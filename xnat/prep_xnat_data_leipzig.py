@@ -66,7 +66,8 @@ def prep_mpi_data(population, original_datadir, out_dir):
             print '..extracting subject parameters'
 
             if not os.path.isfile(param_file):
-                rest_all = [os.path.join(xnat_dir, i) for i in os.listdir(xnat_dir) if 'resting' in pydcm.read_file(os.path.join(xnat_dir, i)).SeriesDescription]
+                rest_all = [os.path.join(xnat_dir, i) for i in os.listdir(xnat_dir) if
+                            'resting' in pydcm.read_file(os.path.join(xnat_dir, i)).SeriesDescription]
                 nvols = len(rest_all)
                 rest = rest_all[0]
 
@@ -110,4 +111,6 @@ def prep_mpi_data(population, original_datadir, out_dir):
 
     print LZ_subjects
 
-prep_mpi_data(population=LEIPZIG_subject_list, original_datadir=LEIPZIG_datadir_in, out_dir=LEIPZIG_datadir_out)
+prep_mpi_data(population=LEIPZIG_subject_list,
+              original_datadir=LEIPZIG_datadir_in,
+              out_dir=LEIPZIG_datadir_out)

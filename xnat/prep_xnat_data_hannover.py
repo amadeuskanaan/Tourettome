@@ -18,7 +18,6 @@ def prep_mhh_data(population, original_datadir, out_datadir):
         xnat_id = 'HA%04d'%count
         HA_subjects[subject] = xnat_id
 
-
         print 'Anonymizing HANNOVER_A Data for subject: %s-%s'%(subject, xnat_id)
         zip_orig  = zipfile.ZipFile(os.path.join(original_datadir, '%s.zip' % subject), 'r')
         zip_anon  = os.path.join(out_datadir, xnat_id, '%s'%xnat_id)
@@ -26,7 +25,6 @@ def prep_mhh_data(population, original_datadir, out_datadir):
         xnat_dir  = os.path.join(out_datadir, xnat_id, 'DICOM')
 
         # unzip all files into one directory
-
         if not os.path.isfile(os.path.join('%s.zip'%zip_anon)):
             print '..extracting'
             zip_orig.extractall(xnat_dir)
@@ -56,12 +54,13 @@ def prep_mhh_data(population, original_datadir, out_datadir):
                 img.save_as(os.path.join(xnat_dir,dicom))
 
             print '..extracting subject parameters'
-            rest_all= [os.path.join(xnat_dir, i) for i in os.listdir(xnat_dir) if 'restingstate' in pydcm.read_file(os.path.join(xnat_dir, i)).SeriesDescription]
-            nvols = len(rest_all)
-            rest = rest_all[0]
-            reader = pydcm.read_file(rest)
-
             if not os.path.isfile(param_file):
+                rest_all = [os.path.join(xnat_dir, i) for i in os.listdir(xnat_dir) if
+                            'restingstate' in pydcm.read_file(os.path.join(xnat_dir, i)).SeriesDescription]
+                nvols = len(rest_all)
+                rest = rest_all[0]
+                reader = pydcm.read_file(rest)
+
                 # create subject dataframe
                 columns = ['Name', 'Site', 'Group', 'Age', 'Sex', 'ScanDate', 'Scanner', 'Sequence', 'TR', 'TE',
                            'Resolution', 'NVols', 'FlipAngle']
@@ -88,7 +87,6 @@ def prep_mhh_data(population, original_datadir, out_datadir):
                                                     })
                 df.to_csv(param_file)
 
-
             # rezipping
             shutil.make_archive(zip_anon, 'zip', xnat_dir)
             shutil.rmtree(xnat_dir)
@@ -97,4 +95,6 @@ def prep_mhh_data(population, original_datadir, out_datadir):
     group_dataframe = pd.concat(df_group, ignore_index=False)#.sort(columns='Age')
     group_dataframe.to_csv(os.path.join(phenotypic_dir, 'subject_list_HANNOVER_A.csv'))
 
-prep_mhh_data(population = HANNOVER_A_subject_list, original_datadir = HANNOVER_A_datadir_in, out_datadir =HANNOVER_A_datadir_out)
+prep_mhh_data(population = HANNOVER_A_subject_list,
+              original_datadir = HANNOVER_A_datadir_in,
+              out_datadir =HANNOVER_A_datadir_out)
