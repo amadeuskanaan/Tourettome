@@ -1,14 +1,12 @@
+__author__ = 'kanaan_28.07.2016'
+
 import os
 import pandas as pd
 import numpy as np
 import dicom as pydcm
 import shutil
 import zipfile
-import operator
-import nibabel as nb
 from variables.subject_list import *
-from utilities.utils import *
-import glob
 
 def prep_mhh_data(population, original_datadir, out_datadir):
 
@@ -21,7 +19,7 @@ def prep_mhh_data(population, original_datadir, out_datadir):
         HA_subjects[subject] = xnat_id
 
 
-        print 'Anonymizing Hannove1 Data for subject: %s-%s'%(subject, xnat_id)
+        print 'Anonymizing HANNOVER_A Data for subject: %s-%s'%(subject, xnat_id)
         zip_orig  = zipfile.ZipFile(os.path.join(original_datadir, '%s.zip' % subject), 'r')
         zip_anon  = os.path.join(out_datadir, xnat_id, '%s'%xnat_id)
         param_file = os.path.join(out_datadir, xnat_id, '%s_param.csv' % xnat_id)
@@ -92,7 +90,6 @@ def prep_mhh_data(population, original_datadir, out_datadir):
 
 
             # rezipping
-            print '..re-zipping'
             shutil.make_archive(zip_anon, 'zip', xnat_dir)
             shutil.rmtree(xnat_dir)
         df_group.append(pd.read_csv(param_file, index_col=0))
@@ -101,12 +98,3 @@ def prep_mhh_data(population, original_datadir, out_datadir):
     group_dataframe.to_csv(os.path.join(phenotypic_dir, 'subject_list_HANNOVER_A.csv'))
 
 prep_mhh_data(population = HANNOVER_A_subject_list, original_datadir = HANNOVER_A_datadir_in, out_datadir =HANNOVER_A_datadir_out)
-
-
-
-
-
-
-
-
-

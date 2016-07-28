@@ -1,15 +1,13 @@
+__author__ = 'kanaan_28.07.2016'
+
 import os
 import pandas as pd
 import numpy as np
 import dicom as pydcm
 import shutil
-import zipfile
-import operator
-import nibabel as nb
 from variables.subject_list import *
 from utilities.utils import *
 import glob
-
 
 def prep_mpi_data(population, original_datadir, out_dir):
 
