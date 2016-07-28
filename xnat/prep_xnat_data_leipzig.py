@@ -23,7 +23,7 @@ def prep_mpi_data(population, original_datadir, out_dir):
         print 'Anonymizing Leipzig Data for subject: %s-%s' % (subject, xnat_id)
 
         zip_anon = os.path.join(out_dir, xnat_id, '%s' % xnat_id)
-        param_file = os.path.join(out_dir, xnat_id, '%s_param.csv' % xnat_id)
+        param_file = os.path.join(xnat_param_folder, '%s_param.csv' % xnat_id)
         xnat_dir = os.path.join(out_dir, xnat_id, 'DICOM')
         mkdir_path(xnat_dir)
 

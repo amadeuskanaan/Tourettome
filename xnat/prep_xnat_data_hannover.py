@@ -21,7 +21,7 @@ def prep_mhh_data(population, original_datadir, out_datadir):
         print 'Anonymizing HANNOVER_A Data for subject: %s-%s'%(subject, xnat_id)
         zip_orig  = zipfile.ZipFile(os.path.join(original_datadir, '%s.zip' % subject), 'r')
         zip_anon  = os.path.join(out_datadir, xnat_id, '%s'%xnat_id)
-        param_file = os.path.join(out_datadir, xnat_id, '%s_param.csv' % xnat_id)
+        param_file = os.path.join(xnat_param_folder, '%s_param.csv' % xnat_id)
         xnat_dir  = os.path.join(out_datadir, xnat_id, 'DICOM')
 
         # unzip all files into one directory
