@@ -99,36 +99,67 @@ def register(population, workspace_dir):
         print '- Non-Linear transformation: functional to MNI'
 
     
-	import os.path as op
-	from nipype.interfaces.ants import Registration
-	reg = Registration()
-	reg.inputs.dimension = 3
-	reg.inputs.fixed_image = mni_brain_1mm
-	reg.inputs.moving_image =  anat
-	reg.inputs.interpolation = 'Linear'
-	reg.inputs.output_transform_prefix = "transform"
-	reg.inputs.output_warped_image = 'transform_Warped.nii.gz'
-	reg.inputs.initial_moving_transform_com = False
-	reg.inputs.collapse_output_transforms = False
-	reg.inputs.num_threads= 16
-	reg.inputs.transforms = ['Rigid', 'Affine']
-	reg.inputs.transform_parameters = [(0.1,), (0.1,)]
-	reg.inputs.number_of_iterations = [[15, 10, 5], [15, 10, 5]]
-	reg.inputs.smoothing_sigmas = [[4,2,0], [2,1,0]]
-	reg.inputs.metric = ['Mattes', 'Mattes']
-	reg.inputs.radius_or_number_of_bins = [32, 32]
-	reg.inputs.shrink_factors = [[8,4,2], [3,2,1]]
-	reg.inputs.use_histogram_matching = [True] * 2
-	reg.inputs.metric_weight = [1] * 2
-	reg.inputs.sampling_strategy = ['Regular', 'Regular']
-	reg.inputs.convergence_threshold = [1.e-8, 1.e-8]
-	reg.inputs.convergence_window_size = [10, 10]
-	reg.inputs.sampling_percentage = [0.25, 0.25]
-	reg.inputs.collapse_output_transforms = True
-	reg.inputs.write_composite_transform = True
-	res = reg.run()
-	print reg.cmdline	
+        import os.path as op
+        from nipype.interfaces.ants import Registration
+        reg = Registration()
+        reg.inputs.dimension = 3
+        reg.inputs.fixed_image = mni_brain_1mm
+        reg.inputs.moving_image =  anat
+        reg.inputs.interpolation = 'Linear'
+        reg.inputs.output_transform_prefix = "transform"
+        reg.inputs.output_warped_image = 'transform_Warped.nii.gz'
+        reg.inputs.initial_moving_transform_com = False
+        reg.inputs.collapse_output_transforms = False
+        reg.inputs.num_threads= 16
+        reg.inputs.transforms = ['Rigid', 'Affine']
+        reg.inputs.transform_parameters = [(0.1,), (0.1,)]
+        reg.inputs.number_of_iterations = [[15, 10, 5], [15, 10, 5]]
+        reg.inputs.smoothing_sigmas = [[4,2,0], [2,1,0]]
+        reg.inputs.metric = ['Mattes', 'Mattes']
+        reg.inputs.radius_or_number_of_bins = [32, 32]
+        reg.inputs.shrink_factors = [[8,4,2], [3,2,1]]
+        reg.inputs.use_histogram_matching = [True] * 2
+        reg.inputs.metric_weight = [1] * 2
+        reg.inputs.sampling_strategy = ['Regular', 'Regular']
+        reg.inputs.convergence_threshold = [1.e-8, 1.e-8]
+        reg.inputs.convergence_window_size = [10, 10]
+        reg.inputs.sampling_percentage = [0.25, 0.25]
+        reg.inputs.collapse_output_transforms = True
+        reg.inputs.write_composite_transform = True
+        #res = reg.run()
+        #print reg.cmdline
 
+
+        os.chdir(regdir_mni)
+        anat2mni = ants.Registration()
+        anat2mni.inputs.moving_image               = anat
+        anat2mni.inputs.fixed_image                = mni_brain_1mm
+        anat2mni.inputs.initial_moving_transform_com=True
+        anat2mni.input.output_inverse_warped_image=True
+        anat2mni.input.output_warped_image=True
+        anat2mni.input.sigma_units=['vox']*3
+        anat2mni.input.transforms=['Rigid', 'Affine', 'SyN']
+        anat2mni.input.terminal_output='file'
+        anat2mni.input.winsorize_lower_quantile=0.005
+        anat2mni.input.convergence_threshold=[1e-08, 1e-08, -0.01]
+        anat2mni.input.convergence_window_size=[20, 20, 5]
+        anat2mni.input.metric=['Mattes', 'Mattes', ['Mattes', 'CC']]
+        anat2mni.input.metric_weight=[1.0, 1.0, [0.5, 0.5]]
+        anat2mni.input.number_of_iterations=[[10000, 11110, 11110], [10000, 11110, 11110], [100, 30, 20]]
+        anat2mni.input.radius_or_number_of_bins=[32, 32, [32, 4]]
+        anat2mni.input.sampling_percentage=[0.3, 0.3, [None, None]],
+        anat2mni.input.sampling_strategy=['Regular','Regular',[None, None]]
+        anat2mni.input.radius_or_number_of_bins=[32, 32, [32, 4]]
+        anat2mni.input.shrink_factors=[[3, 2, 1],[3, 2, 1], [4, 2, 1]]
+        anat2mni.input.smoothing_sigmas=[[4.0, 2.0, 1.0],[4.0, 2.0, 1.0],[1.0, 0.5, 0.0]]
+        anat2mni.input.transform_parameters=[(0.1,),(0.1,),(0.2, 3.0, 0.0)]
+        anat2mni.input.use_estimate_learning_rate_once=[True]*3
+        anat2mni.input.use_histogram_matching=[False, False, True]
+        anat2mni.input.write_composite_transform=True
+        anat2mni.input.collapse_output_transforms=True
+        anat2mni.input.num_threads=16
+
+        anat2mni.run()
 
         #os.system('WarpImageMultiTransform 3 %s %s -i transform0Affine.mat transform1InverseWarp.nii.gz'% (anat, mni_brain_1mm))
 
