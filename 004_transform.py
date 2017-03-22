@@ -15,10 +15,11 @@ def register(population, workspace_dir):
         print 'Preprocessing functional data for %s' % (subject)
 
         #input
-        subdir   = os.path.join(workspace_dir, subject)
-        anat     = os.path.join(subdir, 'ANATOMICAL/ANATOMICAL_BRAIN.nii.gz')
-        anat_wm  = os.path.join(subdir, 'ANATOMICAL/ANATOMICAL_WM.nii.gz')
-        func     = os.path.join(subdir, 'FUNCTIONAL/REST_EDIT_MOCO_BRAIN_MEAN.nii.gz')
+        subdir     = os.path.join(workspace_dir, subject)
+        anat       = os.path.join(subdir, 'ANATOMICAL/ANATOMICAL_BRAIN.nii.gz')
+        anat_skull = os.path.join(subdir, 'ANATOMICAL/ANATOMICAL_BRAIN.nii.gz')
+        anat_wm    = os.path.join(subdir, 'ANATOMICAL/seg_spm/c2ANATOMICAL.nii.gz')
+        func       = os.path.join(subdir, 'FUNCTIONAL/REST_EDIT_MOCO_BRAIN_MEAN.nii.gz')
 
         #output
         regdir          = mkdir_path(os.path.join(subdir, 'REGISTRATION'))
@@ -27,36 +28,44 @@ def register(population, workspace_dir):
 
 
         # Functional to anatomical registration
-        print '-Linear transformation: functional to anatomical space'
+        print '--Linear transformation: functional to anatomical space'
 
-        # resample anat to 2mm
+        # if not os.path.isfile(os.path.join(regdir_anat, ''))
+
+        # # resample anat to 2mm
         # os.chdir(regdir_anat)
         # os.system('flirt -in %s -ref %s -out ANAT_2mm -applyisoxfm 2.0 -datatype float' % (anat, anat))
+        # os.system('fslmaths %s -thr 0.5 -bin anat_wm_thr.nii.gz' %anat_wm)
+        # os.system('flirt -in anat_wm_thr.nii.gz -ref ANAT_2mm -out anat_wm_thr_2mm.nii.gz -applyisoxfm 2.0 -datatype float' )
         #
         # # run corratio linear xfm
+        # print '......flirt corratio'
         # os.system('flirt -in        %s '
-        #                 '-ref       ANAT_2mm '
+        #                 '-ref       %s '
         #                 '-cost      corratio '
         #                 '-dof       6  '
-        #                 '-noresample    '
-        #                 '-interp    spline '
+        #                 '-noresample '
+        #                 '-interp    nearestneighbour '
         #                 '-omat      rest2anat_1.mat '
         #                 '-out       rest2anat_1.nii.gz '
-        #           %(func,))
+        #           %(func,anat))
         #
         # # run bbr linear xfm
+        # print '......flirt bbr'
         # os.system('flirt -in  %s '
-        #           '-ref       ANAT_2mm '
+        #           '-ref       %s '
         #           '-cost      bbr '
-        #           '-wmseg     %s '
+        #           '-wmseg     anat_wm_thr.nii.gz '
         #           '-dof       6 '
         #           '-init      rest2anat_1.mat '
         #           '-schedule  /usr/share/fsl/5.0/etc/flirtsch/bbr.sch '
-        #           '-noresample    '
-        #           '-interp    spline '
+        #           '-noresample '
+        #           '-interp    nearestneighbour '
         #           '-omat      rest2anat_2.mat '
         #           '-out       rest2anat_2.nii.gz '
-        #           % (func, anat_wm))
+        #           % (func, anat_skull))
+        #
+        #
 
         # print '..... unifying moco and linear xfm affines and applying on each 4D frame'
         #
@@ -78,16 +87,13 @@ def register(population, workspace_dir):
         #     os.system('rm -rf vol* flirt_uni_*')
         #
 
-
-
         ##############################################
         # MNI registration
-        print '- Non-Linear transformation: functional to MNI'
+        print '--Non-Linear transformation: functional to MNI'
 
-        if not os.path.isfile(os.path.join(regdir_mni, 'transform_Warped.nii.gz')):
+        if not os.path.isfile(os.path.join(regdir, 'ANATOMICAL_BRAIN_MNI1mm.nii.gz')):
             os.chdir(regdir_mni)
             anat2mni = ants.Registration()
-
             anat2mni.inputs.moving_image= anat
             anat2mni.inputs.fixed_image= mni_brain_1mm
             anat2mni.inputs.dimension=3
@@ -105,7 +111,7 @@ def register(population, workspace_dir):
             anat2mni.inputs.sampling_strategy=['Regular', 'Regular', 'None']
             anat2mni.inputs.sampling_percentage=[0.25,0.25,1]
             anat2mni.inputs.radius_or_number_of_bins=[32,32,4]
-            anat2mni.inputs.num_threads = 24
+            anat2mni.inputs.num_threads = 30
             anat2mni.inputs.interpolation='Linear'
             anat2mni.inputs.winsorize_lower_quantile=0.005
             anat2mni.inputs.winsorize_upper_quantile=0.995
@@ -114,10 +120,7 @@ def register(population, workspace_dir):
             anat2mni.inputs.output_warped_image=True
             anat2mni.inputs.use_histogram_matching=True
             anat2mni.run()
-
-
-        #os.system('WarpImageMultiTransform 3 %s %s -i transform0Affine.mat transform1InverseWarp.nii.gz'% (anat, mni_brain_1mm))
-
+            os.system('cp transform_Warped.nii.gz ../ANATOMICAL_BRAIN_MNI1mm.nii.gz')
 
 register(['HB012'], tourettome_workspace)
 
