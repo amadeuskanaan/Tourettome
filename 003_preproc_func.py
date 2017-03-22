@@ -1,11 +1,12 @@
 __author__ = 'kanaan_02.12.2016'
 
 import os
-from utilities.utils import mkdir_path,create_fsl_mats
-import nipype.interfaces.spm as spm
+from utilities.utils import mkdir_path, create_fsl_mats
+# import nipype.interfaces.spm as spm
 from variables.subject_list import *
 import nibabel as nb
-
+import shutil
+import nibabel as nb
 
 def preprocess_functional(population, afs_dir, workspace):
     count = 0
@@ -17,51 +18,97 @@ def preprocess_functional(population, afs_dir, workspace):
         # input
         afsdir  = os.path.join(afs_dir, subject, 'NIFTI')
         # output
-        func_dir  = mkdir_path(os.path.join(workspace, subject, 'REST'))
+        func_dir  = mkdir_path(os.path.join(workspace, subject, 'FUNCTIONAL'))
         moco_dir = mkdir_path(os.path.join(func_dir, 'moco'))
+        edit_dir = mkdir_path(os.path.join(func_dir, 'edit'))
 
-        if not os.path.isfile(os.path.join(moco_dir, 'REST_moco_2.nii.gz')):
 
-            print '....Dropping first 5 volumes'
-            first_frame = '5'
-            last_frame = nb.load(os.path.join(afsdir, 'REST.nii.gz')).get_data().shape[3] -1
-            frames = '[%s..%s]'%(first_frame, last_frame)
+        if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT.nii.gz')):
+            print '.... Inital editing of functional image'
 
-            os.system('3dcalc -a %s/REST.nii.gz%s -expr "a" -prefix %s/_REST.nii.gz' % (afsdir, frames, func_dir))
+            # grab data
+            os.chdir(func_dir)
+            shutil.copy(os.path.join(afsdir, 'REST.nii.gz'), os.path.join(func_dir, 'REST.nii.gz'))
+            img_hdr = nb.load('REST.nii.gz').header
+            TR    = img_hdr['pixdim'][4]
+            nvols = img_hdr['dim'][4]
+            print 'TR =', TR
+            print 'N-Vols=', nvols
 
-            print '....Swapdim to RPI'
-            os.system('fslswapdim %s RL PA IS %s' % (os.path.join(func_dir, '_REST'), (os.path.join(func_dir, 'REST'))))
-            os.remove('%s/_REST.nii.gz'%func_dir)
+            print '.......slice time correction'
+            os.chdir(edit_dir)
+            os.system('3dTshift -TR %s -tzero 0 -tpattern alt+z -prefix REST_slc.nii.gz ../REST.nii.gz' %(TR))
 
-            print '....Deoblique'
-            ### Replace transformation matrix in header with cardinal matrix.This option DOES NOT deoblique the volume.
-            os.system('3drefit -deoblique %s' % os.path.join(func_dir, 'REST.nii.gz'))
+            print '.......dropping TRs'
+            index_start = 5
+            index_end = nvols
+            frames = '[%s..%s]' % (index_start, nvols -1)
+            os.system('3dcalc -a REST_slc.nii.gz%s -expr "a" -prefix REST_slc_drop.nii.gz' % frames)
 
-            # Run two step motion correction
-            print 'Running two-step motion correction'
-            os.system('fslmaths %s/REST -Tmean %s/REST_mean' %(func_dir, moco_dir))
+            print '.......deoblique'
+            os.system('3drefit -deoblique REST_slc_drop.nii.gz')
 
-            #### step 1
+            print '.......reorient'
+            os.system('3dresample -orient RPI  -prefix REST_slc_drop_rpi.nii.gz  -inset REST_slc_drop.nii.gz')
+
+            os.system('cp REST_slc_drop_rpi.nii.gz ../REST_EDIT.nii.gz')
+
+        if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_MOCO.nii.gz')):
+            print '.... Running two-step motion correction'
+
             os.chdir(moco_dir)
-            os.system('3dvolreg -Fourier -twopass -1Dfile REST_moco_1.1D -1Dmatrix_save REST_moco_1_aff12.1D -zpad 4 -maxdisp1D REST_moco_1_MX.1D '
-                      '-prefix REST_moco_1.nii.gz -base REST_mean.nii.gz ../REST.nii.gz')
-            os.system('fslmaths REST_moco_1 -Tmean REST_moco_1_mean')
+            # run No.1
+            os.system('3dTstat -mean -prefix REST_EDIT_mean.nii.gz ../REST_EDIT.nii.gz')
 
-            #### step 2
-            os.system('3dvolreg -Fourier -twopass -1Dfile REST_moco_2.1D -1Dmatrix_save REST_moco_2_aff12.1D -zpad 4 -maxdisp1D REST_moco_2_MX.1D '
-                      '-prefix REST_moco_2.nii.gz -base REST_moco_1_mean.nii.gz ../REST.nii.gz')
+            os.system('3dvolreg -Fourier -twopass -zpad 4  '
+                      '-1Dfile          REST_EDIT_moco1.1D '
+                      '-1Dmatrix_save   REST_EDIT_moco1_aff12.1D '
+                      '-maxdisp1D       REST_EDIT_moco1_MX.1D '
+                      '-base            REST_EDIT_mean.nii.gz '
+                      '-prefix          REST_EDIT_moco1.nii.gz '
+                      '../REST_EDIT.nii.gz')
 
-            # create fsl style affine matrices
-            mats = create_fsl_mats('%s/REST_moco_2_aff12.1D'%moco_dir)
+            # run No.2
+            os.system('3dTstat -mean -prefix REST_EDIT_moco1_mean.nii.gz REST_EDIT_moco1.nii.gz')
+
+            os.system('3dvolreg -Fourier -twopass -zpad 4  '
+                      '-1Dfile          REST_EDIT_moco2.1D '
+                      '-1Dmatrix_save   REST_EDIT_moco2_aff12.1D '
+                      '-maxdisp1D       REST_EDIT_moco2_MX.1D '
+                      '-base            REST_EDIT_moco1_mean.nii.gz '
+                      '-prefix          REST_EDIT_moco2_mean.nii.gz '
+                      '../REST_EDIT.nii.gz')
+
+            mats = create_fsl_mats('%s/REST_EDIT_moco2_aff12.1D' % moco_dir)
+
+            os.system('cp REST_EDIT_moco2_mean.nii.gz ../REST_EDIT_MOCO.nii.gz')
 
 
-        # Intensity Normalization
-        print '.....Normalizing intensity to Mode 1000 and deskulling'
-        os.chdir(func_dir)
-        if not os.path.isfile('REST_PPROC_NATIVE_BRAIN.nii.gz'):
-            os.system('fslmaths moco/REST_moco_2.nii.gz -ing 1000 REST_PPROC_NATIVE.nii.gz')
-            os.system('bet REST_PPROC_NATIVE.nii.gz REST_PPROC_NATIVE_BRAIN.nii.gz -f 0.50 -F -m -t -g 0.00')
-            os.system('3dTstat -mean -prefix REST_PPROC_NATIVE_BRAIN_mean.nii.gz  REST_PPROC_NATIVE_BRAIN.nii.gz ')
-            # os.system('fslmaths REST_PPROC_NATIVE_BRAIN_mask.nii.gz -ero -ero REST_PPROC_NATIVE_BRAIN_mask_ero.nii.gz')
+        if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_MOCO_BRAIN.nii.gz')):
+            os.chdir(func_dir)
+            print '....Brain extraction and intensity normalization'
+            os.system('3dAutomask -prefix REST_EDIT_MOCO_BRAIN_MASK.nii.gz REST_EDIT_MOCO.nii.gz')
+            os.system('3dcalc -a REST_EDIT_MOCO.nii.gz -b REST_EDIT_MOCO_BRAIN_MASK.nii.gz  -expr \'a*b\' -prefix REST_EDIT_MOCO_BRAIN_.nii.gz')
 
-preprocess_functional(population = ['PA001'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
+            print '....Intensity normalization'
+            os.system('fslmaths REST_EDIT_MOCO_BRAIN_ -ing 1000 REST_EDIT_MOCO_BRAIN -odt float')
+            os.system('rm -rf REST_EDIT_MOCO_BRAIN_.nii.gz')
+
+            print '....get mean'
+            os.system('3dTstat -mean -prefix REST_EDIT_MOCO_BRAIN.nii.gz REST_EDIT_MOCO_BRAIN_MEAN.nii.gz')
+
+        if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_BRAIN.nii.gz')):
+            os.chdir(func_dir)
+            print '....Brain extraction and intensity normalization'
+            os.system('3dAutomask -prefix REST_EDIT_BRAIN_MASK.nii.gz REST_EDIT.nii.gz')
+            os.system('3dcalc -a REST_EDIT.nii.gz -b REST_EDIT_BRAIN_MASK.nii.gz  -expr \'a*b\' -prefix REST_EDIT_BRAIN_.nii.gz')
+
+            print '....Intensity normalization'
+            os.system('fslmaths REST_EDIT_BRAIN_ -ing 1000 REST_EDIT_BRAIN -odt float')
+            os.system('rm -rf REST_EDIT_BRAIN_.nii.gz')
+
+            print '....get mean'
+            os.system('3dTstat -mean -prefix REST_EDIT_BRAIN.nii.gz REST_EDIT_BRAIN_MEAN.nii.gz')
+
+preprocess_functional(population = ['HB012'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
+preprocess_functional(population = ['PA020'], afs_dir = tourettome_afs, workspace = tourettome_workspace )

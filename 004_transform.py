@@ -18,8 +18,9 @@ def register(population, workspace_dir):
         subdir     = os.path.join(workspace_dir, subject)
         anat       = os.path.join(subdir, 'ANATOMICAL/ANATOMICAL_BRAIN.nii.gz')
         anat_skull = os.path.join(subdir, 'ANATOMICAL/ANATOMICAL_BRAIN.nii.gz')
-        anat_wm    = os.path.join(subdir, 'ANATOMICAL/seg_spm/c2ANATOMICAL.nii.gz')
+        anat_wm    = os.path.join(subdir, 'ANATOMICAL/seg_spm/c2ANATOMICAL.nii')
         func       = os.path.join(subdir, 'FUNCTIONAL/REST_EDIT_MOCO_BRAIN_MEAN.nii.gz')
+        func_vols  = os.path.join(subdir, 'FUNCTIONAL/REST_EDIT_MOCO_BRAIN_MEAN.nii.gz')
 
         #output
         regdir          = mkdir_path(os.path.join(subdir, 'REGISTRATION'))
@@ -30,62 +31,50 @@ def register(population, workspace_dir):
         # Functional to anatomical registration
         print '--Linear transformation: functional to anatomical space'
 
-        # if not os.path.isfile(os.path.join(regdir_anat, ''))
+        if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_MOCO_BRAIN_MEAN_ANAT1mm.nii.gz')):
 
-        # # resample anat to 2mm
-        # os.chdir(regdir_anat)
-        # os.system('flirt -in %s -ref %s -out ANAT_2mm -applyisoxfm 2.0 -datatype float' % (anat, anat))
-        # os.system('fslmaths %s -thr 0.5 -bin anat_wm_thr.nii.gz' %anat_wm)
-        # os.system('flirt -in anat_wm_thr.nii.gz -ref ANAT_2mm -out anat_wm_thr_2mm.nii.gz -applyisoxfm 2.0 -datatype float' )
-        #
-        # # run corratio linear xfm
-        # print '......flirt corratio'
-        # os.system('flirt -in        %s '
-        #                 '-ref       %s '
-        #                 '-cost      corratio '
-        #                 '-dof       6  '
-        #                 '-noresample '
-        #                 '-interp    nearestneighbour '
-        #                 '-omat      rest2anat_1.mat '
-        #                 '-out       rest2anat_1.nii.gz '
-        #           %(func,anat))
-        #
-        # # run bbr linear xfm
-        # print '......flirt bbr'
-        # os.system('flirt -in  %s '
-        #           '-ref       %s '
-        #           '-cost      bbr '
-        #           '-wmseg     anat_wm_thr.nii.gz '
-        #           '-dof       6 '
-        #           '-init      rest2anat_1.mat '
-        #           '-schedule  /usr/share/fsl/5.0/etc/flirtsch/bbr.sch '
-        #           '-noresample '
-        #           '-interp    nearestneighbour '
-        #           '-omat      rest2anat_2.mat '
-        #           '-out       rest2anat_2.nii.gz '
-        #           % (func, anat_skull))
-        #
-        #
+            # threshold wmseg
+            os.chdir(regdir_anat)
+            os.system('fslmaths %s -thr 0.5 -bin anat_wm' %anat_wm)
 
-        # print '..... unifying moco and linear xfm affines and applying on each 4D frame'
-        #
-        # if not os.path.isfile(os.path.join(regdir, 'REST2ANAT.nii.gz')):
-        #     # split volumes of func data (with 5 dropped TRs and RPI orientation )
-        #     mats_dir = mkdir_path(os.path.join(regdir_funcanat, 'mats_unified'))
-        #     os.chdir(mats_dir)
-        #     os.system('fslsplit %s/REST.nii.gz -t' % os.path.join(subdir, 'FUNCTIONAL'))
-        #
-        #     # combine affines
-        #     frames = [0, nb.load(os.path.join(subdir, 'FUNCTIONAL/REST.nii.gz')).get_data().shape[3]-1]
-        #     for i in xrange(frames[0], frames[1]):
-        #         frame = '{0:0>4}'.format(i)
-        #         print frame,
-        #         os.system('convert_xfm -omat UNIMAT_%s.mat -concat ../rest2anat_step_2_bbr.mat %s/moco/MATS/MAT_%s' % (frame, os.path.join(subdir,'FUNCTIONAL'), frame))
-        #         os.system('flirt -in vol%s.nii.gz -ref %s -applyxfm -init UNIMAT_%s.mat -out flirt_uni_%s.nii.gz' % (frame, anat_native, frame, frame))
-        #
-        #     os.system('fslmerge -t ../REST2ANAT.nii.gz flirt_uni_*')
-        #     os.system('rm -rf vol* flirt_uni_*')
-        #
+            # run corratio linear xfm
+            print '......flirt corratio'
+            os.system('flirt -in %s -ref %s -cost mutualinfo -dof 6 -omat rest2anat_1.mat -out rest2anat_1.nii.gz ' %(func,anat))
+
+            # run bbr linear xfm
+            print '......flirt bbr'
+            os.system('flirt '
+                      '-in        %s '
+                      '-ref       %s '
+                      '-dof       6 '
+                      '-cost      bbr '
+                      '-wmseg     anat_wm '
+                      '-init      rest2anat_1.mat '
+                      '-schedule  /usr/share/fsl/5.0/etc/flirtsch/bbr.sch '
+                      '-omat      rest2anat_2.mat '
+                      '-out       rest2anat_2.nii.gz '
+                      % (func, anat))
+            os.system('cp rest2anat_2.nii.gz ../REST_EDIT_MOCO_BRAIN_MEAN_ANAT1mm.nii.gz')
+
+        print '..... unifying moco and linear affines'
+
+        if not os.path.isfile(os.path.join(regdir, 'REST2ANAT.nii.gz')):
+            # split volumes of func data (with 5 dropped TRs and RPI orientation )
+            mats_dir = mkdir_path(os.path.join(regdir_anat, 'mats_unified'))
+            os.chdir(mats_dir)
+            os.system('fslsplit %s/REST.nii.gz -t' % os.path.join(subdir, 'FUNCTIONAL'))
+
+            # combine affines
+            frames = [0, nb.load(os.path.join(subdir, 'FUNCTIONAL/REST.nii.gz')).get_data().shape[3]-1]
+            for i in xrange(frames[0], frames[1]):
+                frame = '{0:0>4}'.format(i)
+                print frame,
+                os.system('convert_xfm -omat UNIMAT_%s.mat -concat ../rest2anat_step_2_bbr.mat %s/moco/MATS/MAT_%s' % (frame, os.path.join(subdir,'FUNCTIONAL'), frame))
+                os.system('flirt -in vol%s.nii.gz -ref %s -applyxfm -init UNIMAT_%s.mat -out flirt_uni_%s.nii.gz' % (frame, anat_native, frame, frame))
+
+            os.system('fslmerge -t ../REST2ANAT.nii.gz flirt_uni_*')
+            os.system('rm -rf vol* flirt_uni_*')
+
 
         ##############################################
         # MNI registration
@@ -122,6 +111,25 @@ def register(population, workspace_dir):
             anat2mni.run()
             os.system('cp transform_Warped.nii.gz ../ANATOMICAL_BRAIN_MNI1mm.nii.gz')
 
+            os.chdir(regdir_anat)
+            os.system('/scr/sambesi1/Software/C3D/bin/c3d_affine_tool -ref %s -src %s rest2anat_2.mat -fsl2ras -oitk rest2anat_bbr.tfm' % (anat, func))
+
+        os.chdir(regdir_mni)
+        # os.system('WarpImageMultiTransform 3 %s func2mni.nii.gz -r %s transform1Warp.nii.gz transform0GenericAffine.mat ../reg_anat/rest2anat_bbr.tfm' %(func, mni_brain_2mm ) )
+        os.system('antsApplyTransforms '
+                  '-d 3 '
+                  '-i %s '
+                  '-o func2mni.nii.gz '
+                  '-r %s '
+                  '-n Bspline '
+                  '-t transform1Warp.nii.gz transform0GenericAffine.mat ../reg_anat/rest2anat_bbr.tfm'
+                  %(func, mni_brain_1mm ) )
+
+
+#$   -i T_template0.nii -o test.nii.gz -r T_template0.nii -n Linear -t ~/Desktop/testTransform.tfm -v 1
+
+
 register(['HB012'], tourettome_workspace)
+# register(['PA001'], tourettome_workspace)
 
 
