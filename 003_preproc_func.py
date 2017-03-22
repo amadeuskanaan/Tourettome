@@ -35,6 +35,9 @@ def preprocess_functional(population, afs_dir, workspace):
             print 'TR =', TR
             print 'N-Vols=', nvols
 
+            print '.......deoblique'
+            os.system('3drefit -deoblique REST.nii.gz')
+
             print '.......slice time correction'
             os.chdir(edit_dir)
             os.system('3dTshift -TR %s -tzero 0 -tpattern alt+z -prefix REST_slc.nii.gz ../REST.nii.gz' %(TR))
@@ -44,9 +47,6 @@ def preprocess_functional(population, afs_dir, workspace):
             index_end = nvols
             frames = '[%s..%s]' % (index_start, nvols -1)
             os.system('3dcalc -a REST_slc.nii.gz%s -expr "a" -prefix REST_slc_drop.nii.gz' % frames)
-
-            print '.......deoblique'
-            os.system('3drefit -deoblique REST_slc_drop.nii.gz')
 
             print '.......reorient'
             os.system('3dresample -orient RPI  -prefix REST_slc_drop_rpi.nii.gz  -inset REST_slc_drop.nii.gz')
@@ -84,31 +84,34 @@ def preprocess_functional(population, afs_dir, workspace):
             os.system('cp REST_EDIT_moco2_mean.nii.gz ../REST_EDIT_MOCO.nii.gz')
 
 
-        if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_MOCO_BRAIN.nii.gz')):
+        if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_MOCO_BRAIN_MEAN.nii.gz')):
             os.chdir(func_dir)
             print '....Brain extraction and intensity normalization'
             os.system('3dAutomask -prefix REST_EDIT_MOCO_BRAIN_MASK.nii.gz REST_EDIT_MOCO.nii.gz')
             os.system('3dcalc -a REST_EDIT_MOCO.nii.gz -b REST_EDIT_MOCO_BRAIN_MASK.nii.gz  -expr \'a*b\' -prefix REST_EDIT_MOCO_BRAIN_.nii.gz')
 
-            print '....Intensity normalization'
+            #print '....Intensity normalization'
             os.system('fslmaths REST_EDIT_MOCO_BRAIN_ -ing 1000 REST_EDIT_MOCO_BRAIN -odt float')
             os.system('rm -rf REST_EDIT_MOCO_BRAIN_.nii.gz')
 
-            print '....get mean'
-            os.system('3dTstat -mean -prefix REST_EDIT_MOCO_BRAIN.nii.gz REST_EDIT_MOCO_BRAIN_MEAN.nii.gz')
+            #print '....get mean'
+            os.system('3dTstat -mean -prefix REST_EDIT_MOCO_BRAIN_MEAN.nii.gz REST_EDIT_MOCO_BRAIN.nii.gz')
 
-        if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_BRAIN.nii.gz')):
+        if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_BRAIN_MEAN.nii.gz')):
             os.chdir(func_dir)
             print '....Brain extraction and intensity normalization'
             os.system('3dAutomask -prefix REST_EDIT_BRAIN_MASK.nii.gz REST_EDIT.nii.gz')
             os.system('3dcalc -a REST_EDIT.nii.gz -b REST_EDIT_BRAIN_MASK.nii.gz  -expr \'a*b\' -prefix REST_EDIT_BRAIN_.nii.gz')
 
-            print '....Intensity normalization'
+            #print '....Intensity normalization'
             os.system('fslmaths REST_EDIT_BRAIN_ -ing 1000 REST_EDIT_BRAIN -odt float')
             os.system('rm -rf REST_EDIT_BRAIN_.nii.gz')
 
-            print '....get mean'
-            os.system('3dTstat -mean -prefix REST_EDIT_BRAIN.nii.gz REST_EDIT_BRAIN_MEAN.nii.gz')
+            #print '....get mean'
+            os.system('3dTstat -mean -prefix REST_EDIT_BRAIN_MEAN.nii.gz REST_EDIT_BRAIN.nii.gz')
 
-preprocess_functional(population = ['HB012'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
-preprocess_functional(population = ['PA020'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
+# preprocess_functional(population = ['HB012'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
+# preprocess_functional(population = leipzig , afs_dir = tourettome_afs, workspace = tourettome_workspace )
+# preprocess_functional(population = paris , afs_dir = tourettome_afs, workspace = tourettome_workspace )
+# preprocess_functional(population = hannover_a , afs_dir = tourettome_afs, workspace = tourettome_workspace )
+preprocess_functional(population = hannover_b , afs_dir = tourettome_afs, workspace = tourettome_workspace )
