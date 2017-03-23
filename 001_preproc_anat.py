@@ -10,7 +10,7 @@ import nipype.interfaces.spm as spm
 # Needs FSL5, AFNI, SPM, FREESURFER, pyenv
 
 
-def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
+def preprocess_anatomical(population, workspace):
     for subject in population:
         print '========================================================================================'
         print '-Preprocessing anatomical data for %s' %subject
@@ -73,11 +73,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 
 
 xall = ['HB004']#, 'LZ005', 'PA033', 'HA039']
-# preprocess_anatomical(population = hannover_a, afs_dir = afs_dir, workspace = workspace_dir, freesurfer_dir= freesurfer_dir)
-# preprocess_anatomical(population = hannover_b, afs_dir = afs_dir, workspace = workspace_dir, freesurfer_dir= freesurfer_dir)
-# preprocess_anatomical(population = leipzig, afs_dir = afs_dir, workspace = workspace_dir, freesurfer_dir= freesurfer_dir)
-# preprocess_anatomical(population = paris, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-
+preprocess_anatomical(population = xall, workspace = tourettome_workspace)
 
 
 
