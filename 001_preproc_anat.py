@@ -28,12 +28,13 @@ def preprocess_anatomical(population, workspace):
             ### Deoblique ###  Replace transformation matrix in header with cardinal matrix.This option DOES NOT deoblique the volume.
             os.system('3drefit -deoblique %s' %os.path.join(rawdir, 'ANATOMICAL.nii.gz'))
 
+
             ### SEGMENT
-            print '..... Running SPM segmentation'
             if not os.path.isfile(os.path.join(spmdir, 'mANATOMICAL.nii')):
 
-                os.chdir(spmdir)
+                print '..... Running SPM segmentation'
 
+                os.chdir(spmdir)
                 shutil.copy(os.path.join(rawdir, 'ANATOMICAL.nii.gz'), os.path.join(spmdir, 'ANATOMICAL.nii.gz'))
                 os.system('fslchfiletype NIFTI %s' % os.path.join(spmdir, 'ANATOMICAL'))
 
@@ -47,8 +48,10 @@ def preprocess_anatomical(population, workspace):
         ####### DESKULL data using segmentation
 
         if not os.path.isfile(os.path.join(anatdir, 'ANATOMICAL_BRAIN.nii.gz')):
+
             print '..... Deskulling'
 
+            os.chdir(spmdir)
             os.system('fslmaths c1ANATOMICAL -thr 0.1 -bin c1ANATOMICAL_thr01')
             os.system('fslmaths c2ANATOMICAL -thr 0.1 -bin c2ANATOMICAL_thr01')
             os.system('fslmaths c3ANATOMICAL -thr 0.9 -bin c3ANATOMICAL_the09')
