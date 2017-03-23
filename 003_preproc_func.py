@@ -110,8 +110,10 @@ def preprocess_functional(population, afs_dir, workspace):
             #print '....get mean'
             os.system('3dTstat -mean -prefix REST_EDIT_BRAIN_MEAN.nii.gz REST_EDIT_BRAIN.nii.gz')
 
+paris.remove('PA049')
+
 # preprocess_functional(population = ['HB012'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
-# preprocess_functional(population = leipzig , afs_dir = tourettome_afs, workspace = tourettome_workspace )
-# preprocess_functional(population = paris , afs_dir = tourettome_afs, workspace = tourettome_workspace )
-# preprocess_functional(population = hannover_a , afs_dir = tourettome_afs, workspace = tourettome_workspace )
-preprocess_functional(population = hannover_b , afs_dir = tourettome_afs, workspace = tourettome_workspace )
+#preprocess_functional(population = leipzig[37:50] , afs_dir = tourettome_afs, workspace = tourettome_workspace )
+preprocess_functional(population = paris[80:] , afs_dir = tourettome_afs, workspace = tourettome_workspace )
+#preprocess_functional(population = hannover_a , afs_dir = tourettome_afs, workspace = tourettome_workspace )
+#preprocess_functional(population = hannover_b , afs_dir = tourettome_afs, workspace = tourettome_workspace )
