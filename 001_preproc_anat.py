@@ -67,7 +67,9 @@ def preprocess_anatomical(population, workspace):
 
             if not os.path.isfile(os.path.join(firstdir, 'FIRST_all_fast_firstseg.nii.gz')):
                 os.chdir(firstdir)
+                print '.........flirt anat2mni for priors'
                 os.system('flirt -in ../ANATOMICAL_BRAIN.nii.gz -ref %s -omat anat2mni.mat -out anat2mni -cost mutualinfo -dof 12'%(mni_brain_1mm)) # no skulls. brain to brain.
+                print '......... fsl-first'
                 os.system('run_first_all -d -i ../ANATOMICAL_BRAIN -b -a anat2mni.mat -o FIRST')
 
             os.system('fslmaths FIRST_all_fast_firstseg -sub FIRST-BrStem_first FIRST')
