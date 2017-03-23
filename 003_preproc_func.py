@@ -1,19 +1,18 @@
 __author__ = 'kanaan_02.12.2016'
 
 import os
-from utilities.utils import mkdir_path, create_fsl_mats
-# import nipype.interfaces.spm as spm
-from variables.subject_list import *
 import nibabel as nb
 import shutil
 import nibabel as nb
+from utilities.utils import mkdir_path
+from utilities.utils import create_fsl_mats
+from variables.subject_list import *
 
 def preprocess_functional(population, afs_dir, workspace):
-    count = 0
+
     for subject in population:
-        count += 1
         print '========================================================================================'
-        print '%s-Preprocessing functional data for %s' %(count, subject)
+        print 'Preprocessing functional data for %s' %(subject)
 
         # input
         afsdir  = os.path.join(afs_dir, subject, 'NIFTI')
@@ -21,7 +20,6 @@ def preprocess_functional(population, afs_dir, workspace):
         func_dir  = mkdir_path(os.path.join(workspace, subject, 'FUNCTIONAL'))
         moco_dir = mkdir_path(os.path.join(func_dir, 'moco'))
         edit_dir = mkdir_path(os.path.join(func_dir, 'edit'))
-
 
         if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT.nii.gz')):
             print '.... Inital editing of functional image'
@@ -79,7 +77,7 @@ def preprocess_functional(population, afs_dir, workspace):
                       '-prefix          REST_EDIT_moco2_mean.nii.gz '
                       '../REST_EDIT.nii.gz')
 
-            mats = create_fsl_mats('%s/REST_EDIT_moco2_aff12.1D' % moco_dir)
+            # mats = create_fsl_mats('%s/REST_EDIT_moco2_aff12.1D' % moco_dir)
 
             os.system('cp REST_EDIT_moco2_mean.nii.gz ../REST_EDIT_MOCO.nii.gz')
 
@@ -110,10 +108,14 @@ def preprocess_functional(population, afs_dir, workspace):
             #print '....get mean'
             os.system('3dTstat -mean -prefix REST_EDIT_BRAIN_MEAN.nii.gz REST_EDIT_BRAIN.nii.gz')
 
-paris.remove('PA049')
 
-# preprocess_functional(population = ['HB012'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
-#preprocess_functional(population = leipzig[37:50] , afs_dir = tourettome_afs, workspace = tourettome_workspace )
-preprocess_functional(population = paris[80:] , afs_dir = tourettome_afs, workspace = tourettome_workspace )
+
+# paris.remove('PA049')
+preprocess_functional(population = ['PA025'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
+preprocess_functional(population = ['LZ030'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
+preprocess_functional(population = ['HA022'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
+preprocess_functional(population = ['PB021'], afs_dir = tourettome_afs, workspace = tourettome_workspace )
+#preprocess_functional(population = leipzig , afs_dir = tourettome_afs, workspace = tourettome_workspace )
+# preprocess_functional(population = paris , afs_dir = tourettome_afs, workspace = tourettome_workspace )
 #preprocess_functional(population = hannover_a , afs_dir = tourettome_afs, workspace = tourettome_workspace )
 #preprocess_functional(population = hannover_b , afs_dir = tourettome_afs, workspace = tourettome_workspace )
