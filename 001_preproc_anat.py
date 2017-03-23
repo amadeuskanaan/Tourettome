@@ -67,21 +67,11 @@ def preprocess_anatomical(population, workspace):
                 os.system('run_first_all -d -i ../ANATOMICAL_BRAIN -b -a anat2mni.mat -o FIRST')
 
             os.system('fslmaths FIRST_all_fast_firstseg -sub FIRST-BrStem_first FIRST')
-            os.system('fslmaths %s/c1ANATOMICAL -thr 0.55 -bin -add FIRST -bin ../ANATOMICAL_GM' %spmdir)
+            os.system('fslmaths %s/c1ANATOMICAL -thr 0.55 -bin -add FIRST -bin ../ANATOMICAL_GM'  %spmdir)
             os.system('fslmaths %s/c2ANATOMICAL -thr 0.9  -bin -sub FIRST -bin ../ANATOMICAL_WM'  %spmdir)
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
 
 
 xall = ['HA020']#, 'LZ005', 'PA033', 'HA039']
 preprocess_anatomical(population = xall, workspace = tourettome_workspace)
-
-
-
-
-
-
-
-
-
-
 
