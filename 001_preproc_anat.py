@@ -26,7 +26,7 @@ def preprocess_anatomical(population, workspace):
         if not os.path.isfile(os.path.join(spmdir, 'c1ANATOMICAL.nii')):
 
             ### Deoblique ###  Replace transformation matrix in header with cardinal matrix.This option DOES NOT deoblique the volume.
-            os.system('3drefit -deoblique %s' %os.path.join(anatdir, 'ANATOMICAL.nii.gz'))
+            os.system('3drefit -deoblique %s' %os.path.join(rawdir, 'ANATOMICAL.nii.gz'))
 
             ### SEGMENT
             print '..... Running SPM segmentation'
