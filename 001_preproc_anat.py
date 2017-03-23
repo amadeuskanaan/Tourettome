@@ -54,8 +54,8 @@ def preprocess_anatomical(population, workspace):
             os.chdir(spmdir)
             os.system('fslmaths c1ANATOMICAL -thr 0.1 -bin c1ANATOMICAL_thr01')
             os.system('fslmaths c2ANATOMICAL -thr 0.1 -bin c2ANATOMICAL_thr01')
-            os.system('fslmaths c3ANATOMICAL -thr 0.9 -bin c3ANATOMICAL_the09')
-            os.system('fslmaths c1ANATOMICAL_thr01 -add c2ANATOMICAL_thr01 -add c3ANATOMICAL_thr01 -bin -fillh -s 3 -thr 0.4 -bin ../ANATOMICAL_BRAIN_MASK')
+            os.system('fslmaths c3ANATOMICAL -thr 0.9 -bin c3ANATOMICAL_thr09')
+            os.system('fslmaths c1ANATOMICAL_thr01 -add c2ANATOMICAL_thr01 -add c3ANATOMICAL_thr09 -bin -fillh -s 3 -thr 0.4 -bin ../ANATOMICAL_BRAIN_MASK')
             os.system('fslmaths mANATOMICAL -mas ../ANATOMICAL_BRAIN_MASK ../ANATOMICAL_BRAIN')
 
 
