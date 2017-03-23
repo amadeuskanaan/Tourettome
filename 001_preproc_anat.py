@@ -63,7 +63,8 @@ def preprocess_anatomical(population, workspace):
 
         if not os.path.isfile(os.path.join(anatdir, 'ANATOMICAL_GM.nii.gz')):
 
-            print '.. optimizing tissue masks'
+            print '..... Optimizing tissue masks'
+
             if not os.path.isfile(os.path.join(firstdir, 'FIRST_all_fast_firstseg.nii.gz')):
                 os.chdir(firstdir)
                 os.system('flirt -in ../ANATOMICAL_BRAIN.nii.gz -ref %s -omat anat2mni.mat -out anat2mni -cost mutualinfo -dof 12'%(mni_brain_1mm)) # no skulls. brain to brain.

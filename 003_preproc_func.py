@@ -25,7 +25,7 @@ def preprocess_functional(population, workspace):
 
         if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT.nii.gz')):
 
-            print '-- Inital editing of functional image'
+            print '.....Edit Functional Image (Slice-time-corr/Deoblique/Drop-TRs/Reorient) '
 
             # grab data
             shutil.copy(os.path.join(raw_dir, 'REST.nii.gz'), os.path.join(func_dir, 'REST.nii.gz'))
@@ -40,18 +40,17 @@ def preprocess_functional(population, workspace):
             print 'TR =', TR
             print 'N-Vols=', nvols
 
-            print '.......deoblique'
+            # Deoblique
             os.system('3drefit -deoblique REST.nii.gz')
 
-            print '.......slice time correction'
+            # Slice time correction
             os.chdir(edit_dir)
             os.system('3dTshift -TR %s -tzero 0 -tpattern alt+z -prefix REST_slc.nii.gz ../REST.nii.gz' %(TR))
 
-            print '.......dropping TRs'
-
+            # Dropping TRs
             os.system('3dcalc -a REST_slc.nii.gz%s -expr "a" -prefix REST_slc_drop.nii.gz' % frames)
 
-            print '.......reorient'
+            # Reorient to RPI
             os.system('3dresample -orient RPI  -prefix REST_EDIT.nii.gz  -inset REST_slc_drop.nii.gz')
 
 
@@ -62,8 +61,8 @@ def preprocess_functional(population, workspace):
             print '.... Running two-step motion correction'
 
             os.chdir(moco_dir)
-            # run No.1 - CORRATIO
 
+            # run No.1 - CORRATIO
             os.system('3dTstat -mean -prefix REST_EDIT_mean.nii.gz ../REST_EDIT.nii.gz')
             os.system('3dvolreg -Fourier -twopass -zpad 4  '
                       '-1Dfile          REST_EDIT_moco1.1D '
@@ -83,15 +82,16 @@ def preprocess_functional(population, workspace):
                       '-prefix          REST_EDIT_moco2.nii.gz '
                       '../REST_EDIT.nii.gz')
 
-            # mats = create_fsl_mats('%s/REST_EDIT_moco2_aff12.1D' % moco_dir)
 
-        ###### Brain Extraction and Intensity normaliatuon
+        ###### BET and Intensity normaliatuon
 
         if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_BRAIN_MEAN.nii.gz')):
 
             print '....Brain extraction and intensity normalization'
 
             os.chdir(func_dir)
+
+            # BET with AFNI
             os.system('3dAutomask -prefix REST_EDIT_BRAIN_MASK.nii.gz REST_EDIT.nii.gz')
             os.system('3dcalc -a REST_EDIT.nii.gz -b REST_EDIT_BRAIN_MASK.nii.gz  -expr \'a*b\' -prefix REST_EDIT_BRAIN_.nii.gz')
 
@@ -101,6 +101,9 @@ def preprocess_functional(population, workspace):
 
             #print '....get mean'
             os.system('3dTstat -mean -prefix REST_EDIT_BRAIN_MEAN.nii.gz REST_EDIT_BRAIN.nii.gz')
+
+
+            # mats = create_fsl_mats('%s/REST_EDIT_moco2_aff12.1D' % moco_dir)
 
 
 # paris.remove('PA049')
