@@ -30,7 +30,7 @@ def preprocess_anatomical(population, workspace):
 
             ### SEGMENT
             print '..... Running SPM segmentation'
-            if not os.path.isfile(os.path.join(spmdir, 'ANATOMICAL.nii')):
+            if not os.path.isfile(os.path.join(spmdir, 'mANATOMICAL.nii')):
 
                 os.chdir(spmdir)
 
@@ -46,14 +46,14 @@ def preprocess_anatomical(population, workspace):
 
         ####### DESKULL data using segmentation
 
-        if not os.path.isfile(os.path.join(spmdir, 'c1ANATOMICAL_bin.nii.gz')):
+        if not os.path.isfile(os.path.join(anatdir, 'ANATOMICAL_BRAIN.nii.gz')):
             print '..... Deskulling'
 
             os.system('fslmaths c1ANATOMICAL -thr 0.1 -bin c1ANATOMICAL_thr01')
             os.system('fslmaths c2ANATOMICAL -thr 0.1 -bin c2ANATOMICAL_thr01')
             os.system('fslmaths c3ANATOMICAL -thr 0.9 -bin c3ANATOMICAL_the09')
             os.system('fslmaths c1ANATOMICAL_thr01 -add c2ANATOMICAL_thr01 -add c3ANATOMICAL_thr01 -bin -fillh -s 3 -thr 0.4 -bin ../ANATOMICAL_BRAIN_MASK')
-            os.system('fslmaths mANATOMICAL -mas ../ANATOMICAL_BRAIN_MASK ../ANATOMICAL_BIAS_BRAIN')
+            os.system('fslmaths mANATOMICAL -mas ../ANATOMICAL_BRAIN_MASK ../ANATOMICAL_BRAIN')
 
 
         ####### OPTIMIZE masks with FSL-FIRST subcortical segmentation
@@ -72,7 +72,7 @@ def preprocess_anatomical(population, workspace):
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
 
 
-xall = ['HB004']#, 'LZ005', 'PA033', 'HA039']
+xall = ['HA020']#, 'LZ005', 'PA033', 'HA039']
 preprocess_anatomical(population = xall, workspace = tourettome_workspace)
 
 
