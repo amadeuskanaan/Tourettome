@@ -96,19 +96,19 @@ def preprocess_functional(population, workspace):
             func_e = os.path.join(func_dir, 'REST_EDIT.nii.gz')
             func_m = os.path.join(moco_dir, 'REST_EDIT_moco2.nii.gz')
 
-            for func_path, func_name in {func_e: 'EDIT', func_m: 'MOCO'}:
 
-                # BET
-                os.system('3dcalc -a %s -b REST_BRAIN_MASK.nii.gz -expr \'a*b\' -prefix REST_%s_BRAIN_.nii.gz'
-                          %(func_path, func_name))
+            #BET
+            os.system('3dcalc -a %s -b REST_BRAIN_MASK.nii.gz -expr \'a*b\' -prefix REST_EDIT_BRAIN_.nii.gz' %func_e)
+            os.system('3dcalc -a %s -b REST_BRAIN_MASK.nii.gz -expr \'a*b\' -prefix REST_EDIT_MOCO_BRAIN_.nii.gz' %func_m)
 
-                # Intensity Normalization'
-                os.system('fslmaths REST_%s_BRAIN_ -ing 1000 REST_%s_BRAIN -odt float' %(func_name,func_name))
-                os.system('rm -rf REST_%s_BRAIN_.nii.gz' &func_name)
+            # Intensity Normalization'
+            os.system('fslmaths REST_EDIT_BRAIN_ -ing 1000 REST_EDIT_BRAIN -odt float' )
+            os.system('fslmaths REST_EDIT_MOCO_BRAIN_ -ing 1000 REST_EDIT_MOCO_BRAIN -odt float' )
+            os.system('rm -rf REST*_.nii.gz')
 
-                # Get Mean'
-                os.system('3dTstat -mean -prefix REST_%s_BRAIN_MEAN.nii.gz REST_%s_BRAIN.nii.gz' %(func_name, func_name))
-
+            # Get Mean'
+            os.system('3dTstat -mean -prefix REST_EDIT_BRAIN_MEAN.nii.gz REST_EDIT_BRAIN.nii.gz' )
+            os.system('3dTstat -mean -prefix REST_EDIT_MOCO_BRAIN_MEAN.nii.gz REST_EDIT_MOCO_BRAIN.nii.gz' )
 
 
 # paris.remove('PA049')
