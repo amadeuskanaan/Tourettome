@@ -103,9 +103,8 @@ def preprocess_functional(population, workspace):
             os.system('3dTstat -mean -prefix REST_EDIT_BRAIN_MEAN.nii.gz REST_EDIT_BRAIN.nii.gz')
 
 
-            # mats = create_fsl_mats('%s/REST_EDIT_moco2_aff12.1D' % moco_dir)
 
 
 # paris.remove('PA049')
-preprocess_functional(population = ['HA020'], afs_dir = tourettome_afs, workspace = tourettome_workspace)
+preprocess_functional(population = ['HA020'], workspace = tourettome_workspace)
 
