@@ -51,7 +51,7 @@ def preprocess_functional(population, workspace):
             os.system('3dcalc -a REST_slc.nii.gz%s -expr "a" -prefix REST_slc_drop.nii.gz' % frames)
 
             # Reorient to RPI
-            os.system('3dresample -orient RPI  -prefix REST_EDIT.nii.gz  -inset REST_slc_drop.nii.gz')
+            os.system('3dresample -orient RPI  -prefix ../REST_EDIT.nii.gz -inset REST_slc_drop.nii.gz')
 
 
         ##### Generate Motion Paramters
