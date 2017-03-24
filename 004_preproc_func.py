@@ -96,7 +96,6 @@ def preprocess_functional(population, workspace):
             func_e = os.path.join(func_dir, 'REST_EDIT.nii.gz')
             func_m = os.path.join(moco_dir, 'REST_EDIT_moco2.nii.gz')
 
-
             #BET
             os.system('3dcalc -a %s -b REST_BRAIN_MASK.nii.gz -expr \'a*b\' -prefix REST_EDIT_BRAIN_.nii.gz' %func_e)
             os.system('3dcalc -a %s -b REST_BRAIN_MASK.nii.gz -expr \'a*b\' -prefix REST_EDIT_MOCO_BRAIN_.nii.gz' %func_m)
