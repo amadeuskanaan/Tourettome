@@ -158,7 +158,7 @@ def register(population, workspace_dir):
             os.system('fslmerge -t ../../REST_EDIT_BRAIN_UNIMOCO_MNI2mm.nii.gz warped*')
             # os.system('rm -rf vol* warp*')
 
-register(['PA013'], tourettome_workspace)
+register(['HA020'], tourettome_workspace)
 # del hannover_b[7] # HB008
 
 # register(paris, tourettome_workspace)
