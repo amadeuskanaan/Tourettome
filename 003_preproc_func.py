@@ -56,12 +56,11 @@ def preprocess_functional(population, workspace):
 
         ##### Generate Motion Paramters
 
-        if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_MOCO.nii.gz')):
+        if not os.path.isfile(os.path.join(moco_dir, 'REST_EDIT_moco2.nii.gz')):
 
             print '.... Running two-step motion correction'
 
             os.chdir(moco_dir)
-
             # run No.1 - CORRATIO
             os.system('3dTstat -mean -prefix REST_EDIT_mean.nii.gz ../REST_EDIT.nii.gz')
             os.system('3dvolreg -Fourier -twopass -zpad 4  '
@@ -91,18 +90,22 @@ def preprocess_functional(population, workspace):
 
             os.chdir(func_dir)
 
-            # BET with AFNI
-            os.system('3dAutomask -prefix REST_EDIT_BRAIN_MASK.nii.gz REST_EDIT.nii.gz')
-            os.system('3dcalc -a REST_EDIT.nii.gz -b REST_EDIT_BRAIN_MASK.nii.gz  -expr \'a*b\' -prefix REST_EDIT_BRAIN_.nii.gz')
+            # Create masks
+            os.system('3dAutomask -prefix REST_BRAIN_MASK.nii.gz moco/REST_EDIT_moco2.nii.gz')
 
-            #print '....Intensity normalization'
-            os.system('fslmaths REST_EDIT_BRAIN_ -ing 1000 REST_EDIT_BRAIN -odt float')
-            os.system('rm -rf REST_EDIT_BRAIN_.nii.gz')
+            for func_path, func_name in {os.path.join(func_dir, 'REST_EDIT.nii.gz')       : 'EDIT',
+                                         os.path.join(moco_dir, 'REST_EDIT_moco2.nii.gz') : 'MOCO'  }:
 
-            #print '....get mean'
-            os.system('3dTstat -mean -prefix REST_EDIT_BRAIN_MEAN.nii.gz REST_EDIT_BRAIN.nii.gz')
+                # BET
+                os.system('3dcalc -a %s -b REST_BRAIN_MASK.nii.gz -expr \'a*b\' -prefix REST_%s_BRAIN_.nii.gz'
+                          %(func_path, func_name))
 
+                # Intensity Normalization'
+                os.system('fslmaths REST_%s_BRAIN_ -ing 1000 REST_%s_BRAIN -odt float' %(func_name,func_name))
+                os.system('rm -rf REST_%s_BRAIN_.nii.gz' &func_name)
 
+                # Get Mean'
+                os.system('3dTstat -mean -prefix REST_%s_BRAIN_MEAN.nii.gz REST_%s_BRAIN.nii.gz' %(func_name, func_name))
 
 
 # paris.remove('PA049')
