@@ -18,8 +18,8 @@ def register(population, workspace_dir):
         print '========================================================================================'
         print 'Preprocessing functional data for %s' % (subject)
 
-        anat_dir     = os.path.join(workspace_dir, subject)
-        func_dir     = os.path.join(workspace_dir, subject)
+        anat_dir     = os.path.join(workspace_dir, subject, 'ANATOMICAL')
+        func_dir     = os.path.join(workspace_dir, subject, 'FUNCTIONAL')
         regdir       = mkdir_path(os.path.join(workspace_dir, subject, 'REGISTRATION'))
         regdir_anat  = mkdir_path(os.path.join(regdir, 'reg_anat'))
         regdir_mni   = mkdir_path(os.path.join(regdir, 'reg_mni'))
@@ -159,10 +159,5 @@ def register(population, workspace_dir):
             # os.system('rm -rf vol* warp*')
 
 register(['HA020'], tourettome_workspace)
-# del hannover_b[7] # HB008
-
-# register(paris, tourettome_workspace)
-# register(hannover_b, tourettome_workspace)
-# register(hannover_a, tourettome_workspace)
 
 
