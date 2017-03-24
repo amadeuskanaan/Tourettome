@@ -70,7 +70,7 @@ def register(population, workspace_dir):
 
             # Warp anatomical tissue classess to MNI space
 
-            for tissue_path, tissue_name in {anat_gm : 'GM', anat_wm: 'WM', anat_csf : 'CSF'}:
+            for tissue_path, tissue_name in {anat_gm: 'GM', anat_wm: 'WM', anat_csf: 'CSF'}:
 
                 print '........ Warping tissue masks to MNI'
 
