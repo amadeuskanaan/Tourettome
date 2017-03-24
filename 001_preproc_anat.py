@@ -78,6 +78,7 @@ def preprocess_anatomical(population, workspace):
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
 
 
+
 xall = ['HA020']#, 'LZ005', 'PA033', 'HA039']
 preprocess_anatomical(population = xall, workspace = tourettome_workspace)
 

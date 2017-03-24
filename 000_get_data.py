@@ -21,6 +21,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 
 
 
+
 preprocess_anatomical(population = ['HA020'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 
 

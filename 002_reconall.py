@@ -47,6 +47,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 xall = leipzig+paris+hannover_a + hannover_b
 # preprocess_anatomical(population = hannover_a, afs_dir = afs_dir, workspace = workspace_dir, freesurfer_dir= freesurfer_dir)
 
+
 xall = ['HB001', 'HB002', 'HB003', 'HB004', 'HB005', 'HB008', 'HB011', 'HB014', 'HB015', 'LZ001',
         'LZ008', 'LZ040', 'LZ044', 'LZ045', 'LZ052', 'LZ053', 'LZ057', 'LZ058', 'LZ062', 'LZ066',
         'LZ072', 'PA055']

@@ -111,6 +111,7 @@ def preprocess_functional(population, workspace):
             os.system('3dTstat -mean -prefix REST_EDIT_MOCO_BRAIN_MEAN.nii.gz REST_EDIT_MOCO_BRAIN.nii.gz' )
 
 
+
 # paris.remove('PA049')
 preprocess_functional(population = ['HA020'], workspace = tourettome_workspace)
 
