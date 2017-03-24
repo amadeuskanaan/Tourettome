@@ -93,8 +93,10 @@ def preprocess_functional(population, workspace):
             # Create masks
             os.system('3dAutomask -prefix REST_BRAIN_MASK.nii.gz moco/REST_EDIT_moco2.nii.gz')
 
-            for func_path, func_name in {os.path.join(func_dir, 'REST_EDIT.nii.gz')       : 'EDIT',
-                                         os.path.join(moco_dir, 'REST_EDIT_moco2.nii.gz') : 'MOCO'  }:
+            func_e = os.path.join(func_dir, 'REST_EDIT.nii.gz')
+            func_m = os.path.join(moco_dir, 'REST_EDIT_moco2.nii.gz')
+
+            for func_path, func_name in {func_e: 'EDIT', func_m: 'MOCO'}:
 
                 # BET
                 os.system('3dcalc -a %s -b REST_BRAIN_MASK.nii.gz -expr \'a*b\' -prefix REST_%s_BRAIN_.nii.gz'
