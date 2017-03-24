@@ -18,9 +18,14 @@ def make_cortical_thickness(population, workspace):
         kellydir = mkdir_path(os.path.join(subdir, 'THICKNESS'))
         os.chdir(kellydir)
 
+        prob_gm = os.path.join(subdir, 'ANATOMICAL/seg_spm/c1ANATOMICAL.nii')
+        prob_wm = os.path.join(subdir, 'ANATOMICAL/seg_spm/c2ANATOMICAL.nii')
+        first   = os.path.join(subdir, 'ANATOMICAL/seg_first/FIRST.nii.gz')
+
         # combine gm and wm with correect labels for DIRECT
-        os.system('fslmaths %s -mul 2 gm' % (os.path.join(subdir, 'ANATOMICAL/seg_spm/c1ANATOMICAL')))
-        os.system('fslmaths %s -mul 3 wm' % (os.path.join(subdir, 'ANATOMICAL/seg_spm/c2ANATOMICAL')))
+
+        os.system('fslmaths %s -thr 0.5 -bin -sub %s -bin -mul 2 gm' %(prob_gm, first))
+        os.system('fslmaths %s -thr 0.5 -bin -add %s -bin -mul 3 wm' %(prob_wm, first))
         os.system('fslmaths gm -add wm segmentation0.nii.gz')
 
         # Run ANTS-DIRECT

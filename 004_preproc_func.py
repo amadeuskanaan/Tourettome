@@ -61,26 +61,11 @@ def preprocess_functional(population, workspace):
             print '.... Running two-step motion correction'
 
             os.chdir(moco_dir)
-            # run No.1 - CORRATIO
-            os.system('3dTstat -mean -prefix REST_EDIT_mean.nii.gz ../REST_EDIT.nii.gz')
-            os.system('3dvolreg -Fourier -twopass -zpad 4  '
-                      '-1Dfile          REST_EDIT_moco1.1D '
-                      '-1Dmatrix_save   REST_EDIT_moco1_aff12.1D '
-                      '-maxdisp1D       REST_EDIT_moco1_MX.1D '
-                      '-base            REST_EDIT_mean.nii.gz '
-                      '-prefix          REST_EDIT_moco1.nii.gz '
-                      '../REST_EDIT.nii.gz')
+            # run No.1
+            os.system('mcflirt -in ../REST_EDIT -out REST_EDIT_moco1 -mats -plots -stats -meanvol ')
 
-            # run No.2 - BBR
-            os.system('3dTstat -mean -prefix REST_EDIT_moco1_mean.nii.gz REST_EDIT_moco1.nii.gz')
-            os.system('3dvolreg -Fourier -twopass -zpad 4  '
-                      '-1Dfile          REST_EDIT_moco2.1D '
-                      '-1Dmatrix_save   REST_EDIT_moco2_aff12.1D '
-                      '-maxdisp1D       REST_EDIT_moco2_MX.1D '
-                      '-base            REST_EDIT_moco1_mean.nii.gz '
-                      '-prefix          REST_EDIT_moco2.nii.gz '
-                      '../REST_EDIT.nii.gz')
-
+            # run No.2
+            os.system('mcflirt -in ../REST_EDIT -out REST_EDIT_moco2 -refvol REST_EDIT_moco1_meanvol -mats -plots -stats')
 
         ###### BET and Intensity normaliatuon
 
@@ -88,17 +73,20 @@ def preprocess_functional(population, workspace):
 
             print '....Brain extraction and intensity normalization'
 
-            os.chdir(func_dir)
+            os.chdir(moco_dir)
 
-            # Create masks
-            os.system('3dAutomask -prefix REST_BRAIN_MASK.nii.gz moco/REST_EDIT_moco2.nii.gz')
+            # Create mask
+            os.system('bet REST_EDIT_moco2_meanvol.nii.gz REST_EDIT_moco2_meanvol_brain -m -R -f 0.35' )
+            os.system('cp REST_EDIT_moco2_meanvol_brain_mask.nii.gz ../REST_BRAIN_MASK.nii.gz')
 
             func_e = os.path.join(func_dir, 'REST_EDIT.nii.gz')
             func_m = os.path.join(moco_dir, 'REST_EDIT_moco2.nii.gz')
 
-            #BET
-            os.system('3dcalc -a %s -b REST_BRAIN_MASK.nii.gz -expr \'a*b\' -prefix REST_EDIT_BRAIN_.nii.gz' %func_e)
-            os.system('3dcalc -a %s -b REST_BRAIN_MASK.nii.gz -expr \'a*b\' -prefix REST_EDIT_MOCO_BRAIN_.nii.gz' %func_m)
+            os.chdir(func_dir)
+
+            # Extract Brain
+            os.system('fslmaths %s -mul REST_BRAIN_MASK REST_EDIT_BRAIN_.nii.gz'      %(func_e))
+            os.system('fslmaths %s -mul REST_BRAIN_MASK REST_EDIT_MOCO_BRAIN_.nii.gz' %(func_m))
 
             # Intensity Normalization'
             os.system('fslmaths REST_EDIT_BRAIN_ -ing 1000 REST_EDIT_BRAIN -odt float' )
@@ -106,8 +94,8 @@ def preprocess_functional(population, workspace):
             os.system('rm -rf REST*_.nii.gz')
 
             # Get Mean'
-            os.system('3dTstat -mean -prefix REST_EDIT_BRAIN_MEAN.nii.gz REST_EDIT_BRAIN.nii.gz' )
-            os.system('3dTstat -mean -prefix REST_EDIT_MOCO_BRAIN_MEAN.nii.gz REST_EDIT_MOCO_BRAIN.nii.gz' )
+            os.system('fslmaths REST_EDIT_BRAIN -Tmean REST_EDIT_BRAIN_MEAN.nii' )
+            os.system('fslmaths REST_EDIT_MOCO_BRAIN -Tmean REST_EDIT_MOCO_BRAIN_MEAN.nii' )
 
 
 
