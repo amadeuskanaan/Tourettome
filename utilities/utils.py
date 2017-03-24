@@ -44,7 +44,7 @@ def create_fsl_mats(afni_aff_1D):
         try:
             os.makedirs(os.path.join(cur_dir, 'MATS'))
         except OSError:
-            print 'Matrix output folder already created'
+            print '...........Matrix output folder already created'
         out_dir  = str(os.path.join(cur_dir, 'MATS'))
 
         for i, line in enumerate(aff):
@@ -53,7 +53,7 @@ def create_fsl_mats(afni_aff_1D):
             mat[1] = line[4:8]
             mat[2] = line[8:12]
             mat[3] = (0,0,0,1)
-            out_file  = os.path.join('%s/MAT_%s' %(out_dir, '{0:0>4}'.format(i)))
+            out_file  = os.path.join('%s/MAT_%s.mat' %(out_dir, '{0:0>4}'.format(i)))
             np.savetxt( out_file, mat, delimiter = ' ', fmt="%s")
 
             mat_list.append(out_file)
