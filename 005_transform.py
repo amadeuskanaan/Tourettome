@@ -57,7 +57,7 @@ def register(population, workspace_dir):
             anat2mni.inputs.sampling_strategy=['Regular', 'Regular', 'None']
             anat2mni.inputs.sampling_percentage=[0.25,0.25,1]
             anat2mni.inputs.radius_or_number_of_bins=[32,32,4]
-            anat2mni.inputs.num_threads = 30
+            anat2mni.inputs.num_threads = 26
             anat2mni.inputs.interpolation='Linear'
             anat2mni.inputs.winsorize_lower_quantile=0.005
             anat2mni.inputs.winsorize_upper_quantile=0.995
