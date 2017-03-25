@@ -11,6 +11,14 @@ import nipype.interfaces.spm as spm
 
 
 def preprocess_anatomical(population, workspace):
+
+    print '========================================================================================'
+    print ''
+    print '                    Tourettome - 001.Anatomical Data PreProcessing                      '
+    print ''
+    print '========================================================================================'
+
+
     for subject in population:
         print '========================================================================================'
         print '-Preprocessing anatomical data for %s' %subject
@@ -76,7 +84,6 @@ def preprocess_anatomical(population, workspace):
             os.system('fslmaths %s/c1ANATOMICAL -thr 0.55 -bin -add FIRST -bin ../ANATOMICAL_GM'  %spmdir)
             os.system('fslmaths %s/c2ANATOMICAL -thr 0.9  -bin -sub FIRST -bin ../ANATOMICAL_WM'  %spmdir)
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
-
 
 
 preprocess_anatomical(population = test_dataset, workspace = tourettome_workspace)

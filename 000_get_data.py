@@ -5,6 +5,16 @@ from variables.subject_list import *
 import shutil
 
 def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
+
+    print '========================================================================================'
+    print ''
+    print '                          Tourettome - 000.Grab Raw Data                                '
+    print ''
+    print '========================================================================================'
+
+
+
+
     for subject in population:
         print '========================================================================================'
         print '-Preprocessing anatomical data for %s' %subject
