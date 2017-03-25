@@ -100,5 +100,5 @@ def preprocess_functional(population, workspace):
 
 
 # paris.remove('PA049')
-preprocess_functional(population = ['HA020'], workspace = tourettome_workspace)
+preprocess_functional(population = test_dataset, workspace = tourettome_workspace)
 

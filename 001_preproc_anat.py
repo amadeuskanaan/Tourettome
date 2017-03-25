@@ -79,6 +79,5 @@ def preprocess_anatomical(population, workspace):
 
 
 
-xall = ['HA020']#, 'LZ005', 'PA033', 'HA039']
-preprocess_anatomical(population = xall, workspace = tourettome_workspace)
+preprocess_anatomical(population = test_dataset, workspace = tourettome_workspace)
 

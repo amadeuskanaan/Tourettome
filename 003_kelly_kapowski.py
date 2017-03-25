@@ -41,4 +41,4 @@ def make_cortical_thickness(population, workspace):
                   '--thickness-prior-estimate 10.000000')
 
 
-make_cortical_thickness(['HA020'], tourettome_workspace)
+make_cortical_thickness(test_dataset, tourettome_workspace)

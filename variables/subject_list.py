@@ -9,6 +9,9 @@ mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii
 mni_HOLV_2mm         = '/scr/sambesi1/workspace/Projects/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
 bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
 
+test_dataset  = ['PA072', 'HB027', 'HA013', 'LZ050']
+
+
 paris = ['PA001', 'PA002', 'PA003', 'PA004', 'PA005', 'PA006', 'PA007', 'PA008', 'PA009', 'PA010',
          'PA011', 'PA012', 'PA013', 'PA014', 'PA015', 'PA016', 'PA017', 'PA018', 'PA019', 'PA020',
          'PA021', 'PA022', 'PA023', 'PA024', 'PA025', 'PA026', 'PA027', 'PA028', 'PA029', 'PA030',
