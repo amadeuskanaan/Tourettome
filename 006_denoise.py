@@ -110,5 +110,4 @@ def nuisance_signal_regression(population, workspace_dir):
         # print bp.cmdline
 
 
-
-nuisance_signal_regression(['HB012'], tourettome_workspace)
+nuisance_signal_regression(test_dataset, tourettome_workspace)
