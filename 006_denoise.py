@@ -40,7 +40,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
         # Calculate Friston-24 paramters
         os.chdir(nuisance_dir)
-        movpar  = os.path.join(subdir, 'FUNCTIONAL/moco/REST_EDIT_moco2.1D' )
+        movpar  = os.path.join(subdir, 'FUNCTIONAL/moco/REST_EDIT_moco2.par' )
         friston = os.path.join(subdir, 'FUNC_DENOISE/FRISTON_24.1D')
         calc_friston_twenty_four(movpar)
 
