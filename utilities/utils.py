@@ -80,6 +80,8 @@ def calc_friston_twenty_four(mov_par):
 
     twenty_four   = np.concatenate((twenty_four, six_roll_squ), axis=1)
     updated_mov   = os.path.join(os.getcwd(), 'FRISTON_24.1D')
-    np.savetxt(updated_mov, twenty_four, fmt='%0.8f', delimiter=' ')
+
+    if not os.path.isfile(os.curdir):
+        np.savetxt(updated_mov, twenty_four, fmt='%0.8f', delimiter=' ')
 
     return updated_mov

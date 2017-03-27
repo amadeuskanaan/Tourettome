@@ -27,11 +27,12 @@ def preprocess_functional(population, workspace):
 
             print '.....Edit Functional Image (Slice-time-corr/Deoblique/Drop-TRs/Reorient) '
 
-            # grab data
+            os.chdir(func_dir)
+
+            # get data
             shutil.copy(os.path.join(raw_dir, 'REST.nii.gz'), os.path.join(func_dir, 'REST.nii.gz'))
 
             # get params
-            os.chdir(func_dir)
             img_hdr = nb.load('REST.nii.gz').header
             TR    = img_hdr['pixdim'][4]
             nvols = img_hdr['dim'][4]
@@ -73,20 +74,15 @@ def preprocess_functional(population, workspace):
 
             print '....Brain extraction and intensity normalization'
 
-            os.chdir(moco_dir)
-
-            # Create mask
-            os.system('bet REST_EDIT_moco2_meanvol.nii.gz REST_EDIT_moco2_meanvol_brain -m -R -f 0.35' )
-            os.system('cp REST_EDIT_moco2_meanvol_brain_mask.nii.gz ../REST_BRAIN_MASK.nii.gz')
-
-            func_e = os.path.join(func_dir, 'REST_EDIT.nii.gz')
-            func_m = os.path.join(moco_dir, 'REST_EDIT_moco2.nii.gz')
-
             os.chdir(func_dir)
 
+            # Create mask
+            os.system('bet moco/REST_EDIT_moco2_meanvol.nii.gz moco/REST_EDIT_moco2_meanvol_brain -m -R -f 0.35' )
+            os.system('cp moco/REST_EDIT_moco2_meanvol_brain_mask.nii.gz REST_BRAIN_MASK.nii.gz')
+
             # Extract Brain
-            os.system('fslmaths %s -mul REST_BRAIN_MASK REST_EDIT_BRAIN_.nii.gz'      %(func_e))
-            os.system('fslmaths %s -mul REST_BRAIN_MASK REST_EDIT_MOCO_BRAIN_.nii.gz' %(func_m))
+            os.system('fslmaths REST_EDIT -mul REST_BRAIN_MASK')
+            os.system('fslmaths moco/REST_EDIT_MOCO_BRAIN_ -mul REST_BRAIN_MASK .nii.gz')
 
             # Intensity Normalization'
             os.system('fslmaths REST_EDIT_BRAIN_ -ing 1000 REST_EDIT_BRAIN -odt float' )

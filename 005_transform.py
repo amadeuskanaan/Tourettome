@@ -154,7 +154,7 @@ def register(population, workspace_dir):
                           '-t ../transform1Warp.nii.gz ../transform0GenericAffine.mat MAT_UNI_%s.tfm'
                           %(frame, frame, mni_brain_2mm,  frame))
 
-            os.system('fslmerge -t %s/REST_EDIT_BRAIN_UNIMOCO_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
+            os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
             os.system('rm -rf %s' %concat_dir)
 
 register(test_dataset, tourettome_workspace)
