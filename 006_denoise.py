@@ -74,7 +74,7 @@ def nuisance_signal_regression(population, workspace_dir):
                         TR))
 
 
-             print '......extracting tissue data'
+            print '......extracting tissue data'
 
             extract_tissue_data(data_file = os.path.join(aroma_dir, 'denoised_func_data_nonaggr.nii.gz'),
                                  ventricles_mask_file = mni_HOLV_2mm,
