@@ -11,7 +11,7 @@ bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
 
 test_dataset  = ['PA072', 'HB027', 'HA013', 'LZ050']
 
-# test_dataset = ['PA043']
+test_dataset = ['PA043']
 
 paris = ['PA001', 'PA002', 'PA003', 'PA004', 'PA005', 'PA006', 'PA007', 'PA008', 'PA009', 'PA010',
          'PA011', 'PA012', 'PA013', 'PA014', 'PA015', 'PA016', 'PA017', 'PA018', 'PA019', 'PA020',
@@ -44,6 +44,14 @@ hannover_b  = ['HB001', 'HB002', 'HB003', 'HB004', 'HB005', 'HB006', 'HB007', 'H
                'HB011', 'HB012', 'HB013', 'HB014', 'HB015', 'HB016', 'HB017', 'HB018', 'HB019', 'HB020',
                'HB021', 'HB022', 'HB023', 'HB024', 'HB025', 'HB026', 'HB027', 'HB028', 'HB029', 'HB030',
                'HB031', 'HB032', 'HB033']
+
+
+paris1      = paris[0:50]
+paris2      = paris[50:]
+leipzig1    = leipzig[:40]
+leipzig2    = leipzig[40:]
+hannover_a1 = hannover_a[:25]
+hannover_a2 = hannover_a[25:]
 
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b
 
