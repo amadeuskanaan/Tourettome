@@ -7,7 +7,7 @@ import dicom as pydcm
 import numpy as np
 import pandas as pd
 
-from utils import *
+from utilities.utils import *
 from variables.subject_list_original import *
 
 

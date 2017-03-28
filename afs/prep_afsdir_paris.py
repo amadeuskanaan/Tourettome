@@ -8,7 +8,7 @@ import dicom as pydcm
 import numpy as np
 import pandas as pd
 
-from utils import mkdir_path
+from utilities.utils import mkdir_path
 from variables.subject_list_original import *
 
 

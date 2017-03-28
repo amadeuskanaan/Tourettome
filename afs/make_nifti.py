@@ -3,9 +3,8 @@ __author__ = 'kanaan_06.03.2017'
 import os
 import shutil
 
-# from utils import mkdir_path
+from utilities.utils import mkdir_path
 from variables.subject_list import *
-
 
 def make_nifti(population, afs_dir):
     count = 0
