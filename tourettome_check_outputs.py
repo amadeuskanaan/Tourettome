@@ -11,8 +11,7 @@ def check_outputs(population, workspace):
         if op.isfile(op.join(workspace, subject, 'ANATOMICAL/ANATOMICAL_GM.nii.gz')):
             print '%s Anatomical complete' %subject
         else:
-            print 'Subject %s anatomical preprocessing still running'
-
+            print '%s Anatomical still running' %subject
 
 
 check_outputs(tourettome_subjects, tourettome_workspace)
