@@ -5,7 +5,7 @@ import shutil
 
 import nipype.interfaces.spm as spm
 
-from utils import mkdir_path
+from utilities.utils import mkdir_path
 from variables.subject_list import *
 
 

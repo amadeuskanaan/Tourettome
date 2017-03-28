@@ -6,7 +6,7 @@ import sys
 
 import nibabel as nb
 
-from utils import mkdir_path
+from utilities.utils import mkdir_path
 from variables.subject_list import *
 
 assert len(sys.argv)== 2

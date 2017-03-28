@@ -5,7 +5,7 @@ import os
 import nibabel as nb
 from CPAC.nuisance.nuisance import calc_residuals, extract_tissue_data
 
-from utils import *
+from utilities.utils import *
 from variables.subject_list import *
 
 

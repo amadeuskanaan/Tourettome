@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from utils import mkdir_path
+from utilities.utils import mkdir_path
 from variables.subject_list import *
 
 

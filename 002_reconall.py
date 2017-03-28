@@ -3,7 +3,7 @@ __author__ = 'kanaan_02.12.2016'
 import os
 import sys
 
-from utils import mkdir_path
+from utilities.utils import mkdir_path
 from variables.subject_list import *
 
 # Function to preprocess multi-site anatomical data (mprage and mp2rage)

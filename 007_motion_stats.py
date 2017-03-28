@@ -7,7 +7,7 @@ import pandas as pd
 from nipype.algorithms.misc import TSNR
 
 from motion.motion_statistics import *
-from utils import *
+from utilities.utils import *
 
 
 def quality_control(population, workspace):

@@ -5,7 +5,7 @@ import os
 import nibabel as nb
 import nipype.interfaces.ants as ants
 
-from utils import *
+from utilities.utils import *
 from variables.subject_list import *
 
 
