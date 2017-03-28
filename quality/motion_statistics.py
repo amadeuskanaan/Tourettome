@@ -578,19 +578,21 @@ def calculate_DVARS(rest, mask):
 
     out_file = os.path.join(os.getcwd(), 'DVARS.npy')
 
-    rest_data = nib.load(rest).get_data().astype(np.float32)
-    mask_data = nib.load(mask).get_data().astype('bool')
+    if not os.path.isfile(out_file):
 
-    #square of relative intensity value for each voxel across
-    #every timepoint
-    data = np.square(np.diff(rest_data, axis = 3))
-    #applying mask, getting the data in the brain only
-    data = data[mask_data]
-    #square root and mean across all timepoints inside mask
-    DVARS = np.sqrt(np.mean(data, axis=0))
+        rest_data = nib.load(rest).get_data().astype(np.float32)
+        mask_data = nib.load(mask).get_data().astype('bool')
+
+        #square of relative intensity value for each voxel across
+        #every timepoint
+        data = np.square(np.diff(rest_data, axis = 3))
+        #applying mask, getting the data in the brain only
+        data = data[mask_data]
+        #square root and mean across all timepoints inside mask
+        DVARS = np.sqrt(np.mean(data, axis=0))
 
 
-    np.save(out_file, DVARS)
+        np.save(out_file, DVARS)
 
     return out_file
 

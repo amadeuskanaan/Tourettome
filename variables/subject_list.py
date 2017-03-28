@@ -5,6 +5,9 @@ tourettome_workspace    = '/scr/sambesi4/workspace/project_TOURETTOME/preproc'
 tourettome_freesurfer   = '/scr/sambesi2/TOURETTOME/FS_SUBJECTS'
 
 mni_brain_1mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_1mm_brain.nii.gz'
+mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii.gz'
+mni_HOLV_2mm         = '/scr/sambesi1/workspace/Projects/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
+bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
 
 
 paris = ['PA001', 'PA002', 'PA003', 'PA004', 'PA005', 'PA006', 'PA007', 'PA008', 'PA009', 'PA010',
