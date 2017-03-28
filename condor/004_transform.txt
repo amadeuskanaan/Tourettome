@@ -1,0 +1,11 @@
+executable = /usr/bin/python
+arguments = /scr/sambesi1/workspace/Projects/Tourettome/004_transform.py $(Process)
+universe = vanilla
+output = /scr/sambesi1/workspace/Projects/Tourettome/condor/logs_transform/$(Process)_output.txt
+error = /scr/sambesi1/workspace/Projects/Tourettome/condor/logs_transform/$(Process)_error.txt
+log = /scr/sambesi1/workspace/Projects/Tourettome/condor/logs_transform/$(Process)_log.txt
+getenv = True
+request_memory = 4000
+request_cpus = 1
+notify_user = amadeus.kanaan@gmail.com
+queue 52

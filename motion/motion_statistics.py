@@ -543,22 +543,13 @@ def gen_power_parameters(subject_id, scan_id, FDP_1D, FDJ_1D, DVARS, \
 
         f.write("%s," % subject_id)
         f.write("%s," % scan_id)
-
         f.write('%.4f,' % meanFD_Power)
-
         f.write('%.4f,' % meanFD_Jenkinson)
-
         f.write('%.4f,' % numFD)
-
         f.write('%.4f,' % rmsFD)
-
         f.write('%.4f,' % FDquartile)
-
         f.write('%.4f,' % percentFD)
-
         f.write('%.4f' % meanDVARS)
-
-
     return out_file
 
 

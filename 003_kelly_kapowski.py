@@ -1,16 +1,19 @@
 import os
-import sys
-from utilities.utils import mkdir_path
+
+from utils import mkdir_path
 from variables.subject_list import *
 
 
 # Registration based cortical thickness measurement.
 # Das et al., Neuroimage. 2009 Apr 15;45(3):867-79. doi: 10.1016/j.neuroimage.2008.12.016. Epub 2008 Dec 25.
 
+# assert len(sys.argv)== 2
+# subject_index=int(sys.argv[1])
 
 def make_cortical_thickness(population, workspace):
 
     for subject in population:
+        # subject = population[subject_index]
         print '========================================================================================'
         print 'Runing Kelly Kapowski diffeomorphic registration based cortical thickness %s' % (subject)
 
@@ -41,4 +44,4 @@ def make_cortical_thickness(population, workspace):
                   '--thickness-prior-estimate 10.000000')
 
 
-make_cortical_thickness(test_dataset, tourettome_workspace)
+make_cortical_thickness(paris[0:40], tourettome_workspace)

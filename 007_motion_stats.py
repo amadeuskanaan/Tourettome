@@ -1,15 +1,16 @@
 __author__ = 'kanaan 23.03.2017'
 
 import os
+
 import numpy as np
-from utilities.utils import *
-from variables.subject_list import *
-from motion.motion_statistics import *
+import pandas as pd
 from nipype.algorithms.misc import TSNR
+
+from motion.motion_statistics import *
+from utils import *
 
 
 def quality_control(population, workspace):
-
 
     for subject in population:
         print '###############################################################################'
@@ -44,11 +45,45 @@ def quality_control(population, workspace):
             DVARS = calculate_DVARS(func_wmcsf, gm)
 
         #######################################
+        # Calculate TSNR map
         if not os.path.isfile(os.path.join(qcdir, 'REST_PPROC_NATIVE_BRAIN_tsnr.nii.gz')):
             tsnr = TSNR()
             tsnr.inputs.in_file = func_edit
             tsnr.run()
 
+        #######################################
+
+        df = pd.Dataframe(index=subject, columns = ['FD', 'FD_in', 'FD_max', 'FD_q4', 'DVARS', 'TSNR' ])
+        df.loc[subject]['FD']     = str(np.round(np.mean(FD1D), 3))
+        df.loc[subject]['FD_in']  = str(np.round(len(frames_in), 3))
+        quat = int(len(FD1D) / 4)
+        df.loc[subject]['FD_topQua'] = str(np.round(np.mean(np.sort(FD1D)[::-1][:quat]), 3))
+        df.loc[subject]['FD_max'] = str(np.round(np.max(FD1D), 3))
+        df.loc[subject]['FD_RMS'] = str(np.round(np.sqrt(np.mean(FD1D)), 3))
+        df.loc[subject]['DVARS'] = str(np.round(np.mean(np.load(DVARS)), 3))
+        df.loc[subject]['TSNR'] = str(np.round(np.median(np.load('TSNR_data.npy')), 3))
+        df.to_csv('quality_paramters.csv')
+
+
+
+    """
+Method to generate Power parameters for scrubbing
+
+Parameters
+----------
+subject_id : string
+    subject name or id
+scan_id : string
+    scan name or id
+FD_ID: string
+    framewise displacement(FD as per power et al., 2012) file path
+FDJ_ID: string
+    framewise displacement(FD as per jenkinson et al., 2002) file path
+threshold : float
+    scrubbing threshold set in the configuration
+    by default the value is set to 1.0
+DVARS : string
+    path to numpy file containing DVARS
 
 
 

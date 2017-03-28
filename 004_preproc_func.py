@@ -1,16 +1,21 @@
 __author__ = 'kanaan_02.12.2016'
 
 import os
-import nibabel as nb
 import shutil
+import sys
+
 import nibabel as nb
-from utilities.utils import mkdir_path
-from utilities.utils import create_fsl_mats
+
+from utils import mkdir_path
 from variables.subject_list import *
+
+assert len(sys.argv)== 2
+subject_index=int(sys.argv[1])
 
 def preprocess_functional(population, workspace):
 
-    for subject in population:
+    # for subject in population:
+        subject = population[subject_index]
         print '========================================================================================'
         print 'Preprocessing functional data for %s' %(subject)
 

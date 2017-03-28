@@ -1,10 +1,13 @@
 __author__ = 'kanaan_02.12.2016'
 
 import os
-from utilities.utils import mkdir_path
-from variables.subject_list import *
 import shutil
+
 import nipype.interfaces.spm as spm
+
+from utils import mkdir_path
+from variables.subject_list import *
+
 
 # Function to preprocess multi-site anatomical data (mprage and mp2rage)
 # Needs FSL5, AFNI, SPM, FREESURFER, pyenv
@@ -86,5 +89,11 @@ def preprocess_anatomical(population, workspace):
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
 
 
-preprocess_anatomical(population = test_dataset, workspace = tourettome_workspace)
+# preprocess_anatomical(population = leipzig1, workspace = tourettome_workspace)
+# preprocess_anatomical(population = leipzig2, workspace = tourettome_workspace)
+# preprocess_anatomical(population = paris1, workspace = tourettome_workspace)
+# preprocess_anatomical(population = paris2, workspace = tourettome_workspace)
+# preprocess_anatomical(population = hannover_a1, workspace = tourettome_workspace)
+# preprocess_anatomical(population = hannover_a2, workspace = tourettome_workspace)
+# preprocess_anatomical(population = hannover_b, workspace = tourettome_workspace)
 

@@ -1,12 +1,13 @@
 __author__ = 'kanaan 03.12.2015'
 
 import os
-import sys
-import shutil
+
 import nibabel as nb
 import nipype.interfaces.ants as ants
+
+from utils import *
 from variables.subject_list import *
-from utilities.utils import *
+
 
 # assert len(sys.argv)== 2
 # subject_index=int(sys.argv[1])

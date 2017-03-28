@@ -1,8 +1,9 @@
-
 import os
-from utilities.utils import mkdir_path
-from variables.subject_list import *
 import shutil
+
+from utils import mkdir_path
+from variables.subject_list import *
+
 
 def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 
@@ -12,12 +13,11 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
     print ''
     print '========================================================================================'
 
-
-
-
+    count = 0
     for subject in population:
+        count +=1
         print '========================================================================================'
-        print '-Preprocessing anatomical data for %s' %subject
+        print '-%s Preprocessing anatomical data for %s' %(count, subject)
 
         # input
         afsdir = os.path.join(afs_dir, subject, 'NIFTI')
@@ -32,7 +32,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 
 
 
-preprocess_anatomical(population = test_dataset, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+preprocess_anatomical(population = tourettome_subjects, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 
 
 

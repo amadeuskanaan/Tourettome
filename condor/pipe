@@ -1,0 +1,11 @@
+executable = /usr/bin/python
+arguments = /scr/sambesi1/workspace/Projects/Tourettome/tourettome_runner.py $(Process)
+universe = vanilla
+output = /scr/sambesi1/workspace/Projects/Tourettome/condor/logs_pipe/$(Process)_output.txt
+error = /scr/sambesi1/workspace/Projects/Tourettome/condor/logs_pipe/$(Process)_error.txt
+log = /scr/sambesi1/workspace/Projects/Tourettome/condor/logs_pipe/$(Process)_log.txt
+getenv = True
+request_memory = 4000
+request_cpus = 1
+notify_user = amadeus.kanaan@gmail.com
+queue 1

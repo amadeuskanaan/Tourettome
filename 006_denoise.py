@@ -1,15 +1,12 @@
 __author__ = 'kanaan 22.03.2017'
 
 import os
-from variables.subject_list import *
-from utilities.utils import *
-import nibabel as nb
 
-import nipype
-from nipype.utils import config
-from nipype.interfaces import fsl
+import nibabel as nb
 from CPAC.nuisance.nuisance import calc_residuals, extract_tissue_data
 
+from utils import *
+from variables.subject_list import *
 
 
 def nuisance_signal_regression(population, workspace_dir):

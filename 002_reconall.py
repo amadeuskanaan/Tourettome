@@ -1,11 +1,10 @@
 __author__ = 'kanaan_02.12.2016'
 
 import os
-from utilities.utils import mkdir_path
-from variables.subject_list import *
-import shutil
 import sys
-import nipype.interfaces.spm as spm
+
+from utils import mkdir_path
+from variables.subject_list import *
 
 # Function to preprocess multi-site anatomical data (mprage and mp2rage)
 # Needs FSL5, AFNI, SPM, FREESURFER, pyenv
