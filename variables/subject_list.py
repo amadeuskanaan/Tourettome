@@ -11,6 +11,7 @@ bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
 
 test_dataset  = ['PA072', 'HB027', 'HA013', 'LZ050']
 
+# test_dataset = ['PA043']
 
 paris = ['PA001', 'PA002', 'PA003', 'PA004', 'PA005', 'PA006', 'PA007', 'PA008', 'PA009', 'PA010',
          'PA011', 'PA012', 'PA013', 'PA014', 'PA015', 'PA016', 'PA017', 'PA018', 'PA019', 'PA020',
