@@ -12,8 +12,8 @@ subject_index=int(sys.argv[1])
 
 def make_cortical_thickness(population, workspace, num_threads = 1):
 
-    for subject in population:
-        # subject = population[subject_index]
+    #for subject in population:
+        subject = population[subject_index]
         print '========================================================================================'
         print 'Runing Cortical thickness estimation for %s' % (subject)
 
