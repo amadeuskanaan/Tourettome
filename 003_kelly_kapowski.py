@@ -7,13 +7,13 @@ from variables.subject_list import *
 # Registration based cortical thickness measurement.
 # Das et al., Neuroimage. 2009 Apr 15;45(3):867-79. doi: 10.1016/j.neuroimage.2008.12.016. Epub 2008 Dec 25.
 
-assert len(sys.argv)== 2
-subject_index=int(sys.argv[1])
+#assert len(sys.argv)== 2
+#subject_index=int(sys.argv[1])
 
 def make_cortical_thickness(population, workspace, num_threads = 1):
 
-    #for subject in population:
-        subject = population[subject_index]
+    for subject in population:
+        #subject = population[subject_index]
         print '========================================================================================'
         print 'Runing Cortical thickness estimation for %s' % (subject)
 
