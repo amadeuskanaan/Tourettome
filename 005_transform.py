@@ -66,7 +66,7 @@ def register(population, workspace_dir):
             anat2mni.inputs.output_inverse_warped_image=True
             anat2mni.inputs.output_warped_image=True
             anat2mni.inputs.use_histogram_matching=True
-            anat2mni.cmdline
+            print anat2mni.cmdline
             #anat2mni.run()
             #os.system('cp transform_Warped.nii.gz ../ANATOMICAL_BRAIN_MNI1mm.nii.gz')
 
@@ -159,6 +159,6 @@ def register(population, workspace_dir):
         #     os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
         #     os.system('rm -rf %s' %concat_dir)
 
-register(tourettome_subjects, tourettome_workspace)
+register(['LZ010'], tourettome_workspace)
 
 
