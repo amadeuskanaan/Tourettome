@@ -64,4 +64,4 @@ def make_cortical_thickness(population, workspace):
 
 
 
-make_cortical_thickness(['PA072'], tourettome_workspace)
+make_cortical_thickness(paris, tourettome_workspace)
