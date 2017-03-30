@@ -96,5 +96,6 @@ def preprocess_anatomical(population, workspace):
 # preprocess_anatomical(population = hannover_a1, workspace = tourettome_workspace)
 # preprocess_anatomical(population = hannover_a2, workspace = tourettome_workspace)
 # preprocess_anatomical(population = hannover_b, workspace = tourettome_workspace)
-preprocess_anatomical(population = ['HA053', 'HA054'], workspace = tourettome_workspace)
+#preprocess_anatomical(population = ['HA053', 'HA054'], workspace = tourettome_workspace)
+preprocess_anatomical(population = tourettome_subjects , workspace = tourettome_workspace)
 
