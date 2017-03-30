@@ -26,10 +26,10 @@ def make_quality_reports(population, workspace):
         plot_vol_quality(anat, gm, subject[0:2], '%s - Native Anatomical' %subject, 'plot_anat_native.png', cmap = 'r' )
 
         # Plot anat2mni reg quality using GM as a boundary
-        plot_vol_quality(mni_brain_1mm, gm2mni, 'MNI', '%s - Anatomical to MNI xfm' %subject, 'plot_anat_mni.png', cmap = 'r' )
+        #plot_vol_quality(mni_brain_1mm, gm2mni, 'MNI', '%s - Anatomical to MNI xfm' %subject, 'plot_anat_mni.png', cmap = 'r' )
 
         # Plot func2anat reg quality using GM as a boundary
-        plot_vol_quality(func2anat, gm, subject[0:2], '%s - Func to Anat xfm' %subject, 'plot_func2anat-png', cmap = 'r' )
+        #plot_vol_quality(func2anat, gm, subject[0:2], '%s - Func to Anat xfm' %subject, 'plot_func2anat-png', cmap = 'r' )
 
 
 
