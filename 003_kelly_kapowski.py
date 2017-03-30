@@ -1,4 +1,5 @@
 import os
+import sys
 from utilities.utils import mkdir_path
 from variables.subject_list import *
 
@@ -6,10 +7,10 @@ from variables.subject_list import *
 # Registration based cortical thickness measurement.
 # Das et al., Neuroimage. 2009 Apr 15;45(3):867-79. doi: 10.1016/j.neuroimage.2008.12.016. Epub 2008 Dec 25.
 
-# assert len(sys.argv)== 2
-# subject_index=int(sys.argv[1])
+assert len(sys.argv)== 2
+subject_index=int(sys.argv[1])
 
-def make_cortical_thickness(population, workspace):
+def make_cortical_thickness(population, workspace, num_threads = 1):
 
     for subject in population:
         # subject = population[subject_index]
@@ -23,8 +24,6 @@ def make_cortical_thickness(population, workspace):
         prob_gm = os.path.join(subdir, 'ANATOMICAL/seg_spm/c1ANATOMICAL.nii')
         prob_wm = os.path.join(subdir, 'ANATOMICAL/seg_spm/c2ANATOMICAL.nii')
         first   = os.path.join(subdir, 'ANATOMICAL/seg_first/FIRST.nii.gz')
-
-        num_threads = 24
 
         if not os.path.isfile(os.path.join(ctdir, 'cortical_thickness_kellykapowski.nii.gz')):
 
@@ -62,6 +61,4 @@ def make_cortical_thickness(population, workspace):
             # Run
             os.system('LaplacianThickness wm.nii.gz gm.nii.gz cortical_thickness_laplacian.nii.gz')
 
-
-
-make_cortical_thickness(paris, tourettome_workspace)
+make_cortical_thickness(population=paris, workspace=tourettome_workspace)
