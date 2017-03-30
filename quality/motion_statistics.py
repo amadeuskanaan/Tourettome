@@ -2,47 +2,30 @@ import nipype.pipeline.engine as pe
 import nipype.interfaces.utility as util
 
 
-def calc_friston_twenty_four(in_file):
-    """
-    Method to calculate friston twenty four parameters
 
-    Parameters
-    ----------
-    in_file: string
-        input movement parameters file from motion correction
-
-    Returns
-    -------
-    new_file: string
-        output 1D file containing 24 parameter values
-
-    """
-
+def calc_friston_twenty_four(mov_par):
     import numpy as np
     import os
+    twenty_four   = None
 
-    new_data = None
+    six           = np.genfromtxt(mov_par)
+    six_squared   = six**2
 
-    data = np.genfromtxt(in_file)
+    twenty_four   = np.concatenate((six,six_squared), axis=1)
 
-    data_squared = data ** 2
+    six_roll      = np.roll(six, 1, axis=0)
+    six_roll[0]   = 0
 
-    new_data = np.concatenate((data, data_squared), axis=1)
+    twenty_four   = np.concatenate((twenty_four, six_roll), axis=1)
 
-    data_roll = np.roll(data, 1, axis=0)
+    six_roll_squ  = six_roll**2
 
-    data_roll[0] = 0
+    twenty_four   = np.concatenate((twenty_four, six_roll_squ), axis=1)
+    updated_mov   = os.path.join(os.getcwd(), 'FRISTON_24.1D')
+    np.savetxt(updated_mov, twenty_four, fmt='%0.8f', delimiter=' ')
 
-    new_data = np.concatenate((new_data, data_roll), axis=1)
+    return updated_mov
 
-    data_roll_squared = data_roll ** 2
-
-    new_data = np.concatenate((new_data, data_roll_squared), axis=1)
-
-    new_file = os.path.join(os.getcwd(), 'fristons_twenty_four.1D')
-    np.savetxt(new_file, new_data, fmt='%0.8f', delimiter=' ')
-
-    return new_file
 
 
 
