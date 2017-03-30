@@ -1,5 +1,24 @@
 __author__ = 'kanaan... 30.03.2017'
 
+def edge_detect_ero(i):
+    import numpy as np
+    from scipy import ndimage
+    ero  = ndimage.binary_erosion(i,iterations=1).astype(i.dtype)
+    edge = i -ero
+    edge[edge==0]=np.nan
+    return edge
+
+def edge_detect_first(i):
+    import numpy as np
+    from scipy import ndimage
+    ero =  ndimage.binary_erosion(i, iterations=2).astype(i.dtype)
+    dil =  ndimage.binary_dilation(i, iterations=1).astype(i.dtype)
+    sep = dil-ero
+    sep = ndimage.binary_erosion(sep, iterations=1).astype(sep.dtype)
+    sep[sep==0]=np.nan
+    return sep
+
+
 
 def plot_vol_quality(img, tissue, site, caption,fname, cmap = 'red'):
     import os
