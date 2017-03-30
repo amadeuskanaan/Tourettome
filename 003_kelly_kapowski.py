@@ -1,8 +1,6 @@
 import os
-
 from utilities.utils import mkdir_path
 from variables.subject_list import *
-from nipype.interfaces.ants.segmentation import KellyKapowski
 
 
 # Registration based cortical thickness measurement.
@@ -16,49 +14,54 @@ def make_cortical_thickness(population, workspace):
     for subject in population:
         # subject = population[subject_index]
         print '========================================================================================'
-        print 'Runing Kelly Kapowski diffeomorphic registration based cortical thickness %s' % (subject)
+        print 'Runing Cortical thickness estimation for %s' % (subject)
 
-        subdir   = os.path.join(workspace, subject)
-        kellydir = mkdir_path(os.path.join(subdir, 'THICKNESS'))
-        os.chdir(kellydir)
+        subdir  = os.path.join(workspace, subject)
+        ctdir   = mkdir_path(os.path.join(subdir, 'THICKNESS'))
+        os.chdir(ctdir  )
 
         prob_gm = os.path.join(subdir, 'ANATOMICAL/seg_spm/c1ANATOMICAL.nii')
         prob_wm = os.path.join(subdir, 'ANATOMICAL/seg_spm/c2ANATOMICAL.nii')
         first   = os.path.join(subdir, 'ANATOMICAL/seg_first/FIRST.nii.gz')
 
+        num_threads = 24
 
-        if not os.path.isfile(os.path.join(kellydir, 'segmentation0_cortical_thickness.nii.gz')):
+        if not os.path.isfile(os.path.join(ctdir, 'cortical_thickness_kellykapowski.nii.gz')):
 
-            # combine gm and wm with correect labels for DIRECT
+            print '..... Running KellyKapowski DiReCT algorithm'
 
+            # Set number of cores
+            os.system('export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=%s' %num_threads)
+
+            # Combine gm and wm with correect labels for DIRECT
             os.system('fslmaths %s -thr 0.5 -bin -sub %s -bin -mul 2 gm' %(prob_gm, first))
             os.system('fslmaths %s -thr 0.5 -bin -add %s -bin -mul 3 wm' %(prob_wm, first))
             os.system('fslmaths gm -add wm segmentation0.nii.gz')
 
-            # Run ANTS-DIRECT
-            # os.system('KellyKapowski '
-            #          '--image-dimensionality 3 '
-            #          '--segmentation-image "[segmentation0.nii.gz,2,3]" '
-            #          '--convergence "[45,0.0,10]" '
-            #          '--output "[segmentation0_cortical_thickness.nii.gz, segmentation0_warped_white_matter.nii.gz]" '
-            #          '--gradient-step 0.025000 '
-            #          '--number-of-integration-points 10 '
-            #          '--smoothing-variance 1.000000 '
-            #          '--smoothing-velocity-field-parameter 1.500000 '
-            #          '--thickness-prior-estimate 10.000000')
+            ### Run
+            os.system('KellyKapowski '
+                     '--image-dimensionality 3 '
+                     '--segmentation-image "[segmentation0.nii.gz,2,3]" '
+                     '--convergence "[45,0.0,10]" '
+                     '--output "[cortical_thickness_kellykapowski.nii.gz, segmentation0_warped_white_matter.nii.gz]" '
+                     '--gradient-step 0.025000 '
+                     '--number-of-integration-points 10 '
+                     '--smoothing-variance 1.000000 '
+                     '--smoothing-velocity-field-parameter 1.500000 '
+                     '--thickness-prior-estimate 10.000000')
 
-            kk = KellyKapowski()
-            kk.inputs.dimension = 3
-            kk.inputs.segmentation_image = "[segmentation0.nii.gz,2,3]"
-            kk.inputs.convergence = "[45,0.0,10]"
-            kk.inputs.gradient_step = 0.025
-            kk.inputs.smoothing_variance = 1.0
-            kk.inputs.smoothing_velocity_field = 1.5
-            #kk.inputs.use_bspline_smoothing = False
-            kk.inputs.number_integration_points = 10
-            kk.inputs.thickness_prior_estimate = 10
-            kk.inputs.num_threads = 26
-            kk.run()
+
+        #Laplacian cortical thickness
+        if not os.path.isfile(os.path.join(ctdir, 'cortical_thickness_laplacian.nii.gz')):
+
+            print '..... Running LaplacianThickness algorithm'
+
+            # Set number of cores
+            os.system('export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=%s' %num_threads)
+
+            # Run
+            os.system('LaplacianThickness wm.nii.gz gm.nii.gz cortical_thickness_laplacian.nii.gz')
+
 
 
 make_cortical_thickness(['PA072'], tourettome_workspace)
