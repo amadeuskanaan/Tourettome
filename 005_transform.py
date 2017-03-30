@@ -66,98 +66,99 @@ def register(population, workspace_dir):
             anat2mni.inputs.output_inverse_warped_image=True
             anat2mni.inputs.output_warped_image=True
             anat2mni.inputs.use_histogram_matching=True
-            anat2mni.run()
-            os.system('cp transform_Warped.nii.gz ../ANATOMICAL_BRAIN_MNI1mm.nii.gz')
+            anat2mni.cmdline
+            #anat2mni.run()
+            #os.system('cp transform_Warped.nii.gz ../ANATOMICAL_BRAIN_MNI1mm.nii.gz')
 
+        #
+        #     # Warp anatomical tissue classess to MNI space
+        #
+        #     for tissue_name, tissue_path in {'GM': anat_gm , 'WM': anat_wm,  'CSF': anat_csf}.iteritems():
+        #
+        #         print '........ Warping tissue masks to MNI'
+        #
+        #         # Subtract FSl-FIRST subcortical segmentation from WM/CSF
+        #         if tissue_name == 'GM':
+        #             os.system('fslmaths %s -add %s anat_%s' %(tissue_path, anat_first, tissue_name))
+        #         else:
+        #             os.system('fslmaths %s -sub %s anat_%s' %(tissue_path, anat_first, tissue_name))
+        #
+        #         os.system('WarpImageMultiTransform 3 anat_%s anat_%s_MNI1mm.nii.gz -R %s transform1Warp.nii.gz transform0GenericAffine.mat'
+        #                   %(tissue_name, tissue_name, mni_brain_1mm))
+        #         os.system('fslmaths anat_%s_MNI1mm.nii.gz -thr 0.5 -bin ../ANATOMICAL_%s_MNI1mm.nii.gz' %(tissue_name, tissue_name))
+        #
+        #         #Resample to 2mm
+        #         os.system('flirt -in anat_%s_MNI1mm -ref %s -applyisoxfm 2 -out anat_%s_MNI2mm'
+        #                   %(tissue_name,mni_brain_2mm, tissue_name))
+        #         os.system('fslmaths anat_%s_MNI2mm -thr 0.5 -bin ../ANATOMICAL_%s_MNI2mm' %(tissue_name, tissue_name))
+        #
+        #
+        # ################################################################################################################
+        # ##### Linear FUNCTIONAL to ANATOMICAL
+        #
+        # print 'Two-step linear registration - func2anat'
+        #
+        # if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')):
+        #
+        #     os.chdir(regdir_anat)
+        #
+        #     print '......flirt mutualinfo'
+        #
+        #     #linear step 1  mutualinfo
+        #     os.system('flirt -in %s -ref %s -cost mutualinfo -dof 6 -omat rest2anat_1.mat -out rest2anat_1.nii.gz ' %(func3d,anat))
+        #
+        #     print '......flirt bbr'
+        #
+        #     # linear step 2 - bbr
+        #     os.system('fslmaths %s -thr 0.5 -bin anat_wm' %anat_wm)
+        #     os.system('flirt -in %s -ref %s -dof 6 -cost bbr -wmseg anat_wm -schedule %s -init rest2anat_1.mat -omat rest2anat_2.mat -out rest2anat_2.nii.gz'
+        #               % (func3d, anat, bbr_schedule))
+        #     os.system('cp rest2anat_2.nii.gz ../REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
+        #
+        # ################################################################################################################
+        # ##### Resample FUNCTIONAL to MNI linear
+        #
+        # if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_BRAIN_UNIMOCO_MNI2mm.nii.gz')):
+        #
+        #     print '..... Transforming func2mni in one step.....'
+        #     print '...........concatenating moco-affine/func2anat-affine/anat2mni-affine/anat2mni-warp'
+        #
+        #     concat_dir = mkdir_path(os.path.join(regdir_mni, 'concat'))
+        #     os.chdir(concat_dir)
+        #
+        #     # Split volumes of func_edit
+        #     os.system('fslsplit %s -t' %func4d)
+        #
+        #     # Convert BBR affine to ants-itk format
+        #     os.system('c3d_affine_tool -ref %s -src %s %s/rest2anat_2.mat -fsl2ras -oitk rest2anat_2.tfm'%(anat, func3d, regdir_anat))
+        #
+        #     # Concat
+        #     frames = [0,nb.load(func4d).get_data().shape[3]]
+        #     print 'N-frames', frames
+        #
+        #     for i in xrange(frames[0], frames[1]):
+        #         frame = '{0:0>4}'.format(i)
+        #
+        #         # Concatenate motion-correction-affines and fun2anat-affine
+        #         os.system('convert_xfm -omat MAT_UNI_%s.mat -concat %s/rest2anat_2.mat %s/MAT_%s' %(frame, regdir_anat,  matsdir, frame))
+        #
+        #         # Convert unified mat to ants-itk format
+        #         os.system('c3d_affine_tool -ref %s -src vol%s.nii.gz MAT_UNI_%s.mat -fsl2ras -oitk  MAT_UNI_%s.tfm'
+        #                   %(anat, frame, frame, frame))
+        #
+        #         # Apply all xfms
+        #         os.system('antsApplyTransforms '
+        #                   '-d 3 '
+        #                   '-i vol%s.nii.gz '
+        #                   '-o warped%s.nii.gz '
+        #                   '-r %s '
+        #                   '-n Linear '
+        #                   '-t ../transform1Warp.nii.gz ../transform0GenericAffine.mat MAT_UNI_%s.tfm'
+        #                   %(frame, frame, mni_brain_2mm,  frame))
+        #
+        #     os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
+        #     os.system('rm -rf %s' %concat_dir)
 
-            # Warp anatomical tissue classess to MNI space
-
-            for tissue_name, tissue_path in {'GM': anat_gm , 'WM': anat_wm,  'CSF': anat_csf}.iteritems():
-
-                print '........ Warping tissue masks to MNI'
-
-                # Subtract FSl-FIRST subcortical segmentation from WM/CSF
-                if tissue_name == 'GM':
-                    os.system('fslmaths %s -add %s anat_%s' %(tissue_path, anat_first, tissue_name))
-                else:
-                    os.system('fslmaths %s -sub %s anat_%s' %(tissue_path, anat_first, tissue_name))
-
-                os.system('WarpImageMultiTransform 3 anat_%s anat_%s_MNI1mm.nii.gz -R %s transform1Warp.nii.gz transform0GenericAffine.mat'
-                          %(tissue_name, tissue_name, mni_brain_1mm))
-                os.system('fslmaths anat_%s_MNI1mm.nii.gz -thr 0.5 -bin ../ANATOMICAL_%s_MNI1mm.nii.gz' %(tissue_name, tissue_name))
-
-                #Resample to 2mm
-                os.system('flirt -in anat_%s_MNI1mm -ref %s -applyisoxfm 2 -out anat_%s_MNI2mm'
-                          %(tissue_name,mni_brain_2mm, tissue_name))
-                os.system('fslmaths anat_%s_MNI2mm -thr 0.5 -bin ../ANATOMICAL_%s_MNI2mm' %(tissue_name, tissue_name))
-
-
-        ################################################################################################################
-        ##### Linear FUNCTIONAL to ANATOMICAL
-
-        print 'Two-step linear registration - func2anat'
-
-        if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')):
-
-            os.chdir(regdir_anat)
-
-            print '......flirt mutualinfo'
-
-            #linear step 1  mutualinfo
-            os.system('flirt -in %s -ref %s -cost mutualinfo -dof 6 -omat rest2anat_1.mat -out rest2anat_1.nii.gz ' %(func3d,anat))
-
-            print '......flirt bbr'
-
-            # linear step 2 - bbr
-            os.system('fslmaths %s -thr 0.5 -bin anat_wm' %anat_wm)
-            os.system('flirt -in %s -ref %s -dof 6 -cost bbr -wmseg anat_wm -schedule %s -init rest2anat_1.mat -omat rest2anat_2.mat -out rest2anat_2.nii.gz'
-                      % (func3d, anat, bbr_schedule))
-            os.system('cp rest2anat_2.nii.gz ../REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
-
-        ################################################################################################################
-        ##### Resample FUNCTIONAL to MNI linear
-
-        if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_BRAIN_UNIMOCO_MNI2mm.nii.gz')):
-
-            print '..... Transforming func2mni in one step.....'
-            print '...........concatenating moco-affine/func2anat-affine/anat2mni-affine/anat2mni-warp'
-
-            concat_dir = mkdir_path(os.path.join(regdir_mni, 'concat'))
-            os.chdir(concat_dir)
-
-            # Split volumes of func_edit
-            os.system('fslsplit %s -t' %func4d)
-
-            # Convert BBR affine to ants-itk format
-            os.system('c3d_affine_tool -ref %s -src %s %s/rest2anat_2.mat -fsl2ras -oitk rest2anat_2.tfm'%(anat, func3d, regdir_anat))
-
-            # Concat
-            frames = [0,nb.load(func4d).get_data().shape[3]]
-            print 'N-frames', frames
-
-            for i in xrange(frames[0], frames[1]):
-                frame = '{0:0>4}'.format(i)
-
-                # Concatenate motion-correction-affines and fun2anat-affine
-                os.system('convert_xfm -omat MAT_UNI_%s.mat -concat %s/rest2anat_2.mat %s/MAT_%s' %(frame, regdir_anat,  matsdir, frame))
-
-                # Convert unified mat to ants-itk format
-                os.system('c3d_affine_tool -ref %s -src vol%s.nii.gz MAT_UNI_%s.mat -fsl2ras -oitk  MAT_UNI_%s.tfm'
-                          %(anat, frame, frame, frame))
-
-                # Apply all xfms
-                os.system('antsApplyTransforms '
-                          '-d 3 '
-                          '-i vol%s.nii.gz '
-                          '-o warped%s.nii.gz '
-                          '-r %s '
-                          '-n Linear '
-                          '-t ../transform1Warp.nii.gz ../transform0GenericAffine.mat MAT_UNI_%s.tfm'
-                          %(frame, frame, mni_brain_2mm,  frame))
-
-            os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
-            os.system('rm -rf %s' %concat_dir)
-
-register(test_dataset, tourettome_workspace)
+register(tourettome_subjects, tourettome_workspace)
 
 
