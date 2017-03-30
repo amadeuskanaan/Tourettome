@@ -33,7 +33,7 @@ def make_quality_reports(population, workspace):
 
 
 
-make_quality_reports(['HA013'], tourettome_workspace)
+make_quality_reports(tourettome_subjects, tourettome_workspace)
 
 ###########
 # Functional
