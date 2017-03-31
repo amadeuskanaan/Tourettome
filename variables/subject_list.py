@@ -42,6 +42,14 @@ hannover_b  = ['HB001', 'HB002', 'HB003', 'HB004', 'HB005', 'HB006', 'HB007', 'H
                'HB021', 'HB022', 'HB023', 'HB024', 'HB025', 'HB026', 'HB027', 'HB028', 'HB029', 'HB030',
                'HB031', 'HB032', 'HB033']
 
+
+paris1 = paris[:40]
+paris2 = paris[40:]
+leipzig1 = leipzig[:35]
+leipzig2 = leipzig[35:]
+hannover_a1 = hannover_a[:25]
+hannover_a2 = hannover_a[25:]
+
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b
 
 
