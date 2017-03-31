@@ -61,10 +61,10 @@ def make_cortical_thickness(population, workspace, num_threads = 1):
             # Run
             os.system('LaplacianThickness wm.nii.gz gm.nii.gz cortical_thickness_laplacian.nii.gz')
 
-#make_cortical_thickness(population=paris1, workspace=tourettome_workspace)
-# make_cortical_thickness(population=paris2, workspace=tourettome_workspace)
+make_cortical_thickness(population=paris1, workspace=tourettome_workspace)
+#make_cortical_thickness(population=paris2, workspace=tourettome_workspace)
 #make_cortical_thickness(population=leipzig1, workspace=tourettome_workspace)
 #make_cortical_thickness(population=leipzig2, workspace=tourettome_workspace)
 #make_cortical_thickness(population=hannover_a1, workspace=tourettome_workspace)
 #make_cortical_thickness(population=hannover_a2, workspace=tourettome_workspace)
-make_cortical_thickness(population=hannover_b, workspace=tourettome_workspace)
+#make_cortical_thickness(population=hannover_b, workspace=tourettome_workspace)
