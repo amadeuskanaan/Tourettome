@@ -23,7 +23,8 @@ def make_quality_reports(population, workspace):
         func2anat = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
 
         # Plot native anatomical with GM
-        plot_vol_quality(anat, gm, subject[0:2], '%s - Native Anatomical' %subject, 'plot_anat_native.png', cmap = 'r' )
+        if not os.path.isfile(os.path.join(qcdir, 'plot_anat_native.png')):
+            plot_vol_quality(anat, gm, subject[0:2], '%s - Native Anatomical' %subject, 'plot_anat_native.png', cmap = 'r' )
 
         # Plot anat2mni reg quality using GM as a boundary
         #plot_vol_quality(mni_brain_1mm, gm2mni, 'MNI', '%s - Anatomical to MNI xfm' %subject, 'plot_anat_mni.png', cmap = 'r' )
