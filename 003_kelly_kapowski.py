@@ -41,13 +41,16 @@ def make_cortical_thickness(population, workspace, num_threads = 1):
             os.system('KellyKapowski '
                      '--image-dimensionality 3 '
                      '--segmentation-image "[segmentation0.nii.gz,2,3]" '
+                     '--gray-matter-probability-image %s'
+                     '--white-matter-probability-image %s'
                      '--convergence "[45,0.0,10]" '
                      '--output "[cortical_thickness_kellykapowski.nii.gz, segmentation0_warped_white_matter.nii.gz]" '
                      '--gradient-step 0.025000 '
                      '--number-of-integration-points 10 '
                      '--smoothing-variance 1.000000 '
                      '--smoothing-velocity-field-parameter 1.500000 '
-                     '--thickness-prior-estimate 10.000000')
+                     '--thickness-prior-estimate 10.000000'
+                      %(prob_gm, prob_wm))
 
 
         #Laplacian cortical thickness
