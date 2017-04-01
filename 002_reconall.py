@@ -38,7 +38,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
             # Runs thick2surf
 
             if not os.path.isfile(os.path.join(freesurfer_dir, "CT", "%s_rh2fsaverage5_20.mgh" %subject)):
-
+                print '.... Running thick2surf'
                 os.system('sh /scr/sambesi1/workspace/Projects/Tourettome/quality/thick2surf.sh %s %s %s %s %s'
                           %(subject,
                             os.path.join(freesurfer_dir, subject),
@@ -47,11 +47,6 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
                             '5'    # FSAVERAGE5
                             ))
 
-xall = leipzig+paris+hannover_a + hannover_b
-
-#xall = ['HB001', 'HB002', 'HB003', 'HB004', 'HB005', 'HB008', 'HB011', 'HB014', 'HB015', 'LZ001',
-#        'LZ008', 'LZ040', 'LZ044', 'LZ045', 'LZ052', 'LZ053', 'LZ057', 'LZ058', 'LZ062', 'LZ066',
-#        'LZ072', 'PA055']
 
 preprocess_anatomical(population = ['HA002'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 

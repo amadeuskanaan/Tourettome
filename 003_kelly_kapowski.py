@@ -10,7 +10,7 @@ from variables.subject_list import *
 #assert len(sys.argv)== 2
 #subject_index=int(sys.argv[1])
 
-def make_cortical_thickness(population, workspace, num_threads = 1):
+def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads = 1):
 
     for subject in population:
         #subject = population[subject_index]
@@ -24,6 +24,7 @@ def make_cortical_thickness(population, workspace, num_threads = 1):
         prob_gm = os.path.join(subdir, 'ANATOMICAL/seg_spm/c1ANATOMICAL.nii')
         prob_wm = os.path.join(subdir, 'ANATOMICAL/seg_spm/c2ANATOMICAL.nii')
         first   = os.path.join(subdir, 'ANATOMICAL/seg_first/FIRST.nii.gz')
+        T1mgz   = os.path.join(freesurfer_dir, subject, 'mri/T1.mgz')
 
         if not os.path.isfile(os.path.join(ctdir, 'cortical_thickness_kellykapowski.nii.gz')):
 
@@ -52,6 +53,12 @@ def make_cortical_thickness(population, workspace, num_threads = 1):
                      '--thickness-prior-estimate 10.000000'
                       %(prob_gm, prob_wm))
 
+            os.system('mri_vol2vol '
+                      '--mov cortical_thickness_kellykapowski.nii.gz '
+                      '--targ %s '
+                      '--o cortical_thickness_kellykapowski.mgz '
+                      '--regheader' %(T1mgz))
+
 
         #Laplacian cortical thickness
         if not os.path.isfile(os.path.join(ctdir, 'cortical_thickness_laplacian.nii.gz')):
@@ -63,6 +70,15 @@ def make_cortical_thickness(population, workspace, num_threads = 1):
 
             # Run
             os.system('LaplacianThickness wm.nii.gz gm.nii.gz cortical_thickness_laplacian.nii.gz')
+
+            os.system('mri_vol2vol '
+                      '--mov cortical_thickness_laplacian.nii.gz '
+                      '--targ %s '
+                      '--o cortical_thickness_laplacian.mgz '
+                      '--regheader' %(T1mgz))
+
+
+make_cortical_thickness(population=['HA022'], workspace=tourettome_workspace, num_threads=30)
 
 #make_cortical_thickness(population=paris1, workspace=tourettome_workspace)
 #make_cortical_thickness(population=paris2, workspace=tourettome_workspace)
