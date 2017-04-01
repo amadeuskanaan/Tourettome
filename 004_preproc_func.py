@@ -25,7 +25,6 @@ def preprocess_functional(population, workspace):
         moco_dir  = mkdir_path(os.path.join(func_dir, 'moco'))
         edit_dir  = mkdir_path(os.path.join(func_dir, 'edit'))
 
-
         ##### Minimal pre-processing
 
         if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT.nii.gz')):
@@ -73,7 +72,7 @@ def preprocess_functional(population, workspace):
             # run No.2
             os.system('mcflirt -in ../REST_EDIT -out REST_EDIT_moco2 -refvol REST_EDIT_moco1_meanvol -mats -plots -stats')
 
-        ###### BET and Intensity normaliatuon
+        ###### BET and Intensity normalization
 
         if not os.path.isfile(os.path.join(func_dir, 'REST_EDIT_BRAIN_MEAN.nii.gz')):
 
@@ -99,7 +98,9 @@ def preprocess_functional(population, workspace):
             os.system('fslmaths REST_EDIT_MOCO_BRAIN -Tmean REST_EDIT_MOCO_BRAIN_MEAN.nii' )
 
 
-
 # paris.remove('PA049')
-preprocess_functional(population = test_dataset, workspace = tourettome_workspace)
+preprocess_functional(population = leipzig, workspace = tourettome_workspace)
+preprocess_functional(population = paris, workspace = tourettome_workspace)
+preprocess_functional(population = hannover_a, workspace = tourettome_workspace)
+preprocess_functional(population = hannover_b, workspace = tourettome_workspace)
 

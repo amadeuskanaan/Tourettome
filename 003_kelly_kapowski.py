@@ -27,7 +27,7 @@ def make_cortical_thickness(population, workspace, num_threads = 1):
 
         if not os.path.isfile(os.path.join(ctdir, 'cortical_thickness_kellykapowski.nii.gz')):
 
-            print '..... Running KellyKapowski DiReCT algorithm'
+            print '..... Running KellyKapowski DiReCT algorithm %s'%subject
 
             # Set number of cores
             os.system('export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=%s' %num_threads)
@@ -64,7 +64,7 @@ def make_cortical_thickness(population, workspace, num_threads = 1):
             # Run
             os.system('LaplacianThickness wm.nii.gz gm.nii.gz cortical_thickness_laplacian.nii.gz')
 
-make_cortical_thickness(population=paris1, workspace=tourettome_workspace)
+#make_cortical_thickness(population=paris1, workspace=tourettome_workspace)
 #make_cortical_thickness(population=paris2, workspace=tourettome_workspace)
 #make_cortical_thickness(population=leipzig1, workspace=tourettome_workspace)
 #make_cortical_thickness(population=leipzig2, workspace=tourettome_workspace)
