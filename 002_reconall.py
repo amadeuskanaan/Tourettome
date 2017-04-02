@@ -68,5 +68,5 @@ missing = ['LZ040', 'LZ052', 'LZ053', 'LZ057', 'LZ058', 'LZ066',
 
 recon_checker = [subject for subject in tourettome_subjects if subject not in missing]
 
-preprocess_anatomical(population = ['HA053', 'HA054'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-#preprocess_anatomical(population = recon_checker, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population = ['HA053', 'HA054'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+preprocess_anatomical(population = recon_checker, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
