@@ -46,7 +46,6 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
                             '5'    # FSAVERAGE5
                             ))
 
-
              # Runs recon-checker
             if not os.path.isfile(os.path.join(freesurfer_dir, 'QUALITY', subject, 'rgb/snaps/%s.html'%subject)):
 
@@ -69,5 +68,5 @@ missing = ['LZ040', 'LZ052', 'LZ053', 'LZ057', 'LZ058', 'LZ066',
 
 recon_checker = [subject for subject in tourettome_subjects if subject not in missing]
 
-# preprocess_anatomical(population = ['HA053', 'HA054'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-preprocess_anatomical(population = recon_checker, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+preprocess_anatomical(population = ['HA053', 'HA054'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population = recon_checker, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
