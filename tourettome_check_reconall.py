@@ -22,9 +22,8 @@ fsdir= tourettome_freesurfer
 
 
 for sub in os.listdir(fsdir):
-    print 'x'
-    print sub
-    print 'x'
+    if sub in tourettome_subjects:
+        print sub
 
 missing_files = [sub for sub in os.listdir(fsdir) if sub in tourettome_subjects if 'aparc.DKTatlas+aseg.mgz' not in os.listdir(os.path.join(fsdir, sub, 'mri'))]
 missing_dirs  = [sub for sub in tourettome_subjects if not os.path.isdir(os.path.join(fsdir, sub))]
