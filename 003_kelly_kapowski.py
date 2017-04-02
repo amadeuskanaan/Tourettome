@@ -85,5 +85,6 @@ def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads =
 # make_cortical_thickness(population=paris2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
 # make_cortical_thickness(population=hannover_a1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
 # make_cortical_thickness(population=hannover_a2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
-make_cortical_thickness(population=leipzig1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
+# make_cortical_thickness(population=leipzig1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
+make_cortical_thickness(population=leipzig2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
 
