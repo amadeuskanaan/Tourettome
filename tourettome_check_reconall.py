@@ -19,7 +19,7 @@ print '---------------------------------------------'
 
 # # check FREESURFER DIR
 fsdir= tourettome_freesurfer
-missing= [sub for sub in tourettome_freesurfer if 'aparc.DKTatlas+aseg.mgz' not in os.listdir(os.path.join(fsdir, sub, 'mri'))]
+missing= [sub for sub in tourettome_subjects if 'aparc.DKTatlas+aseg.mgz' not in os.listdir(os.path.join(fsdir, sub, 'mri'))]
 
 print ''
 print 'These subjects have an incomplete recon-all directory. Run them again.',  missing
