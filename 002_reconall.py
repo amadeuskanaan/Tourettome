@@ -62,18 +62,9 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
                   %(subject))
 
 
-missing = ['LZ040', 'LZ052', 'LZ053', 'LZ057', 'LZ058', 'LZ066', 'PA055', 'HA053', 'HA054', 'HB003', 'HB004', 'HB005', 'HB008', 'HB014', 'HB015']
+missing = ['LZ040', 'LZ052', 'LZ053', 'LZ057', 'LZ058', 'LZ066',
+           'HB003', 'HB004', 'HB005', 'HB008', 'HB014', 'HB015',
+           'HA053', 'HA054',
+           'PA055' ]
 
 preprocess_anatomical(population = ['HA053', 'HA054'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-
-
-
-
-
-
-
-
-
-
-
-
