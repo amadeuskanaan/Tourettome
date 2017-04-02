@@ -80,7 +80,6 @@ def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads =
                       '--regheader' %(T1mgz))
 
 
-# make_cortical_thickness(population=['HA022'], workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
 # make_cortical_thickness(population=paris1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
 # make_cortical_thickness(population=paris2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
 # make_cortical_thickness(population=hannover_a1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=100)
