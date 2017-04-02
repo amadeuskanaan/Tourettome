@@ -47,7 +47,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
                             ))
 
              # Runs recon-checker
-            if not os.path.isfile(os.path.join(freesurfer_dir, 'QUALITY', subject, 'rgb/snaps/%s.html'%subject)):
+            if not os.path.isfile(os.path.join(freesurfer_dir, 'QA', subject, 'rgb/snaps/%s.html'%subject)):
 
                 # Source freesurfer
                 os.system('export SUBJECTS_DIR=%s'%freesurfer_dir)
