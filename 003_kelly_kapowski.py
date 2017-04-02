@@ -53,6 +53,7 @@ def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads =
                      '--thickness-prior-estimate 10.000000'
                       %(prob_gm, prob_wm))
 
+            # Transform to Freesurfer space
             os.system('mri_vol2vol '
                       '--mov cortical_thickness_kellykapowski.nii.gz '
                       '--targ %s '
@@ -71,6 +72,7 @@ def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads =
             # Run
             os.system('LaplacianThickness wm.nii.gz gm.nii.gz cortical_thickness_laplacian.nii.gz')
 
+            # Transform to Freesurfer space
             os.system('mri_vol2vol '
                       '--mov cortical_thickness_laplacian.nii.gz '
                       '--targ %s '
@@ -78,7 +80,7 @@ def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads =
                       '--regheader' %(T1mgz))
 
 
-make_cortical_thickness(population=['HA022'], workspace=tourettome_workspace, num_threads=30)
+make_cortical_thickness(population=['HA022'], workspace=tourettome_workspace, num_threads=1)
 
 #make_cortical_thickness(population=paris1, workspace=tourettome_workspace)
 #make_cortical_thickness(population=paris2, workspace=tourettome_workspace)
