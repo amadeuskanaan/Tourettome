@@ -79,12 +79,13 @@ def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads =
                       '--o cortical_thickness_laplacian.mgz '
                       '--regheader' %(T1mgz))
 
-num_threads = 26
+num_threads = 30
 
 #make_cortical_thickness(population=paris1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 #make_cortical_thickness(population=paris2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 #make_cortical_thickness(population=hannover_a1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 #make_cortical_thickness(population=hannover_a2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 #make_cortical_thickness(population=leipzig1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
-make_cortical_thickness(population=leipzig2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
+#make_cortical_thickness(population=leipzig2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 
+make_cortical_thickness(population=tourettome_subjects, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
