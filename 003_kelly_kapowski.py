@@ -31,7 +31,7 @@ def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads =
             print '..... Running KellyKapowski DiReCT algorithm %s'%subject
 
             # Set number of cores
-            os.system('export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=%s' %num_threads)
+            #os.system('export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=%s' %num_threads)
 
             # Combine gm and wm with correect labels for DIRECT
             os.system('fslmaths %s -thr 0.5 -bin -sub %s -bin -mul 2 gm' %(prob_gm, first))
@@ -67,7 +67,7 @@ def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads =
             print '..... Running LaplacianThickness algorithm'
 
             # Set number of cores
-            os.system('export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=%s' %num_threads)
+            #os.system('export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=%s' %num_threads)
 
             # Run
             os.system('LaplacianThickness wm.nii.gz gm.nii.gz cortical_thickness_laplacian.nii.gz')
@@ -79,7 +79,8 @@ def make_cortical_thickness(population, workspace, freesurfer_dir, num_threads =
                       '--o cortical_thickness_laplacian.mgz '
                       '--regheader' %(T1mgz))
 
-num_threads = 2000
+
+num_threads= 1
 
 #make_cortical_thickness(population=paris1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 #make_cortical_thickness(population=paris2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
@@ -88,6 +89,7 @@ num_threads = 2000
 #make_cortical_thickness(population=leipzig1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 #make_cortical_thickness(population=leipzig2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 
+#make_cortical_thickness(population=tourettome_subjects, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 
-# make_cortical_thickness(population=tourettome_subjects, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
-make_cortical_thickness(population=hannover_a, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
+xlist = paris + leipzig + hannover_b
+make_cortical_thickness(population=xlist, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
