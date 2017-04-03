@@ -88,4 +88,5 @@ num_threads = 30
 #make_cortical_thickness(population=leipzig1, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 #make_cortical_thickness(population=leipzig2, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
 
+
 make_cortical_thickness(population=tourettome_subjects, workspace=tourettome_workspace, freesurfer_dir=tourettome_freesurfer, num_threads=num_threads)
