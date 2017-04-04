@@ -90,44 +90,17 @@ def preprocess_anatomical(population, workspace):
             os.system('fslmaths %s/c2ANATOMICAL -thr 0.9  -bin -sub FIRST -bin ../ANATOMICAL_WM'  %spmdir)
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
 
-
-
-# for roi in mrs_rois:
-#                 nucleus = os.path.join(workspace_dir, subject, 'SEGMENTATION/MRS/%s/%s_FLASH_BIN.nii.gz' % (roi,roi))
-#                 if os.path.isfile(nucleus):
-#                     mu = float(commands.getoutput('fslstats %s -k %s %s' % (img, nucleus, stat_type))) * XVAL
-#                 else:
-#                     mu = np.nan
-#                 print roi, mu
-#                 stats_df.loc[subject]['MRS_%s' % roi] = mu
-#
-#             stats_dir   = os.path.join(workspace_dir, subject, 'NUCLEUS_STATISTICS')
-#             mkdir_path(stats_dir)
-#
-#             stats_df.ix[subject, 'Caud']  = np.mean((stats_df.loc['%s'%subject]['L_Caud'], stats_df.loc['%s'%subject]['R_Caud']))
-#             stats_df.ix[subject, 'Puta']  = np.mean((stats_df.loc['%s'%subject]['L_Puta'], stats_df.loc['%s'%subject]['R_Puta']))
-#             stats_df.ix[subject, 'Pall']  = np.mean((stats_df.loc['%s'%subject]['R_Pall'], stats_df.loc['%s'%subject]['L_Pall']))
-#             stats_df.ix[subject, 'Amyg']  = np.mean((stats_df.loc['%s'%subject]['R_Amyg'], stats_df.loc['%s'%subject]['L_Amyg']))
-#             stats_df.ix[subject, 'Hipp']  = np.mean((stats_df.loc['%s'%subject]['R_Hipp'], stats_df.loc['%s'%subject]['L_Hipp']))
-#             stats_df.ix[subject, 'Accu']  = np.mean((stats_df.loc['%s'%subject]['R_Accu'], stats_df.loc['%s'%subject]['L_Accu']))
-#             stats_df.ix[subject, 'Thal'] = np.mean((stats_df.loc['%s' % subject]['L_Thal'], stats_df.loc['%s' % subject]['R_Thal']))
-
-
-
-
         df = pd.DataFrame(index = ['count'], columns = rois)
 
         if not os.path.isfile(os.path.join(anatdir, 'sef_first/first_count.csv')):
-
-
             for roi in rois:
-                count = np.count_nonzero(nb.load('FIRST-%s_first.nii.gz' %roi).get_data())
+                first = os.path.join(firstdir,'FIRST-%s_first.nii.gz' %roi )
+                count = np.count_nonzero(nb.load(first).get_data())
+                df.ix['count', roi] = count
 
-                df.ix['count','R_Caud'] = count
 
-
+        df.to_csv(os.path.join(firstdir, 'bin_count.csv'))
         print df
-
 
 #preprocess_anatomical(population = ['HA053', 'HA054'], workspace = tourettome_workspace)
 # preprocess_anatomical(population = tourettome_subjects , workspace = tourettome_workspace)
