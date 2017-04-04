@@ -90,13 +90,13 @@ def preprocess_anatomical(population, workspace):
             os.system('fslmaths %s/c2ANATOMICAL -thr 0.9  -bin -sub FIRST -bin ../ANATOMICAL_WM'  %spmdir)
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
 
-        df = pd.DataFrame(index = ['count'], columns = rois)
+        df = pd.DataFrame(index = ['%s'%subject], columns = rois)
 
         if not os.path.isfile(os.path.join(anatdir, 'sef_first/first_count.csv')):
             for roi in rois:
                 first = os.path.join(firstdir,'FIRST-%s_first.nii.gz' %roi )
                 count = np.count_nonzero(nb.load(first).get_data())
-                df.ix['count', roi] = count
+                df.ix['%s'%subject, roi] = count
 
 
         df.to_csv(os.path.join(firstdir, 'bin_count.csv'))
