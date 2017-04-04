@@ -53,4 +53,4 @@ mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii
 mni_HOLV_2mm         = '/scr/sambesi1/workspace/Projects/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
 bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
 rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta', 'R_Pall', 'L_Pall', 'R_Amyg', 'L_Amyg', 'R_Hipp', 'L_Hipp', 'R_Accu', 'L_Accu',
-        'R_Thal', 'L_Thal','L_RN', 'R_RN', 'L_STN', 'R_STN', 'L_SN', 'R_SN', 'L_GPe', 'R_GPe', 'L_GPi', 'R_GPi', 'L_DN', 'R_DN']
+        'R_Thal', 'L_Thal']
