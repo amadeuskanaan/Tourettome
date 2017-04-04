@@ -4,12 +4,6 @@ tourettome_afs          = '/data/pt_nmr093_gts'
 tourettome_workspace    = '/scr/sambesi4/workspace/project_TOURETTOME/preproc'
 tourettome_freesurfer   = '/scr/sambesi2/TOURETTOME/FS_SUBJECTS'
 
-mni_brain_1mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_1mm_brain.nii.gz'
-mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii.gz'
-mni_HOLV_2mm         = '/scr/sambesi1/workspace/Projects/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
-bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
-
-
 paris = ['PA001', 'PA002', 'PA003', 'PA004', 'PA005', 'PA006', 'PA007', 'PA008', 'PA009', 'PA010',
          'PA011', 'PA012', 'PA013', 'PA014', 'PA015', 'PA016', 'PA017', 'PA018', 'PA019', 'PA020',
          'PA021', 'PA022', 'PA023', 'PA024', 'PA025', 'PA026', 'PA027', 'PA028', 'PA029', 'PA030',
@@ -53,3 +47,10 @@ hannover_a2 = hannover_a[25:]
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b
 
 
+########################################################################################################################
+mni_brain_1mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_1mm_brain.nii.gz'
+mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii.gz'
+mni_HOLV_2mm         = '/scr/sambesi1/workspace/Projects/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
+bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
+rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta', 'R_Pall', 'L_Pall', 'R_Amyg', 'L_Amyg', 'R_Hipp', 'L_Hipp', 'R_Accu', 'L_Accu',
+        'R_Thal', 'L_Thal','L_RN', 'R_RN', 'L_STN', 'R_STN', 'L_SN', 'R_SN', 'L_GPe', 'R_GPe', 'L_GPi', 'R_GPi', 'L_DN', 'R_DN']
