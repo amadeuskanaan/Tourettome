@@ -2,7 +2,9 @@ __author__ = 'kanaan_02.12.2016'
 
 import os
 import shutil
-
+import numpy as np
+import nibabel as nb
+import pandas as pd
 import nipype.interfaces.spm as spm
 
 from utilities.utils import mkdir_path
@@ -89,13 +91,50 @@ def preprocess_anatomical(population, workspace):
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
 
 
-# preprocess_anatomical(population = leipzig1, workspace = tourettome_workspace)
-# preprocess_anatomical(population = leipzig2, workspace = tourettome_workspace)
-# preprocess_anatomical(population = paris1, workspace = tourettome_workspace)
-# preprocess_anatomical(population = paris2, workspace = tourettome_workspace)
-# preprocess_anatomical(population = hannover_a1, workspace = tourettome_workspace)
-# preprocess_anatomical(population = hannover_a2, workspace = tourettome_workspace)
-# preprocess_anatomical(population = hannover_b, workspace = tourettome_workspace)
+
+# for roi in mrs_rois:
+#                 nucleus = os.path.join(workspace_dir, subject, 'SEGMENTATION/MRS/%s/%s_FLASH_BIN.nii.gz' % (roi,roi))
+#                 if os.path.isfile(nucleus):
+#                     mu = float(commands.getoutput('fslstats %s -k %s %s' % (img, nucleus, stat_type))) * XVAL
+#                 else:
+#                     mu = np.nan
+#                 print roi, mu
+#                 stats_df.loc[subject]['MRS_%s' % roi] = mu
+#
+#             stats_dir   = os.path.join(workspace_dir, subject, 'NUCLEUS_STATISTICS')
+#             mkdir_path(stats_dir)
+#
+#             stats_df.ix[subject, 'Caud']  = np.mean((stats_df.loc['%s'%subject]['L_Caud'], stats_df.loc['%s'%subject]['R_Caud']))
+#             stats_df.ix[subject, 'Puta']  = np.mean((stats_df.loc['%s'%subject]['L_Puta'], stats_df.loc['%s'%subject]['R_Puta']))
+#             stats_df.ix[subject, 'Pall']  = np.mean((stats_df.loc['%s'%subject]['R_Pall'], stats_df.loc['%s'%subject]['L_Pall']))
+#             stats_df.ix[subject, 'Amyg']  = np.mean((stats_df.loc['%s'%subject]['R_Amyg'], stats_df.loc['%s'%subject]['L_Amyg']))
+#             stats_df.ix[subject, 'Hipp']  = np.mean((stats_df.loc['%s'%subject]['R_Hipp'], stats_df.loc['%s'%subject]['L_Hipp']))
+#             stats_df.ix[subject, 'Accu']  = np.mean((stats_df.loc['%s'%subject]['R_Accu'], stats_df.loc['%s'%subject]['L_Accu']))
+#             stats_df.ix[subject, 'Thal'] = np.mean((stats_df.loc['%s' % subject]['L_Thal'], stats_df.loc['%s' % subject]['R_Thal']))
+
+
+
+
+        df = pd.DataFrame(index = ['count'], columns = rois)
+
+        if not os.path.isfile(os.path.join(anatdir, 'sef_first/first_count.csv')):
+
+
+            for roi in rois:
+                count = np.count_nonzero(nb.load('FIRST-%s_first.nii.gz' %roi).get_data())
+
+                df.ix['count','R_Caud'] = count
+
+
+        print df
+
+
+
+
+
+
+
 #preprocess_anatomical(population = ['HA053', 'HA054'], workspace = tourettome_workspace)
-preprocess_anatomical(population = tourettome_subjects , workspace = tourettome_workspace)
+# preprocess_anatomical(population = tourettome_subjects , workspace = tourettome_workspace)
+preprocess_anatomical(population = ['HA030'] , workspace = tourettome_workspace)
 
