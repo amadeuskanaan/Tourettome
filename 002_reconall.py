@@ -38,7 +38,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
             # Runs thick2surf
             if not os.path.isfile(os.path.join(freesurfer_dir, "CT", "%s_rh2fsaverage5_20.mgh" %subject)):
                 print '.... Running thick2surf'
-                os.system('sh /scr/sambesi1/workspace/Projects/Tourettome/quality/thick2surf.sh %s %s %s %s %s'
+                os.system('sh /scr/sambesi1/workspace/Projects/Tourettome/surf/thick2surf.sh %s %s %s %s %s'
                           %(subject,
                             os.path.join(freesurfer_dir, subject),
                             '20',  # FWHM
