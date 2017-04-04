@@ -102,6 +102,7 @@ def preprocess_anatomical(population, workspace):
         df.to_csv(os.path.join(firstdir, 'bin_count.csv'))
         print df
 
+
 #preprocess_anatomical(population = ['HA053', 'HA054'], workspace = tourettome_workspace)
 preprocess_anatomical(population = tourettome_subjects , workspace = tourettome_workspace)
 
