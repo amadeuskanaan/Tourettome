@@ -47,10 +47,10 @@ def make_paris_afs(population, original_datadir, afs_dir):
 
         if subject[-1] == 'p' or subject[-1] == 'P':
             group_id = 'patients'
-        elif subject[-1] == 'c' or subject[-1] == 'C':
+        elif subject[-1] == 't' or subject[-1] == 'T':
             group_id = 'controls'
 
-        if not os.path.isfile(param_file):
+        if not os.path.isfile('x'):
             print '..extracting subject parameters'
             rest_all = [os.path.join(dicom_dir, i) for i in os.listdir(dicom_dir) if 'Resting' in pydcm.read_file(os.path.join(dicom_dir, i)).SeriesDescription]
             nvols = len(rest_all)
