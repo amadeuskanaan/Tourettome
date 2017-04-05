@@ -58,14 +58,19 @@ def make_paris_afs(population, original_datadir, afs_dir):
         nvols = len(rest_all)
         reader = pydcm.read_file(rest_all[0])
 
+        if reader.PatientSex is 'F':
+            sex = 'female'
+        elif reader.PatientSex is 'M':
+            sex = 'male'
+
         # create subject dataframe
         columns = ['Name', 'Site', 'Group', 'Age', 'Sex', 'ScanDate', 'Scanner', 'NCoils', 'Sequence', 'TR',
                    'TE', 'Resolution', 'NVols', 'FlipAngle']
         df = pd.DataFrame(index=['%s' % subject_id], columns=columns)
         df.loc['%s' % subject_id] = pd.Series({'Name': subject,
                                             'Group': group_id,
-                                            'Age': reader.PatientAge,
-                                            'Sex': reader.PatientSex,
+                                            'Age': reader.PatientAge[:-1],
+                                            'Sex': sex,
                                             'ScanDate': reader.AcquisitionDate,
                                             'Scanner': '%sT-%s-%s' % (
                                                 reader.MagneticFieldStrength,
