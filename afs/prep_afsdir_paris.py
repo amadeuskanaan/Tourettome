@@ -54,7 +54,7 @@ def make_paris_afs(population, original_datadir, afs_dir):
 
         # if not os.path.isfile('x'):
         print '..extracting subject parameters'
-        rest_all = [os.path.join(dicom_dir, i) for i in os.listdir(dicom_dir) if 'Resting' in pydcm.read_file(os.path.join(dicom_dir, i)).SeriesDescription]
+        rest_all = [os.path.join(dicom_dir, i) for i in os.listdir(dicom_dir) if 'Resting' in pydcm.read_file(os.path.join(dicom_dir, i), force=True).SeriesDescription]
         nvols = len(rest_all)
         reader = pydcm.read_file(rest_all[0])
 
