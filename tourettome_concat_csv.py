@@ -21,10 +21,15 @@ def concat_csv(population, workspace):
     df_count = pd.concat([pd.read_csv(os.path.join(workspace, subject, 'ANATOMICAL','seg_first', 'bin_count.csv'))
                           for subject in population], ignore_index = 0)
 
-    # Create Full dataframe
+    for roi in rois_bilateral:
+        df_count['%s' %roi]  = df_count['L_%s'%roi] + df_count['R_%s'%roi]
 
+
+    # Create Full dataframe
     df = pd.concat([df_dcm, df_count], axis = 1)
 
+
+    df.to_csv(os.path.join(phenotypic_dir, 'phenotypic_tourettome.csv'))
 
 
 
