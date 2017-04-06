@@ -2,6 +2,7 @@
 
 tourettome_afs          = '/data/pt_nmr093_gts'
 tourettome_workspace    = '/scr/sambesi4/workspace/project_TOURETTOME/preproc'
+tourettome_phenotypic   = '/scr/sambesi4/workspace/project_TOURETTOME/phenotypic'
 tourettome_freesurfer   = '/scr/sambesi2/TOURETTOME/FS_SUBJECTS'
 
 paris = ['PA001', 'PA002', 'PA003', 'PA004', 'PA005', 'PA006', 'PA007', 'PA008', 'PA009', 'PA010',
@@ -54,3 +55,5 @@ mni_HOLV_2mm         = '/scr/sambesi1/workspace/Projects/Tourettome/resources/Ha
 bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
 rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta', 'R_Pall', 'L_Pall', 'R_Amyg', 'L_Amyg', 'R_Hipp', 'L_Hipp', 'R_Accu', 'L_Accu',
         'R_Thal', 'L_Thal']
+
+rois_bilateral = ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']

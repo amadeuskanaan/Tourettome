@@ -4,9 +4,7 @@ import os
 import pandas as pd
 from variables.subject_list import *
 
-def concat_csv(population, workspace):
-
-    phenotypic_dir       = os.path.join(workspace, 'phenotypic')
+def concat_csv(population, workspace, phenotypic_dir):
 
     def get_dcm_header(site_id):
         df = pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_%s.csv'%site_id))
@@ -32,7 +30,7 @@ def concat_csv(population, workspace):
     df.to_csv(os.path.join(phenotypic_dir, 'phenotypic_tourettome.csv'))
 
 
-concat_csv(tourettome_subjects, tourettome_workspace)
+concat_csv(tourettome_subjects, tourettome_phenotypic)
 
 
 
