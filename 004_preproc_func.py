@@ -98,9 +98,9 @@ def preprocess_functional(population, workspace):
             os.system('fslmaths REST_EDIT_MOCO_BRAIN -Tmean REST_EDIT_MOCO_BRAIN_MEAN.nii' )
 
 
-# paris.remove('PA049')
-preprocess_functional(population = leipzig, workspace = tourettome_workspace)
-preprocess_functional(population = paris, workspace = tourettome_workspace)
-preprocess_functional(population = hannover_a, workspace = tourettome_workspace)
-preprocess_functional(population = hannover_b, workspace = tourettome_workspace)
+# preprocess_functional(population = leipzig, workspace = tourettome_workspace)
+# preprocess_functional(population = paris, workspace = tourettome_workspace)
+# preprocess_functional(population = hannover_a, workspace = tourettome_workspace)
+# preprocess_functional(population = hannover_b, workspace = tourettome_workspace)
+preprocess_functional(population = tourettome_subjects, workspace = tourettome_workspace)
 
