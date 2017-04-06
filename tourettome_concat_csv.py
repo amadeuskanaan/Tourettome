@@ -27,7 +27,7 @@ def concat_csv(population, workspace, phenotypic_dir):
 
     # Create Full dataframe
     df = pd.concat([df_dcm, df_count])
-
+    df.to_csv(os.path.join(phenotypic_dir, 'phenotypic_tourettome.csv'))
 
     #df_count.to_csv(os.path.join(phenotypic_dir, 'tmp_count.csv'))
     #df_dcm.to_csv(os.path.join(phenotypic_dir, 'tmp_dcm.csv'))
