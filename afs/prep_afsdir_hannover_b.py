@@ -74,7 +74,7 @@ def make_hannoverB_afs(population, original_datadir, afs_dir):
         df.loc['%s' % subject_id] = pd.Series({ 'Name': subject,
                                                 'Group': group_id,
                                                 'Age': reader.PatientAge[:-1],
-                                                'Sex': reader.PatientSex,
+                                                'Sex': sex,
                                                 'ScanDate': reader.AcquisitionDate,
                                                 'Scanner': '%sT-%s-%s' % (
                                                     reader.MagneticFieldStrength,
