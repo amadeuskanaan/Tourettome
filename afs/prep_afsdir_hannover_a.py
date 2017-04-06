@@ -68,41 +68,44 @@ def make_hannoverA_afs(population, original_datadir, afs_dir):
 
         print '..extracting subject parameters'
 
+
+
+        rest_all = [os.path.join(dicom_dir, i) for i in os.listdir(dicom_dir) if 'restingstate' in pydcm.read_file(os.path.join(dicom_dir, i.decode('utf-8').strip())).SeriesDescription]
+        nvols = len(rest_all)
+        reader = pydcm.read_file(rest_all[0])
+
         if reader.PatientSex is 'F':
             sex = 'female'
         elif reader.PatientSex is 'M':
             sex = 'male'
 
-            rest_all = [os.path.join(dicom_dir, i) for i in os.listdir(dicom_dir) if 'restingstate' in pydcm.read_file(os.path.join(dicom_dir, i.decode('utf-8').strip())).SeriesDescription]
-            nvols = len(rest_all)
-            reader = pydcm.read_file(rest_all[0])
 
-            # create subject dataframe
-            columns = ['Name', 'Site', 'Group', 'Age', 'Sex', 'ScanDate', 'Scanner', 'NCoils', 'Sequence', 'TR', 'TE',
-                       'Resolution', 'NVols', 'FlipAngle']
-            df = pd.DataFrame(index=['%s' % subject_id], columns=columns)
-            df.loc['%s' % subject_id] = pd.Series({ 'Name': subject,
-                                                    'Group': group_id,
-                                                    'Age': reader.PatientAge[:-1],
-                                                    'Sex': reader.PatientSex,
-                                                    'ScanDate': reader.AcquisitionDate,
-                                                    'Scanner': '%sT-%s-%s' % (
-                                                        reader.MagneticFieldStrength,
-                                                        reader.Manufacturer,
-                                                        reader.ManufacturerModelName),
-                                                    'Sequence': reader.SeriesDescription,
-                                                    'NCoils': '32',
-                                                    'TR': str(reader.RepetitionTime),
-                                                    'TE': str(reader.EchoTime),
-                                                    'Resolution': '%sx%sx%s' % (
-                                                        str(reader.PixelSpacing[0])[0:4],
-                                                        str(reader.PixelSpacing[1])[0:4],
-                                                        np.round(reader.SpacingBetweenSlices, 3)),
-                                                    'NVols': nvols,
-                                                    'FlipAngle': reader.FlipAngle,
-                                                    'Site': 'HANNOVER_A'
-                                                    })
-            df.to_csv(param_file)
+        # create subject dataframe
+        columns = ['Name', 'Site', 'Group', 'Age', 'Sex', 'ScanDate', 'Scanner', 'NCoils', 'Sequence', 'TR', 'TE',
+                   'Resolution', 'NVols', 'FlipAngle']
+        df = pd.DataFrame(index=['%s' % subject_id], columns=columns)
+        df.loc['%s' % subject_id] = pd.Series({ 'Name': subject,
+                                                'Group': group_id,
+                                                'Age': reader.PatientAge[:-1],
+                                                'Sex': reader.PatientSex,
+                                                'ScanDate': reader.AcquisitionDate,
+                                                'Scanner': '%sT-%s-%s' % (
+                                                    reader.MagneticFieldStrength,
+                                                    reader.Manufacturer,
+                                                    reader.ManufacturerModelName),
+                                                'Sequence': reader.SeriesDescription,
+                                                'NCoils': '32',
+                                                'TR': str(reader.RepetitionTime),
+                                                'TE': str(reader.EchoTime),
+                                                'Resolution': '%sx%sx%s' % (
+                                                    str(reader.PixelSpacing[0])[0:4],
+                                                    str(reader.PixelSpacing[1])[0:4],
+                                                    np.round(reader.SpacingBetweenSlices, 3)),
+                                                'NVols': nvols,
+                                                'FlipAngle': reader.FlipAngle,
+                                                'Site': 'HANNOVER_A'
+                                                })
+        df.to_csv(param_file)
 
 
     print HA_subjects
