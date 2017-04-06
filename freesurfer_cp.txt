@@ -1,0 +1,45 @@
+
+export SUBJ=HA001
+export SUBJECTS_DIR=/host/yeatman/local_raid/kanaan/workspace/Tourettome/FREESURFER_DIR
+freeview \
+-v $SUBJECTS_DIR/$SUBJ/mri/orig.mgz \
+-v $SUBJECTS_DIR/$SUBJ/mri/brainmask.mgz:colormap=jet:colorscale=0,1:opacity=0.1 \
+-f $SUBJECTS_DIR/$SUBJ/surf/lh.pial:edgecolor=red \
+-f $SUBJECTS_DIR/$SUBJ/surf/rh.pial:edgecolor=red \
+-f $SUBJECTS_DIR/$SUBJ/surf/rh.white:edgecolor=blue \
+-f $SUBJECTS_DIR/$SUBJ/surf/lh.white:edgecolor=blue \ &
+
+
+########################################################################################################################
+#Step 1: Correct the Pial Surfaces to remove any non-brain tissue
+
+export SUBJ=YourSubjectName
+freeview \
+-v $SUBJECTS_DIR/$SUBJ/mri/orig.mgz \
+-v $SUBJECTS_DIR/$SUBJ/mri/brainmask.mgz:colormap=jet:colorscale=0,1:opacity=0.3 \
+-f $SUBJECTS_DIR/$SUBJ/surf/lh.pial:edgecolor='255,0,0' \
+-f $SUBJECTS_DIR/$SUBJ/surf/rh.pial:edgecolor='255,0,0' &
+
+#Step 2: Correct the White Matter surfaces to include any missing white matter
+
+export SUBJ=YourSubjectName
+freeview \
+-v $SUBJECTS_DIR/$SUBJ/mri/orig.mgz \
+-f $SUBJECTS_DIR/$SUBJ/surf/lh.white:edgecolor='0,0,255' \
+-f $SUBJECTS_DIR/$SUBJ/surf/rh.white:edgecolor='0,0,255' &
+
+# Step 3: Correct the White Matter surfaces to remove any grey matter tisse
+
+export SUBJ=YourSubjectName
+freeview \
+-v $SUBJECTS_DIR/$SUBJ/mri/orig.mgz \
+-v $SUBJECTS_DIR/$SUBJ/mri/wm.mgz:colormap=heat:opacity=0.1 \
+-f $SUBJECTS_DIR/$SUBJ/surf/lh.white:edgecolor='0,0,0':edgethickness=1 \
+-f $SUBJECTS_DIR/$SUBJ/surf/rh.white:edgecolor='0,0,0':edgethickness=1 &
+
+# MGH code
+freeview -v cp_before/mri/brainmask.mgz \
+-f cp_before/surf/lh.white:edgecolor=blue \
+cp_before/surf/lh.pial:edgecolor=red \
+cp_before/surf/rh.white:edgecolor=blue \
+cp_before/surf/rh.pial:edgecolor=red
