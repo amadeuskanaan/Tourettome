@@ -93,8 +93,14 @@ def preprocess_anatomical(population, workspace):
 
         ####### Count number of non-zero voxels for FSL-FIRST subcortical segmentations
 
+        # create bilateral masks
+        if not os.path.isfile(os.path.join(anatdir, 'seg_first/Thal.nii.gz'))
+            for roi in ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']:
+                os.system('fslmaths FIRST-R_%s_first.nii.gz -add FIRST-L_%s_first.nii.gz -bin -out %s' %(roi, roi, roi))
+
+        # make count
         df = pd.DataFrame(index = ['%s'%subject], columns = rois)
-        if not os.path.isfile(os.path.join(anatdir, 'sef_first/first_count.csv')):
+        if not os.path.isfile(os.path.join(anatdir, 'seg_first/first_count.csv')):
             for roi in rois:
                 first = os.path.join(firstdir,'FIRST-%s_first.nii.gz' %roi )
                 count = np.count_nonzero(nb.load(first).get_data())
