@@ -23,8 +23,6 @@ brain.save_image('/Users/kanaan/Desktop/test.png')
 
 
 
-
-
 import nibabel as nb
 from surfer import Brain
 
