@@ -97,7 +97,7 @@ def preprocess_anatomical(population, workspace):
         if not os.path.isfile(os.path.join(anatdir, 'seg_first/Thal.nii.gz')):
             for roi in ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']:
                 os.chdir(firstdir)
-                os.system('fslmaths FIRST-R_%s_first.nii.gz -add FIRST-L_%s_first.nii.gz -bin -out %s' %(roi, roi, roi))
+                os.system('fslmaths FIRST-R_%s_first.nii.gz -add FIRST-L_%s_first.nii.gz -bin %s' %(roi, roi, roi))
 
         # make count
         df = pd.DataFrame(index = ['%s'%subject], columns = rois)
