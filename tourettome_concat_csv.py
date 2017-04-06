@@ -32,6 +32,7 @@ def concat_csv(population, workspace):
     df.to_csv(os.path.join(phenotypic_dir, 'phenotypic_tourettome.csv'))
 
 
+concat_csv(tourettome_subjects, tourettome_workspace)
 
 
 
