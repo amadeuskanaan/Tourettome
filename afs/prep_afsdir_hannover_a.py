@@ -64,8 +64,15 @@ def make_hannoverA_afs(population, original_datadir, afs_dir):
         else:
             group_id = 'controls'
 
-        if not os.path.isfile(param_file):
-            print '..extracting subject parameters'
+        #if not os.path.isfile(param_file):
+
+        print '..extracting subject parameters'
+
+        if reader.PatientSex is 'F':
+            sex = 'female'
+        elif reader.PatientSex is 'M':
+            sex = 'male'
+
             rest_all = [os.path.join(dicom_dir, i) for i in os.listdir(dicom_dir) if 'restingstate' in pydcm.read_file(os.path.join(dicom_dir, i.decode('utf-8').strip())).SeriesDescription]
             nvols = len(rest_all)
             reader = pydcm.read_file(rest_all[0])
@@ -76,7 +83,7 @@ def make_hannoverA_afs(population, original_datadir, afs_dir):
             df = pd.DataFrame(index=['%s' % subject_id], columns=columns)
             df.loc['%s' % subject_id] = pd.Series({ 'Name': subject,
                                                     'Group': group_id,
-                                                    'Age': reader.PatientAge,
+                                                    'Age': reader.PatientAge[:-1],
                                                     'Sex': reader.PatientSex,
                                                     'ScanDate': reader.AcquisitionDate,
                                                     'Scanner': '%sT-%s-%s' % (
