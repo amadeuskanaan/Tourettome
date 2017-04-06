@@ -52,7 +52,7 @@ def make_paris_afs(population, original_datadir, afs_dir):
                     shutil.rmtree(os.path.join(dicom_dir, file), ignore_errors=True)
 
 
-        # if not os.path.isfile('x'):
+        #if not os.path.isfile(param_file):
         print '..extracting subject parameters'
         rest_all = [os.path.join(dicom_dir, i) for i in os.listdir(dicom_dir) if 'Resting' in pydcm.read_file(os.path.join(dicom_dir, i), force=True).SeriesDescription]
         nvols = len(rest_all)

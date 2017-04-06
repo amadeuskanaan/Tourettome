@@ -66,38 +66,47 @@ def make_leipzig_afs(population, original_datadir, afs_dir):
                 for file in glob.glob(os.path.join(data_dir, 'DICOM/%s*' % id)):
                     shutil.copy(file, dicom_dir)
 
-        if not os.path.isfile(param_file):
-            print '.... extracting subject paramters'
-            rest_all = [os.path.join(dicom_dir, i) for i in os.listdir(dicom_dir) if 'resting' in pydcm.read_file(os.path.join(dicom_dir, i)).SeriesDescription]
-            nvols    = len(rest_all)
-            reader = pydcm.read_file(rest_all[0], force=True)
 
-            # create subject dataframe
-            columns = ['Name', 'Site', 'Group', 'Age', 'Sex', 'ScanDate', 'Scanner', 'NCoils', 'Sequence', 'TR', 'TE',
-                       'Resolution', 'NVols', 'FlipAngle']
-            df = pd.DataFrame(index=['%s' % subject_id], columns=columns)
-            df.loc['%s' % subject_id] = pd.Series({'Name': subject,
-                                                'Group': group_id,
-                                                'Age': reader.PatientAge,
-                                                'Sex': reader.PatientSex,
-                                                'ScanDate': reader.AcquisitionDate,
-                                                'Scanner': '%sT-%s-%s' % (
-                                                    reader.MagneticFieldStrength,
-                                                    reader.Manufacturer,
-                                                    reader.ManufacturerModelName),
-                                                'NCoils': '32',
-                                                'Sequence': reader.SeriesDescription,
-                                                'TR': str(reader.RepetitionTime),
-                                                'TE': str(reader.EchoTime),
-                                                'Resolution': '%sx%sx%s' % (
-                                                    str(reader.PixelSpacing[0])[0:4],
-                                                    str(reader.PixelSpacing[1])[0:4],
-                                                    np.round(reader.SpacingBetweenSlices, 3)),
-                                                'NVols': nvols,
-                                                'FlipAngle': reader.FlipAngle,
-                                                'Site': 'Leipzig'
-                                                })
-            df.to_csv(param_file)
+
+
+        #if not os.path.isfile(param_file):
+        print '.... extracting subject paramters'
+
+        rest_all = [os.path.join(dicom_dir, i) for i in os.listdir(dicom_dir) if 'resting' in pydcm.read_file(os.path.join(dicom_dir, i)).SeriesDescription]
+        nvols    = len(rest_all)
+        reader = pydcm.read_file(rest_all[0], force=True)
+
+        if reader.PatientSex is 'F':
+            sex = 'female'
+        elif reader.PatientSex is 'M':
+            sex = 'male'
+
+        # create subject dataframe
+        columns = ['Name', 'Site', 'Group', 'Age', 'Sex', 'ScanDate', 'Scanner', 'NCoils', 'Sequence', 'TR', 'TE',
+                   'Resolution', 'NVols', 'FlipAngle']
+        df = pd.DataFrame(index=['%s' % subject_id], columns=columns)
+        df.loc['%s' % subject_id] = pd.Series({'Name': subject,
+                                            'Group': group_id,
+                                            'Age': reader.PatientAge[:-1],
+                                            'Sex': reader.PatientSex,
+                                            'ScanDate': reader.AcquisitionDate,
+                                            'Scanner': '%sT-%s-%s' % (
+                                                reader.MagneticFieldStrength,
+                                                reader.Manufacturer,
+                                                reader.ManufacturerModelName),
+                                            'NCoils': '32',
+                                            'Sequence': reader.SeriesDescription,
+                                            'TR': str(reader.RepetitionTime),
+                                            'TE': str(reader.EchoTime),
+                                            'Resolution': '%sx%sx%s' % (
+                                                str(reader.PixelSpacing[0])[0:4],
+                                                str(reader.PixelSpacing[1])[0:4],
+                                                np.round(reader.SpacingBetweenSlices, 3)),
+                                            'NVols': nvols,
+                                            'FlipAngle': reader.FlipAngle,
+                                            'Site': 'Leipzig'
+                                            })
+        df.to_csv(param_file)
 
     print LZ_subjects
 
