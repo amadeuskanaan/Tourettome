@@ -1,5 +1,5 @@
 executable = /usr/bin/python
-arguments = /scr/sambesi1/workspace/Projects/Tourettome/003_preproc_func.py $(Process)
+arguments = /scr/sambesi1/workspace/Projects/Tourettome/004_preproc_func.py $(Process)
 universe = vanilla
 output = /scr/sambesi1/workspace/Projects/Tourettome/condor/logs_preproc_func/output_$(Process).txt
 error = /scr/sambesi1/workspace/Projects/Tourettome/condor/logs_preproc_func/error_$(Process).txt
