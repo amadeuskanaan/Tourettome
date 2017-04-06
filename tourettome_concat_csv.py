@@ -26,11 +26,11 @@ def concat_csv(population, workspace, phenotypic_dir):
 
 
     # Create Full dataframe
-    #df = pd.concat([df_dcm, df_count])
+    df = pd.concat([df_dcm, df_count])
 
 
-    df_count.to_csv(os.path.join(phenotypic_dir, 'tmp_count.csv'))
-    df_dcm.to_csv(os.path.join(phenotypic_dir, 'tmp_dcm.csv'))
+    #df_count.to_csv(os.path.join(phenotypic_dir, 'tmp_count.csv'))
+    #df_dcm.to_csv(os.path.join(phenotypic_dir, 'tmp_dcm.csv'))
 
 
 concat_csv(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
