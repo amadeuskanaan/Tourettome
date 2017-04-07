@@ -91,26 +91,27 @@ def preprocess_anatomical(population, workspace):
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
 
 
+
         ####### Count number of non-zero voxels for FSL-FIRST subcortical segmentations
 
         # create bilateral masks
-
         for roi in ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']:
             if not os.path.isfile(os.path.join(anatdir, 'seg_first/FIRST-%s_first.nii.gz'%roi)):
                 os.chdir(firstdir)
                 os.system('fslmaths FIRST-R_%s_first.nii.gz -add FIRST-L_%s_first.nii.gz -bin FIRST-%s_first.nii.gz' %(roi, roi, roi))
 
-        # make count
+        # Make count
         df = pd.DataFrame(index = ['%s'%subject], columns = rois)
-        if not os.path.isfile(os.path.join(anatdir, 'seg_first/first_count.csv')):
+        if not os.path.isfile(os.path.join(anatdir, 'seg_first/first_count_jac.csv')):
             for roi in rois:
+                # Get jacobian deteminant from anat2mni.mat and multiply by bincount
+                jacobian_det = np.linalg.det(os.path.join(anatdir, 'seg_first', 'anat2mni.mat'))
                 first = os.path.join(firstdir,'FIRST-%s_first.nii.gz' %roi )
                 count = np.count_nonzero(nb.load(first).get_data())
-                df.ix['%s'%subject, roi] = count
+                df.ix['%s'%subject, roi] = count * jacobian_det
 
-        df.to_csv(os.path.join(firstdir, 'bin_count.csv'))
+        df.to_csv(os.path.join(firstdir, 'bin_count_jac.csv'))
         print df
-
 
 #preprocess_anatomical(population = ['HA053', 'HA054'], workspace = tourettome_workspace)
 preprocess_anatomical(population = tourettome_subjects , workspace = tourettome_workspace)
