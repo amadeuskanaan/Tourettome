@@ -66,9 +66,9 @@ def register(population, workspace_dir):
             anat2mni.inputs.output_inverse_warped_image=True
             anat2mni.inputs.output_warped_image=True
             anat2mni.inputs.use_histogram_matching=True
-            anat2mni.cmdline
-            #anat2mni.run()
-            #os.system('cp transform_Warped.nii.gz ../ANATOMICAL_BRAIN_MNI1mm.nii.gz')
+            #anat2mni.cmdline
+            anat2mni.run()
+            os.system('cp transform_Warped.nii.gz ../ANATOMICAL_BRAIN_MNI1mm.nii.gz')
 
             # Warp anatomical tissue classess to MNI space
 
@@ -159,5 +159,3 @@ def register(population, workspace_dir):
             os.system('rm -rf %s' %concat_dir)
 
 register(tourettome_subjects, tourettome_workspace)
-
-
