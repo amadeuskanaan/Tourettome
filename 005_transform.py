@@ -1,21 +1,20 @@
 __author__ = 'kanaan 03.12.2015'
 
 import os
-
+import sys
 import nibabel as nb
 import nipype.interfaces.ants as ants
-
 from utilities.utils import *
 from variables.subject_list import *
 
 
-# assert len(sys.argv)== 2
-# subject_index=int(sys.argv[1])
+assert len(sys.argv)== 2
+subject_index=int(sys.argv[1])
 
 def register(population, workspace_dir):
 
-    for subject in population:
-        # subject = population[subject_index]
+    #for subject in population:
+        subject = population[subject_index]
         print '========================================================================================'
         print 'Preprocessing functional data for %s' % (subject)
 
