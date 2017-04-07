@@ -85,17 +85,15 @@ def preprocess_functional(population, workspace):
             os.system('cp moco/REST_EDIT_moco2_meanvol_brain_mask.nii.gz REST_BRAIN_MASK.nii.gz')
 
             # Extract Brain
-            os.system('fslmaths REST_EDIT -mul REST_BRAIN_MASK')
-            os.system('fslmaths moco/REST_EDIT_MOCO_BRAIN_ -mul REST_BRAIN_MASK .nii.gz')
+            os.system('fslmaths REST_EDIT -mul REST_BRAIN_MASK REST_EDIT_BRAIN_nonorm')
 
             # Intensity Normalization'
-            os.system('fslmaths REST_EDIT_BRAIN_ -ing 1000 REST_EDIT_BRAIN -odt float' )
-            os.system('fslmaths REST_EDIT_MOCO_BRAIN_ -ing 1000 REST_EDIT_MOCO_BRAIN -odt float' )
-            os.system('rm -rf REST*_.nii.gz')
+            os.system('fslmaths REST_EDIT_BRAIN_nonorm -ing 1000 REST_EDIT_BRAIN -odt float')
+            os.system('rm -rf REST_EDIT_BRAIN_nonorm.nii.gz')
 
             # Get Mean'
             os.system('fslmaths REST_EDIT_BRAIN -Tmean REST_EDIT_BRAIN_MEAN.nii' )
-            os.system('fslmaths REST_EDIT_MOCO_BRAIN -Tmean REST_EDIT_MOCO_BRAIN_MEAN.nii' )
+            os.system('cp moco/REST_EDIT_moco2_meanvol_brain.nii.gz REST_EDIT_MOCO_BRAIN_MEAN.nii.gz' )
 
 
 # preprocess_functional(population = leipzig, workspace = tourettome_workspace)
