@@ -55,21 +55,51 @@ for readcsv = 1
     
     cd(P)
     fid = fopen('/host/yeatman/local_raid/kanaan/workspace/Tourettome/phenotypic/phenotypic_tourettome.csv'); % final group
-    C   = textscan(fid,'%s%s%s%f%s','Delimiter',',','headerLines',1,'CollectOutput',1);
+    
+    % ID ,Group,Site,Age,Sex,  %s%s%s%f%s
+    % R_Caud,L_Caud,R_Puta,L_Puta,R_Pall,L_Pall, %f%f%f%f%f%f
+    % R_Amyg,L_Amyg,R_Hipp,L_Hipp,R_Accu,L_Accu, %f%f%f%f%f%f
+    % R_Thal,L_Thal, %f%f
+    % Caud,Puta,Pall,Amyg,Hipp,Accu,Thal %f%f%f%f%f%f%f
+       
+    C   = textscan(fid,'%s%s%s%f%s%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f','Delimiter',',','headerLines',1,'CollectOutput',1);
     fclose(fid);
     
     % These are the variables of interest 
-    % -- %id,site,group,age,sex
+    % -- % ID ,Group,Site,Age,Sex, 
 
     ID         = C{1}(:,1);
-    SITE       = C{1}(:,2);
-    GROUP      = C{1}(:,3);
+    GROUP      = C{1}(:,2);
+    SITE       = C{1}(:,3);
     AGE        = C{2};
     SEX        = C{3};
+    BG.CAUD_R     = C{4}(:,1);
+    BG.CAUD_L     = C{4}(:,2);
+    BG.PUTA_R     = C{4}(:,3);
+    BG.PUTA_L     = C{4}(:,4);
+    BG.PALL_R     = C{4}(:,5);
+    BG.PALL_L     = C{4}(:,6);
+    BG.AMYG_R     = C{4}(:,7);
+    BG.AMYG_L     = C{4}(:,8);
+    BG.HIPP_R     = C{4}(:,9);
+    BG.HIPP_L     = C{4}(:,10);
+    BG.ACCU_R     = C{4}(:,11);
+    BG.ACCU_L     = C{4}(:,12);
+    BG.THAL_R     = C{4}(:,13);
+    BG.THAL_L     = C{4}(:,14);
+    BG.CAUD       = C{4}(:,15);
+    BG.PUTA       = C{4}(:,16);
+    BG.PALL       = C{4}(:,17);
+    BG.AMYG       = C{4}(:,18);
+    BG.HIPP       = C{4}(:,19);
+    BG.ACCU       = C{4}(:,20);
+    BG.THAL       = C{4}(:,21);
+    BG.STR_L      = BG.PUTA_L + BG.CAUD_L + BG.ACCU_L; 
+    BG.STR_R      = BG.PUTA_R + BG.CAUD_R + BG.ACCU_R; 
+    BG.BG_L       = BG.STR_L + BG.PALL_L; 
+    BG.BG_R       = BG.STR_R + BG.PALL_R; 
     
 end
-
-
 
 
 %% Read the thickness data 
@@ -112,6 +142,11 @@ mask  = mean(T20k,1) > 0.4;
 clusp = 0.005; 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Figure 1 analyses: compare cortical thickness 
 % ------------------------
 for Figure1 = 1
@@ -130,14 +165,12 @@ for Figure1 = 1
         M        = 1 + SI + G + A + SE;
         slm      = SurfStatLinMod(T20k,M,SW);
         slm      = SurfStatT(slm,G.controls-G.patients); 
-
-       
         
-        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%%%%%% CONTROLS > PATIENTS
-        f=figure, SurfStatViewData(slm.t,SM,'t-stat controls>patients')
+        f=figure, BoSurfStatViewData(slm.t,SM,'t-stat controls>patients')
         SurfStatColLim([-4 4]) 
-        exportfigbo(f,[RPATH 'Tourettome_Tstat_Controls_Patients.png'],'png',10)
+        exportfigbo(f,[RPATH 'thickness_t_stat_Controls>Patients.png'],'png',10)
         
         % multiple comparison correction (controls > patients)
         [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
@@ -146,11 +179,10 @@ for Figure1 = 1
         dlmwrite([RPATH, 'thickness_tstat_CP.csv'], slm.t);
         dlmwrite([RPATH 'thickness_tstat_CP_fwe.csv'], effect);
         f=figure, 
-            SurfStatViewData(effect, SM, 'FWE T-values controls>patients') 
+            BoSurfStatViewData(effect, SM, 'FWE T-values controls>patients') 
             SurfStatColLim([2 5])
             colormap([0.8 .8 .8; ice/255])
-            exportfigbo(f,[RPATH 'Tourettome_Tstat_FWE_clust025_Controls_Patients.png'],'png',10)           
-
+            exportfigbo(f,[RPATH 'thickness_t_stat_fwe_Controls>Patients.png'],'png',10)           
                 
         %%%%%%%%%% write thickness values of significant clusters 
         k = sum(clus.P<0.025); 
@@ -160,16 +192,15 @@ for Figure1 = 1
         end
         datatosave  = [{GROUPk}  SI.PARIS SI.HANNOVER_A SI.Leipzig  sigclus]
         
-        clust_table = table(IDk, GROUPk, SITEk, sigclus(:,1), sigclus(:,2), sigclus(:,3), 'VariableNames', {' ','group', 'site', 'clust1', 'clust2', 'clust3'})
-        writetable(clust_table,[RPATH 'thickness_table.csv'],'WriteRowNames',true)
+        clust_table = table(IDk, GROUPk, SITEk, sigclus(:,1), sigclus(:,2), sigclus(:,3), 'VariableNames', {'ID','Group', 'Site', 'clust1', 'clust2', 'clust3'})
+        writetable(clust_table,[RPATH 'thickness_table_Controls>Patients.csv'],'WriteRowNames',true)
         
-            
-
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
         %%%%%%%%%% PATIENTS > CONTROLS  
         slm.t = -slm.t;  
-        f=figure, SurfStatViewData(slm.t,SM,'t-stat patients>controls')
+        f=figure, BoSurfStatViewData(slm.t,SM,'t-stat patients>controls')
         SurfStatColLim([-4 4]) 
-        exportfigbo(f,[RPATH 'Tourettome_Tstat_Patients_Controls.png'],'png',10)
+        exportfigbo(f,[RPATH 'thickness_t_stat_Controls<Patients.png'],'png',10)
         
         % multiple comparison correction (patients > controls)
         [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
@@ -179,20 +210,9 @@ for Figure1 = 1
         dlmwrite([RPATH 'thickness_tstat_PC_fwe.csv'], effect);
         
         f=figure, 
-            SurfStatViewData(effect2, SM, 'FWE t-values patients>controls') 
+            BoSurfStatViewData(effect2, SM, 'FWE t-values patients>controls') 
             SurfStatColLim([2 5])
             colormap([0.8 .8 .8; ice/255])
-            exportfigbo(f,[RPATH 'Tourettome_Tstat_FWE_clust025_Patients_Controls.png'],'png',10)
+            exportfigbo(f,[RPATH 'thickness_t_stat_fwe_Controls<Patients.png'],'png',10)
 
-end 
-
-%for covariance_analysis = 1    
-%        seed = LCaudate; 
-%        Seed = term(seed); 
-%        % Linea model 
-%        % controlled for site, age, iq
-%        % ---
-%        M        = 1 + SI + G + Seed + G*Seed ;
-%        slm      = SurfStatLinMod(T20k,M,SW); 
-%        slm      = SurfStatT(slm,(G.controls.*seed)-(G.patients.*seed) ); 
-%end 
+end
