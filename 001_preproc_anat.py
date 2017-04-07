@@ -105,7 +105,7 @@ def preprocess_anatomical(population, workspace):
         if not os.path.isfile(os.path.join(anatdir, 'seg_first/first_count_jac.csv')):
             for roi in rois:
                 # Get jacobian deteminant from anat2mni.mat and multiply by bincount
-                jacobian_det = np.linalg.det(os.path.join(anatdir, 'seg_first', 'anat2mni.mat'))
+                jacobian_det = np.linalg.det(np.gendromtext(os.path.join(anatdir, 'seg_first', 'anat2mni.mat')))
                 first = os.path.join(firstdir,'FIRST-%s_first.nii.gz' %roi )
                 count = np.count_nonzero(nb.load(first).get_data())
                 df.ix['%s'%subject, roi] = count * jacobian_det
