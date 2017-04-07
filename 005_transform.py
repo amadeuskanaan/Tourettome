@@ -157,4 +157,5 @@ def register(population, workspace_dir):
             os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
             os.system('rm -rf %s' %concat_dir)
 
+
 register(tourettome_subjects, tourettome_workspace)
