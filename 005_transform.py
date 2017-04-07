@@ -70,7 +70,6 @@ def register(population, workspace_dir):
             #anat2mni.run()
             #os.system('cp transform_Warped.nii.gz ../ANATOMICAL_BRAIN_MNI1mm.nii.gz')
 
-
             # Warp anatomical tissue classess to MNI space
 
             for tissue_name, tissue_path in {'GM': anat_gm , 'WM': anat_wm,  'CSF': anat_csf}.iteritems():
@@ -159,6 +158,6 @@ def register(population, workspace_dir):
             os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
             os.system('rm -rf %s' %concat_dir)
 
-register(test_dataset, tourettome_workspace)
+register(tourettome_subjects, tourettome_workspace)
 
 

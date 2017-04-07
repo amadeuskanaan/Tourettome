@@ -95,7 +95,6 @@ def preprocess_functional(population, workspace):
             os.system('fslmaths REST_EDIT_BRAIN -Tmean REST_EDIT_BRAIN_MEAN.nii' )
             os.system('cp moco/REST_EDIT_moco2_meanvol_brain.nii.gz REST_EDIT_MOCO_BRAIN_MEAN.nii.gz' )
 
-
 # preprocess_functional(population = leipzig, workspace = tourettome_workspace)
 # preprocess_functional(population = paris, workspace = tourettome_workspace)
 # preprocess_functional(population = hannover_a, workspace = tourettome_workspace)
