@@ -12,7 +12,7 @@ def concat_csv(population, workspace, phenotypic_dir):
         return df
 
     df_dcm = pd.concat([get_dcm_header('hannover_a'),
-                        get_dcm_header('hannover_b'),
+                        #get_dcm_header('hannover_b'),
                         get_dcm_header('leipzig'),
                         get_dcm_header('paris') ])
 
