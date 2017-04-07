@@ -108,8 +108,6 @@ def preprocess_anatomical(population, workspace):
         df = pd.DataFrame(index = ['%s'%subject], columns = rois)
         if not os.path.isfile(os.path.join(anatdir, 'seg_first/first_count_jac.csv')):
             for roi in rois:
-
-
                 first = os.path.join(firstdir,'FIRST-%s_first.nii.gz' %roi )
                 count = np.count_nonzero(nb.load(first).get_data()) * jacobian_det
                 df.ix['%s'%subject, roi] = count
