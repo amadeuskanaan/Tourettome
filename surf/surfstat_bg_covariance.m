@@ -160,8 +160,6 @@ for Figure1 = 1
         clust_table = array2table(datatosave,  'VariableNames', {'controls','patients','paris', 'hannover_a', 'leipzig', 'clust1', 'clust2', 'clust3'})
         writetable(clust_table,[RPATH 'thickness_table.csv'],'WriteRowNames',true)
 
-
-
         %%%%%%%%%% PATIENTS > CONTROLS
         slm.t = -slm.t;
         f=figure, SurfStatViewData(slm.t,SM,'t-stat patients>controls')

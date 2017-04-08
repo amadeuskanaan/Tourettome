@@ -131,9 +131,6 @@ for Figure1 = 1
         slm      = SurfStatLinMod(T20k,M,SW);
         slm      = SurfStatT(slm,G.controls-G.patients); 
 
-       
-        
-        
         %%%%%%%%%% CONTROLS > PATIENTS
         f=figure, SurfStatViewData(slm.t,SM,'t-stat controls>patients')
         SurfStatColLim([-4 4]) 
