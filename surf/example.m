@@ -155,9 +155,8 @@ for Figure1 = 1
         for i = 1:sum(k) 
            sigclus(:,i) = mean(T20k(:,clusid==i),2); 
         end
-        datatosave  = [{GROUPk}  SI.PARIS SI.HANNOVER_A SI.Leipzig  sigclus]
-        
-        clust_table = table(IDk, GROUPk, SITEk, sigclus(:,1), sigclus(:,2), sigclus(:,3), 'VariableNames', {' ','group', 'site', 'clust1', 'clust2', 'clust3'})
+        datatosave  = [G.controls G.patients  SI.PARIS SI.HANNOVER_A SI.Leipzig  sigclus]
+        clust_table = array2table(datatosave,  'VariableNames', {'controls','patients','paris', 'hannover_a', 'leipzig', 'clust1', 'clust2', 'clust3'})
         writetable(clust_table,[RPATH 'thickness_table.csv'],'WriteRowNames',true)
         
             

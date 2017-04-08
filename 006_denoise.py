@@ -7,6 +7,7 @@ from CPAC.nuisance.nuisance import calc_residuals, extract_tissue_data
 
 from utilities.utils import *
 from variables.subject_list import *
+from quality.motion_statistics import *
 
 
 def nuisance_signal_regression(population, workspace_dir):
@@ -15,7 +16,6 @@ def nuisance_signal_regression(population, workspace_dir):
         print '###############################################################################'
         print 'Denoising Functional Data for subject %s' % subject
         print ''
-
 
         # Input
         subdir   = os.path.join(workspace_dir, subject)
