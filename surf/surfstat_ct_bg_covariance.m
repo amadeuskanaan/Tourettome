@@ -1,30 +1,30 @@
-%% clearallcloseall 
+%% clearallcloseall
 % ------------------------
 clear all
 close all
 
 
-%% load toolboxes and define paths 
+%% load toolboxes and define paths
 % ------------------------
 for pathtoolbox = 1
-   
+
     % you need to change the P variable to your path
-    % and these paths too relative to where your data are 
+    % and these paths too relative to where your data are
     addpath('/host/yeatman/local_raid/kanaan/Software/surfstat_chicago')
     addpath('/host/yeatman/local_raid/kanaan/Software')
-   
+
     P               = '/host/yeatman/local_raid/kanaan/workspace/Tourettome/';
-    RPATH           = [P '/Results_R1/'];
+    RPATH           = [P '/Results_R2'];
     mkdir(RPATH);
 
-end 
+end
 
 ice = textread('ice.m');
 
 %% read fs average stuff (surfaces, parcellations, curvature)
 % ------------------------
 for readsurfdata = 1
-    
+
     cd([P 'surf_fsa5'])
     SPHERE = SurfStatReadSurf({'lh.sphere','rh.sphere'});
     S = SurfStatReadSurf({'lh.inflated','rh.inflated'});
@@ -32,20 +32,20 @@ for readsurfdata = 1
     SP = SurfStatReadSurf({'lh.pial','rh.pial'});
     SM.tri = SW.tri;
     SM.coord = (SW.coord + SP.coord)./2;
-    
+
     SInf = SW;
     SInf.coord = 0.2 *SW.coord + 0.8* S.coord;
 
-   
+
     CURV = SurfStatReadData({['fsaverage_curv_lh.asc'],['fsaverage_curv_rh.asc']});
- 
-    f = figure; 
+
+    f = figure;
         BoSurfStatViewData(sign(CURV),SM,'');
         colormap([0.6 0.6 0.6; 0.8 0.8 0.8]);
-        exportfigbo(f,[RPATH 'fsaverage.png'],'png',10); 
-    close(f) 
-   
- 
+        exportfigbo(f,[RPATH 'fsaverage.png'],'png',10);
+    close(f)
+
+
 end
 
 
@@ -132,6 +132,17 @@ AGEk        = AGE(keep);
 SEXk        = SEX(keep); 
 T20k        = T20(keep,:); 
 
+%T20k_fname = fullfile(RPATH, 'T20k_table.csv')
+%dlmwrite(T20k, T20k);
+
+%T20arrt = array2table(T20k);
+%T20k_fname = fullfile(RPATH, 'T20k_table.csv')
+%T20_table = table(IDk,GROUPk, SITEk, T20k)
+%writetable(T20_table ,T20k_fname )
+
+
+
+
 
 %% generate the mask using heuristic approach 
 % ------------------------
@@ -180,22 +191,30 @@ for covariance = 1
         slm      = SurfStatT(slm,(G.controls.*seedk)-(G.patients.*seedk) ); 
 
         
-        f=figure, BoSurfStatViewData(slm.t,SM,[bg{b} 'T-stat(FWE) controls>patients'])
-            SurfStatColLim([-5 5]) 
-            exportfigbo(f, [RPATH '/' bg{b} '_covariance_C>P_t.png'],'png',10) 
-        close(f)    
+        %f=figure, BoSurfStatViewData(slm.t,SM,[bg{b} 'T-stat(FWE) controls>patients'])
+        %    SurfStatColLim([-5 5])
+        %    exportfigbo(f, [RPATH '/' bg{b} '_covariance_C>P_t.png'],'png',10)
+        %close(f)
 
         % multiple comparison correction (controls > patients)
         [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
-        effect = slm.t; 
+
+        effect = slm.t;
         if isfield(pval,'C')
-            effect(pval.C>0.025) = 0; 
-            f=figure, 
-                BoSurfStatViewData(effect, SM, [bg{b} 'T-stat(FWE) controls>patients']) 
-                SurfStatColLim([2 5])
-                colormap([0.8 .8 .8; ice/255])
-                exportfigbo(f, [RPATH '/' bg{b} '_covariance_C>P_fwe.png'],'png',10) 
-            close(f)
+            effect(pval.C>0.025) = 0;
+            effect(pval.C<0.025) = 1;
+
+            t20_bg = effect * transpose(T20k);
+            t20_bg_cov_mean = mean(nonzeros(t20_bg));
+            t20_bg_cov_mean
+
+
+            %f=figure,
+            %    BoSurfStatViewData(effect, SM, [bg{b} 'T-stat(FWE) controls>patients'])
+            %    SurfStatColLim([2 5])
+            %    colormap([0.8 .8 .8; ice/255])
+            %    exportfigbo(f, [RPATH '/' bg{b} '_covariance_C>P_fwe.png'],'png',10)
+            %close(f)
         end
         
         
@@ -204,18 +223,22 @@ for covariance = 1
         [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
         effect = slm.t; 
         if isfield(pval,'C')
-            effect(pval.C>0.025) = 0; 
-            f=figure, 
-                BoSurfStatViewData(effect, SM, [bg{b} 'T-stat(FWE) controls<patients']) 
-                SurfStatColLim([2 5])
-                colormap([0.8 .8 .8; hot])
-                exportfigbo(f, [RPATH '/' bg{b} '_covariance_C<P_fwe.png'],'png',10) 
-            close(f)
+            effect(pval.C>0.025) = 0;
+            effect(pval.C<0.025) = 1;
+            %dlmwrite([RPATH '/' bg{b} '_thickness_mask_pc.csv'], effect);
+
+            t20_bg = effect * transpose(T20k);
+            t20_bg_cov_mean = mean(nonzeros(t20_bg));
+            t20_bg_cov_mean
+
+            %f=figure,
+            %    BoSurfStatViewData(effect, SM, [bg{b} 'T-stat(FWE) controls<patients'])
+            %    SurfStatColLim([2 5])
+            %    colormap([0.8 .8 .8; hot])
+            %    exportfigbo(f, [RPATH '/' bg{b} '_covariance_C<P_fwe.png'],'png',10)
+            %close(f)
         end
-        
-        
-        
-            
+
     end
 
 end   
