@@ -23,8 +23,6 @@ def concat_csv(population, workspace, phenotypic_dir):
                           for subject in population], ignore_index = False)
 
 
-    df_count['BG'] = df_count['']
-
     for roi in rois_bilateral:
         df_count['%s' %roi]  = df_count['L_%s'%roi] + df_count['R_%s'%roi]
 
