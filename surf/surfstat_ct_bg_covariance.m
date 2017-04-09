@@ -39,11 +39,11 @@ for readsurfdata = 1
 
     CURV = SurfStatReadData({['fsaverage_curv_lh.asc'],['fsaverage_curv_rh.asc']});
 
-    f = figure;
-        BoSurfStatViewData(sign(CURV),SM,'');
-        colormap([0.6 0.6 0.6; 0.8 0.8 0.8]);
-        exportfigbo(f,[RPATH 'fsaverage.png'],'png',10);
-    close(f)
+    %f = figure;
+    %    BoSurfStatViewData(sign(CURV),SM,'');
+    %    colormap([0.6 0.6 0.6; 0.8 0.8 0.8]);
+    %    exportfigbo(f,[RPATH 'fsaverage.png'],'png',10);
+    %close(f)
 
 
 end
@@ -73,20 +73,20 @@ for readcsv = 1
     SITE       = C{1}(:,3);
     AGE        = C{2};
     SEX        = C{3};
-    BG.CAUD_R     = C{4}(:,1);
-    BG.CAUD_L     = C{4}(:,2);
-    BG.PUTA_R     = C{4}(:,3);
-    BG.PUTA_L     = C{4}(:,4);
-    BG.PALL_R     = C{4}(:,5);
-    BG.PALL_L     = C{4}(:,6);
-    BG.AMYG_R     = C{4}(:,7);
-    BG.AMYG_L     = C{4}(:,8);
-    BG.HIPP_R     = C{4}(:,9);
-    BG.HIPP_L     = C{4}(:,10);
-    BG.ACCU_R     = C{4}(:,11);
-    BG.ACCU_L     = C{4}(:,12);
-    BG.THAL_R     = C{4}(:,13);
-    BG.THAL_L     = C{4}(:,14);
+    BG.R_CAUD     = C{4}(:,1);
+    BG.L_CAUD     = C{4}(:,2);
+    BG.R_PUTA     = C{4}(:,3);
+    BG.L_PUTA     = C{4}(:,4);
+    BG.R_PALL     = C{4}(:,5);
+    BG.L_PALL     = C{4}(:,6);
+    BG.R_AMYG     = C{4}(:,7);
+    BG.L_AMYG     = C{4}(:,8);
+    BG.R_HIPP     = C{4}(:,9);
+    BG.L_HIPP     = C{4}(:,10);
+    BG.R_ACCU     = C{4}(:,11);
+    BG.L_ACCU     = C{4}(:,12);
+    BG.R_THAL     = C{4}(:,13);
+    BG.L_THAL     = C{4}(:,14);
     BG.CAUD       = C{4}(:,15);
     BG.PUTA       = C{4}(:,16);
     BG.PALL       = C{4}(:,17);
@@ -94,10 +94,10 @@ for readcsv = 1
     BG.HIPP       = C{4}(:,19);
     BG.ACCU       = C{4}(:,20);
     BG.THAL       = C{4}(:,21);
-    BG.STR_L      = BG.PUTA_L + BG.CAUD_L + BG.ACCU_L; 
-    BG.STR_R      = BG.PUTA_R + BG.CAUD_R + BG.ACCU_R; 
-    BG.BG_L       = BG.STR_L + BG.PALL_L; 
-    BG.BG_R       = BG.STR_R + BG.PALL_R; 
+    BG.L_STR      = BG.PUTA_L + BG.CAUD_L + BG.ACCU_L;
+    BG.R_STR      = BG.PUTA_R + BG.CAUD_R + BG.ACCU_R;
+    BG.L_BG       = BG.STR_L + BG.PALL_L;
+    BG.R_BG       = BG.STR_R + BG.PALL_R;
     
 end
 
@@ -135,16 +135,12 @@ T20k        = T20(keep,:);
 %T20k_fname = fullfile(RPATH, 'T20k_table.csv')
 %dlmwrite(T20k, T20k);
 
-%T20arrt = array2table(T20k);
-%T20k_fname = fullfile(RPATH, 'T20k_table.csv')
-%T20_table = table(IDk,GROUPk, SITEk, T20k)
-%writetable(T20_table ,T20k_fname )
+T20arrt = array2table(T20k);
+T20k_fname = fullfile(RPATH, 'T20k_table.csv')
+T20_table = table(IDk,GROUPk, SITEk, T20k)
+writetable(T20_table ,T20k_fname)
 
-
-
-
-
-%% generate the mask using heuristic approach 
+%% generate the mask using heuristic approach
 % ------------------------
 mask  = mean(T20k,1) > 0.4;
 
@@ -170,25 +166,25 @@ for covariance = 1
          
         disp([' --------- ' bg{b} ' ----------']) 
         seed = getfield(BG, bg{b}); 
-        seedk = seed(keep); 
-       
+        seedk = seed(keep);
+
         clusp  = 0.025;
 
-        
-        % make terms needed for the modeling          
-        Seed  = term(seedk); 
+
+        % make terms needed for the modeling
+        Seed  = term(seedk);
         G     = term(GROUPk);
         SI    = term(SITEk);
-        A     = term(AGEk); 
-        SE    = term(SEXk); 
+        A     = term(AGEk);
+        SE    = term(SEXk);
         
         
-        % Linea model 
-        % controlled for site, age, iq
-        % ---
-        M        = 1 + SI + G + Seed + G*Seed ;
-        slm      = SurfStatLinMod(T20k,M,SW); 
-        slm      = SurfStatT(slm,(G.controls.*seedk)-(G.patients.*seedk) ); 
+          % Linea model
+          % controlled for site, age, iq
+          % ---
+          M        = 1 + SI + G + Seed + G*Seed ;
+          slm      = SurfStatLinMod(T20k,M,SW);
+          slm      = SurfStatT(slm,(G.controls.*seedk)-(G.patients.*seedk) );
 
         
         %f=figure, BoSurfStatViewData(slm.t,SM,[bg{b} 'T-stat(FWE) controls>patients'])
@@ -203,11 +199,7 @@ for covariance = 1
         if isfield(pval,'C')
             effect(pval.C>0.025) = 0;
             effect(pval.C<0.025) = 1;
-
-            t20_bg = effect * transpose(T20k);
-            t20_bg_cov_mean = mean(nonzeros(t20_bg));
-            t20_bg_cov_mean
-
+            dlmwrite([RPATH '/' bg{b} '_thickness_mask_cp.csv'], effect);
 
             %f=figure,
             %    BoSurfStatViewData(effect, SM, [bg{b} 'T-stat(FWE) controls>patients'])
@@ -216,8 +208,7 @@ for covariance = 1
             %    exportfigbo(f, [RPATH '/' bg{b} '_covariance_C>P_fwe.png'],'png',10)
             %close(f)
         end
-        
-        
+
         % multiple comparison correction (controls < patients)
         slm.t = -slm.t
         [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
@@ -225,11 +216,7 @@ for covariance = 1
         if isfield(pval,'C')
             effect(pval.C>0.025) = 0;
             effect(pval.C<0.025) = 1;
-            %dlmwrite([RPATH '/' bg{b} '_thickness_mask_pc.csv'], effect);
-
-            t20_bg = effect * transpose(T20k);
-            t20_bg_cov_mean = mean(nonzeros(t20_bg));
-            t20_bg_cov_mean
+            dlmwrite([RPATH '/' bg{b} '_thickness_mask_pc.csv'], effect);
 
             %f=figure,
             %    BoSurfStatViewData(effect, SM, [bg{b} 'T-stat(FWE) controls<patients'])
