@@ -8,13 +8,13 @@ from utilities.utils import *
 from variables.subject_list import *
 
 
-assert len(sys.argv)== 2
-subject_index=int(sys.argv[1])
+#assert len(sys.argv)== 2
+#subject_index=int(sys.argv[1])
 
 def register(population, workspace_dir):
 
-    #for subject in population:
-        subject = population[subject_index]
+    for subject in population:
+        #subject = population[subject_index]
         print '========================================================================================'
         print 'Preprocessing functional data for %s' % (subject)
 
@@ -116,7 +116,7 @@ def register(population, workspace_dir):
         ################################################################################################################
         ##### Resample FUNCTIONAL to MNI linear
 
-        if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_BRAIN_UNIMOCO_MNI2mm.nii.gz')):
+        if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')):
 
             print '..... Transforming func2mni in one step.....'
             print '...........concatenating moco-affine/func2anat-affine/anat2mni-affine/anat2mni-warp'

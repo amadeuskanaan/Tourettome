@@ -1,5 +1,24 @@
 __author__ = 'kanaan'
 
+import numpy as np
+
+from surfer import Brain
+
+brain = Brain('fsaverage5', 'split', 'pial', views = ['lat', 'med'], background='black', cortex='high_contrast')
+surf_data = np.genfromtxt ('/Users/kanaan/SCR/workspace/project_touretome/Results_R1/thickness_tstat_CP.csv', delimiter=",")
+
+
+surf_data_lh = surf_data[:10242]
+surf_data_rh = surf_data[10242:]
+
+brain.add_data(surf_data_lh, -5, 5, colormap="jet", alpha=1, hemi='lh')
+brain.add_data(surf_data_rh, -5, 5, colormap="jet", alpha=1, hemi='rh')
+
+brain.save_image('/Users/kanaan/Desktop/test.png')
+
+
+
+
 
 import nibabel as nb
 from surfer import Brain
@@ -53,3 +72,8 @@ for hemi in ['lh', 'rh']:
     pl.draw()
     pl.show()
     pl.savefig('/Users/kanaan/Desktop/%s.png'%hemi)
+
+
+
+
+
