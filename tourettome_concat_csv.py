@@ -76,3 +76,6 @@ def concat_qsm_csv(phenotypic_dir):
     df = df[order]
 
     df.to_csv(os.path.join(phenotypic_dir, 'phenotypic_leipzig_qsm.csv'))
+
+
+concat_qsm_csv(tourettome_phenotypic)
