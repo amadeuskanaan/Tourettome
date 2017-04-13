@@ -46,8 +46,33 @@ def concat_csv(population, workspace, phenotypic_dir):
     df_jac.to_csv(os.path.join(phenotypic_dir, 'phenotypic_tourettome_jac.csv'))
 
 
-concat_csv(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
+#concat_csv(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
 
 
+qsm_results_dir = '/scr/sambesi3/workspace/project_iron/results_OCT_26'
 
+def concat_qsm_csv(phenotypic_dir):
 
+    qsm_c = pd.read_csv(os.path.join(qsm_results_dir), '/QSM_median_controls_a.csv', index_col=0)
+    qsm_p = pd.read_csv(os.path.join(qsm_results_dir), '/QSM_median_patients_a.csv', index_col=0)
+    df= pd.concat([qsm_c,qsm_p])
+
+    tour = pd.read_csv('./phenotypic_leipzig.csv', index_col=0, usecols=[0, 1, 2, 3, 4, 5], skiprows=0)
+    tour['ID'] = tour.index
+    tour = tour.set_index('Name')
+    tour.index.name = None
+
+    cols1 = ['Name', 'Group', 'Site', 'Age', 'Sex']
+    cols2 = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta', 'R_Pall', 'L_Pall',
+             'R_Amyg', 'L_Amyg', 'R_Hipp', 'L_Hipp', 'R_Accu', 'L_Accu', 'R_Thal', 'L_Thal',
+             'Caud', 'Puta', 'Pall', 'Amyg', 'Hipp', 'Accu', 'Thal',
+             'L_RN', 'R_RN', 'L_STN', 'R_STN', 'L_SN', 'R_SN', 'L_DN', 'R_DN',
+             'SN', 'STN', 'RN', 'GPe', 'GPi', 'DN', 'MRS_STR']
+
+    df['Name'] = df.index
+    df = df.set_index('ID')
+    df.index.name = None
+    order = cols1 + cols2
+    df = df[order]
+
+    df.to_csv(os.path.join(phenotypic_dir, 'phenotypic_leipzig_qsm.csv'))
