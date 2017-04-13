@@ -69,6 +69,9 @@ def concat_qsm_csv(phenotypic_dir):
              'L_RN', 'R_RN', 'L_STN', 'R_STN', 'L_SN', 'R_SN', 'L_DN', 'R_DN',
              'SN', 'STN', 'RN', 'GPe', 'GPi', 'DN', 'MRS_STR']
 
+    df = df[cols2]
+    df = pd.concat([tour, df], axis=1)
+
     df['Name'] = df.index
     df = df.set_index('ID')
     df.index.name = None
