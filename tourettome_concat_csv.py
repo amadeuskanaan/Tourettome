@@ -53,8 +53,8 @@ qsm_results_dir = '/scr/sambesi3/workspace/project_iron/results_OCT_26'
 
 def concat_qsm_csv(phenotypic_dir):
 
-    qsm_c = pd.read_csv(os.path.join(qsm_results_dir), '/QSM_median_controls_a.csv', index_col=0)
-    qsm_p = pd.read_csv(os.path.join(qsm_results_dir), '/QSM_median_patients_a.csv', index_col=0)
+    qsm_c = pd.read_csv(os.path.join(qsm_results_dir, 'QSM_median_controls_a.csv'), index_col=0)
+    qsm_p = pd.read_csv(os.path.join(qsm_results_dir, 'QSM_median_patients_a.csv'), index_col=0)
     df= pd.concat([qsm_c,qsm_p])
 
     tour = pd.read_csv('./phenotypic_leipzig.csv', index_col=0, usecols=[0, 1, 2, 3, 4, 5], skiprows=0)
