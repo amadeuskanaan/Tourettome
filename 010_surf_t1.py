@@ -58,7 +58,7 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           '--icoorder 5 '
                           '--interp nearest '
                           '--hemi %s '
-                          '--out %s_%s_%s_R1.mgh'
+                          '--out %s_%s_%s_R1.mgh '
                           '--fwhm 6 '
                           %(subject,
                             proj_fracs[depth],
