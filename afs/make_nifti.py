@@ -14,6 +14,7 @@ def make_nifti(population, afs_dir):
         print '%s-Converting dicom to Nifti for %s' %(count, subject)
         #input
         dicom_dir  = os.path.join(afs_dir, subject, 'DICOM')
+        dicom_dir_t1 = os.path.join(afs_dir, subject, 'DICOM_T1MAPS')
         nifti_dir = os.path.join(afs_dir, subject, 'NIFTI')
         nifti_dir = mkdir_path(nifti_dir)
         string = '%p_%t_%u_%s'
@@ -29,6 +30,7 @@ def make_nifti(population, afs_dir):
                 shutil.move(rest,  os.path.join(nifti_dir, 'REST.nii.gz'))
                 shutil.move(se[0], os.path.join(nifti_dir, 'REST_SE.nii.gz'))
                 shutil.move(se[1], os.path.join(nifti_dir, 'REST_SEINV.nii.gz'))
+
 
             if subject[0:2] == 'HA':
                 os.system('dcm2niix  -b n -o %s %s' % (nifti_dir, dicom_dir))
@@ -61,9 +63,19 @@ def make_nifti(population, afs_dir):
                 shutil.move(anat, os.path.join(nifti_dir, 'ANATOMICAL.nii.gz'))
                 shutil.move(rest, os.path.join(nifti_dir, 'REST.nii.gz'))
 
+
             # os.system('flirt -in %s/REST -ref %s/ANATOMICAL -dof 6 -cost corratio -out %s/test_func2anat'%(nifti_dir,nifti_dir,nifti_dir))
 
-# make_nifti(population= leipzig,    afs_dir=tourettome_afs)
-make_nifti(population= hannover_a, afs_dir=tourettome_afs)
+        # Get T1MAPS.... introduced 16-04-2017
+        if subject[0:2] == 'LZ':
+            if not os.path.isfile(os.path.join(nifti_dir, 'T1MAPS.nii.gz')):
+                os.system('dcm2niix -b n -o %s %s' % (nifti_dir, dicom_dir))
+                t1 = [os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 'mp2rage' in fname][0]
+                shutil.move(t1, os.path.join(nifti_dir, 'T1MAPS.nii.gz'))
+
+
+
+make_nifti(population= leipzig,    afs_dir=tourettome_afs)
+#make_nifti(population= hannover_a, afs_dir=tourettome_afs)
 # make_nifti(population= hannover_b, afs_dir=tourettome_afs)
 # make_nifti(population= paris,      afs_dir=tourettome_afs)
