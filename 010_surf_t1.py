@@ -109,4 +109,5 @@ def make_r1_surf(population, workspace, freesurfer_dir):
             #     brain.close()
 
 
+
 make_r1_surf(['LZ031'], tourettome_workspace, tourettome_freesurfer)
