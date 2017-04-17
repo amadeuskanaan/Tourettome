@@ -103,4 +103,5 @@ def make_r1_surf(population, workspace, freesurfer_dir):
             #     brain.overlays["%s_lh" %depth].remove()
             #     brain.overlays["%s_rh" %depth].remove()
 
+
 make_r1_surf(['LZ002'], tourettome_workspace, tourettome_freesurfer)
