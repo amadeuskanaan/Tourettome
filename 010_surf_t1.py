@@ -51,33 +51,36 @@ def make_r1_surf(population, workspace, freesurfer_dir):
 
                 os.system('mri_vol2surf '
                           '--mov R1.mgz '
-                          '--regheader %s '
+                          #####'--regheader %s '
+                          '--srcsubject %s'
+                          '--trgsubject fsaverage5'
                           '--projfrac-avg %s '
                           '--icoorder 5 '
                           '--interp nearest '
                           '--hemi %s '
                           '--out %s_%s_%s_R1.mgh'
+                          'fwhm 6 '
                           %(subject,
                             proj_fracs[depth],
                             hemi,
                             subject, depth, hemi,
                             ))
 
-                os.system('mri_surf2surf '
-                          '--s %s '
-                          '--sval  %s_%s_%s_R1.mgh '
-                          '--trgsubject fsaverage5 '
-                          '--tval %s_%s_%s_fsaverage5_fwhm%s_R1.mgh '
-                          '--fwhm %s '
-                          '--hemi %s '
-                          '--noreshape '
-                          '--cortex'
-                          %(subject,
-                            subject, depth, hemi,
-                            subject, depth, hemi, fwhm,
-                            fwhm,
-                            hemi
-                            ))
+                # os.system('mri_surf2surf '
+                #           '--s %s '
+                #           '--sval  %s_%s_%s_R1.mgh '
+                #           '--trgsubject fsaverage5 '
+                #           '--tval %s_%s_%s_fsaverage5_fwhm%s_R1.mgh '
+                #           '--fwhm %s '
+                #           '--hemi %s '
+                #           '--noreshape '
+                #           '--cortex'
+                #           %(subject,
+                #             subject, depth, hemi,
+                #             subject, depth, hemi, fwhm,
+                #             fwhm,
+                #             hemi
+                #             ))
 
             # ###### view qsm data on fsaverage5
             # import nibabel as nb
