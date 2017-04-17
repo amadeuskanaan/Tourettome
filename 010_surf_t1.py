@@ -47,40 +47,58 @@ def make_r1_surf(population, workspace, freesurfer_dir):
         # vol2surf iterate of six laminar layers
         for hemi in ['lh', 'rh']:
 
-            for depth in proj_fracs.keys():
+            # for depth in proj_fracs.keys():
 
-                os.system('mri_vol2surf '
-                          '--mov R1.mgz '
-                          '--regheader %s '
-                          '--srcsubject %s '
-                          '--projfrac-avg %s '
-                          #'--icoorder 5 ' 
-                          '--interp nearest '
-                          '--hemi %s '
-                          '--out %s_%s_%s_R1.mgh '
-                          #'--fwhm 6'
-                          %(subject,
-                            subject,
-                            proj_fracs[depth],
-                            hemi,
-                            subject, depth, hemi,
-                            ))
+            # os.system('mri_vol2surf '
+            #           '--mov R1.mgz '
+            #           '--regheader %s '
+            #           '--srcsubject %s '
+            #           '--projfrac-avg %s '
+            #           #'--icoorder 5 '
+            #           '--interp nearest '
+            #           '--hemi %s '
+            #           '--out %s_%s_%s_R1.mgh '
+            #           #'--fwhm 6'
+            #           %(subject,
+            #             subject,
+            #             proj_fracs[depth],
+            #             hemi,
+            #             subject, depth, hemi,
+            #             ))
 
-                os.system('mri_surf2surf '
-                          '--s %s '
-                          '--sval  %s_%s_%s_R1.mgh '
-                          '--trgsubject fsaverage5 '
-                          '--tval %s_%s_%s_fsaverage5_fwhm%s_R1.mgh '
-                          '--fwhm %s '
-                          '--hemi %s '
-                          '--noreshape '
-                          '--cortex'
-                          %(subject,
-                            subject, depth, hemi,
-                            subject, depth, hemi, fwhm,
-                            fwhm,
-                            hemi
-                            ))
+
+            os.system('mri_vol2surf '
+                      '--mov R1.mgz '
+                      '--regheader %s '
+                      '--srcsubject %s '
+                      '--projfrac-avg 0.2 0.8 0.1 '
+                      #'--icoorder 5 ' 
+                      '--interp nearest '
+                      '--hemi %s '
+                      '--out test.mgh '
+                      #'--fwhm 6'
+                      %(subject,
+                        subject,
+                        hemi,
+                        ))
+
+
+
+                # os.system('mri_surf2surf '
+                #           '--s %s '
+                #           '--sval  %s_%s_%s_R1.mgh '
+                #           '--trgsubject fsaverage5 '
+                #           '--tval %s_%s_%s_fsaverage5_fwhm%s_R1.mgh '
+                #           '--fwhm %s '
+                #           '--hemi %s '
+                #           '--noreshape '
+                #           '--cortex'
+                #           %(subject,
+                #             subject, depth, hemi,
+                #             subject, depth, hemi, fwhm,
+                #             fwhm,
+                #             hemi
+                #             ))
 
             ###### view qsm data on fsaverage5
             import nibabel as nb
