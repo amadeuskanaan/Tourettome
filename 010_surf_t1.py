@@ -51,7 +51,7 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                 os.system('mri_vol2surf '
                           '--mov R1.mgz '
                           '--regheader %s '
-                          '--icoorder 5 '
+                          '--icoorder 2 '
                           '--projfrac-avg %s '
                           '--interp nearest '
                           '--hemi %s '
