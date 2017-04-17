@@ -57,22 +57,23 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           '--interp nearest '
                           '--hemi %s '
                           '--out %s_%s_%s_R1.mgh'
-                          %(subject, proj_fracs[depth], subject,
-                            subject, depth, hemi)
-                          )
+                          %(subject,
+                            proj_fracs[depth],
+                            hemi,
+                            subject, depth, hemi,
+                            ))
 
-                # os.system('mri_surf2surf '
-                #           '--s %s '
-                #           '--trgsubject fsaverage5 '
-                #           '--tval %s_%s_%s_fsaverege_fwhm%s_R1.mgh '
-                #           '--fwhm %s '
-                #           '--noreshape '
-                #           '--cortex'
-                #           %(subject,
-                #             subject, depth, hemi, fwhm,
-                #             fwhm
-                #             ))
-
+                os.system('mri_surf2surf '
+                          '--s %s '
+                          '--trgsubject fsaverage5 '
+                          '--tval %s_%s_%s_fsaverege_fwhm%s_R1.mgh '
+                          '--fwhm %s '
+                          '--noreshape '
+                          '--cortex'
+                          %(subject,
+                            subject, depth, hemi, fwhm,
+                            fwhm
+                            ))
 
             ####### view qsm data on fsaverage5
             # import nibabel as nb
