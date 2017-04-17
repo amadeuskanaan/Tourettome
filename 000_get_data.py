@@ -5,7 +5,7 @@ from utilities.utils import mkdir_path
 from variables.subject_list import *
 
 
-def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
+def preprocess_anatomical(population, afs_dir, workspace):
 
     print '========================================================================================'
     print ''
@@ -29,12 +29,11 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
         if not os.path.isfile(os.path.join(rawdir, 'REST.nii.gz')):
             shutil.copy(os.path.join(afsdir, 'REST.nii.gz'), os.path.join(rawdir, 'REST.nii.gz'))
 
+        if subject[0:2] == 'LZ':
+            if not os.path.isfile(os.path.join(rawdir, 'T1MAPS.nii.gz')):
+                shutil.copy(os.path.join(afsdir, 'T1MAPS.nii.gz'), os.path.join(rawdir, 'T1MAPS.nii.gz'))
 
-
-
-preprocess_anatomical(population = tourettome_subjects, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-
-
+preprocess_anatomical(population = tourettome_subjects, afs_dir = tourettome_afs, workspace = tourettome_workspace)
 
 
 
