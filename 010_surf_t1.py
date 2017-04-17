@@ -69,7 +69,7 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           '--trgsubject fsaverage5 '
                           '--tval %s_%s_%s_fsaverage5_fwhm%s_R1.mgh '
                           '--fwhm %s '
-                          '--hemi %s'
+                          '--hemi %s '
                           '--noreshape '
                           '--cortex'
                           %(subject,
