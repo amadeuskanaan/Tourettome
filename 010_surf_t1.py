@@ -53,7 +53,7 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           '--mov R1.mgz '
                           #####'--regheader %s '
                           '--srcsubject %s'
-                          '--trgsubject fsaverage5'
+                          '--trgsubject fsaverage5 '
                           '--projfrac-avg %s '
                           '--icoorder 5 '
                           '--interp nearest '
