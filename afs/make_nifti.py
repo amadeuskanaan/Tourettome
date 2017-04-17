@@ -71,7 +71,7 @@ def make_nifti(population, afs_dir):
             if not os.path.isfile(os.path.join(nifti_dir, 'T1MAPS.nii.gz')):
                 os.system('dcm2niix -b n -o %s %s' % (dicom_dir_t1, dicom_dir_t1))
                 t1 = [os.path.join(nifti_dir, fname) for fname in os.listdir(dicom_dir_t1) if 'mp2rage' in fname][0]
-                shutil.move(t1, os.path.join(nifti_dir, 'T1MAPS.nii.gz'))
+                shutil.move(t1, os.path.join(dicom_dir_t1, 'T1MAPS.nii.gz'))
 
 make_nifti(population= leipzig,    afs_dir=tourettome_afs)
 #make_nifti(population= hannover_a, afs_dir=tourettome_afs)
