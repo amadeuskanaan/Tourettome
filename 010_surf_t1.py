@@ -36,78 +36,78 @@ def make_r1_surf(population, workspace, freesurfer_dir):
             os.system('fslmaths T1MAPS_fs -recip R1')
             os.system('mri_convert R1.nii.gz R1.mgz')
 
-        proj_fracs = {'depth1': '0.0 0.2 0.1',
-                      'depth2': '0.2 0.4 0.1',
-                      'depth3': '0.4 0.6 0.1',
-                      'depth4': '0.6 0.8 0.1',
-                      'depth5': '0.8 1.0 0.1'}
+        # proj_fracs = {'depth1': '0.0 0.2 0.1',
+        #               'depth2': '0.2 0.4 0.1',
+        #               'depth3': '0.4 0.6 0.1',
+        #               'depth4': '0.6 0.8 0.1',
+        #               'depth5': '0.8 1.0 0.1'}
+        #
+        # fwhm = 6
+        #
+        # # vol2surf iterate of six laminar layers
+        # for hemi in ['lh', 'rh']:
+        #
+        #     for depth in proj_fracs.keys():
+        #
+        #         os.system('mri_vol2surf '
+        #                   '--mov R1.mgz '
+        #                   '--regheader %s '
+        #                   '--projfrac-avg %s '
+        #                   '--interp nearest '
+        #                   '--hemi %s '
+        #                   '--out %s_%s_%s_R1.mgh '
+        #                   #'--fwhm 6'
+        #                   %(subject,
+        #                     proj_fracs[depth],
+        #                     hemi,
+        #                     subject, depth, hemi,
+        #                     ))
+        #
+        #         os.system('mri_surf2surf '
+        #                   '--s %s '
+        #                   '--sval  %s_%s_%s_R1.mgh '
+        #                   '--trgsubject fsaverage5 '
+        #                   '--tval %s_%s_%s_fsaverage5_R1.mgh '
+        #                   '--fwhm %s '
+        #                   '--hemi %s '
+        #                   '--noreshape '
+        #                   '--cortex'
+        #                   %(subject,
+        #                     subject, depth, hemi,
+        #                     subject, depth, hemi,
+        #                     fwhm,
+        #                     hemi
+        #                     ))
+        #
+        #     ###### view qsm data on fsaverage5
+        #     import nibabel as nb
+        #     from surfer import Brain
+        #
+        #     subject  = 'LZ031'
+        #     proj_fracs = {'depth1': '0.0 0.2 0.2',
+        #                   'depth2': '0.2 0.4 0.2',
+        #                   'depth3': '0.4 0.6 0.2',
+        #                   'depth4': '0.6 0.8 0.2',
+        #                   'depth5': '0.8 1.0 0.2'}
+        #
+        #     for depth in proj_fracs:
+        #
+        #         # get data
+        #         data_leftx  = nb.load('%s_%s_lh_fsaverage5_R1.mgh' %(subject,depth)).get_data()
+        #         #data_rightx = nb.load('%s_%s_rh_fsaverage5_R1.mgh' %(subject,depth)).get_data()
+        #
+        #         #reshape
+        #         data_left   = data_leftx.reshape(data_leftx.shape[0],1)
+        #         #data_right  = data_rightx.reshape(data_rightx.shape[0],1)
+        #
+        #         brain = Brain("fsaverage5", "split", "white",views=['lat', 'med'], background="white")
+        #
+        #         brain.add_data(data_left,0.005,0.0011,  hemi='lh', colormap = "coolwarm")
+        #         #brain.add_data(data_right,0.005,0.0011, hemi='rh', colormap = "coolwarm")
+        #
+        #         brain.save_image("%s.png" %depth)
+        #         brain.close()
 
-        fwhm = 6
-
-        # vol2surf iterate of six laminar layers
-        for hemi in ['lh', 'rh']:
-
-            for depth in proj_fracs.keys():
-
-                os.system('mri_vol2surf '
-                          '--mov R1.mgz '
-                          '--regheader %s '
-                          '--projfrac-avg %s '
-                          '--interp nearest '
-                          '--hemi %s '
-                          '--out %s_%s_%s_R1.mgh '
-                          #'--fwhm 6'
-                          %(subject,
-                            proj_fracs[depth],
-                            hemi,
-                            subject, depth, hemi,
-                            ))
-
-                os.system('mri_surf2surf '
-                          '--s %s '
-                          '--sval  %s_%s_%s_R1.mgh '
-                          '--trgsubject fsaverage5 '
-                          '--tval %s_%s_%s_fsaverage5_R1.mgh '
-                          '--fwhm %s '
-                          '--hemi %s '
-                          '--noreshape '
-                          '--cortex'
-                          %(subject,
-                            subject, depth, hemi,
-                            subject, depth, hemi,
-
-                            hemi
-                            ))
-
-            # ###### view qsm data on fsaverage5
-            # import nibabel as nb
-            # from surfer import Brain
-            #
-            # subject  = 'LZ031'
-            # proj_fracs = {'depth1': '0.0 0.2 0.2',
-            #               'depth2': '0.2 0.4 0.2',
-            #               'depth3': '0.4 0.6 0.2',
-            #               'depth4': '0.6 0.8 0.2',
-            #               'depth5': '0.8 1.0 0.2'}
-            #
-            # for depth in proj_fracs:
-            #
-            #     # get data
-            #     data_leftx  = nb.load('%s_%s_lh_fsaverage5_R1.mgh' %(subject,depth)).get_data()
-            #     #data_rightx = nb.load('%s_%s_rh_fsaverage5_R1.mgh' %(subject,depth)).get_data()
-            #
-            #     #reshape
-            #     data_left   = data_leftx.reshape(data_leftx.shape[0],1)
-            #     #data_right  = data_rightx.reshape(data_rightx.shape[0],1)
-            #
-            #     brain = Brain("fsaverage5", "split", "white",views=['lat', 'med'], background="white")
-            #
-            #     brain.add_data(data_left,0.005,0.0011,  hemi='lh', colormap = "coolwarm")
-            #     #brain.add_data(data_right,0.005,0.0011, hemi='rh', colormap = "coolwarm")
-            #
-            #     brain.save_image("%s.png" %depth)
-            #     brain.close()
 
 
-
-make_r1_surf(['LZ031'], tourettome_workspace, tourettome_freesurfer)
+make_r1_surf(['LZ050'], tourettome_workspace, tourettome_freesurfer)
