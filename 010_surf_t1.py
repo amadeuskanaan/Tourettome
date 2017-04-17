@@ -67,14 +67,16 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           '--s %s '
                           '--sval  %s_%s_%s_R1.mgh '
                           '--trgsubject fsaverage5 '
-                          '--tval %s_%s_%s_fsaverege5_fwhm%s_R1.mgh '
+                          '--tval %s_%s_%s_fsaverage5_fwhm%s_R1.mgh '
                           '--fwhm %s '
+                          '--hemi %s'
                           '--noreshape '
                           '--cortex'
                           %(subject,
                             subject, depth, hemi,
                             subject, depth, hemi, fwhm,
-                            fwhm
+                            fwhm,
+                            hemi
                             ))
 
             ####### view qsm data on fsaverage5
