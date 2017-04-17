@@ -31,8 +31,46 @@ def make_r1_surf(population, workspace, freesurfer_dir):
         # reg
         os.system('flirt -in T1MAPS_brain_rsp -ref T1mgz -dof 6 -cost mutualinfo -out T1MAPS_fs -omat NATIVE2FS.mat')
 
+        #get reciprocal
+        os.system('fslmaths T1MAPS_fs -recip R1')
+        os.system('mri_convert R1.nii.gz R1.mgz')
 
+        proj_fracs = {'depth1': '0.0 0.2 0.2',
+                      'depth2': '0.2 0.4 0.2',
+                      'depth3': '0.4 0.6 0.2',
+                      'depth4': '0.6 0.8 0.2',
+                      'depth5': '0.8 1.0 0.2'}
 
+        fwhm = 6
+
+        # vol2surf iterate of six laminar layers
+        for hemi in ['lh', 'rh']:
+
+            for depth in proj_fracs.keys():
+
+                os.system('mri_vol2surf '
+                          '--mov R1.mgz '
+                          '--regheader %s '
+                          '--icoorder 5 '
+                          '--projfrac-avg %s '
+                          '--interp nearest'
+                          '--hemi %s'
+                          '--out %s_%s_%s_R1.mgh'
+                          %(subject, proj_fracs[depth], subject,
+                            subject, depth, hemi)
+                          )
+
+                os.system('mri_vol2surf '
+                          '--s %s '
+                          '--trgsubject fsaverage5 '
+                          '--tval %s_%s_%s_fsavarege_%sfwhm.mgh'
+                          '--fwhm %s '
+                          '--noreshape '
+                          '--cortex'
+                          %(subject,
+                            subject, depth, hemi, fwhm,
+                            fwhm
+                            ))
 
 make_r1_surf(['LZ002'], tourettome_workspace, tourettome_freesurfer)
 
