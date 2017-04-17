@@ -53,7 +53,7 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           '--mov R1.mgz '
                           '--regheader %s '
                           '--projfrac-avg %s '
-                          '--icoorder 2 '
+                          '--icoorder 5 '
                           '--interp nearest '
                           '--hemi %s '
                           '--out %s_%s_%s_R1.mgh'
@@ -79,35 +79,34 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                             hemi
                             ))
 
-            ####### view qsm data on fsaverage5
-            # import nibabel as nb
-            # from surfer import Brain
-            #
-            # proj_fracs = {'depth1': '0.0 0.2 0.2',
-            #               'depth2': '0.2 0.4 0.2',
-            #               'depth3': '0.4 0.6 0.2',
-            #               'depth4': '0.6 0.8 0.2',
-            #               'depth5': '0.8 1.0 0.2'}
-            #
-            # # for depth in proj_fracs:
-            #
-            #     # get data
-            #     data_left  = nb.load('%s_%s_lh_fsaverege_fwhm6_R1.mgh' %(subject,depth))
-            #     data_right = nb.load('%s_%s_rh_fsaverege_fwhm6_R1.mgh' %(subject,depth))
-            #
-            #     #reshape
-            #     data_left   = data_left.reshape(data_left.shape[0],1)
-            #     data_right  = data_left.reshape(data_right.shape[0],1)
-            #
-            #     brain = Brain("fsaverage", "split", "inflated",views=['lat', 'med'], background="white")
-            #
-            #     brain.add_overlay(data_left,  name="%s_lh" %depth , hemi='lh')
-            #     brain.add_overlay(data_right, name="%s_rh" %depth , hemi='rh')
-            #
-            #     brain.save_image("%s.png" %depth))
-            #
-            #     brain.overlays["%s_lh" %depth].remove()
-            #     brain.overlays["%s_rh" %depth].remove()
+            ###### view qsm data on fsaverage5
+            import nibabel as nb
+            from surfer import Brain
+
+            proj_fracs = {'depth1': '0.0 0.2 0.2',
+                          'depth2': '0.2 0.4 0.2',
+                          'depth3': '0.4 0.6 0.2',
+                          'depth4': '0.6 0.8 0.2',
+                          'depth5': '0.8 1.0 0.2'}
+
+            for depth in proj_fracs:
+
+                # get data
+                data_leftx  = nb.load('%s_%s_lh_fsaverage5_fwhm6_R1.mgh' %(subject,depth)).get_data()
+                data_rightx = nb.load('%s_%s_rh_fsaverage5_fwhm6_R1.mgh' %(subject,depth)).get_data()
+
+                #reshape
+                data_left   = data_leftx.reshape(data_leftx.shape[0],1)
+                data_right  = data_rightx.reshape(data_rightx.shape[0],1)
+
+                brain = Brain("fsaverage5", "split", "inflated",views=['lat', 'med'], background="white")
+
+                brain.add_data(data_left, 0, 0.001, hemi='lh', colormap = "coolwarm")
+                brain.add_data(data_right, 0, 0.001, hemi='lh', colormap = "coolwarm")
+
+
+                brain.save_image("%s.png" %depth)
+                brain.close()
 
 
 make_r1_surf(['LZ003'], tourettome_workspace, tourettome_freesurfer)
