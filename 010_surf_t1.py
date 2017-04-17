@@ -22,18 +22,19 @@ def make_r1_surf(population, workspace, freesurfer_dir):
 
         os.chdir(t1_dir)
 
-        # Deskull
-        os.system('fslmaths %s -mul %s T1MAPS_brain.nii.gz '%(T1MAPS, mask))
-        # Swapdim
-        os.system('fslswapdim T1MAPS_brain LR SI PA T1MAPS_brain_rsp')
-        # get fs t1
-        os.system('mri_convert %s T1mgz.nii.gz'%T1MGZ)
-        # reg
-        os.system('flirt -in T1MAPS_brain_rsp -ref T1mgz -dof 6 -cost mutualinfo -out T1MAPS_fs -omat NATIVE2FS.mat')
+        if not os.path.isfile(os.path.join(t1_dir, 'R1.mgz')):
+            # Deskull
+            os.system('fslmaths %s -mul %s T1MAPS_brain.nii.gz '%(T1MAPS, mask))
+            # Swapdim
+            os.system('fslswapdim T1MAPS_brain LR SI PA T1MAPS_brain_rsp')
+            # get fs t1
+            os.system('mri_convert %s T1mgz.nii.gz'%T1MGZ)
+            # reg
+            os.system('flirt -in T1MAPS_brain_rsp -ref T1mgz -dof 6 -cost mutualinfo -out T1MAPS_fs -omat NATIVE2FS.mat')
 
-        #get reciprocal
-        os.system('fslmaths T1MAPS_fs -recip R1')
-        os.system('mri_convert R1.nii.gz R1.mgz')
+            #get reciprocal
+            os.system('fslmaths T1MAPS_fs -recip R1')
+            os.system('mri_convert R1.nii.gz R1.mgz')
 
         proj_fracs = {'depth1': '0.0 0.2 0.2',
                       'depth2': '0.2 0.4 0.2',
