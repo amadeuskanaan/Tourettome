@@ -52,15 +52,12 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                 os.system('mri_vol2surf '
                           '--mov R1.mgz '
                           '--regheader %s '
-                          '--srcsubject %s '
                           '--projfrac-avg %s '
-                          #'--icoorder 5 '
                           '--interp nearest '
                           '--hemi %s '
                           '--out %s_%s_%s_R1.mgh '
                           #'--fwhm 6'
                           %(subject,
-                            subject,
                             proj_fracs[depth],
                             hemi,
                             subject, depth, hemi,
@@ -71,13 +68,14 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           '--sval  %s_%s_%s_R1.mgh '
                           '--trgsubject fsaverage5 '
                           '--tval %s_%s_%s_fsaverage5_R1.mgh '
-                          #'--fwhm %s '
+                          '--fwhm %s '
                           '--hemi %s '
                           '--noreshape '
                           '--cortex'
                           %(subject,
                             subject, depth, hemi,
                             subject, depth, hemi,
+                            fwhm,
                             hemi
                             ))
 
@@ -95,17 +93,17 @@ def make_r1_surf(population, workspace, freesurfer_dir):
             for depth in proj_fracs:
 
                 # get data
-                data_leftx  = nb.load('%s_%s_lh_fsaverage5_fwhm6_R1.mgh' %(subject,depth)).get_data()
-                data_rightx = nb.load('%s_%s_rh_fsaverage5_fwhm6_R1.mgh' %(subject,depth)).get_data()
+                data_leftx  = nb.load('%s_%s_lh_fsaverage5_R1.mgh' %(subject,depth)).get_data()
+                #data_rightx = nb.load('%s_%s_rh_fsaverage5_R1.mgh' %(subject,depth)).get_data()
 
                 #reshape
                 data_left   = data_leftx.reshape(data_leftx.shape[0],1)
-                data_right  = data_rightx.reshape(data_rightx.shape[0],1)
+                #data_right  = data_rightx.reshape(data_rightx.shape[0],1)
 
                 brain = Brain("fsaverage5", "split", "white",views=['lat', 'med'], background="white")
 
                 brain.add_data(data_left,0.005,0.0011,  hemi='lh', colormap = "coolwarm")
-                brain.add_data(data_right,0.005,0.0011, hemi='rh', colormap = "coolwarm")
+                #brain.add_data(data_right,0.005,0.0011, hemi='rh', colormap = "coolwarm")
 
                 brain.save_image("%s.png" %depth)
                 brain.close()
