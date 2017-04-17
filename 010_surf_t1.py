@@ -33,5 +33,6 @@ def make_r1_surf(population, workspace, freesurfer_dir):
 
 
 
+
 make_r1_surf(['LZ002'], tourettome_workspace, tourettome_freesurfer)
 
