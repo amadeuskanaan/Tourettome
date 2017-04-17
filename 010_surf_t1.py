@@ -33,18 +33,18 @@ def make_r1_surf(population, workspace, freesurfer_dir):
             os.system('flirt -in T1MAPS_brain_rsp -ref T1mgz -dof 6 -cost mutualinfo -out T1MAPS_fs -omat NATIVE2FS.mat')
 
             #get reciprocal
-            os.system('fslmaths T1MAPS_fs -recip R1')
+            os.system('fslmaths T1MAPS_fs -recip -mul 10000 R1')
             os.system('mri_convert R1.nii.gz R1.mgz')
 
 
         #mri_vol2surf --mov R1.mgz --regheader LZ050 --projfrac 0.2 0.4 0.1 --hemi --interp nearest --out depth2.mgh
         #mri_surf2surf --s LZ050 --sval depth2.mgh --trgsubject fsaverage5 --tval depth2_fs5.mgh --fwhm 6 --hemi lh --cortex
 
-        proj_fracs = {'depth1': '0.0 0.2 0.1',
+        proj_fracs = {#'depth1': '0.0 0.2 0.1',
                       'depth2': '0.2 0.4 0.1',
-                      'depth3': '0.4 0.6 0.1',
-                      'depth4': '0.6 0.8 0.1',
-                      'depth5': '0.8 1.0 0.1'
+                      #'depth3': '0.4 0.6 0.1',
+                      #'depth4': '0.6 0.8 0.1',
+                      #'depth5': '0.8 1.0 0.1'
                       }
 
         fwhm = 6
@@ -62,6 +62,7 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                             subject, depth, hemi,
                             ))
 
+                #mri_surf2surf --s LZ031 --sval depth.mgh --trgsubject fsaverage5 --tval depth_fs5.mgh  --hemi lh --cortex --fwhm 6
                 os.system('mri_surf2surf --s %s --sval  %s_%s_%s_R1.mgh --trgsubject fsaverage5 '
                           '--tval %s_%s_%s_fs5_R1.mgh --hemi %s --noreshape --cortex --fwhm %s '
                           %(subject,
