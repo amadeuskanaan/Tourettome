@@ -40,11 +40,11 @@ def make_r1_surf(population, workspace, freesurfer_dir):
         #mri_vol2surf --mov R1.mgz --regheader LZ050 --projfrac 0.2 0.4 0.1 --hemi --interp nearest --out depth2.mgh
         #mri_surf2surf --s LZ050 --sval depth2.mgh --trgsubject fsaverage5 --tval depth2_fs5.mgh --fwhm 6 --hemi lh --cortex
 
-        proj_fracs = {#'depth1': '0.0 0.2 0.1',
+        proj_fracs = {'depth1': '0.0 0.2 0.1',
                       'depth2': '0.2 0.4 0.1',
-                      #'depth3': '0.4 0.6 0.1',
-                      #'depth4': '0.6 0.8 0.1',
-                      #'depth5': '0.8 1.0 0.1'
+                      'depth3': '0.4 0.6 0.1',
+                      'depth4': '0.6 0.8 0.1',
+                      'depth5': '0.8 1.0 0.1'
                       }
 
         fwhm = 6
@@ -102,4 +102,4 @@ def make_r1_surf(population, workspace, freesurfer_dir):
             #     brain.close()
 
 
-make_r1_surf(['LZ050'], tourettome_workspace, tourettome_freesurfer)
+make_r1_surf(leipzig, tourettome_workspace, tourettome_freesurfer)
