@@ -61,6 +61,7 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           '--out %s_%s_%s_R1.mgh '
                           '--fwhm 6 '
                           %(subject,
+                            subject,
                             proj_fracs[depth],
                             hemi,
                             subject, depth, hemi,
