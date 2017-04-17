@@ -67,8 +67,8 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           %(subject,
                             subject, depth, hemi,
                             subject, depth, hemi,
+                            hemi,
                             fwhm,
-                            hemi
                             ))
 
             # ###### view qsm data on fsaverage5
