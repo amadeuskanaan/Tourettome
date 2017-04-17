@@ -115,17 +115,17 @@ def make_leipzig_afs(population, original_datadir, afs_dir):
                                                 })
             df.to_csv(param_file)
 
-        print LZ_subjects
+            print LZ_subjects
 
-        # grab all header info into one df
-        param_group = []
-        for subject in population:
-            param_subject = pd.read_csv(os.path.join(afs_dir, LZ_subjects[subject], '%s_param.csv' % LZ_subjects[subject]),
-                                        index_col=0)
-            param_group.append(param_subject)
+            # grab all header info into one df
+            param_group = []
+            for subject in population:
+                param_subject = pd.read_csv(os.path.join(afs_dir, LZ_subjects[subject], '%s_param.csv' % LZ_subjects[subject]),
+                                            index_col=0)
+                param_group.append(param_subject)
 
-        param_group = pd.concat(param_group, ignore_index=False)  # .sort(columns='Age')
-        param_group.to_csv(os.path.join(tourettome_phenotypic, 'phenotypic_leipzig.csv'))
+            param_group = pd.concat(param_group, ignore_index=False)  # .sort(columns='Age')
+            param_group.to_csv(os.path.join(tourettome_phenotypic, 'phenotypic_leipzig.csv'))
 
 make_leipzig_afs(population = LEIPZIG_orig_subject_list,
                  original_datadir =LEIPZIG_orig_datadir,
