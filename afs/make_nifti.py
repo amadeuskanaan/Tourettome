@@ -73,8 +73,6 @@ def make_nifti(population, afs_dir):
                 os.system('dcm2niix -b n -o %s %s' % (nifti_dir, dicom_dir))
                 shutil.move(t1, os.path.join(nifti_dir, 'T1MAPS.nii.gz'))
 
-
-
 make_nifti(population= leipzig,    afs_dir=tourettome_afs)
 #make_nifti(population= hannover_a, afs_dir=tourettome_afs)
 # make_nifti(population= hannover_b, afs_dir=tourettome_afs)
