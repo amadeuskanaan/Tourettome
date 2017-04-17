@@ -61,30 +61,30 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                             subject, depth, hemi)
                           )
 
-                os.system('mri_vol2surf '
-                          '--s %s '
-                          '--trgsubject fsaverage5 '
-                          '--tval %s_%s_%s_fsaverege_fwhm%s_R1.mgh '
-                          '--fwhm %s '
-                          '--noreshape '
-                          '--cortex'
-                          %(subject,
-                            subject, depth, hemi, fwhm,
-                            fwhm
-                            ))
+                # os.system('mri_vol2surf '
+                #           '--s %s '
+                #           '--trgsubject fsaverage5 '
+                #           '--tval %s_%s_%s_fsaverege_fwhm%s_R1.mgh '
+                #           '--fwhm %s '
+                #           '--noreshape '
+                #           '--cortex'
+                #           %(subject,
+                #             subject, depth, hemi, fwhm,
+                #             fwhm
+                #             ))
 
 
             ####### view qsm data on fsaverage5
-            import nibabel as nb
-            from surfer import Brain
-
-            proj_fracs = {'depth1': '0.0 0.2 0.2',
-                          'depth2': '0.2 0.4 0.2',
-                          'depth3': '0.4 0.6 0.2',
-                          'depth4': '0.6 0.8 0.2',
-                          'depth5': '0.8 1.0 0.2'}
-
-            # for depth in proj_fracs:
+            # import nibabel as nb
+            # from surfer import Brain
+            #
+            # proj_fracs = {'depth1': '0.0 0.2 0.2',
+            #               'depth2': '0.2 0.4 0.2',
+            #               'depth3': '0.4 0.6 0.2',
+            #               'depth4': '0.6 0.8 0.2',
+            #               'depth5': '0.8 1.0 0.2'}
+            #
+            # # for depth in proj_fracs:
             #
             #     # get data
             #     data_left  = nb.load('%s_%s_lh_fsaverege_fwhm6_R1.mgh' %(subject,depth))
@@ -99,7 +99,7 @@ def make_r1_surf(population, workspace, freesurfer_dir):
             #     brain.add_overlay(data_left,  name="%s_lh" %depth , hemi='lh')
             #     brain.add_overlay(data_right, name="%s_rh" %depth , hemi='rh')
             #
-            #     brain.save_image("%s/%s.png" %(t1_dir, depth))
+            #     brain.save_image("%s.png" %depth))
             #
             #     brain.overlays["%s_lh" %depth].remove()
             #     brain.overlays["%s_rh" %depth].remove()
