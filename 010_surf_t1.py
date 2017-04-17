@@ -53,13 +53,13 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                           '--mov R1.mgz '
                           #####'--regheader %s '
                           '--srcsubject %s'
-                          '--trgsubject fsaverage5 '
+                          ##'--trgsubject fsaverage5 '
                           '--projfrac-avg %s '
                           '--icoorder 5 '
                           '--interp nearest '
                           '--hemi %s '
                           '--out %s_%s_%s_R1.mgh'
-                          'fwhm 6 '
+                          '--fwhm 6 '
                           %(subject,
                             proj_fracs[depth],
                             hemi,
