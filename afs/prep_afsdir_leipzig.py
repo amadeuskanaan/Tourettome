@@ -59,6 +59,7 @@ def make_leipzig_afs(population, original_datadir, afs_dir):
         seinv_id = str([line for line in open(scans).readlines() if 'cmrr_mbep2d_se_invpol' in line])[2:6]
         uni_id   = str([line for line in open(scans).readlines() if 'UNI' in line and 'SLAB' not in line])[2:6]
 
+
         # copy anat and rest dicom data to afs directory
         if not os.listdir(dicom_dir):
             for id in [rest_id, se_id, seinv_id, uni_id]:
@@ -66,6 +67,14 @@ def make_leipzig_afs(population, original_datadir, afs_dir):
                 for file in glob.glob(os.path.join(data_dir, 'DICOM/%s*' % id)):
                     shutil.copy(file, dicom_dir)
 
+
+        ######## GET T1MAPS .  introduced 16.04.2017
+        dicom_dir_t1 = mkdir_path(os.path.join(subject_dir, 'DICOM_T1MAPS'))
+        t1_id = str([line for line in open(scans).readlines() if 'T1MAPS' in line and 'SLAB' not in line])[2:6]
+        # copy anat and rest dicom data to afs directory
+        if not os.listdir(dicom_dir_t1):
+                for file in glob.glob(os.path.join(data_dir, 'DICOM/%s*' % t1_id)):
+                    shutil.copy(file, dicom_dir_t1)
 
 
 
