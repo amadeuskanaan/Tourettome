@@ -61,7 +61,7 @@ def make_r1_surf(population, workspace, freesurfer_dir):
                             subject, depth, hemi)
                           )
 
-                # os.system('mri_vol2surf '
+                # os.system('mri_surf2surf '
                 #           '--s %s '
                 #           '--trgsubject fsaverage5 '
                 #           '--tval %s_%s_%s_fsaverege_fwhm%s_R1.mgh '
