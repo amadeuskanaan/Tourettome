@@ -5,6 +5,8 @@ tourettome_workspace    = '/scr/sambesi4/workspace/project_TOURETTOME/preproc'
 tourettome_phenotypic   = '/scr/sambesi4/workspace/project_TOURETTOME/phenotypic'
 tourettome_freesurfer   = '/scr/sambesi2/TOURETTOME/FS_SUBJECTS'
 
+
+
 paris = ['PA001', 'PA002', 'PA003', 'PA004', 'PA005', 'PA006', 'PA007', 'PA008', 'PA009', 'PA010',
          'PA011', 'PA012', 'PA013', 'PA014', 'PA015', 'PA016', 'PA017', 'PA018', 'PA019', 'PA020',
          'PA021', 'PA022', 'PA023', 'PA024', 'PA025', 'PA026', 'PA027', 'PA028', 'PA029', 'PA030',
