@@ -65,8 +65,6 @@ def nuisance_signal_regression(population, workspace_dir):
 
             os.chdir(wmcsf_dir)
 
-            mni_HOLV_2mm = '/scr/sambesi2/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
-
             extract_tissue_data(data_file= func_mni,
                                 ventricles_mask_file=mni_HOLV_2mm,
                                 wm_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_WM_MNI2mm.nii.gz'),
