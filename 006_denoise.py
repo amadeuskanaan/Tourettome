@@ -65,6 +65,8 @@ def nuisance_signal_regression(population, workspace_dir):
 
             os.chdir(wmcsf_dir)
 
+            mni_HOLV_2mm = '/scr/sambesi2/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
+
             extract_tissue_data(data_file= func_mni,
                                 ventricles_mask_file=mni_HOLV_2mm,
                                 wm_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_WM_MNI2mm.nii.gz'),
@@ -94,9 +96,11 @@ def nuisance_signal_regression(population, workspace_dir):
         os.system('mri_vol2surf '
                   '--mov REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz '
                   '--reg %s '
+                  '--'
 
+                  %(reg,
 
-                  %(reg))
+                    ))
 
         # os.system('mri_vol2surf --mov R1.mgz --regheader %s --projfrac-avg %s --interp nearest --hemi %s '
         #           '--out %s_%s_%s_R1.mgh '
@@ -168,4 +172,4 @@ def nuisance_signal_regression(population, workspace_dir):
         #     os.system('cp residual_bp.nii.gz ../REST_MNI2mm_fwhm_aroma_detrend_compcor_moco24_bp.nii.gz')
 
 
-nuisance_signal_regression(['LZ002'], tourettome_workspace)
+nuisance_signal_regression(['LZ003'], tourettome_workspace)
