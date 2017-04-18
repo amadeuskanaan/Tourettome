@@ -9,13 +9,13 @@ from utilities.utils import *
 from variables.subject_list import *
 from quality.motion_statistics import *
 
-assert len(sys.argv)== 2
-subject_index=int(sys.argv[1])
+#assert len(sys.argv)== 2
+#subject_index=int(sys.argv[1])
 
 def nuisance_signal_regression(population, workspace_dir):
 
-    #for subject in population:
-        subject = population[subject_index]
+    for subject in population:
+        #subject = population[subject_index]
         print '###############################################################################'
         print 'Denoising Functional Data for subject %s' % subject
         print ''
