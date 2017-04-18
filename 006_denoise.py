@@ -9,13 +9,13 @@ from utilities.utils import *
 from variables.subject_list import *
 from quality.motion_statistics import *
 
-#assert len(sys.argv)== 2
-#subject_index=int(sys.argv[1])
+assert len(sys.argv)== 2
+subject_index=int(sys.argv[1])
 
 def nuisance_signal_regression(population, workspace_dir):
 
-    for subject in population:
-        #subject = population[subject_index]
+    #for subject in population:
+        subject = population[subject_index]
         print '###############################################################################'
         print 'Denoising Functional Data for subject %s' % subject
         print ''
@@ -86,22 +86,22 @@ def nuisance_signal_regression(population, workspace_dir):
             os.system('cp residual_bp.nii.gz ../REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz')
 
 
-        # project to surface
-
-        os.chdir(nuisance_dir)
-
-        for hemi in ['lh', 'rh']:
-            os.system('mri_vol2surf '
-                      '--mov REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz '
-                      '--reg %s '
-                      '--projfrac-avg 0.2 0.8 0.2 '
-                      '--hemi %s '
-                      '--interp nearest '
-                      '--surf-fwhm 6 '
-                      '--o REST_MNI2mm_detrend_wmcsf_moco24_bp.mgh'
-                      %(fs_mni_reg, hemi))
-
-
+        # # project to surface
+        #
+        # os.chdir(nuisance_dir)
+        #
+        # for hemi in ['lh', 'rh']:
+        #     os.system('mri_vol2surf '
+        #               '--mov REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz '
+        #               '--reg %s '
+        #               '--projfrac-avg 0.2 0.8 0.2 '
+        #               '--hemi %s '
+        #               '--interp nearest '
+        #               '--surf-fwhm 6 '
+        #               '--o REST_MNI2mm_detrend_wmcsf_moco24_bp.mgh'
+        #               %(fs_mni_reg, hemi))
+        #
+        #
 
 
 
@@ -184,4 +184,4 @@ def nuisance_signal_regression(population, workspace_dir):
         #     os.system('cp residual_bp.nii.gz ../REST_MNI2mm_fwhm_aroma_detrend_compcor_moco24_bp.nii.gz')
 
 
-nuisance_signal_regression(['LZ003'], tourettome_workspace)
+nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
