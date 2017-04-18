@@ -107,6 +107,7 @@ def register(population, workspace_dir):
                 os.system('fslmaths %s_MNI2mm_ -thr 20 -bin %s_MNI2mm'%(roi,roi))
                 os.system('rm -rf *_.nii.gz')
 
+
         ################################################################################################################
         ##### Linear FUNCTIONAL to ANATOMICAL
 
