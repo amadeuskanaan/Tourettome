@@ -45,7 +45,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
         # Calculate Friston-24 paramters
         os.chdir(nuisance_dir)
-        movpar  = os.path.join(subdir, 'FUNCTIONAL/moco/REST_EDIT_moco2.par' )
+        movpar  = os.path.join(subdir, 'FUNCTIONAL/moco/REST_EDIT_moco2.par')
         friston = os.path.join(subdir, 'DENOISE/FRISTON_24.1D')
         calc_friston_twenty_four(movpar)
 
@@ -88,7 +88,6 @@ def nuisance_signal_regression(population, workspace_dir):
 
         # project to surface
 
-
         os.chdir(nuisance_dir)
 
         for hemi in ['lh', 'rh']:
@@ -100,7 +99,6 @@ def nuisance_signal_regression(population, workspace_dir):
                       '--interp nearest '
                       '--surf-fwhm 6 '
                       '--o REST_MNI2mm_detrend_wmcsf_moco24_bp.mgh'
-
                       %(fs_mni_reg, hemi))
 
 

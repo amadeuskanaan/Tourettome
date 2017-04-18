@@ -56,7 +56,7 @@ mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii
 mni_HOLV_2mm         = '/scr/sambesi2/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
 bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
 
-mni_fs_reg = '/a/freesurfer/6.0.0/ubuntu-xenial-amd64/average/mni152.register.dat'
+fs_mni_reg = '/a/freesurfer/6.0.0/ubuntu-xenial-amd64/average/mni152.register.dat'
 
 rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta', 'R_Pall', 'L_Pall', 'R_Amyg', 'L_Amyg', 'R_Hipp', 'L_Hipp', 'R_Accu', 'L_Accu',
         'R_Thal', 'L_Thal']
