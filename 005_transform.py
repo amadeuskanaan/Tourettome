@@ -92,8 +92,8 @@ def register(population, workspace_dir):
                 os.system('fslmaths anat_%s_MNI2mm -thr 0.5 -bin ../ANATOMICAL_%s_MNI2mm' %(tissue_name, tissue_name))
 
         ################################################################################################################
-        if not os.path.isfile(os.path.join(first_dir, 'L_Puta_MNI2mm.nii.gz')):
-            rois = ['R_Puta', 'L_Puta', 'L_Caud', 'R_Caud', '']
+        if not os.path.isfile(os.path.join(first_dir, 'R_Caud_MNI2mm.nii.gz')):
+            rois = ['R_Puta', 'L_Puta', 'L_Caud', 'R_Caud']
             for roi in rois:
                 os.chdir(regdir_mni)
                 os.system('WarpImageMultiTransform 3 %s/FIRST-%s_first.nii.gz %s/%s_MNI1mm_.nii.gz '
