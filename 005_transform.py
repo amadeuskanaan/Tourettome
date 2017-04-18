@@ -93,8 +93,9 @@ def register(population, workspace_dir):
 
         ################################################################################################################
         if not os.path.isfile(os.path.join(first_dir, 'R_Caud_MNI2mm.nii.gz')):
-            rois = ['R_Puta', 'L_Puta', 'L_Caud', 'R_Caud']
-            for roi in rois:
+            print 'warping subcortex'
+
+            for roi in ['R_Puta', 'L_Puta', 'L_Caud', 'R_Caud']:
                 os.chdir(regdir_mni)
                 os.system('WarpImageMultiTransform 3 %s/FIRST-%s_first.nii.gz %s/%s_MNI1mm_.nii.gz '
                           '-R %s transform1Warp.nii.gz transform0GenericAffine.mat'
@@ -111,10 +112,8 @@ def register(population, workspace_dir):
         ################################################################################################################
         ##### Linear FUNCTIONAL to ANATOMICAL
 
-        print 'Two-step linear registration - func2anat'
-
         if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')):
-
+            print 'Two-step linear registration - func2anat'
             os.chdir(regdir_anat)
 
             print '......flirt mutualinfo'
