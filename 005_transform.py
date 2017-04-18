@@ -104,10 +104,9 @@ def register(population, workspace_dir):
                         %(first_dir,roi, mni_brain_2mm, first_dir, roi))
 
                 os.chdir(first_dir)
-                os.system('fslmaths %s_MNI1mm_ -thr 20 -bin -fillh %s_MNI1mm'%(roi,roi))
-                os.system('fslmaths %s_MNI2mm_ -thr 20 -bin -fillh %s_MNI2mm'%(roi,roi))
+                os.system('fslmaths %s_MNI1mm_ -thr 40 -bin -fillh %s_MNI1mm'%(roi,roi))
+                os.system('fslmaths %s_MNI2mm_ -thr 40 -bin -fillh %s_MNI2mm'%(roi,roi))
                 os.system('rm -rf *_.nii.gz')
-
 
         ################################################################################################################
         ##### Linear FUNCTIONAL to ANATOMICAL
@@ -174,5 +173,5 @@ def register(population, workspace_dir):
             os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
             os.system('rm -rf %s' %concat_dir)
 
-# register(tourettome_subjects, tourettome_workspace)
-register(['LZ002'], tourettome_workspace)
+register(tourettome_subjects, tourettome_workspace)
+#register(['LZ002'], tourettome_workspace)
