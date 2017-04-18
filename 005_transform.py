@@ -100,8 +100,8 @@ def register(population, workspace_dir):
                 os.system('WarpImageMultiTransform 3 FIRST-%s_first.nii.gz %s/%s_MNI1mm.nii.gz '
                           '-R %s transform1Warp.nii.gz transform0GenericAffine.mat'
                         %(roi, first_dir, roi, mni_brain_1mm))
-                os.system('flirt -in %s/%s_MNI1mm.nii.gz -ref -applyisoxfm 2 -out %s/%s_MNI2mm'
-                          %(roi, first_dir, mni_brain_2mm, first_dir, roi))
+                os.system('flirt -in %s/%s_MNI1mm.nii.gz -ref %s -applyisoxfm 2 -out %s/%s_MNI2mm'
+                          %(first_dir,roi, mni_brain_2mm, first_dir, roi))
 
         ################################################################################################################
         ##### Linear FUNCTIONAL to ANATOMICAL
