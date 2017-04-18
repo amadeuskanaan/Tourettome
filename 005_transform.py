@@ -103,8 +103,8 @@ def register(population, workspace_dir):
                         %(first_dir,roi, mni_brain_2mm, first_dir, roi))
 
                 os.chdir(first_dir)
-                os.system('fslmaths %s_MNI1mm_ -thr 20 -bin %s_MNI1mm'(roi,roi))
-                os.system('fslmaths %s_MNI2mm_ -thr 20 -bin %s_MNI2mm'(roi,roi))
+                os.system('fslmaths %s_MNI1mm_ -thr 20 -bin %s_MNI1mm'%(roi,roi))
+                os.system('fslmaths %s_MNI2mm_ -thr 20 -bin %s_MNI2mm'%(roi,roi))
                 os.system('rm -rf *_.nii.gz')
 
         ################################################################################################################
