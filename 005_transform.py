@@ -20,6 +20,7 @@ def register(population, workspace_dir):
 
         anat_dir     = os.path.join(workspace_dir, subject, 'ANATOMICAL')
         func_dir     = os.path.join(workspace_dir, subject, 'FUNCTIONAL')
+        first_dir    = os.path.join(anat_dir, 'seg_first')
         matsdir      = os.path.join(workspace_dir, subject, 'FUNCTIONAL/moco/REST_EDIT_moco2.mat')
         regdir       = mkdir_path(os.path.join(workspace_dir, subject, 'REGISTRATION'))
         regdir_anat  = mkdir_path(os.path.join(regdir, 'reg_anat'))
@@ -91,6 +92,17 @@ def register(population, workspace_dir):
                 os.system('fslmaths anat_%s_MNI2mm -thr 0.5 -bin ../ANATOMICAL_%s_MNI2mm' %(tissue_name, tissue_name))
 
 
+
+        if not os.path.isfile(first_dir, 'L_Puta_MNI2mm.nii.gz'):
+            rois = ['R_Puta', 'L_Puta']
+            for roi in rois:
+                os.chdir(regdir_mni)
+                os.system('WarpImageMultiTransform 3 FIRST-%s_first.nii.gz %s/%s_MNI1mm.nii.gz '
+                          '-R %s transform1Warp.nii.gz transform0GenericAffine.mat'
+                        %(roi, first_dir, roi, mni_brain_1mm))
+                os.system('flirt -in %s/%s_MNI1mm.nii.gz -ref -applyisoxfm 2 -out %s/%s_MNI2mm'
+                          %(roi, first_dir, mni_brain_2mm, first_dir, roi))
+
         ################################################################################################################
         ##### Linear FUNCTIONAL to ANATOMICAL
 
@@ -112,6 +124,8 @@ def register(population, workspace_dir):
             os.system('flirt -in %s -ref %s -dof 6 -cost bbr -wmseg anat_wm -schedule %s -init rest2anat_1.mat -omat rest2anat_2.mat -out rest2anat_2.nii.gz'
                       % (func3d, anat, bbr_schedule))
             os.system('cp rest2anat_2.nii.gz ../REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
+
+
 
         ################################################################################################################
         ##### Resample FUNCTIONAL to MNI linear
@@ -157,5 +171,5 @@ def register(population, workspace_dir):
             os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
             os.system('rm -rf %s' %concat_dir)
 
-
-register(tourettome_subjects, tourettome_workspace)
+# register(tourettome_subjects, tourettome_workspace)
+register(['LZ002'], tourettome_workspace)
