@@ -93,7 +93,7 @@ def register(population, workspace_dir):
 
 
 
-        if not os.path.isfile(first_dir, 'L_Puta_MNI2mm.nii.gz'):
+        if not os.path.isfile(os.path.join(first_dir, 'L_Puta_MNI2mm.nii.gz')):
             rois = ['R_Puta', 'L_Puta']
             for roi in rois:
                 os.chdir(regdir_mni)
