@@ -91,15 +91,14 @@ def register(population, workspace_dir):
                           %(tissue_name,mni_brain_2mm, tissue_name))
                 os.system('fslmaths anat_%s_MNI2mm -thr 0.5 -bin ../ANATOMICAL_%s_MNI2mm' %(tissue_name, tissue_name))
 
-
-
+        ################################################################################################################
         if not os.path.isfile(os.path.join(first_dir, 'L_Puta_MNI2mm.nii.gz')):
             rois = ['R_Puta', 'L_Puta']
             for roi in rois:
                 os.chdir(regdir_mni)
-                os.system('WarpImageMultiTransform 3 FIRST-%s_first.nii.gz %s/%s_MNI1mm.nii.gz '
+                os.system('WarpImageMultiTransform 3 %s/FIRST-%s_first.nii.gz %s/%s_MNI1mm.nii.gz '
                           '-R %s transform1Warp.nii.gz transform0GenericAffine.mat'
-                        %(roi, first_dir, roi, mni_brain_1mm))
+                        %(first_dir, roi, first_dir, roi, mni_brain_1mm))
                 os.system('flirt -in %s/%s_MNI1mm.nii.gz -ref %s -applyisoxfm 2 -out %s/%s_MNI2mm'
                           %(first_dir,roi, mni_brain_2mm, first_dir, roi))
 
@@ -124,7 +123,6 @@ def register(population, workspace_dir):
             os.system('flirt -in %s -ref %s -dof 6 -cost bbr -wmseg anat_wm -schedule %s -init rest2anat_1.mat -omat rest2anat_2.mat -out rest2anat_2.nii.gz'
                       % (func3d, anat, bbr_schedule))
             os.system('cp rest2anat_2.nii.gz ../REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
-
 
 
         ################################################################################################################
