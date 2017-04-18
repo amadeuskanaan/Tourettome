@@ -9,10 +9,13 @@ from utilities.utils import *
 from variables.subject_list import *
 from quality.motion_statistics import *
 
+#assert len(sys.argv)== 2
+#subject_index=int(sys.argv[1])
 
 def nuisance_signal_regression(population, workspace_dir):
 
     for subject in population:
+        #subject = population[subject_index]
         print '###############################################################################'
         print 'Denoising Functional Data for subject %s' % subject
         print ''
@@ -24,8 +27,8 @@ def nuisance_signal_regression(population, workspace_dir):
 
         # Output
         nuisance_dir = mkdir_path(os.path.join(subdir, 'DENOISE'))
-        aroma_dir    = mkdir_path(os.path.join(nuisance_dir, 'residuals_ica_aroma'))
-        compcor_dir  = mkdir_path(os.path.join(nuisance_dir, 'residuals_compcor'))
+        #aroma_dir    = mkdir_path(os.path.join(nuisance_dir, 'residuals_ica_aroma'))
+        #compcor_dir  = mkdir_path(os.path.join(nuisance_dir, 'residuals_compcor'))
         wmcsf_dir    = mkdir_path(os.path.join(nuisance_dir, 'residuals_wmcsf'))
 
         # Smoothing kernel
@@ -84,6 +87,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
 
         # project to surface
+
 
 
         ################################################################################################################
