@@ -88,6 +88,21 @@ def nuisance_signal_regression(population, workspace_dir):
 
         # project to surface
 
+        reg = '/a/freesurfer/6.0.0/ubuntu-xenial-amd64/average/mni152.register.dat'
+
+        os.chdir(nuisance_dir)
+        os.system('mri_vol2surf '
+                  '--mov REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz '
+                  '--reg %s '
+
+
+                  %(reg))
+
+        # os.system('mri_vol2surf --mov R1.mgz --regheader %s --projfrac-avg %s --interp nearest --hemi %s '
+        #           '--out %s_%s_%s_R1.mgh '
+        #           % (subject, proj_fracs[depth], hemi,
+        #              subject, depth, hemi,
+        #              ))
 
 
         ################################################################################################################
