@@ -94,19 +94,18 @@ def register(population, workspace_dir):
         ################################################################################################################
         if not os.path.isfile(os.path.join(first_dir, 'L_STR_MNI2mm.nii.gz')):
             print 'warping subcortex'
-            os.chdir(regdir_mni)
+
             for roi in ['R_Puta', 'L_Puta', 'L_Caud', 'R_Caud']:
-
-                os.system('WarpImageMultiTransform 3 %s/FIRST-%s_first.nii.gz %s/%s_MNI1mm_.nii.gz '
-                          '-R %s transform1Warp.nii.gz transform0GenericAffine.mat'
-                        %(first_dir, roi, first_dir, roi, mni_brain_1mm))
-                os.system('flirt -in %s/%s_MNI1mm_.nii.gz -ref %s -applyisoxfm 2 -out %s/%s_MNI2mm_'
-                        %(first_dir,roi, mni_brain_2mm, first_dir, roi))
-
                 os.chdir(first_dir)
+                os.system('WarpImageMultiTransform 3 %s/FIRST-%s_first.nii.gz %s/%s_MNI1mm_.nii.gz '
+                          '-R %s %s/transform1Warp.nii.gz %s/transform0GenericAffine.mat'
+                        %(first_dir, roi, first_dir, roi, mni_brain_1mm, regdir_mni, regdir_mni))
+                os.system('flirt -in %s_MNI1mm_.nii.gz -ref %s -applyisoxfm 2 -out %s_MNI2mm_'
+                        %(roi, mni_brain_2mm, roi))
+
                 os.system('fslmaths %s_MNI1mm_ -thr 40 -bin -fillh -ero %s_MNI1mm'%(roi,roi))
                 os.system('fslmaths %s_MNI2mm_ -thr 40 -bin -fillh -ero %s_MNI2mm'%(roi,roi))
-                os.system('rm -rf *_.nii.gz')
+                os.system('rm -rf *MNI*mm_.nii.gz')
 
             os.system('fslmaths L_Caud_MNI2mm -add L_Puta_MNI2mm L_STR_MNI2mm')
             os.system('fslmaths R_Caud_MNI2mm -add R_Puta_MNI2mm R_STR_MNI2mm')
@@ -178,5 +177,5 @@ def register(population, workspace_dir):
             os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
             os.system('rm -rf %s' %concat_dir)
 
-register(tourettome_subjects, tourettome_workspace)
-#register(['LZ002'], tourettome_workspace)
+# register(tourettome_subjects, tourettome_workspace)
+register(['LZ004'], tourettome_workspace)
