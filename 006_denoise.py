@@ -63,7 +63,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
         print '- Nuisance Signal regression :::: FUNC2mm_fwhm_detrend_wmcsf_moco24 '
 
-        if not os.path.isfile(os.path.join(nuisance_dir, 'REST2mm_fwhm_detrend_wmcsf_moco24_bp.nii.gz')):
+        if not os.path.isfile(os.path.join(nuisance_dir, 'REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz')):
             print '......extracting tissue data'
 
             os.chdir(wmcsf_dir)
