@@ -89,20 +89,21 @@ def nuisance_signal_regression(population, workspace_dir):
             os.system('cp residual_bp.nii.gz ../REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz')
 
 
-        # # project to surface
-        #
-        # os.chdir(nuisance_dir)
-        #
-        # for hemi in ['lh', 'rh']:
-        #     os.system('mri_vol2surf '
-        #               '--mov REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz '
-        #               '--reg %s '
-        #               '--projfrac-avg 0.2 0.8 0.2 '
-        #               '--hemi %s '
-        #               '--interp nearest '
-        #               '--surf-fwhm 6 '
-        #               '--o REST_MNI2mm_detrend_wmcsf_moco24_bp.mgh'
-        #               %(fs_mni_reg, hemi))
+        ############  Project denoised data to surface
+        if not os.path.isfile(os.path.join(nuisance_dir, 'REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz' )):
+            os.chdir(nuisance_dir)
+            os.system('fslmaths %s -s %s REST_EDIT_UNI_BRAIN_MNI2mm_fwhm4mm.nii.gz' % (func_mni, sigma))
+            for hemi in ['lh', 'rh']:
+                os.system('mri_vol2surf '
+                          '--mov REST_EDIT_UNI_BRAIN_MNI2mm_fwhm4mm.nii.gz '
+                          '--reg %s '
+                          '--trgsubject fsaverage5 '
+                          '--projfrac-avg 0.2 0.8 0.2 '
+                          '--hemi %s '
+                          '--interp nearest '
+                          ####'--surf-fwhm 6 '
+                          '--o REST_MNI2mm_detrend_wmcsf_moco24_bp_%s.mgh'
+                          %(fs_mni_reg, hemi, hemi))
 
 
 
@@ -179,4 +180,5 @@ def nuisance_signal_regression(population, workspace_dir):
         #     os.system('cp residual_bp.nii.gz ../REST_MNI2mm_fwhm_aroma_detrend_compcor_moco24_bp.nii.gz')
 
 
-nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
+nuisance_signal_regression(['PA040'], tourettome_workspace)
+# nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
