@@ -12,6 +12,9 @@ from quality.motion_statistics import *
 #assert len(sys.argv)== 2
 #subject_index=int(sys.argv[1])
 
+
+#requires FSL5, FREESURFER, CPAC
+
 def nuisance_signal_regression(population, workspace_dir):
 
     for subject in population:
@@ -176,6 +179,4 @@ def nuisance_signal_regression(population, workspace_dir):
         #     os.system('cp residual_bp.nii.gz ../REST_MNI2mm_fwhm_aroma_detrend_compcor_moco24_bp.nii.gz')
 
 
-# nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
-nuisance_signal_regression(paris, tourettome_workspace)
-# nuisance_signal_regression(hannover_a, tourettome_workspace)
+nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
