@@ -76,7 +76,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
         ################################################################################################################
 
-        def denoise(run_dir, data, selector, aroma=0):
+        def denoise(run_dir, data, selector):
 
             print '......calculating residual image'
             os.chdir(run_dir)
@@ -119,7 +119,7 @@ def nuisance_signal_regression(population, workspace_dir):
         print '- Nuisance Signal regression :::: FUNC2mm_fwhm_detrend_wmcsf_moco24 '
         selector_std = {'wm'     : True, 'csf': True,  'motion': True,  'linear': True, 'quadratic': True,
                         'compcor': False, 'gm': False, 'global': False, 'pc1'   : False}
-        denoise(func_mni, wmcsf_dir, selector_std, aroma=0)
+        denoise(run_dir=wmcsf_dir,data=func_mni, selector=selector_std)
 
 
 
