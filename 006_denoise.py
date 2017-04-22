@@ -63,10 +63,6 @@ def nuisance_signal_regression(population, workspace_dir):
                             csf_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_CSF_MNI2mm.nii.gz'),
                             gm_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_GM_MNI2mm.nii.gz'))
 
-        wmsig  = os.path.join(wmcsf_dir, 'wm_signals.npy')
-        csfsig = os.path.join(wmcsf_dir, 'csf_signals.npy')
-        gmsig  = os.path.join(wmcsf_dir, 'gm_signals.npy'),
-
         ################################################################################################################
         ######## Denoise MNI FUNC
 
@@ -81,11 +77,11 @@ def nuisance_signal_regression(population, workspace_dir):
             print '......calculating residual image'
             os.chdir(run_dir)
             calc_residuals(data,
-                           selector    = selector,
-                           wm_sig_file = wmsig,
-                           csf_sig_file= csfsig,
-                           gm_sig_file=  gmsig,
-                           motion_file=  friston,
+                           selector     =  selector,
+                           wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
+                           csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
+                           gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
+                           motion_file  =  friston,
                            compcor_ncomponents=0)
 
             print '......bandpass filtering'
