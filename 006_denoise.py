@@ -173,5 +173,5 @@ def nuisance_signal_regression(population, workspace_dir):
         # #     os.system('cp residual_bp.nii.gz ../REST_MNI2mm_fwhm_aroma_detrend_compcor_moco24_bp.nii.gz')
 
 
-nuisance_signal_regression(['LZ004', 'LZ030', 'LZ053'], tourettome_workspace)
+nuisance_signal_regression(['LZ020'], tourettome_workspace)
 # nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
