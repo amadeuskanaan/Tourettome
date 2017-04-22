@@ -79,23 +79,24 @@ def nuisance_signal_regression(population, workspace_dir):
 
             print '......calculating residual image'
             os.chdir(run_dir)
-            calc_residuals(data,
-                           selector     =  selector,
-                           wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
-                           csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
-                           gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
-                           motion_file  =  friston,
-                           compcor_ncomponents=0)
+            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm%s.nii.gz'%FWHM))
+                calc_residuals(data,
+                               selector     =  selector,
+                               wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
+                               csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
+                               gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
+                               motion_file  =  friston,
+                               compcor_ncomponents=0)
 
-            print '......bandpass filtering'
-            os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
+                print '......bandpass filtering'
+                os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
 
-            print '...... standradizing data'
-            expr = ['log((a+1)/(a-1))/2']
-            os.system('3dcalc -a residual_bp.nii.gz -expr %s -prefix residual_bp_z.nii.gz' %expr)
+                print '...... standradizing data'
+                expr = ['log((a+1)/(a-1))/2']
+                os.system('3dcalc -a residual_bp.nii.gz -expr %s -prefix residual_bp_z.nii.gz' %expr)
 
-            print '...... smooth data'
-            os.system('fslmaths residual_bp_z -s %s residual_bp_z_fwhm%s.nii.gz' % (sigma,FWHM))
+                print '...... smooth data'
+                os.system('fslmaths residual_bp_z -s %s residual_bp_z_fwhm%s.nii.gz' % (sigma,FWHM))
 
             print '...... project to surface' #### take non-smoothed data and smooth on surface
             for hemi in ['lh', 'rh']:
