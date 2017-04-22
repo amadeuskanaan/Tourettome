@@ -55,13 +55,16 @@ def nuisance_signal_regression(population, workspace_dir):
         friston = os.path.join(subdir, 'DENOISE/FRISTON_24.1D')
         calc_friston_twenty_four(movpar)
 
-        print '......extracting tissue data'
-        os.chdir(wmcsf_dir)
-        extract_tissue_data(data_file=func_mni,
-                            ventricles_mask_file=mni_HOLV_2mm,
-                            wm_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_WM_MNI2mm.nii.gz'),
-                            csf_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_CSF_MNI2mm.nii.gz'),
-                            gm_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_GM_MNI2mm.nii.gz'))
+
+        # extract tissue data
+        if not os.path.isfile( os.path.join(wmcsf_dir, 'wm_signals.npy')):
+            print '......extracting tissue data'
+            os.chdir(wmcsf_dir)
+            extract_tissue_data(data_file=func_mni,
+                                ventricles_mask_file=mni_HOLV_2mm,
+                                wm_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_WM_MNI2mm.nii.gz'),
+                                csf_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_CSF_MNI2mm.nii.gz'),
+                                gm_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_GM_MNI2mm.nii.gz'))
 
         ################################################################################################################
         ######## Denoise MNI FUNC
@@ -74,21 +77,21 @@ def nuisance_signal_regression(population, workspace_dir):
 
         def denoise(run_dir, data, selector):
 
-            print '......calculating residual image'
-            os.chdir(run_dir)
-            calc_residuals(data,
-                           selector     =  selector,
-                           wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
-                           csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
-                           gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
-                           motion_file  =  friston,
-                           compcor_ncomponents=0)
-
-            print '......bandpass filtering'
-            os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
+            # print '......calculating residual image'
+            # os.chdir(run_dir)
+            # calc_residuals(data,
+            #                selector     =  selector,
+            #                wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
+            #                csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
+            #                gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
+            #                motion_file  =  friston,
+            #                compcor_ncomponents=0)
+            #
+            # print '......bandpass filtering'
+            # os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
 
             print '...... smooth data'
-            os.system('fslmaths residual_bp -s %s residual_bp_fwhm%smm.nii.gz' % (sigma,FWHM[0]))
+            os.system('fslmaths residual_bp -s %s residual_bp_fwhm%smm.nii.gz' % (sigma,FWHM))
 
             print '...... standradizing data'
             os.system('3dcalc  -expr residual_bp.nii.gz \'log((a+1)/(a-1))/2\' -prefix residual_bp_z.nii.gz')
