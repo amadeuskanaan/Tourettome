@@ -79,7 +79,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
             print '......calculating residual image'
             os.chdir(run_dir)
-            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm%s.nii.gz'%FWHM))
+            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm%s.nii.gz'%FWHM)):
                 calc_residuals(data,
                                selector     =  selector,
                                wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
