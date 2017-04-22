@@ -34,7 +34,7 @@ def nuisance_signal_regression(population, workspace_dir):
         compcor_dir  = mkdir_path(os.path.join(nuisance_dir, 'residuals_compcor'))
 
         # Smoothing kernel
-        FWHM     = '6'
+        FWHM     = 6
         sigma    = FWHM / 2.35482004503
 
         # Band-pass frequencies  #https://www.jiscmail.ac.uk/cgi-bin/webadmin?A2=ind1205&L=FSL&P=R57592&1=FSL&9=A&I=-3&J=on&d=No+Match%3BMatch%3BMatches&z=4
@@ -78,7 +78,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
             print '......calculating residual image'
             os.chdir(run_dir)
-            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm%s.nii.gz'%FWHM)):
+            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm6.nii.gz')):
                 calc_residuals(data,
                                selector     =  selector,
                                wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
@@ -95,7 +95,7 @@ def nuisance_signal_regression(population, workspace_dir):
                 os.system('3dcalc -a residual_bp.nii.gz -expr %s -prefix residual_bp_z.nii.gz' %expr)
 
                 print '...... smooth data'
-                os.system('fslmaths residual_bp_z -s %s residual_bp_z_fwhm%s.nii.gz' % (sigma,FWHM))
+                os.system('fslmaths residual_bp_z -s %s residual_bp_z_fwhm6.nii.gz' % (sigma))
 
             print '...... project to surface' #### take non-smoothed data and smooth on surface
             for hemi in ['lh', 'rh']:
@@ -116,7 +116,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
         # 1- Detrend (Linear-Quadratic), Motion-24, WM/CSF mean signal
 
-        print '- Nuisance Signal regression :::: FUNC2mm_fwhm_detrend_wmcsf_moco24 '
+        print '- Nuisance Signal regression :::: FUNC2mm_detrend_wmcsf_moco24_bp_std_fwhm '
 
         selector_std = {'wm'     : True, 'csf': True,  'motion': True,  'linear': True, 'quadratic': True,
                         'compcor': False, 'gm': False, 'global': False, 'pc1'   : False}
@@ -125,7 +125,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
         # 2- Detrend (Linear-Quadratic), Motion-24, Compcor
 
-        print '- Nuisance Signal regression :::: FUNC2mm_fwhm_detrend_compcor_moco24 '
+        print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
 
         selector_cc = {'wm'     : False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
                         'compcor': True,  'gm' : False, 'global': False, 'pc1'  : False}
