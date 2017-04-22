@@ -34,7 +34,7 @@ def nuisance_signal_regression(population, workspace_dir):
         #compcor_dir  = mkdir_path(os.path.join(nuisance_dir, 'residuals_compcor'))
 
         # Smoothing kernel
-        FWHM     = 6.
+        FWHM     = '6'
         sigma    = FWHM / 2.35482004503
 
         # Band-pass frequencies  #https://www.jiscmail.ac.uk/cgi-bin/webadmin?A2=ind1205&L=FSL&P=R57592&1=FSL&9=A&I=-3&J=on&d=No+Match%3BMatch%3BMatches&z=4
