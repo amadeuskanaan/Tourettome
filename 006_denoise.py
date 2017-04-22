@@ -55,7 +55,6 @@ def nuisance_signal_regression(population, workspace_dir):
         friston = os.path.join(subdir, 'DENOISE/FRISTON_24.1D')
         calc_friston_twenty_four(movpar)
 
-
         # extract tissue data
         if not os.path.isfile( os.path.join(wmcsf_dir, 'wm_signals.npy')):
             print '......extracting tissue data'
