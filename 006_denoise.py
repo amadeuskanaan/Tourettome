@@ -74,7 +74,11 @@ def nuisance_signal_regression(population, workspace_dir):
 
         ################################################################################################################
 
-        def denoise(run_dir, data, selector):
+        wmsig  = os.path.join(wmcsf_dir, 'wm_signals.npy')
+        csfsig = os.path.join(wmcsf_dir, 'csf_signals.npy')
+        gmsig  = os.path.join(wmcsf_dir, 'gm_signals.npy')
+
+        def denoise(run_dir, data, selector, wmsig  = wmsig,csfsig = csfsig, gmsig  = gmsig):
 
             os.chdir(run_dir)
             if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm6.nii.gz')):
@@ -83,9 +87,9 @@ def nuisance_signal_regression(population, workspace_dir):
                     print '......calculating residual image'
                     calc_residuals(data,
                                    selector     =  selector,
-                                   wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
-                                   csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
-                                   gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
+                                   wm_sig_file  = wmsig,
+                                   csf_sig_file =  csfsig,
+                                   gm_sig_file  =  gmsig,
                                    motion_file  =  friston,
                                    compcor_ncomponents=0)
 
@@ -120,7 +124,6 @@ def nuisance_signal_regression(population, workspace_dir):
         # 1- Detrend (Linear-Quadratic), Motion-24, WM/CSF mean signal
 
         print '- Nuisance Signal regression :::: FUNC2mm_detrend_wmcsf_moco24_bp_std_fwhm '
-
         selector_std = {'wm'     : True, 'csf': True,  'motion': True,  'linear': True, 'quadratic': True,
                         'compcor': False, 'gm': False, 'global': False, 'pc1'   : False}
         denoise(run_dir=wmcsf_dir,data=func_mni, selector=selector_std)
@@ -129,7 +132,6 @@ def nuisance_signal_regression(population, workspace_dir):
         # 2- Detrend (Linear-Quadratic), Motion-24, Compcor
 
         print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
-
         selector_cc = {'wm'     : False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
                         'compcor': True,  'gm' : False, 'global': False, 'pc1'  : False}
         denoise(run_dir=compcor_dir, data=func_mni, selector=selector_cc)
@@ -137,44 +139,37 @@ def nuisance_signal_regression(population, workspace_dir):
         ################################################################################################################
         ################################################################################################################
 
+        # # 3- ICA-AROMA, Detrend (Linear-Quadratic), Motion-24, WM/CSF mean signal
         # print '- Nuisance Signal regression :::: FUNC2mm_fwhm_ICA-AROMA_detrend_wmcsf_moco24 '
         #
-        # if not os.path.isfile(os.path.join(aroma_dir, 'denoised_func_data_nonaggr.nii.gz')):
+        #
+        # if not os.path.isfile(os.path.join(aroma_dir, 'denoised_func_data_nonaggr')):
         #     os.chdir(aroma_dir)
+        #     print '......smoothing to FWHM=6mm'
+        #     os.system('fslmaths %s -s %s REST_EDIT_UNI_BRAIN_MNI2mm_fwhm6mm.nii.gz' %(func_mni, sigma))
+        #     os.system('fslmaths %s -Tmean -thr 200 -bin REST_EDIT_UNI_BRAIN_MNI2mm_mask'%func_mni)
         #
-        #     print '......smoothing to FWHM=4mm'
-        #     os.system('fslmaths %s -s %s REST_EDIT_UNI_BRAIN_MNI2mm_fwhm4mm.nii.gz' %(func_mni, sigma))
-        #     os.system('fslmaths %s -Tmean -bin REST_EDIT_UNI_BRAIN_MNI2mm_mask'%func_mni)
+        #     if not os.path.isfile(os.path.join(aroma_dir, 'denoised_func_data_nonaggr')):
+        #         print '......ica_aroma'
+        #         os.system('python /scr/sambesi4/SCR/Software/ICA-AROMA/ICA_AROMA.py '
+        #                   '-in %s -out %s -mc %s -m %s -tr %s'
+        #                   %(os.path.join(aroma_dir, 'REST_EDIT_UNI_BRAIN_MNI2mm_fwhm6mm.nii.gz'),
+        #                     aroma_dir, movpar, os.path.join(aroma_dir, 'REST_EDIT_UNI_BRAIN_MNI2mm_mask.nii.gz'),TR))
         #
-        #     print '......ica_aroma'
-        #     os.system('python /scr/sambesi1/Software/ICA-AROMA/ICA_AROMA.py '
-        #               '-in %s -out %s -mc %s -m %s -tr %s'
-        #               %(os.path.join(aroma_dir, 'REST_EDIT_UNI_BRAIN_MNI2mm_fwhm4mm.nii.gz'),
-        # #                 aroma_dir, movpar, os.path.join(aroma_dir, 'REST_EDIT_UNI_BRAIN_MNI2mm_mask.nii.gz'),TR))
-        # #
-        # #
-        # #     print '......extracting tissue data'
-        # #     extract_tissue_data(data_file = os.path.join(aroma_dir, 'denoised_func_data_nonaggr.nii.gz'),
-        # #                          ventricles_mask_file = mni_HOLV_2mm,
-        # #                          wm_seg_file  = os.path.join(subdir, 'REGISTRATION/ANATOMICAL_WM_MNI2mm.nii.gz'),
-        # #                          csf_seg_file = os.path.join(subdir, 'REGISTRATION/ANATOMICAL_CSF_MNI2mm.nii.gz'),
-        # #                          gm_seg_file  = os.path.join(subdir, 'REGISTRATION/ANATOMICAL_GM_MNI2mm.nii.gz'))
-        # #
-        # #     print '......calculating residual image'
-        # #     selector = {'wm': True, 'csf': True, 'motion': True, 'linear': True, 'quadratic': True,
-        # #                 'compcor': False, 'gm': False, 'global': False, 'pc1': False}
-        # #     calc_residuals(os.path.join(aroma_dir, 'denoised_func_data_nonaggr.nii.gz'),
-        # #                    selector     = selector,
-        # #                    wm_sig_file  = os.path.join(aroma_dir, 'wm_signals.npy'),
-        # #                    csf_sig_file = os.path.join(aroma_dir, 'csf_signals.npy'),
-        # #                    gm_sig_file  = os.path.join(aroma_dir, 'gm_signals.npy'),
-        # #                    motion_file  = friston,
-        # #                    compcor_ncomponents=0)
-        # #
-        # #     print '......bandpass filtering'
-        # #     os.system('fslmaths residual -bptf %s %s residual_bp' %(highpass_sigma, lowpass_sigma))
-        # #     os.system('cp residual_bp.nii.gz ../REST_MNI2mm_fwhm_aroma_detrend_compcor_moco24_bp.nii.gz')
+        #
+        #     print '......extracting tissue data'
+        #     extract_tissue_data(data_file = os.path.join(aroma_dir, 'denoised_func_data_nonaggr.nii.gz'),
+        #                         ventricles_mask_file = mni_HOLV_2mm,
+        #                         wm_seg_file  = os.path.join(subdir, 'REGISTRATION/ANATOMICAL_WM_MNI2mm.nii.gz'),
+        #                         csf_seg_file = os.path.join(subdir, 'REGISTRATION/ANATOMICAL_CSF_MNI2mm.nii.gz'),
+        #                         gm_seg_file  = os.path.join(subdir, 'REGISTRATION/ANATOMICAL_GM_MNI2mm.nii.gz'))
+        #
+        #
+        #     denoise(run_dir=aroma_dir, data=, selector=selector_std,
+        #             wmsig =os.path.join(wmcsf_dir, 'wm_signals.npy'),
+        #             csfsig =os.path.join(wmcsf_dir, 'csf_signals.npy'),
+        #             gmsig =os.path.join(wmcsf_dir, 'gm_signals.npy'))
 
 
-nuisance_signal_regression(['LZ032', 'PA070', 'HA033'], tourettome_workspace)
-# nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
+# nuisance_signal_regression(['LZ032', 'PA070', 'HA033'], tourettome_workspace)
+nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
