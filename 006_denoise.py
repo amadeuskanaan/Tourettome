@@ -31,7 +31,7 @@ def nuisance_signal_regression(population, workspace_dir):
         nuisance_dir = mkdir_path(os.path.join(subdir, 'DENOISE'))
         wmcsf_dir    = mkdir_path(os.path.join(nuisance_dir, 'residuals_wmcsf'))
         #aroma_dir    = mkdir_path(os.path.join(nuisance_dir, 'residuals_ica_aroma'))
-        #compcor_dir  = mkdir_path(os.path.join(nuisance_dir, 'residuals_compcor'))
+        compcor_dir  = mkdir_path(os.path.join(nuisance_dir, 'residuals_compcor'))
 
         # Smoothing kernel
         FWHM     = '6'
@@ -123,6 +123,10 @@ def nuisance_signal_regression(population, workspace_dir):
         denoise(run_dir=wmcsf_dir,data=func_mni, selector=selector_std)
 
 
+        # 2- Detrend (Linear-Quadratic), Motion-24, Compcor
+        selector_cc = {'wm'     : False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+                        'compcor': True,  'gm' : False, 'global': False, 'pc1'  : False}
+        denoise(run_dir=compcor_dir, data=func_mni, selector=selector_cc)
 
         ################################################################################################################
         ################################################################################################################
