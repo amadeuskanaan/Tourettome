@@ -76,19 +76,21 @@ def nuisance_signal_regression(population, workspace_dir):
 
         def denoise(run_dir, data, selector):
 
-            print '......calculating residual image'
             os.chdir(run_dir)
             if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm6.nii.gz')):
-                calc_residuals(data,
-                               selector     =  selector,
-                               wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
-                               csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
-                               gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
-                               motion_file  =  friston,
-                               compcor_ncomponents=0)
 
-                print '......bandpass filtering'
-                os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
+                if not os.path.isfile(os.path.join(run_dir, 'residual_bp.nii.gz')):
+                    print '......calculating residual image'
+                    calc_residuals(data,
+                                   selector     =  selector,
+                                   wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
+                                   csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
+                                   gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
+                                   motion_file  =  friston,
+                                   compcor_ncomponents=0)
+
+                    print '......bandpass filtering'
+                    os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
 
                 print '...... standradizing data'
                 expr = ['log((a+1)/(a-1))/2']
@@ -97,19 +99,20 @@ def nuisance_signal_regression(population, workspace_dir):
                 print '...... smooth data'
                 os.system('fslmaths residual_bp_z -s %s residual_bp_z_fwhm6.nii.gz' % (sigma))
 
-            print '...... project to surface' #### take non-smoothed data and smooth on surface
-            for hemi in ['lh', 'rh']:
-                os.system('mri_vol2surf '
-                          '--mov residual_bp_z.nii.gz '
-                          '--reg %s '
-                          '--trgsubject fsaverage5 '
-                          '--projfrac-avg 0.2 0.8 0.1 '
-                          '--hemi %s '
-                          '--interp nearest '
-                          '--surf-fwhm 6 '
-                          '--cortex '
-                          '--o residual_bp_z_%s.mgh'
-                          % (fs_mni_reg, hemi, hemi))
+            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_rh.nii.gz')):
+                print '...... project to surface' #### take non-smoothed data and smooth on surface
+                for hemi in ['lh', 'rh']:
+                    os.system('mri_vol2surf '
+                              '--mov residual_bp_z.nii.gz '
+                              '--reg %s '
+                              '--trgsubject fsaverage5 '
+                              '--projfrac-avg 0.2 0.8 0.1 '
+                              '--hemi %s '
+                              '--interp nearest '
+                              '--surf-fwhm 6 '
+                              '--cortex '
+                              '--o residual_bp_z_%s.mgh'
+                              % (fs_mni_reg, hemi, hemi))
 
 
         ################################################################################################################
