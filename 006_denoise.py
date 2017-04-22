@@ -44,9 +44,10 @@ def nuisance_signal_regression(population, workspace_dir):
         highpass_sigma  = 1./(2*TR*highpass_cutoff)
         lowpass_sigma   = 1./(2*TR*lowpass_cutoff)
 
-        print 'FWHM=', FWHM
+        print 'TR=%ss'%TR
         print 'Highpass filter=', highpass_sigma
         print 'Lowpass filter=', lowpass_sigma
+        print 'FWHM=', FWHM
 
         # Calculate Friston-24 paramters
         os.chdir(nuisance_dir)
@@ -185,5 +186,5 @@ def nuisance_signal_regression(population, workspace_dir):
         #     os.system('cp residual_bp.nii.gz ../REST_MNI2mm_fwhm_aroma_detrend_compcor_moco24_bp.nii.gz')
 
 
-nuisance_signal_regression(['LZ041', 'HA050','PA022'], tourettome_workspace)
+nuisance_signal_regression(['PA022','LZ041','HA050' ], tourettome_workspace)
 # nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
