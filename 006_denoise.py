@@ -77,24 +77,25 @@ def nuisance_signal_regression(population, workspace_dir):
 
         def denoise(run_dir, data, selector):
 
-            # print '......calculating residual image'
-            # os.chdir(run_dir)
-            # calc_residuals(data,
-            #                selector     =  selector,
-            #                wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
-            #                csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
-            #                gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
-            #                motion_file  =  friston,
-            #                compcor_ncomponents=0)
-            #
-            # print '......bandpass filtering'
-            # os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
+            print '......calculating residual image'
+            os.chdir(run_dir)
+            calc_residuals(data,
+                           selector     =  selector,
+                           wm_sig_file  =  os.path.join(wmcsf_dir, 'wm_signals.npy'),
+                           csf_sig_file =  os.path.join(wmcsf_dir, 'csf_signals.npy'),
+                           gm_sig_file  =  os.path.join(wmcsf_dir, 'gm_signals.npy'),
+                           motion_file  =  friston,
+                           compcor_ncomponents=0)
+
+            print '......bandpass filtering'
+            os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
 
             print '...... smooth data'
             os.system('fslmaths residual_bp -s %s residual_bp_fwhm%smm.nii.gz' % (sigma,FWHM))
 
             print '...... standradizing data'
-            os.system('3dcalc  -expr residual_bp.nii.gz \'log((a+1)/(a-1))/2\' -prefix residual_bp_z.nii.gz')
+            expr = ['log((a+1)/(a-1))/2']
+            os.system('3dcalc  -expr residual_bp.nii.gz %s -prefix residual_bp_z.nii.gz' %expr)
 
             print '...... project to surface' #### take non-smoothed data and smooth on surface
             for hemi in ['lh', 'rh']:
