@@ -90,12 +90,12 @@ def nuisance_signal_regression(population, workspace_dir):
             print '......bandpass filtering'
             os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
 
-            print '...... smooth data'
-            os.system('fslmaths residual_bp -s %s residual_bp_fwhm%smm.nii.gz' % (sigma,FWHM))
-
             print '...... standradizing data'
             expr = ['log((a+1)/(a-1))/2']
-            os.system('3dcalc  -expr residual_bp.nii.gz %s -prefix residual_bp_z.nii.gz' %expr)
+            os.system('3dcalc -a residual_bp.nii.gz -expr %s -prefix residual_bp_z.nii.gz' %expr)
+
+            print '...... smooth data'
+            os.system('fslmaths residual_bp_z -s %s residual_bp_z_fwhm%s.nii.gz' % (sigma,FWHM))
 
             print '...... project to surface' #### take non-smoothed data and smooth on surface
             for hemi in ['lh', 'rh']:
