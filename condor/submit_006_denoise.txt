@@ -5,7 +5,7 @@ output = /scr/sambesi2/Github/Tourettome/condor/logs_denoise/$(Process)_output.t
 error = /scr/sambesi2/Github/Tourettome/condor/logs_denoise/$(Process)_error.txt
 log = /scr/sambesi2/Github/Tourettome/condor/logs_denoise/$(Process)_log.txt
 getenv = True
-request_memory = 4000
+request_memory = 2000
 request_cpus = 1
 notify_user = amadeus.kanaan@gmail.com
-queue 254
+queue 3
