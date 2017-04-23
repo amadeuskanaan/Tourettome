@@ -103,7 +103,7 @@ def nuisance_signal_regression(population, workspace_dir):
                 print '...... smooth data'
                 os.system('fslmaths residual_bp_z -s %s residual_bp_z_fwhm6.nii.gz' % (sigma))
 
-            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_rh.nii.gz')):
+            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_rh.mgh')):
                 print '...... project to surface' #### take non-smoothed data and smooth on surface
                 for hemi in ['lh', 'rh']:
                     os.system('mri_vol2surf '
