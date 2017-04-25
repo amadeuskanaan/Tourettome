@@ -171,7 +171,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
 
 #nuisance_signal_regression(['LZ032', 'PA070', 'HA033'], tourettome_workspace)
-nuisance_signal_regression(leipzig, tourettome_workspace)
-# nuisance_signal_regression(paris, tourettome_workspace)
 # nuisance_signal_regression(leipzig, tourettome_workspace)
+# nuisance_signal_regression(paris, tourettome_workspace)
+nuisance_signal_regression(hannover_a, tourettome_workspace)
 # nuisance_signal_regression(leipzig, tourettome_workspace)
