@@ -10,13 +10,19 @@ for pathtoolbox = 1
    
     % you need to change the P variable to your path
     % and these paths too relative to where your data are 
-    addpath('/host/yeatman/local_raid/kanaan/Software/surfstat_chicago')
-    addpath('/host/yeatman/local_raid/kanaan/Software')
-   
-    P               = '/host/yeatman/local_raid/kanaan/workspace/Tourettome/';
-    RPATH           = [P '/Results_R1/'];
+    %addpath('/host/yeatman/local_raid/kanaan/Software/surfstat_chicago')
+    %addpath('/host/yeatman/local_raid/kanaan/Software')
+    
+    addpath('/Users/kanaan/SCR/Github/Tourettome/surf/software/surfstat_chicago')
+    addpath('/Users/kanaan/SCR/Github/Tourettome/surf/software')
+    
+    %P               = '/host/yeatman/local_raid/kanaan/workspace/Tourettome/';
+    P               = '/Users/kanaan/SCR/workspace/project_touretome/FSDIR/';
+    RPATH           = [P '/Results_CT/'];
     mkdir(RPATH);
-
+    
+    %phenotypic = '/host/yeatman/local_raid/kanaan/workspace/Tourettome/phenotypic/phenotypic_tourettome.csv'
+    phenotypic = '/Users/kanaan/SCR/workspace/project_touretome/phenotypic/phenotypic_tourettome.csv'
 end 
 
 ice = textread('ice.m');
@@ -39,11 +45,11 @@ for readsurfdata = 1
    
     CURV = SurfStatReadData({['fsaverage_curv_lh.asc'],['fsaverage_curv_rh.asc']});
  
-    f = figure; 
-        BoSurfStatViewData(sign(CURV),SM,'');
-        colormap([0.6 0.6 0.6; 0.8 0.8 0.8]);
-        exportfigbo(f,[RPATH 'fsaverage.png'],'png',10); 
-    close(f) 
+    %f = figure; 
+    %    BoSurfStatViewData(sign(CURV),SM,'');
+    %    colormap([0.6 0.6 0.6; 0.8 0.8 0.8]);
+    %    exportfigbo(f,[RPATH 'fsaverage.png'],'png',10); 
+    %close(f) 
    
  
 end
@@ -54,7 +60,7 @@ end
 for readcsv = 1
     
     cd(P)
-    fid = fopen('/host/yeatman/local_raid/kanaan/workspace/Tourettome/phenotypic/phenotypic_tourettome.csv'); % final group
+    fid = fopen(phenotypic); % final group
     
     % ID ,Group,Site,Age,Sex,  %s%s%s%f%s
     % R_Caud,L_Caud,R_Puta,L_Puta,R_Pall,L_Pall, %f%f%f%f%f%f
@@ -101,7 +107,6 @@ for readcsv = 1
     
 end
 
-
 %% Read the thickness data 
 % ------------------------
 for loadct = 1
@@ -141,7 +146,6 @@ mask  = mean(T20k,1) > 0.4;
 % ------------------------
 clusp = 0.005; 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -151,8 +155,6 @@ clusp = 0.005;
 % ------------------------
 for Figure1 = 1
       
-        clusp = 0.005;
-
         % make terms needed for the modeling  
         G     = term(GROUPk);
         SI    = term(SITEk);
@@ -170,19 +172,19 @@ for Figure1 = 1
         %%%%%%%%%% CONTROLS > PATIENTS
         f=figure, BoSurfStatViewData(slm.t,SM,'t-stat controls>patients')
         SurfStatColLim([-4 4]) 
-        exportfigbo(f,[RPATH 'thickness_t_stat_Controls>Patients.png'],'png',10)
+        exportfigbo(f,[RPATH 'CT_tstat_CP.png'],'png',10)
         
         % multiple comparison correction (controls > patients)
         [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
         effect = slm.t; 
         effect(pval.C>0.025) = 0; 
-        dlmwrite([RPATH, 'thickness_tstat_CP.csv'], slm.t);
-        dlmwrite([RPATH 'thickness_tstat_CP_fwe.csv'], effect);
+        dlmwrite([RPATH, 'write_CT_tstat_CP.csv'], slm.t);
+        dlmwrite([RPATH 'write_CT_tstat_CP_fwe.csv'], effect);
         f=figure, 
             BoSurfStatViewData(effect, SM, 'FWE T-values controls>patients') 
             SurfStatColLim([2 5])
             colormap([0.8 .8 .8; ice/255])
-            exportfigbo(f,[RPATH 'thickness_t_stat_fwe_Controls>Patients.png'],'png',10)           
+            exportfigbo(f,[RPATH 'CT_tstat_CP_fwe.png'],'png',10)           
                 
         %%%%%%%%%% write thickness values of significant clusters 
         k = sum(clus.P<0.025); 
@@ -193,34 +195,26 @@ for Figure1 = 1
         datatosave  = [{GROUPk}  SI.PARIS SI.HANNOVER_A SI.Leipzig  sigclus]
         
         clust_table = table(IDk, GROUPk, SITEk, sigclus(:,1), sigclus(:,2), sigclus(:,3), 'VariableNames', {'ID','Group', 'Site', 'clust1', 'clust2', 'clust3'})
-        writetable(clust_table,[RPATH 'thickness_table_Controls>Patients.csv'],'WriteRowNames',true)
+        writetable(clust_table,[RPATH 'write_table_CT_clusters_CP.csv'],'WriteRowNames',true)
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
         %%%%%%%%%% PATIENTS > CONTROLS  
         slm.t = -slm.t;  
         f=figure, BoSurfStatViewData(slm.t,SM,'t-stat patients>controls')
         SurfStatColLim([-4 4]) 
-        exportfigbo(f,[RPATH 'thickness_t_stat_Controls<Patients.png'],'png',10)
+        exportfigbo(f,[RPATH 'CT_tstat_PC.png'],'png',10)
         
         % multiple comparison correction (patients > controls)
         [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
         effect2 = slm.t; 
         effect2(pval.C>0.025) = 0; 
-        dlmwrite([RPATH, 'thickness_tstat_PC.csv'], slm.t);
-        dlmwrite([RPATH 'thickness_tstat_PC_fwe.csv'], effect);
+        dlmwrite([RPATH, 'write_CT_tstat_PC.csv'], slm.t);
+        dlmwrite([RPATH 'write_CT_tstat_PC_fwe.csv'], effect);
         
         f=figure, 
             BoSurfStatViewData(effect2, SM, 'FWE t-values patients>controls') 
             SurfStatColLim([2 5])
             colormap([0.8 .8 .8; ice/255])
-            exportfigbo(f,[RPATH 'thickness_t_stat_fwe_Controls<Patients.png'],'png',10)
+            exportfigbo(f,[RPATH 'CT_tstat_PC_fwe.png'],'png',10)
 
 end
-
-
-
-
-
-
-
-

@@ -10,12 +10,18 @@ for pathtoolbox = 1
 
     % you need to change the P variable to your path
     % and these paths too relative to where your data are
-    addpath('/host/yeatman/local_raid/kanaan/Software/surfstat_chicago')
-    addpath('/host/yeatman/local_raid/kanaan/Software')
-
-    P               = '/host/yeatman/local_raid/kanaan/workspace/Tourettome/';
-    RPATH           = [P '/Results_R2'];
+    %addpath('/Users/kanaan/SCR/Github/Tourettome/surf/software/surfstat_chicago')
+    %addpath('/Users/kanaan/SCR/Github/Tourettome/surf/software')
+    
+    addpath('/Users/kanaan/SCR/Github/Tourettome/surf/software/surfstat_chicago')
+    addpath('/Users/kanaan/SCR/Github/Tourettome/surf/software')
+    
+    %P               = '/Users/kanaan/SCR/workspace/project_touretome/FSDIR/';
+    P               = '/Users/kanaan/SCR/workspace/project_touretome/FSDIR/';
+    RPATH           = [P '/Results_CT_BGcov'];
     mkdir(RPATH);
+
+    phenotypic = '/Users/kanaan/SCR/workspace/project_touretome/phenotypic/phenotypic_tourettome.csv'
 
 end
 
@@ -54,7 +60,7 @@ end
 for readcsv = 1
     
     cd(P)
-    fid = fopen('/host/yeatman/local_raid/kanaan/workspace/Tourettome/phenotypic/phenotypic_tourettome.csv'); % final group
+    fid = fopen(phenotypic); % final group
     
     % ID ,Group,Site,Age,Sex,  %s%s%s%f%s
     % R_Caud,L_Caud,R_Puta,L_Puta,R_Pall,L_Pall, %f%f%f%f%f%f
@@ -79,25 +85,25 @@ for readcsv = 1
     BG.L_PUTA     = C{4}(:,4);
     BG.R_PALL     = C{4}(:,5);
     BG.L_PALL     = C{4}(:,6);
-    BG.R_AMYG     = C{4}(:,7);
-    BG.L_AMYG     = C{4}(:,8);
-    BG.R_HIPP     = C{4}(:,9);
-    BG.L_HIPP     = C{4}(:,10);
-    BG.R_ACCU     = C{4}(:,11);
-    BG.L_ACCU     = C{4}(:,12);
+    %BG.R_AMYG     = C{4}(:,7);
+    %BG.L_AMYG     = C{4}(:,8);
+    %BG.R_HIPP     = C{4}(:,9);
+    %BG.L_HIPP     = C{4}(:,10);
+    %BG.R_ACCU     = C{4}(:,11);
+    %BG.L_ACCU     = C{4}(:,12);
     BG.R_THAL     = C{4}(:,13);
     BG.L_THAL     = C{4}(:,14);
     BG.CAUD       = C{4}(:,15);
     BG.PUTA       = C{4}(:,16);
     BG.PALL       = C{4}(:,17);
-    BG.AMYG       = C{4}(:,18);
-    BG.HIPP       = C{4}(:,19);
-    BG.ACCU       = C{4}(:,20);
+    %BG.AMYG       = C{4}(:,18);
+    %BG.HIPP       = C{4}(:,19);
+    %BG.ACCU       = C{4}(:,20);
     BG.THAL       = C{4}(:,21);
-    BG.L_STR      = BG.PUTA_L + BG.CAUD_L + BG.ACCU_L;
-    BG.R_STR      = BG.PUTA_R + BG.CAUD_R + BG.ACCU_R;
-    BG.L_BG       = BG.STR_L + BG.PALL_L;
-    BG.R_BG       = BG.STR_R + BG.PALL_R;
+    BG.L_STR      = BG.L_PUTA + BG.L_CAUD %+ BG.L_ACCU;
+    BG.R_STR      = BG.R_PUTA + BG.R_CAUD %+ BG.R_ACCU;
+    BG.L_BG       = BG.L_STR + BG.L_PALL;
+    BG.R_BG       = BG.R_STR + BG.R_PALL;
     
 end
 
@@ -138,7 +144,7 @@ T20k        = T20(keep,:);
 T20arrt = array2table(T20k);
 T20k_fname = fullfile(RPATH, 'T20k_table.csv')
 T20_table = table(IDk,GROUPk, SITEk, T20k)
-writetable(T20_table ,T20k_fname)
+%writetable(T20_table ,T20k_fname)
 
 %% generate the mask using heuristic approach
 % ------------------------
@@ -146,7 +152,7 @@ mask  = mean(T20k,1) > 0.4;
 
 %% clusp setting across all analyses
 % ------------------------
-clusp = 0.005; 
+clusp = 0.025; 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,69 +169,70 @@ for covariance = 1
   bg = fieldnames(BG) 
   
   for b = 1:length(bg) 
-         
-        disp([' --------- ' bg{b} ' ----------']) 
-        seed = getfield(BG, bg{b}); 
-        seedk = seed(keep);
-
-        clusp  = 0.025;
-
-
-        % make terms needed for the modeling
-        Seed  = term(seedk);
-        G     = term(GROUPk);
-        SI    = term(SITEk);
-        A     = term(AGEk);
-        SE    = term(SEXk);
         
-        
-          % Linea model
-          % controlled for site, age, iq
-          % ---
-          M        = 1 + SI + G + Seed + G*Seed ;
-          slm      = SurfStatLinMod(T20k,M,SW);
-          slm      = SurfStatT(slm,(G.controls.*seedk)-(G.patients.*seedk) );
+    if bg{b}(1) == 'R'
+        bg_name = [bg{b}(3:end) '_R'];
+    elseif bg{b}(1) == 'L'
+        bg_name = [bg{b}(3:end) '_L'];
+    else
+        bg_name = bg{b};
+    end 
 
-        
-        %f=figure, BoSurfStatViewData(slm.t,SM,[bg{b} 'T-stat(FWE) controls>patients'])
-        %    SurfStatColLim([-5 5])
-        %    exportfigbo(f, [RPATH '/' bg{b} '_covariance_C>P_t.png'],'png',10)
-        %close(f)
+    disp([' --------- ' bg_name ' ----------']) 
+    seed = getfield(BG, bg{b}); 
+    seedk = seed(keep);
 
-        % multiple comparison correction (controls > patients)
-        [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
+    % make terms needed for the modeling
+    Seed  = term(seedk);
+    G     = term(GROUPk);
+    SI    = term(SITEk);
+    A     = term(AGEk);
+    SE    = term(SEXk);
 
-        effect = slm.t;
-        if isfield(pval,'C')
-            effect(pval.C>0.025) = 0;
-            effect(pval.C<0.025) = 1;
-            dlmwrite([RPATH '/' bg{b} '_thickness_mask_cp.csv'], effect);
+    %%%%%%%%%%%%%%%%%%%
+    % Linear model
+    M     = 1 + SI + G + Seed + G*Seed ;
+    slm   = SurfStatLinMod(T20k,M,SW);
+    slm   = SurfStatT(slm,(G.controls.*seedk)-(G.patients.*seedk) );
 
-            %f=figure,
-            %    BoSurfStatViewData(effect, SM, [bg{b} 'T-stat(FWE) controls>patients'])
-            %    SurfStatColLim([2 5])
-            %    colormap([0.8 .8 .8; ice/255])
-            %    exportfigbo(f, [RPATH '/' bg{b} '_covariance_C>P_fwe.png'],'png',10)
-            %close(f)
-        end
+    %f=figure, BoSurfStatViewData(slm.t,SM,[bg{b} ' T-stat(FWE) controls>patients'])
+    %    SurfStatColLim([-5 5])
+    %    exportfigbo(f, [RPATH '/' bg_name '_covariance_C>P_t.png'],'png',10)
+    %close(f)
 
-        % multiple comparison correction (controls < patients)
-        slm.t = -slm.t
-        [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
-        effect = slm.t; 
-        if isfield(pval,'C')
-            effect(pval.C>0.025) = 0;
-            effect(pval.C<0.025) = 1;
-            dlmwrite([RPATH '/' bg{b} '_thickness_mask_pc.csv'], effect);
+    % multiple comparison correction (controls > patients)
+    [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
 
-            %f=figure,
-            %    BoSurfStatViewData(effect, SM, [bg{b} 'T-stat(FWE) controls<patients'])
-            %    SurfStatColLim([2 5])
-            %    colormap([0.8 .8 .8; hot])
-            %    exportfigbo(f, [RPATH '/' bg{b} '_covariance_C<P_fwe.png'],'png',10)
-            %close(f)
-        end
+    effect = slm.t;
+    if isfield(pval,'C')
+        effect(pval.C>0.025) = 0;
+        %effect(pval.C<0.025) = 1;
+        %dlmwrite([RPATH '/' bg{b} '_thickness_mask_cp.csv'], effect);
 
+        f=figure,
+            BoSurfStatViewData(effect, SM, [bg_name 'Tstat(FWE) C>P'])
+            SurfStatColLim([2 5])
+            colormap([0.8 .8 .8; ice/255])
+            exportfigbo(f, [RPATH '/' bg_name '_covariance_C>P_fwe.png'],'png',10)
+        close(f)
     end
 
+    % multiple comparison correction (controls < patients)
+    slm.t = -slm.t
+    [pval, peak, clus, clusid] = SurfStatP(slm, mask, clusp); 
+    effect = slm.t; 
+    if isfield(pval,'C')
+        effect(pval.C>0.025) = 0;
+        %effect(pval.C<0.025) = 1;
+        %dlmwrite([RPATH '/' bg{b} '_thickness_mask_pc.csv'], effect);
+
+        f=figure,
+            BoSurfStatViewData(effect, SM, [bg_name ' Tstat(FWE) C<P'])
+            SurfStatColLim([2 5])
+            colormap([0.8 .8 .8; hot])
+            exportfigbo(f, [RPATH '/' bg_name '_covariance_C<P_fwe.png'],'png',10)
+        close(f)
+    end
+  end
 end   
+
