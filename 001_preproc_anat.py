@@ -28,11 +28,10 @@ def preprocess_anatomical(population, workspace):
         print '========================================================================================'
         print '-Preprocessing anatomical data for %s' %subject
 
-        rawdir    = mkdir_path(os.path.join(workspace, subject, 'RAW'))
+        rawdir    = os.path.join(workspace, subject, 'RAW')
         anatdir   = mkdir_path(os.path.join(workspace, subject, 'ANATOMICAL'))
         spmdir    = mkdir_path(os.path.join(anatdir, 'seg_spm'))
         firstdir  = mkdir_path(os.path.join(anatdir, 'seg_first'))
-
 
         ####### RUN SPM SEGMENTATION
 
@@ -40,7 +39,6 @@ def preprocess_anatomical(population, workspace):
 
             ### Deoblique ###  Replace transformation matrix in header with cardinal matrix.This option DOES NOT deoblique the volume.
             os.system('3drefit -deoblique %s' %os.path.join(rawdir, 'ANATOMICAL.nii.gz'))
-
 
             ### SEGMENT
             if not os.path.isfile(os.path.join(spmdir, 'mANATOMICAL.nii')):
@@ -89,8 +87,6 @@ def preprocess_anatomical(population, workspace):
             os.system('fslmaths %s/c1ANATOMICAL -thr 0.55 -bin -add FIRST -bin ../ANATOMICAL_GM'  %spmdir)
             os.system('fslmaths %s/c2ANATOMICAL -thr 0.9  -bin -sub FIRST -bin ../ANATOMICAL_WM'  %spmdir)
             os.system('fslmaths %s/c3ANATOMICAL -sub 0.9  -bin -sub FIRST -bin ../ANATOMICAL_CSF' %spmdir)
-
-
 
         ####### Count number of non-zero voxels for FSL-FIRST subcortical segmentations
 

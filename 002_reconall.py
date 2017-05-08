@@ -52,14 +52,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
                 # Source freesurfer
                 os.system('export SUBJECTS_DIR=%s'%freesurfer_dir)
                 os.system('export QA_TOOLS=/scr/sambesi1/Software/QAtools_v1.2')
-
-                os.system('$QA_TOOLS/recon_checker '
-                  '-s %s '
-                  '-snaps-out '
-                  '-snaps-detailed '
-                  '-gen-outputFOF '
-                  %(subject))
-
+                os.system('$QA_TOOLS/recon_checker -s %s -snaps-out -snaps-detailed -gen-outputFOF'%(subject))
 
 missing = ['LZ040', 'LZ052', 'LZ053', 'LZ057', 'LZ058', 'LZ066',
            'HB003', 'HB004', 'HB005', 'HB008', 'HB014', 'HB015',
@@ -68,5 +61,5 @@ missing = ['LZ040', 'LZ052', 'LZ053', 'LZ057', 'LZ058', 'LZ066',
 
 recon_checker = [subject for subject in tourettome_subjects if subject not in missing]
 
-preprocess_anatomical(population = ['HA053', 'HA054'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-#preprocess_anatomical(population = recon_checker, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population = ['HA053', 'HA054'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+preprocess_anatomical(population = recon_checker, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)

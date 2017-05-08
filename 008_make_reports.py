@@ -1,7 +1,7 @@
 import os
 from variables.subject_list import *
 from utilities.utils import *
-from plots.plot_volumes import *
+from plots.plot_volumes_qc import *
 
 
 def make_quality_reports(population, workspace):

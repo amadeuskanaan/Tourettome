@@ -33,7 +33,7 @@ def preprocess_anatomical(population, afs_dir, workspace):
             if not os.path.isfile(os.path.join(rawdir, 'T1MAPS.nii.gz')):
                 shutil.copy(os.path.join(afsdir, 'T1MAPS.nii.gz'), os.path.join(rawdir, 'T1MAPS.nii.gz'))
 
-preprocess_anatomical(population = tourettome_subjects, afs_dir = tourettome_afs, workspace = tourettome_workspace)
+preprocess_anatomical(population = tourettome_subjects, afs_dir = tourettome_afs, workspace = tourettome_workspace  )
 
 
 
