@@ -177,7 +177,7 @@ def nuisance_signal_regression(population, workspace_dir):
 # nuisance_signal_regression(leipzig, tourettome_workspace)
 
 import numpy as np
-X = np.asanyarray()
+X = np.asanyarray([])
 for i in hannover_a1[0:2]:
     resid = os.path.isfile(os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual_bp.nii.gz'))
     if os.path.isfile(resid):
