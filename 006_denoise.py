@@ -176,12 +176,22 @@ def nuisance_signal_regression(population, workspace_dir):
 #nuisance_signal_regression(hannover_a, tourettome_workspace)
 # nuisance_signal_regression(leipzig, tourettome_workspace)
 
+import numpy as np
+X = np.asanyarray()
+for i in hannover_a1[0:2]:
+    resid = os.path.isfile(os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual_bp.nii.gz'))
+    if os.path.isfile(resid):
+        data = nb.load(resid).get_data()
+        X.append(data)
 
-dn = [os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual_bp.nii.gz') for i in hannover_a1 if
-      os.path.isfile(os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual_bp.nii.gz'))]
-print dn
+
+print X.shape
+
+
 os.chdir(tourettome_workspace)
-os.system('fslmerge -t concat %s' % ' '.join(dn))
+
+
+#os.system('fslmerge -t concat %s' % ' '.join(dn))
 #os.system('fslmaths %s/concat -Tmean %s/mean' %(tourettome_workspace, tourettome_workspace))
 #
 # qsm_list = [os.path.join(workspace, subject, 'REGISTRATION/QSM_MNI1mm.nii.gz') for subject in population]
