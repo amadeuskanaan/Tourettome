@@ -173,5 +173,15 @@ def nuisance_signal_regression(population, workspace_dir):
 #nuisance_signal_regression(['LZ032', 'PA070', 'HA033'], tourettome_workspace)
 # nuisance_signal_regression(leipzig, tourettome_workspace)
 # nuisance_signal_regression(paris, tourettome_workspace)
-nuisance_signal_regression(hannover_a, tourettome_workspace)
+#nuisance_signal_regression(hannover_a, tourettome_workspace)
 # nuisance_signal_regression(leipzig, tourettome_workspace)
+
+
+dn = [os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual.nii.gz') for i in tourettome_subjects]
+
+print dn
+
+#
+# qsm_list = [os.path.join(workspace, subject, 'REGISTRATION/QSM_MNI1mm.nii.gz') for subject in population]
+# os.system('fslmerge -t concat_qsm.nii.gz %s' % ' '.join(qsm_list))
+# os.system('fslmaths concat_qsm.nii.gz -Tmean QSM_mean.nii.gz')
