@@ -177,7 +177,8 @@ def nuisance_signal_regression(population, workspace_dir):
 # nuisance_signal_regression(leipzig, tourettome_workspace)
 
 
-dn = [os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual.nii.gz') for i in tourettome_subjects]
+dn = [os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual.nii.gz') for i in tourettome_subjects if
+      os.path.isfile(os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual.nii.gz'))]
 print dn
 os.system('fslmerge -t concat %s' % ' '.join(dn))
 
