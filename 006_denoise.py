@@ -178,8 +178,8 @@ def nuisance_signal_regression(population, workspace_dir):
 
 
 dn = [os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual.nii.gz') for i in tourettome_subjects]
-
 print dn
+os.system('fslmerge -t concat %s' % ' '.join(dn))
 
 #
 # qsm_list = [os.path.join(workspace, subject, 'REGISTRATION/QSM_MNI1mm.nii.gz') for subject in population]
