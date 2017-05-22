@@ -4,7 +4,7 @@ __author__ = 'kanaan 23.05.2017'
 import os
 import numpy as np
 from variables.subject_list import *
-
+from utilities.utils import *
 
 
 
@@ -14,7 +14,7 @@ def prep_meta_ica(population, workspace):
 
         # Input/Output
         subject_dir = os.path.join(workspace, subject)
-        ica_dir     = os.path.join(subject_dir, 'ICA')
+        ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
         func_2mm    = os.path.join(subject_dir,'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
 
         os.chdir(ica_dir)
