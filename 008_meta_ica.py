@@ -73,7 +73,7 @@ def prep_meta_ica(population, workspace):
     ####################################################
     # Take 10 controls and 10 patients from each site at random.. ie. total sample = 20* 4 = 80
 
-    phenotypic = pd.read_csv(tourettome_phenotypic, index_col = 0).drop(outliers)
+    phenotypic = pd.read_csv(os.path.join(tourettome_phenotypic, 'phenotypic_tourettome.csv'), index_col = 0).drop(outliers)
 
     patients = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'patients']
     controls = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'controls']
