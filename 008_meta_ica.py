@@ -19,8 +19,6 @@ def make_meta_ica(population, workspace):
     # Prepare data for meta_ICA
     ####################################################################################################################
 
-    print population
-
     def prep_func(subject):
         print 'Preparaing %s data for meta ICA' %subject
         # Input/Output
@@ -48,7 +46,6 @@ def make_meta_ica(population, workspace):
     # Parallelize func_prep 26 cores
     print multiprocessing.cpu_count()
     task_iterables = population
-    print task_iterables
     pool_prep      = multiprocessing.Pool(5)
     pool_prep.map_async(prep_func, task_iterables)
     pool_prep.close()
