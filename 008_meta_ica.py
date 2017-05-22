@@ -66,38 +66,38 @@ def prep_meta_ica(population, workspace):
     with open('%s/outliers.json' %meta_ica_dir, 'w') as file:
         file.write(json.dumps(outliers))
 
-    #
-    # ####################################################
-    # # Take 10 controls and 10 patients from each site at random.. ie. total sample = 20* 4 = 80
-    #
-    # phenotypic = pd.read_csv(tourettome_phenotypic).drop([outliers])
-    #
-    # patients = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'patients']
-    # controls = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'controls']
-    # meta_lists = {}
-    #
-    #
-    # for i in xrange(30):
-    #     PA = list(
-    #         np.random.choice([subject for subject in controls if subject[0:2] == 'PA'], 10, replace=False)) + list(
-    #         np.random.choice([subject for subject in patients if subject[0:2] == 'PA'], 10, replace=False))
-    #
-    #     HA = list(
-    #         np.random.choice([subject for subject in controls if subject[0:2] == 'HA'], 10, replace=False)) + list(
-    #         np.random.choice([subject for subject in patients if subject[0:2] == 'HA'], 10, replace=False))
-    #
-    #     HB = list(
-    #         np.random.choice([subject for subject in controls if subject[0:2] == 'HB'], 10, replace=False)) + list(
-    #         np.random.choice([subject for subject in patients if subject[0:2] == 'HB'], 10, replace=False))
-    #
-    #     LZ = list(
-    #         np.random.choice([subject for subject in controls if subject[0:2] == 'LZ'], 10, replace=False)) + list(
-    #         np.random.choice([subject for subject in patients if subject[0:2] == 'LZ'], 10, replace=False))
-    #
-    #     meta_lists['meta_list_%s' % i] = PA + HA + HB + LZ
-    #
-    # with open('%s/meta_lists.json' %ica_dir, 'w') as file:
-    #     file.write(json.dumps(meta_lists))
+
+    ####################################################
+    # Take 10 controls and 10 patients from each site at random.. ie. total sample = 20* 4 = 80
+
+    phenotypic = pd.read_csv(tourettome_phenotypic).drop([outliers])
+
+    patients = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'patients']
+    controls = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'controls']
+    meta_lists = {}
+
+
+    for i in xrange(30):
+        PA = list(
+            np.random.choice([subject for subject in controls if subject[0:2] == 'PA'], 10, replace=False)) + list(
+            np.random.choice([subject for subject in patients if subject[0:2] == 'PA'], 10, replace=False))
+
+        HA = list(
+            np.random.choice([subject for subject in controls if subject[0:2] == 'HA'], 10, replace=False)) + list(
+            np.random.choice([subject for subject in patients if subject[0:2] == 'HA'], 10, replace=False))
+
+        HB = list(
+            np.random.choice([subject for subject in controls if subject[0:2] == 'HB'], 10, replace=False)) + list(
+            np.random.choice([subject for subject in patients if subject[0:2] == 'HB'], 10, replace=False))
+
+        LZ = list(
+            np.random.choice([subject for subject in controls if subject[0:2] == 'LZ'], 10, replace=False)) + list(
+            np.random.choice([subject for subject in patients if subject[0:2] == 'LZ'], 10, replace=False))
+
+        meta_lists['meta_list_%s' % i] = PA + HA + HB + LZ
+
+    with open('%s/meta_lists.json' %meta_ica_dir, 'w') as file:
+        file.write(json.dumps(meta_lists))
 
 
 prep_meta_ica(tourettome_subjects, tourettome_workspace)
