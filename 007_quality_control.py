@@ -41,7 +41,7 @@ def quality_control(population, workspace):
         anat_fg_mu, anat_fg_sd, anat_fg_size    = summary_mask(anat, anat_mask)
         anat_gm_mu, anat_gm_sd, anat_gm_size    = summary_mask(anat, np.where(anat_gm > 0.5, 1, 0 ))
         anat_wm_mu, anat_wm_sd, anat_wm_size    = summary_mask(anat, np.where(anat_wm > 0.5, 1, 0 ))
-        #anat_csf_mu, anat_gm_sd, anat_csf_size  = summary_mask(anat, np.where(anat_csf > 0.5, 1, 0 ))
+        anat_csf_mu, anat_gm_sd, anat_csf_size  = summary_mask(anat, np.where(anat_csf > 0.5, 1, 0 ))
         anat_bg_data, anat_bg_mask              = get_background(anat, anat_mask)
         anat_bg_mu, anat_bg_sd, anat_bg_size    = summary_mask(anat, anat_bg_mask)
 
@@ -63,7 +63,7 @@ def quality_control(population, workspace):
         func_edit  = os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT_MOCO_BRAIN.nii.gz')
         func_gm    = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI2mm.nii.gz')
         func_mask  = os.path.join(subdir, 'FUNCTIONAL', 'REST_BRAIN_MASK.nii.gz')
-        func_wmcsf = os.path.join(subdir, 'DENOISE', 'REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz')
+        #func_wmcsf = os.path.join(subdir, 'DENOISE', 'REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz')
 
 
         # Calculate Framewise-Displacment
@@ -71,7 +71,7 @@ def quality_control(population, workspace):
         frames_in = [frame for frame, val in enumerate(FD1D) if val < 0.2]
 
         # Calculate DVARS
-        DVARS = calculate_DVARS(func_wmcsf, func_gm)
+        #DVARS = calculate_DVARS(func_wmcsf, func_gm)
 
         # Calculate TSNR map
         if not os.path.isfile(os.path.join(qcdir, 'tsnr.nii.gz')):
@@ -108,7 +108,7 @@ def quality_control(population, workspace):
         df.loc[subject]['FD_Q4'] = str(np.round(np.mean(np.sort(FD1D)[::-1][:quat]), 3))
         df.loc[subject]['FD_max'] = str(np.round(np.max(FD1D), 3))
         df.loc[subject]['FD_RMS'] = str(np.round(np.sqrt(np.mean(FD1D)), 3))
-        df.loc[subject]['DVARS'] = str(np.round(np.mean(np.load(DVARS)), 3))
+        #df.loc[subject]['DVARS'] = str(np.round(np.mean(np.load(DVARS)), 3))
         df.loc[subject]['TSNR'] = str(np.round(np.median(np.load('TSNR_data.npy')), 3))
         df.to_csv('quality_paramters.csv')
 
