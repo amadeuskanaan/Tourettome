@@ -1,17 +1,18 @@
 __author__ = 'kanaan 23.05.2017'
 import os
 import numpy as np
+import pandas as pd
+import json
 from variables.subject_list import *
 from utilities.utils import *
 from quality.motion_statistics import calculate_FD_Power
 
 
 
-
-
 def prep_meta_ica(population, workspace):
 
 
+    ####################################################
     # Prepare data for meta_ICA
     for subject in population:
         print 'Preparaing %s data for meta ICA' %subject
@@ -34,7 +35,7 @@ def prep_meta_ica(population, workspace):
             # Calculate FD
             FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
 
-
+    ####################################################
     # Identify subjects with FD above 2SD from the mean
     FD_median_dict = {}
     for subject in population:
@@ -59,7 +60,43 @@ def prep_meta_ica(population, workspace):
     print FD_outliers
 
 
+    ####################################################
+    # Take 10 controls and 10 patients from each site at random.. ie. total sample = 20* 4 = 80
+
+    outliers = FD_outliers + outlier_above_1mm
+    phenotypic = pd.read_csv(tourettome_phenotypic).drop([outliers])
+
+    patients = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'patients']
+    controls = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'controls']
+    meta_lists = {}
+
+
+    for i in xrange(30):
+        PA = list(
+            np.random.choice([subject for subject in controls if subject[0:2] == 'PA'], 10, replace=False)) + list(
+            np.random.choice([subject for subject in patients if subject[0:2] == 'PA'], 10, replace=False))
+
+        HA = list(
+            np.random.choice([subject for subject in controls if subject[0:2] == 'HA'], 10, replace=False)) + list(
+            np.random.choice([subject for subject in patients if subject[0:2] == 'HA'], 10, replace=False))
+
+        HB = list(
+            np.random.choice([subject for subject in controls if subject[0:2] == 'HB'], 10, replace=False)) + list(
+            np.random.choice([subject for subject in patients if subject[0:2] == 'HB'], 10, replace=False))
+
+        LZ = list(
+            np.random.choice([subject for subject in controls if subject[0:2] == 'LZ'], 10, replace=False)) + list(
+            np.random.choice([subject for subject in patients if subject[0:2] == 'LZ'], 10, replace=False))
+
+        meta_lists['meta_list_%s' % i] = PA + HA + HB + LZ
+
+    with open('%s/meta_lists.json' %ica_dir, 'w') as file:
+        file.write(json.dumps(meta_lists))
+
+
 prep_meta_ica(tourettome_subjects, tourettome_workspace)
+
+
 
 
 
