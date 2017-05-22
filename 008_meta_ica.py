@@ -5,7 +5,7 @@ import os
 import numpy as np
 from variables.subject_list import *
 from utilities.utils import *
-
+from quality.motion_statistics import calculate_FD_Power
 
 def prep_meta_ica(population, workspace):
 
@@ -19,14 +19,22 @@ def prep_meta_ica(population, workspace):
         os.chdir(ica_dir)
 
         # Resample data to 4mm
-        os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out REST_EDIT_UNI_BRAIN_MNI4mm'%(func_2mm, mni_brain_2mm))
+        #os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out REST_EDIT_UNI_BRAIN_MNI4mm'%(func_2mm, mni_brain_2mm))
 
         # Cut data to shortest time-point length
-        ### n_vols: PA=196; LZ=418; HB=271; HA=271
+        ### n_vols: PA=196; LZ=418; HA=271; HB=174
         ### TR: PA=2.4; LZ=1.4; HA=2.0; HA=2.4; HB= 2.0. Average TR=2.05
-        os.system('fslroi REST_EDIT_UNI_BRAIN_MNI4mm REST_EDIT_UNI_BRAIN_MNI4mm_n174 0 174')
+        #os.system('fslroi REST_EDIT_UNI_BRAIN_MNI4mm REST_EDIT_UNI_BRAIN_MNI4mm_n174 0 174')
 
-        # resample Data to 4mm
+        # Calculate mean_FD for the modified time-series
+        movpar = os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
+        movpar_174 = open(movpar, 'r').readlines()[:174]
+        np.savetxt('movpar_174.par', movpar_174)
+
+        FD = calculate_FD_Power(movpar)
+        print 'FD_all', np.mean(FD)
+        FD = calculate_FD_Power('movpar_174.par')
+        print 'FD_cut', np.mean(FD)
 
 prep_meta_ica(['LZ030'], tourettome_workspace)
 
