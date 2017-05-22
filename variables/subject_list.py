@@ -54,6 +54,7 @@ tourettome_subjects = leipzig + paris + hannover_a + hannover_b
 ########################################################################################################################
 mni_brain_1mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_1mm_brain.nii.gz'
 mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii.gz'
+mni_brain_2mm_mask   = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain_mask.nii.gz'
 mni_HOLV_2mm         = '/scr/sambesi2/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
 bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
 
@@ -66,20 +67,8 @@ rois_bilateral = ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']
 
 
 
-
-
-
-
-
-
-
-
-
-
 ##########################################################################
 # META ICA LISTS
-
-
 LEIPZIG_A_subject_dict =  {
  'AA8P': 'LZ001', 'BATP': 'LZ002', 'BE9P': 'LZ003', 'BM8X': 'LZ040', 'CB4P': 'LZ004', 'CF1P': 'LZ005', 'CM5P': 'LZ006', 'DF2P': 'LZ007',
  'EB2P': 'LZ008', 'EC9T': 'LZ041', 'EW3P': 'LZ009', 'FL3P': 'LZ010', 'FMEP': 'LZ011', 'GF3T': 'LZ042', 'GH4T': 'LZ043', 'GSAP': 'LZ012',
