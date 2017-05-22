@@ -44,9 +44,8 @@ def make_meta_ica(population, workspace):
             np.savetxt('FD_n174.1D', FD_n174)
 
     # Parallelize MELODIC runs on 26 cores
-    number_processes = 26
-    pool_prep = multiprocessing.Pool(number_processes)
-    pool_prep.map_async(prep_func, tourettome_subjects)
+    pool_prep = multiprocessing.Pool(26)
+    pool_prep.map_async(prep_func, population)
     pool_prep.close()
     pool_prep.join()
 
