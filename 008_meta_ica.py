@@ -47,8 +47,10 @@ def make_meta_ica(population, workspace):
 
     # Parallelize func_prep 26 cores
     print multiprocessing.cpu_count()
-    pool_prep = multiprocessing.Pool(26)
-    pool_prep.map_async(prep_func, population)
+    task_iterables = population
+    print task_iterables
+    pool_prep      = multiprocessing.Pool(26)
+    pool_prep.map_async(prep_func, task_iterables)
     pool_prep.close()
     pool_prep.join()
 
