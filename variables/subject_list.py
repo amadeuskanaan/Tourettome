@@ -39,9 +39,6 @@ hannover_b  = ['HB001', 'HB002', 'HB003', 'HB004', 'HB005', 'HB006', 'HB007', 'H
                'HB021', 'HB022', 'HB023', 'HB024', 'HB025', 'HB026', 'HB027', 'HB028', 'HB029', 'HB030',
                'HB031', 'HB032', 'HB033']
 
-hamburg = []
-
-
 paris1 = paris[:40]
 paris2 = paris[40:]
 leipzig1 = leipzig[:35]

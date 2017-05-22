@@ -12,7 +12,7 @@ from quality.motion_statistics import calculate_FD_Power
 
 def make_meta_ica(population, workspace):
 
-    meta_ica_dir      = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA'))
+    meta_ica_dir      = mkdir_path(os.path.join(workspace, 'META_ICA'))
     meta_ica_list_dir = mkdir_path(os.path.join(meta_ica_dir,'meta_subject_lists'))
 
     ####################################################################################################################
@@ -20,7 +20,7 @@ def make_meta_ica(population, workspace):
     ####################################################################################################################
 
     print population
-    #
+
     # def prep_func(subject):
     #     print 'Preparaing %s data for meta ICA' %subject
     #     # Input/Output
