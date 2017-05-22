@@ -12,7 +12,7 @@ from quality.motion_statistics import calculate_FD_Power
 
 def make_meta_ica(population, workspace):
 
-    meta_ica_dir      = mkdir_path(os.path.join(workspace, 'META_ICA'))
+    meta_ica_dir      = mkdir_path(os.path.join(workspace,   'META_ICA'))
     meta_ica_list_dir = mkdir_path(os.path.join(meta_ica_dir,'meta_subject_lists'))
 
     ####################################################################################################################
@@ -54,7 +54,7 @@ def make_meta_ica(population, workspace):
     # pool_prep.close()
     # pool_prep.join()
 
-    #
+
     # ####################################################################################################################
     # # Identify subjects with FD above 2SD from the mean
     # ####################################################################################################################
@@ -168,6 +168,7 @@ def make_meta_ica(population, workspace):
 
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b
 
-make_meta_ica(tourettome_subjects, tourettome_workspace)
+print tourettome_subjects
+# make_meta_ica(tourettome_subjects, tourettome_workspace)
 
 
