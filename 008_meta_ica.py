@@ -36,20 +36,17 @@ def prep_meta_ica(population, workspace):
 
 
     # Identify subjects with FD above 2SD from the mean
-
     FD_mean_dict = {}
     for subject in population:
         FD_mean_dict[subject] = np.loadtxt(os.path.join(workspace, subject, 'ICA/FD.1D')).mean()
 
-    print FD_mean_dict
+    FD_upper_bound = np.mean(FD_mean_dict.values()) + np.std(FD_mean_dict.values)*2
+    FD_outliers    = [subject for subject in population if FD_mean_dict[subject] > FD_upper_bound]
 
-    #FDmu_population = [np.loadtxt(os.path.join(workspace, subject, 'ICA/FD.1D')).mean() for subject in population]
-    #FD_upper = np.mean(FDmu_population) + np.std(FDmu_population)*2
-
-    #outliers =
+    print FD_outliers
 
 
-prep_meta_ica(tourettome_subjects[0:10], tourettome_workspace)
+prep_meta_ica(tourettome_subjects, tourettome_workspace)
 
 
 
