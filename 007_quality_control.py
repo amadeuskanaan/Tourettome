@@ -59,19 +59,19 @@ def quality_control(population, workspace):
         ###############################################################################################################
         # Temporal Quality metrics - REST
 
-        movpar     = os.path.join(subdir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
-        func_edit  = os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT_MOCO_BRAIN.nii.gz')
-        func_gm    = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI2mm.nii.gz')
-        func_mask  = os.path.join(subdir, 'FUNCTIONAL', 'REST_BRAIN_MASK.nii.gz')
-        #func_wmcsf = os.path.join(subdir, 'DENOISE', 'REST_MNI2mm_detrend_wmcsf_moco24_bp.nii.gz')
+
 
 
         # Calculate Framewise-Displacment
+        movpar = os.path.join(subdir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
         FD1D = np.loadtxt(calculate_FD_Power(movpar))
         frames_in = [frame for frame, val in enumerate(FD1D) if val < 0.2]
 
         # Calculate DVARS
-        #DVARS = calculate_DVARS(func_wmcsf, func_gm)
+        func_proc = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
+        func_mask = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI2mm.nii.gz')
+        DVARS = calculate_DVARS(func_proc, func_gm)
+
 
         # Calculate TSNR map
         if not os.path.isfile(os.path.join(qcdir, 'tsnr.nii.gz')):
@@ -86,13 +86,13 @@ def quality_control(population, workspace):
              data = tsnr_data[np.logical_and(nan_mask, mask)]
              np.save(os.path.join(os.getcwd(), 'TSNR_data.npy'), data)  #######################################
 
-
+        # Calculate DVARS
+        # DVARS = calculate_DVARS(func_wmcsf, func_gm)
 
         ################################################################################################################
         ## Save quality paramters
 
-        columns = [ 'SNR', 'CNR', 'FBER', 'EFC', 'FWHM', 'QI1',
-                    'FD', 'FD_in', 'FD_max', 'FD_Q4', 'DVARS', 'TSNR']
+        columns = [ 'SNR', 'CNR', 'FBER', 'EFC', 'FWHM', 'QI1', 'FD', 'FD_in', 'FD_max', 'FD_Q4', 'DVARS', 'TSNR']
 
         df = pd.DataFrame(index=['%s'%subject], columns = columns)
         df.loc[subject]['SNR']  = anat_SNR
@@ -118,3 +118,63 @@ def quality_control(population, workspace):
         ## plot image quality
 
 quality_control(['PA040'], tourettome_workspace)
+
+
+
+
+
+
+
+
+#
+# import os
+# from variables.subject_list import *
+# from utilities.utils import *
+# from plots.plot_volumes_qc import *
+#
+#
+# def make_quality_reports(population, workspace):
+#
+#     for subject in population:
+#
+#         print '###############################################################################'
+#         print 'Creating Quality Control Report for subject %s' % subject
+#         print ''
+#
+#         subdir = os.path.join(workspace, subject)
+#         qcdir  = mkdir_path(os.path.join(subdir, 'QUALITY'))
+#         os.chdir(qcdir)
+#
+#         anat      = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_BRAIN.nii.gz' )
+#         gm        = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_GM.nii.gz')
+#         gm2mni    = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI1mm.nii.gz')
+#         func2anat = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
+#
+#         # Plot native anatomical with GM
+#         if not os.path.isfile(os.path.join(qcdir, 'plot_anat_native.png')):
+#             plot_vol_quality(anat, gm, subject[0:2], '%s - Native Anatomical' %subject, 'plot_anat_native.png', cmap = 'r')
+#
+#         # Plot anat2mni reg quality using GM as a boundary
+#         #plot_vol_quality(mni_brain_1mm, gm2mni, 'MNI', '%s - Anatomical to MNI xfm' %subject, 'plot_anat_mni.png', cmap = 'r' )
+#
+#         # Plot func2anat reg quality using GM as a boundary
+#         #plot_vol_quality(func2anat, gm, subject[0:2], '%s - Func to Anat xfm' %subject, 'plot_func2anat-png', cmap = 'r' )
+#
+#
+#
+# make_quality_reports(tourettome_subjects, tourettome_workspace)
+#
+# ###########
+# # Functional
+# # 1- Raw Mean
+# # 2- TSNR
+# # 3- FD
+# # 4- DVARS
+# # 5- denoised imshow
+#
+# # GM/WM/CSF
+# # PLOT FUNCTIONAL MEAN ax-cor-sagg at level of BG
+#
+#
+#
+# # make qap pipe
