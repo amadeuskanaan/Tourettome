@@ -29,7 +29,7 @@ def prep_meta_ica(population, workspace):
         # Calculate mean_FD for the modified time-series
         movpar = os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
         FD = calculate_FD_Power(movpar)
-
+        print FD
         print np.mean(FD)
         print np.mean(FD[:174])
 
