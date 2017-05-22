@@ -40,6 +40,8 @@ def prep_meta_ica(population, workspace):
     for subject in population:
         FD_mean_dict[subject] = np.loadtxt(os.path.join(workspace, subject, 'ICA/FD.1D')).mean()
 
+    print FD_mean_dict
+
     FD_upper_bound = np.mean(FD_mean_dict.values()) + np.std(FD_mean_dict.values())*2
     print FD_upper_bound
 
