@@ -19,6 +19,8 @@ def make_meta_ica(population, workspace):
     # Prepare data for meta_ICA
     ####################################################################################################################
 
+    print population
+
     def prep_func(subject):
         print 'Preparaing %s data for meta ICA' %subject
         # Input/Output
@@ -43,7 +45,7 @@ def make_meta_ica(population, workspace):
             FD_n174 = np.loadtxt(FD)[:174]
             np.savetxt('FD_n174.1D', FD_n174)
 
-    # Parallelize MELODIC runs on 26 cores
+    # Parallelize func_prep 26 cores
     print multiprocessing.cpu_count()
     pool_prep = multiprocessing.Pool(26)
     pool_prep.map_async(prep_func, population)
