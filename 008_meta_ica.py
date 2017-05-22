@@ -34,9 +34,8 @@ def prep_meta_ica(population, workspace):
 
             # Calculate FD
             FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
-            FD_n174 = FD[:174]
-
-            print FD#np.savetxt('FD_n174.1D', FD_n174)
+            FD_n174 = np.loadtxt(FD)[:174]
+            print np.savetxt('FD_n174.1D', FD_n174)
 
     # ####################################################
     # # Identify subjects with FD above 2SD from the mean
