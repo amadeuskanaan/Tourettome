@@ -169,6 +169,11 @@ def make_meta_ica(population, workspace):
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b
 
 print tourettome_subjects
+print 'L=',leipzig
+print 'P=',paris
+print 'HA=',hannover_a
+print 'HB=',hannover_b
+
 # make_meta_ica(tourettome_subjects, tourettome_workspace)
 
 
