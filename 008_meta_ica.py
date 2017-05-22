@@ -19,7 +19,7 @@ def make_meta_ica(population, workspace):
     # Prepare data for meta_ICA
     ####################################################################################################################
 
-    def prep_func(subject):
+    for subject in population:
         print 'Preparaing %s data for meta ICA' %subject
         # Input/Output
         subject_dir = os.path.join(workspace, subject)
@@ -43,13 +43,13 @@ def make_meta_ica(population, workspace):
             FD_n174 = np.loadtxt(FD)[:174]
             np.savetxt('FD_n174.1D', FD_n174)
 
-    # Parallelize func_prep 26 cores
-    print multiprocessing.cpu_count()
-    task_iterables = population
-    pool_prep      = multiprocessing.Pool(5)
-    pool_prep.map_async(prep_func, task_iterables)
-    pool_prep.close()
-    pool_prep.join()
+    # # Parallelize func_prep 26 cores
+    # print multiprocessing.cpu_count()
+    # task_iterables = population
+    # pool_prep      = multiprocessing.Pool(5)
+    # pool_prep.map_async(prep_func, task_iterables)
+    # pool_prep.close()
+    # pool_prep.join()
 
     # ####################################################################################################################
     # # Identify subjects with FD above 2SD from the mean
