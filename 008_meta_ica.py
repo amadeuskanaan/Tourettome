@@ -21,39 +21,38 @@ def make_meta_ica(population, workspace):
 
     print population
 
-    # def prep_func(subject):
-    #     print 'Preparaing %s data for meta ICA' %subject
-    #     # Input/Output
-    #     subject_dir = os.path.join(workspace, subject)
-    #     ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
-    #     func_2mm    = os.path.join(subject_dir,'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
-    #
-    #     if not os.path.isfile(os.path.join(ica_dir, 'REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz' )):
-    #     #if not os.path.isfile(os.path.join(ica_dir, 'FD_n174.1D' )):
-    #         os.chdir(ica_dir)
-    #
-    #         # Resample data to 4mm
-    #         os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out REST_EDIT_UNI_BRAIN_MNI4mm'
-    #                   %(func_2mm, mni_brain_2mm))
-    #
-    #         # Cut data to shortest time-point length
-    #         ### n_vols: PA=196; LZ=418; HA=271; HB=174
-    #         os.system('fslroi REST_EDIT_UNI_BRAIN_MNI4mm REST_EDIT_UNI_BRAIN_MNI4mm_n174 0 174')
-    #
-    #         # Calculate FD
-    #         FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
-    #         FD_n174 = np.loadtxt(FD)[:174]
-    #         np.savetxt('FD_n174.1D', FD_n174)
-    #
-    # # Parallelize func_prep 26 cores
-    # print multiprocessing.cpu_count()
-    # task_iterables = population
-    # print task_iterables
-    # pool_prep      = multiprocessing.Pool(5)
-    # pool_prep.map_async(prep_func, task_iterables)
-    # pool_prep.close()
-    # pool_prep.join()
+    def prep_func(subject):
+        print 'Preparaing %s data for meta ICA' %subject
+        # Input/Output
+        subject_dir = os.path.join(workspace, subject)
+        ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
+        func_2mm    = os.path.join(subject_dir,'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
 
+        if not os.path.isfile(os.path.join(ica_dir, 'REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz' )):
+        #if not os.path.isfile(os.path.join(ica_dir, 'FD_n174.1D' )):
+            os.chdir(ica_dir)
+
+            # Resample data to 4mm
+            os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out REST_EDIT_UNI_BRAIN_MNI4mm'
+                      %(func_2mm, mni_brain_2mm))
+
+            # Cut data to shortest time-point length
+            ### n_vols: PA=196; LZ=418; HA=271; HB=174
+            os.system('fslroi REST_EDIT_UNI_BRAIN_MNI4mm REST_EDIT_UNI_BRAIN_MNI4mm_n174 0 174')
+
+            # Calculate FD
+            FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
+            FD_n174 = np.loadtxt(FD)[:174]
+            np.savetxt('FD_n174.1D', FD_n174)
+
+    # Parallelize func_prep 26 cores
+    print multiprocessing.cpu_count()
+    task_iterables = population
+    print task_iterables
+    pool_prep      = multiprocessing.Pool(5)
+    pool_prep.map_async(prep_func, task_iterables)
+    pool_prep.close()
+    pool_prep.join()
 
     # ####################################################################################################################
     # # Identify subjects with FD above 2SD from the mean
@@ -166,14 +165,6 @@ def make_meta_ica(population, workspace):
     # pool.close()
     # pool.join()
 
-tourettome_subjects = leipzig + paris + hannover_a + hannover_b
-
-print tourettome_subjects
-print 'L=',leipzig
-print 'P=',paris
-print 'HA=',hannover_a
-print 'HB=',hannover_b
-
-# make_meta_ica(tourettome_subjects, tourettome_workspace)
+make_meta_ica(tourettome_subjects, tourettome_workspace)
 
 
