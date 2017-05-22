@@ -23,21 +23,21 @@ def prep_meta_ica(population, workspace):
         ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
         func_2mm    = os.path.join(subject_dir,'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
 
-        # if not os.path.isfile(os.path.join(ica_dir, 'REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz' )):
-        #     os.chdir(ica_dir)
-        #
-        #     # Resample data to 4mm
-        #     os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out REST_EDIT_UNI_BRAIN_MNI4mm'%(func_2mm, mni_brain_2mm))
-        #
-        #     # Cut data to shortest time-point length
-        #     ### n_vols: PA=196; LZ=418; HA=271; HB=174
-        #     ### TR: PA=2.4; LZ=1.4; HA=2.0; HA=2.4; HB= 2.0. Average TR=2.05
-        #     os.system('fslroi REST_EDIT_UNI_BRAIN_MNI4mm REST_EDIT_UNI_BRAIN_MNI4mm_n174 0 174')
-        #
-        #     # Calculate FD
-        #     FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
-        #     FD_n174 = np.loadtxt(FD)[:174]
-        #     np.savetxt('FD_n174.1D', FD_n174)
+        if not os.path.isfile(os.path.join(ica_dir, 'REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz' )):
+            os.chdir(ica_dir)
+
+            # Resample data to 4mm
+            #os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out REST_EDIT_UNI_BRAIN_MNI4mm'%(func_2mm, mni_brain_2mm))
+
+            # Cut data to shortest time-point length
+            ### n_vols: PA=196; LZ=418; HA=271; HB=174
+            ### TR: PA=2.4; LZ=1.4; HA=2.0; HA=2.4; HB= 2.0. Average TR=2.05
+            #os.system('fslroi REST_EDIT_UNI_BRAIN_MNI4mm REST_EDIT_UNI_BRAIN_MNI4mm_n174 0 174')
+
+            # Calculate FD
+            FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
+            FD_n174 = np.loadtxt(FD)[:174]
+            np.savetxt('FD_n174.1D', FD_n174)
 
     ####################################################
     # Identify subjects with FD above 2SD from the mean
