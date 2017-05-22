@@ -28,13 +28,10 @@ def prep_meta_ica(population, workspace):
 
         # Calculate mean_FD for the modified time-series
         movpar = os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
-        movpar_174 = open(movpar, 'r').readlines()[:174]
-        np.savetxt('movpar_174.par', movpar_174)
-
         FD = calculate_FD_Power(movpar)
-        print 'FD_all', np.mean(FD)
-        FD = calculate_FD_Power('movpar_174.par')
-        print 'FD_cut', np.mean(FD)
+
+        print np.mean(FD)
+        print np.mean(FD[:174])
 
 prep_meta_ica(['LZ030'], tourettome_workspace)
 
