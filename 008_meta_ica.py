@@ -7,7 +7,6 @@ from variables.subject_list import *
 from utilities.utils import *
 
 
-
 def prep_meta_ica(population, workspace):
 
     for subject in population:
@@ -20,7 +19,7 @@ def prep_meta_ica(population, workspace):
         os.chdir(ica_dir)
 
         # Resample data to 4mm
-        os.system('flirt -in %s -ref %s -applisoxfm 4 -nosearch -out REST_EDIT_UNI_BRAIN_MNI4mm'%(func_2mm, mni_brain_2mm))
+        os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out REST_EDIT_UNI_BRAIN_MNI4mm'%(func_2mm, mni_brain_2mm))
 
         # Cut data to shortest time-point length
         ### n_vols: PA=196; LZ=418; HB=271; HA=271

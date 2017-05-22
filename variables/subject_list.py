@@ -131,17 +131,17 @@ HANNOVER_A_subject_dict = {'AAXP': 'HA001', 'BRXP': 'HA002', 'CSXP': 'HA003', 'D
 lz_patients = [i for i in LEIPZIG_A_subject_dict.keys() if i[-1] == 'P' or i[-1] == 'U']
 lz_controls = [i for i in LEIPZIG_A_subject_dict.keys() if i[-1] == 'T' or i[-1] == 'X']
 
-print len(LEIPZIG_A_subject_dict.keys())
-print len(lz_controls + lz_controls)
+#print len(LEIPZIG_A_subject_dict.keys())
+#print len(lz_controls + lz_controls)
 
 pa_patients = [i for i in PARIS_subject_dict.keys() if i[-1] == 'p']
 pa_controls = [i for i in PARIS_subject_dict.keys() if i[-1] == 't']
 
-print len(PARIS_subject_dict.keys())
-print len(pa_patients + pa_controls)
+#print len(PARIS_subject_dict.keys())
+#print len(pa_patients + pa_controls)
 
 ha_patients = [i for i in HANNOVER_A_subject_dict.keys() if i[-1] == 'P']
 ha_controls = [i for i in HANNOVER_A_subject_dict.keys() if i[-1] != 'P']
 
-print len(HANNOVER_A_subject_dict.keys())
-print len(ha_patients + ha_controls)
+#print len(HANNOVER_A_subject_dict.keys())
+#print len(ha_patients + ha_controls)
