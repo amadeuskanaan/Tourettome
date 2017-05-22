@@ -34,7 +34,7 @@ def prep_meta_ica(population, workspace):
 
 
     # Identify subjects with FD above 2SD from the mean
-    population_mean_FD = [np.loadtxt(os.path.join(workspace, subject_dir, 'ICA/FD.1D')).mean() for subject in population]
+    population_mean_FD = [np.loadtxt(os.path.join(workspace, subject, 'ICA/FD.1D')).mean() for subject in population]
 
     print population_mean_FD
 
