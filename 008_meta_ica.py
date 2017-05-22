@@ -23,7 +23,8 @@ def prep_meta_ica(population, workspace):
         ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
         func_2mm    = os.path.join(subject_dir,'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
 
-        if not os.path.isfile(os.path.join(ica_dir, 'REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz' )):
+        # if not os.path.isfile(os.path.join(ica_dir, 'REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz' )):
+        if not os.path.isfile(os.path.join(ica_dir, 'FD_n174.1D' )):
             os.chdir(ica_dir)
 
             # Resample data to 4mm
@@ -105,14 +106,4 @@ def prep_meta_ica(population, workspace):
         file.write(json.dumps(meta_lists))
 
 
-
-
 prep_meta_ica(tourettome_subjects, tourettome_workspace)
-
-
-
-
-
-
-
-
