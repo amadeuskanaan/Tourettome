@@ -137,8 +137,8 @@ def calculate_FD_Power(in_file):
     #FD is zero for the first time point
     FD_power = np.insert(FD_power, 0, 0)
 
-    print 'FD-Power=', np.mean(FD_power)
-    print 'FD-Max='  , np.max(FD_power)
+    #print 'FD-Power=', np.mean(FD_power)
+    #print 'FD-Max='  , np.max(FD_power)
 
     np.savetxt(out_file, FD_power)
 
