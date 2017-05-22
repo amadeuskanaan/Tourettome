@@ -1,3 +1,6 @@
+__author__ = 'kanaan 23.05.2017'
+
+# -*- coding: utf-8 -*-
 import os
 import numpy as np
 from variables.subject_list import *
@@ -29,7 +32,9 @@ def prep_meta_ica(population, workspace):
 prep_meta_ica(['LZ030'], tourettome_workspace)
 
 
-#
+
+
+
 # def cut_data(func)
 #
 # # Given computational resource limitations (e.g., 32 GB of physical memory), as well as a number of centers with a
