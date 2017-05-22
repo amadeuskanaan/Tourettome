@@ -14,7 +14,7 @@ def prep_meta_ica(population, workspace):
 
     # Prepare data for meta_ICA
     for subject in population:
-
+        print 'Preparaing %s data for meta ICA' %subject
         # Input/Output
         subject_dir = os.path.join(workspace, subject)
         ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
@@ -40,9 +40,10 @@ def prep_meta_ica(population, workspace):
     for subject in population:
         FD_mean_dict[subject] = np.loadtxt(os.path.join(workspace, subject, 'ICA/FD.1D')).mean()
 
-    FD_upper_bound = np.mean(FD_mean_dict.values()) + np.std(FD_mean_dict.values)*2
-    FD_outliers    = [subject for subject in population if FD_mean_dict[subject] > FD_upper_bound]
+    FD_upper_bound = np.mean(FD_mean_dict.values()) + np.std(FD_mean_dict.values())*2
+    print FD_upper_bound
 
+    FD_outliers    = [subject for subject in population if FD_mean_dict[subject] > FD_upper_bound]
     print FD_outliers
 
 
