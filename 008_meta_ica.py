@@ -49,7 +49,7 @@ def make_meta_ica(population, workspace):
     print multiprocessing.cpu_count()
     task_iterables = population
     print task_iterables
-    pool_prep      = multiprocessing.Pool(26)
+    pool_prep      = multiprocessing.Pool(5)
     pool_prep.map_async(prep_func, task_iterables)
     pool_prep.close()
     pool_prep.join()
