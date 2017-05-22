@@ -166,6 +166,7 @@ def make_meta_ica(population, workspace):
     # pool.close()
     # pool.join()
 
+tourettome_subjects = leipzig + paris + hannover_a + hannover_b
 
 make_meta_ica(tourettome_subjects, tourettome_workspace)
 
