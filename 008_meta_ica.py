@@ -42,10 +42,16 @@ def prep_meta_ica(population, workspace):
 
     print FD_median_dict
 
-    FD_upper_bound = np.median(FD_median_dict.values()) + np.std(FD_median_dict.values())*2
-    print FD_upper_bound
+    outlier_above_1mm = [subject for subject in population if FD_median_dict[subject] > 1]
 
-    FD_outliers    = [subject for subject in population if FD_median_dict[subject] > FD_upper_bound]
+    for subject in outlier_above_1mm:
+        print 'outlier above 1mm', subject
+        del FD_median_dict[subject]
+
+    FD_upper_bound =  np.median(FD_median_dict.values()) + np.std(FD_median_dict.values())*2
+    # np.percentile(FD_median_dict.values(), 95)#
+
+    FD_outliers    = [subject for subject in population if FD_median_dict[subject] > FD_upper_bound and FD_median_dict > 1]
     print FD_outliers
 
 
