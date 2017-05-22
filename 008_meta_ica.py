@@ -107,9 +107,6 @@ def prep_meta_ica(population, workspace):
 
 
 
-def make_meta_ica(subject_list)
-
-
 
 
 
