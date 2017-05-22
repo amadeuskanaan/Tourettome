@@ -1,16 +1,19 @@
 __author__ = 'kanaan 23.05.2017'
-
-# -*- coding: utf-8 -*-
 import os
 import numpy as np
 from variables.subject_list import *
 from utilities.utils import *
 from quality.motion_statistics import calculate_FD_Power
 
+
+
+
+
 def prep_meta_ica(population, workspace):
 
-    for subject in population:
 
+    # Prepare data for meta_ICA
+    for subject in population:
         # Input/Output
         subject_dir = os.path.join(workspace, subject)
         ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
@@ -26,14 +29,16 @@ def prep_meta_ica(population, workspace):
         ### TR: PA=2.4; LZ=1.4; HA=2.0; HA=2.4; HB= 2.0. Average TR=2.05
         #os.system('fslroi REST_EDIT_UNI_BRAIN_MNI4mm REST_EDIT_UNI_BRAIN_MNI4mm_n174 0 174')
 
-        # Calculate mean_FD for the modified time-series
-        movpar = os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
-        FD = calculate_FD_Power(movpar)
-        print FD
-        print np.mean(FD)
-        print np.mean(FD[:174])
+        # Calculate FD
+        FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
 
-prep_meta_ica(['LZ030'], tourettome_workspace)
+
+    # Identify subjects with FD above 2SD from the mean
+    population_mean_FD = [np.loadtxt(os.path.join(workspace, subject_dir, 'ICA/FD.1D')).mean() for subject in population]
+
+    print population_mean_FD
+
+prep_meta_ica(tourettome_subjects[0:10], tourettome_workspace)
 
 
 
