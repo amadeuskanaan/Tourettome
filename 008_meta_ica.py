@@ -133,20 +133,20 @@ def make_meta_ica(population, workspace):
     for i in xrange(1):
         print 'Running Melodic Number %s' %i
 
-        func_list = ', '.join([os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
+        func_list = ','.join([os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
                                 for subject in meta_lists['meta_list_%s' %i]])
 
-        fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
-        fun_list_file.write(func_list)
+        #fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
+        #fun_list_file.write(func_list)
 
         print func_list
         ica_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_0'))
 
         os.system(' '.join(['melodic',
-                            '--in=' + '%s/list_%s.txt' %(meta_ica_list_dir, i),
+                            '--in=' + func_list,#'%s/list_%s.txt' %(meta_ica_list_dir, i),
                             '--mask=' + brain_mask_4mm,
                             '-v',
-                            '-d 30',
+                            '-dim=30',
                             '--outdir=' + ica_run_dir,
                             '--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=' + str(TR_mean)]))
