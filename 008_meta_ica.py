@@ -129,8 +129,8 @@ def make_meta_ica(population, workspace):
 
     meta_lists = json.load(open('%s/meta_lists.json'% meta_ica_list_dir))
 
-    def run_melodic_multi_processing(i):
-
+    # def run_melodic_multi_processing(i):
+    for i in xrange(30):
         print 'Running Melodic Number %s' %i
 
         func_list = ', '.join([os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
@@ -148,14 +148,14 @@ def make_meta_ica(population, workspace):
                             '--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=' + str(TR_mean)]))
 
-    if __name__ == "__main__":
-        # Parallelize MELODIC runs on 26 cores
-        number_processes = 26
-        tasks_iterable   = range(30)
-        pool             = multiprocessing.Pool(number_processes)
-        pool.map_async(run_melodic_multi_processing, tasks_iterable)
-        pool.close()
-        pool.join()
+    # if __name__ == "__main__":
+    #     # Parallelize MELODIC runs on 26 cores
+    #     number_processes = 26
+    #     tasks_iterable   = range(30)
+    #     pool             = multiprocessing.Pool(number_processes)
+    #     pool.map_async(run_melodic_multi_processing, tasks_iterable)
+    #     pool.close()
+    #     pool.join()
 
     # ####################################################################################################################
     # # Run META ICA
