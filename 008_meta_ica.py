@@ -130,7 +130,7 @@ def make_meta_ica(population, workspace):
     meta_lists = json.load(open('%s/meta_lists.json'% meta_ica_list_dir))
 
     # def run_melodic_multi_processing(i):
-    for i in xrange(1):
+    for i in xrange(30):
         print 'Running Melodic Number %s' %i
 
         func_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
