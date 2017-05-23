@@ -129,8 +129,8 @@ def make_meta_ica(population, workspace):
 
     meta_lists = json.load(open('%s/meta_lists.json'% meta_ica_list_dir))
 
-    # def run_melodic_multi_processing(i):
-    for i in xrange(30):
+    def run_melodic_multi_processing(i):
+    # for i in xrange(30):
         print 'Running Melodic Number %s' %i
 
         func_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
@@ -158,14 +158,14 @@ def make_meta_ica(population, workspace):
                             '--tr=' + str(TR_mean)]))
 
 
-    # if __name__ == "__main__":
-    #     # Parallelize MELODIC runs on 26 cores
-    #     number_processes = 26
-    #     tasks_iterable   = range(30)
-    #     pool             = multiprocessing.Pool(number_processes)
-    #     pool.map_async(run_melodic_multi_processing, tasks_iterable)
-    #     pool.close()
-    #     pool.join()
+    if __name__ == "__main__":
+        # Parallelize MELODIC runs on 26 cores
+        number_processes = 26
+        tasks_iterable   = range(30)
+        pool             = multiprocessing.Pool(number_processes)
+        pool.map_async(run_melodic_multi_processing, tasks_iterable)
+        pool.close()
+        pool.join()
 
     # ####################################################################################################################
     # # Run META ICA
@@ -176,7 +176,7 @@ def make_meta_ica(population, workspace):
     #
     # #Merge all melodic runs
     # os.system('fslmerge -t %s/melodic_IC_all.nii.gz ' %(meta_ica_dir, ''.join(melodic_ICs)))
-    #
+
     # # run meta ica
     # ica_run_dir_all = mkdir_path(ica_dir, 'ICA_all')
     # os.system(' '.join(['melodic',
@@ -197,7 +197,4 @@ def make_meta_ica(population, workspace):
     # os.system('dual_regression %s 1 design.mat design.con 500 dual_regression '
     #           %(os.path.join(ica_run_dir_all, 'melodic_IC_thr.nii.gz'))
     #           )
-
-make_meta_ica(tourettome_subjects, tourettome_workspace)
-
 
