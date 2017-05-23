@@ -110,7 +110,7 @@ def make_meta_ica(population, workspace):
                 np.random.choice([subject for subject in controls if subject[0:2] == 'LZ'], 10, replace=False)) + list(
                 np.random.choice([subject for subject in patients if subject[0:2] == 'LZ'], 10, replace=False))
 
-            meta_lists['meta_list_%s' % i] = PA + HA + HB + LZ
+            meta_lists['meta_list_%s' % i] = PA + HA + LZ #+ HB
 
         print meta_lists
 
@@ -127,6 +127,7 @@ def make_meta_ica(population, workspace):
 
     ### TR: PA=2.4; LZ=1.4; HA=2.0; HA=2.4; HB= 2.0. Average TR=2.05
     TR_mean = (2.4 + 2.4 + 2.0 + 1.4) / 4.
+    TR_mean = (2.4 + 2.4 + 1.4) / 3.
 
     # create brain mask
     os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out %s/MNI152_T1_4mm_brain_mask'
