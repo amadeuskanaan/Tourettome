@@ -178,4 +178,4 @@ def register(population, workspace_dir):
             os.system('rm -rf %s' %concat_dir)
 
 # register(tourettome_subjects, tourettome_workspace)
-register(['HB008'], tourettome_workspace)
+register(['HB008', 'HB009', 'HB019'], tourettome_workspace)
