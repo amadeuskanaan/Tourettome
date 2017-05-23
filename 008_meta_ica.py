@@ -145,17 +145,17 @@ def make_meta_ica(population, workspace):
                 file.write(i + '\n')
         print input_file
 
-
         ica_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_0'))
 
         os.system(' '.join(['melodic',
                             '--in=' + input_file,#'%s/list_%s.txt' %(meta_ica_list_dir, i),
                             '--mask=' + brain_mask_4mm,
                             '-v',
-                            '-dim=30',
+                            '-d 30',
                             '--outdir=' + ica_run_dir,
                             '--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=' + str(TR_mean)]))
+
 
     # if __name__ == "__main__":
     #     # Parallelize MELODIC runs on 26 cores
