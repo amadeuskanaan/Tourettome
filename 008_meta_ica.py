@@ -137,8 +137,7 @@ def make_meta_ica(population, workspace):
                                 for subject in meta_lists['meta_list_%s' %i]])
 
         fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
-        for item in func_list:
-            fun_list_file.write("%s, " % item)
+        fun_list_file.write(func_list)
 
         # print func_list
         # ica_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_0'))
