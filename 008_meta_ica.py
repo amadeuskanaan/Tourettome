@@ -167,8 +167,8 @@ def make_meta_ica(population, workspace):
     #                         '--tr=' + str(TR_mean)]))
 
 # make_meta_ica(tourettome_subjects, tourettome_workspace)
-make_meta_ica(leipzig, tourettome_workspace)
-# make_meta_ica(tourettome_subjects, tourettome_workspace)
+# make_meta_ica(leipzig, tourettome_workspace)
+make_meta_ica(paris, tourettome_workspace)
 # make_meta_ica(tourettome_subjects, tourettome_workspace)
 # make_meta_ica(tourettome_subjects, tourettome_workspace)
 
