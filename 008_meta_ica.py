@@ -134,7 +134,8 @@ def make_meta_ica(population, workspace):
         print 'Running Melodic Number %s' %i
 
         func_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
-                                for subject in meta_lists['meta_list_%s' %i]]
+                     for subject in meta_lists['meta_list_%s' %i]
+                     if os.path.isfile(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz'))]
 
         #fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
         #fun_list_file.write(func_list)
