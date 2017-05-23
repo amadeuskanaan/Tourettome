@@ -133,30 +133,30 @@ def make_meta_ica(population, workspace):
     # for i in xrange(30):
         print 'Running Melodic Number %s' %i
 
-        func_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
-                     for subject in meta_lists['meta_list_%s' %i]
-                     if os.path.isfile(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz'))]
-
-        #fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
-        #fun_list_file.write(func_list)
-
-        input_file = os.path.join(meta_ica_list_dir, 'input_list_%s.txt' %(i))
-        with open(input_file, 'w') as file:
-            for func in func_list:
-                file.write(func + '\n')
-        #print input_file
-
-        melodic_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_%s'%i))
-
-        os.system(' '.join(['melodic',
-                            '--in=' + input_file,#'%s/list_%s.txt' %(meta_ica_list_dir, i),
-                            '--mask=' + brain_mask_4mm,
-                            '-v',
-                            '-d 30',
-                            '--outdir=' + melodic_run_dir,
-                            '--Ostats --nobet --mmthresh=0.5 --report',
-                            '--tr=' + str(TR_mean)]))
-
+        # func_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
+        #              for subject in meta_lists['meta_list_%s' %i]
+        #              if os.path.isfile(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz'))]
+        #
+        # #fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
+        # #fun_list_file.write(func_list)
+        #
+        # input_file = os.path.join(meta_ica_list_dir, 'input_list_%s.txt' %(i))
+        # with open(input_file, 'w') as file:
+        #     for func in func_list:
+        #         file.write(func + '\n')
+        # #print input_file
+        #
+        # melodic_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_%s'%i))
+        #
+        # os.system(' '.join(['melodic',
+        #                     '--in=' + input_file,#'%s/list_%s.txt' %(meta_ica_list_dir, i),
+        #                     '--mask=' + brain_mask_4mm,
+        #                     '-v',
+        #                     '-d 30',
+        #                     '--outdir=' + melodic_run_dir,
+        #                     '--Ostats --nobet --mmthresh=0.5 --report',
+        #                     '--tr=' + str(TR_mean)]))
+        #
 
     if __name__ == "__main__":
         # Parallelize MELODIC runs on 26 cores
