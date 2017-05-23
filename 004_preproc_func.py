@@ -99,5 +99,6 @@ def preprocess_functional(population, workspace):
 # preprocess_functional(population = paris, workspace = tourettome_workspace)
 # preprocess_functional(population = hannover_a, workspace = tourettome_workspace)
 # preprocess_functional(population = hannover_b, workspace = tourettome_workspace)
-preprocess_functional(population = tourettome_subjects, workspace = tourettome_workspace)
+# preprocess_functional(population = tourettome_subjects, workspace = tourettome_workspace)
+preprocess_functional(population = ['HB008', 'HB009'], workspace = tourettome_workspace)
 
