@@ -43,7 +43,6 @@ def make_meta_ica(population, workspace):
             FD_n174 = np.loadtxt(FD)[:174]
             np.savetxt('FD_n174.1D', FD_n174)
 
-
     ####################################################################################################################
     # Identify subjects with FD above 2SD from the mean
     ####################################################################################################################
@@ -164,6 +163,8 @@ def make_meta_ica(population, workspace):
                             '--outdir=' + melodic_run_dir,
                             #'--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=' + str(TR_mean)]))
+
+make_meta_ica(tourettome_subjects, tourettome_workspace)
 
 # if __name__ == "__main__":
 #     # Parallelize MELODIC runs on 26 cores
