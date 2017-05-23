@@ -141,18 +141,18 @@ def make_meta_ica(population, workspace):
 
         input_file = os.path.join(meta_ica_list_dir, 'input_list_%s.txt' %(i))
         with open(input_file, 'w') as file:
-            for i in func_list:
-                file.write(i + '\n')
-        print input_file
+            for func in func_list:
+                file.write(func + '\n')
+        #print input_file
 
-        ica_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_%s'%i))
+        melodic_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_%s'%i))
 
         os.system(' '.join(['melodic',
                             '--in=' + input_file,#'%s/list_%s.txt' %(meta_ica_list_dir, i),
                             '--mask=' + brain_mask_4mm,
                             '-v',
                             '-d 30',
-                            '--outdir=' + ica_run_dir,
+                            '--outdir=' + melodic_run_dir,
                             '--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=' + str(TR_mean)]))
 
