@@ -139,7 +139,7 @@ def make_meta_ica(population, workspace):
     meta_lists = json.load(open('%s/meta_lists.json'% meta_ica_list_dir))
 
     #def run_melodic_multi_processing(i):
-    for i in xrange(1):
+    for i in xrange(30):
         print 'Running Melodic Number %s' %i
 
         func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
@@ -161,16 +161,18 @@ def make_meta_ica(population, workspace):
                             '--in=' + input_file,#'%s/list_%s.txt' %(meta_ica_list_dir, i),
                             '--mask=' + brain_mask_4mm,
                             '-v',
-                            '-d 30',
                             '--outdir=' + melodic_run_dir,
-                            #'--Ostats --nobet --mmthresh=0.5 --report',
-                            '--tr=' + str(TR_mean)]))
+                            '--report',
+                            '--tr=' + str(TR_mean)])
+                            # '--Ostats --nobet --mmthresh=0.5
+                            # '-d 30',
+                            )
 
-# make_meta_ica(tourettome_subjects, tourettome_workspace)
+make_meta_ica(tourettome_subjects, tourettome_workspace)
 # make_meta_ica(leipzig, tourettome_workspace)
 # make_meta_ica(paris, tourettome_workspace)
 # make_meta_ica(hannover_a, tourettome_workspace)
-make_meta_ica(leipzig, tourettome_workspace)
+# make_meta_ica(leipzig, tourettome_workspace)
 
 # if __name__ == "__main__":
 #     # Parallelize MELODIC runs on 26 cores
