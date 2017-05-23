@@ -129,7 +129,7 @@ def make_meta_ica(population, workspace):
     # create brain mask
     os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out %s/MNI152_T1_4mm_brain_mask'
               % (mni_brain_2mm_mask, mni_brain_2mm_mask, meta_ica_dir))
-    os.system('fslmaths %s/MNI152_T1_4mm_brain_mask -thr 0.5 -bin MNI152_T1_4mm_brain_mask_bin'
+    os.system('fslmaths %s/MNI152_T1_4mm_brain_mask -thr 0.5 -bin %s/MNI152_T1_4mm_brain_mask_bin'
               %(meta_ica_dir,meta_ica_dir))
     brain_mask_4mm = os.path.join(meta_ica_dir, 'MNI152_T1_4mm_brain_mask_bin.nii.gz')
 
