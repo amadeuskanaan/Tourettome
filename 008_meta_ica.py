@@ -119,7 +119,7 @@ def make_meta_ica(population, workspace):
 ####################################################################################################################
 
 
-meta_ica_dir      = mkdir_path(os.path.join(workspace,   'META_ICA'))
+meta_ica_dir      = mkdir_path(os.path.join(tourettome_workspace,   'META_ICA'))
 meta_ica_list_dir = mkdir_path(os.path.join(meta_ica_dir,'meta_subject_lists'))
 
 ### TR: PA=2.4; LZ=1.4; HA=2.0; HA=2.4; HB= 2.0. Average TR=2.05
