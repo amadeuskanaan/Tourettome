@@ -168,8 +168,8 @@ def make_meta_ica(population, workspace):
 
 # make_meta_ica(tourettome_subjects, tourettome_workspace)
 # make_meta_ica(leipzig, tourettome_workspace)
-make_meta_ica(paris, tourettome_workspace)
-# make_meta_ica(tourettome_subjects, tourettome_workspace)
+# make_meta_ica(paris, tourettome_workspace)
+make_meta_ica(hannover_a, tourettome_workspace)
 # make_meta_ica(tourettome_subjects, tourettome_workspace)
 
 # if __name__ == "__main__":
