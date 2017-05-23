@@ -127,6 +127,8 @@ def make_meta_ica(population, workspace):
     brain_mask_4mm = os.path.join(meta_ica_dir, 'MNI152_T1_4mm_brain_mask.nii.gz')
 
 
+    meta_lists = json.load(open('%s/meta_lists.json'% meta_ica_list_dir))
+
     def run_melodic_multi_processing(i):
 
         print 'Running Melodic Number %s' %i
@@ -146,14 +148,14 @@ def make_meta_ica(population, workspace):
                             '--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=' + str(TR_mean)]))
 
-
-    # Parallelize MELODIC runs on 26 cores
-    number_processes = 26
-    tasks_iterable   = range(30)
-    pool             = multiprocessing.Pool(number_processes)
-    pool.map_async(run_melodic_multi_processing, tasks_iterable)
-    pool.close()
-    pool.join()
+    if __name__ == "__main__":
+        # Parallelize MELODIC runs on 26 cores
+        number_processes = 26
+        tasks_iterable   = range(30)
+        pool             = multiprocessing.Pool(number_processes)
+        pool.map_async(run_melodic_multi_processing, tasks_iterable)
+        pool.close()
+        pool.join()
 
     # ####################################################################################################################
     # # Run META ICA
@@ -186,7 +188,7 @@ def make_meta_ica(population, workspace):
     #           %(os.path.join(ica_run_dir_all, 'melodic_IC_thr.nii.gz'))
     #           )
 
-
-make_meta_ica(tourettome_subjects, tourettome_workspace)
+if __name__ == "__main__":
+    make_meta_ica(tourettome_subjects, tourettome_workspace)
 
 
