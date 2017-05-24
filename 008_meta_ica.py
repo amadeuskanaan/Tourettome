@@ -207,13 +207,15 @@ def make_dual_regression(population, workspace):
     # Run Dual Regression to extract spatial maps from each subject
     ####################################################################################################################
 
+    print 'Running dual Regression'
+
     # Make sure you create a Design Matrix first
 
     dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
     os.chdir(dualreg_dir)
 
     pproc_list = ' '.join([os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in population])
-    print pproc_list
+    print len(pproc_list)
 
     # meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
     #
@@ -230,5 +232,5 @@ def make_dual_regression(population, workspace):
     #           ))
 
 
-make_dual_regression(tourettome_subjects, tourettome_workspace)
+make_dual_regression(leipzig + hannover_a + paris, tourettome_workspace)
 #make_meta_ica(tourettome_subjects, tourettome_workspace)
