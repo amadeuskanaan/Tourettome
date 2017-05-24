@@ -214,7 +214,7 @@ def make_dual_regression(population, workspace):
     dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
     os.chdir(dualreg_dir)
 
-    pproc_list = ' '.join([os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in population])
+    pproc_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in population]
     print len(pproc_list)
 
     # meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
@@ -228,7 +228,7 @@ def make_dual_regression(population, workspace):
     #                     'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
     #                     '500',        # <n_perm>
     #                     dualreg_dir,
-    #                     pproc_list]
+    #                     ' '.join(pproc_list)]
     #           ))
 
 
