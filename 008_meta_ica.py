@@ -188,82 +188,82 @@ def make_meta_ica(population, workspace):
 
     print 'Running META_ICA'
 
-    #melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
-    melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in [1,5,6,7,8,9,10,11,13,15,16,17,20,21,22,23,25,27,]]
+    if not os.path.isfile(os.path.join(meta_ica_dir, 'ICA_merged', 'melodic_IC.nii.gz')):
 
-    #Merge all melodic runs
-    #os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' %(meta_ica_dir, ' '.join(melodic_ICs)))
+        #melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
+        melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in [1,5,6,7,8,9,10,11,13,15,16,17,20,21,22,23,25,27,]]
 
-    # run meta ica
-    ica_run_dir_all = mkdir_path(os.path.join(meta_ica_dir, 'ICA_merged'))
-    os.system(' '.join(['melodic',
-                        '--in=' + os.path.join(meta_ica_dir, 'melodic_IC_all.nii.gz'),
-                        '--mask=' + brain_mask_4mm,
-                        '-v',
-                        '--outdir=' + ica_run_dir_all,
-                        '--Ostats --nobet --mmthresh=0.5 --report',
-                        '--tr=1', # + str(TR_mean)
-                        #'-d 50'
-                        ]))
+        #Merge all melodic runs
+        os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' %(meta_ica_dir, ' '.join(melodic_ICs)))
 
-    ####################################################################################################################
-    # Run Dual Regression to extract spatial maps from each subject
-    ####################################################################################################################
-    #
-    # print 'Running dual Regression'
-    #
-    # dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
-    # os.chdir(dualreg_dir)
-    #
-    # # Create a Design Matrix  ... same as Glm_gui
-    # mat = open('design.mat', 'w')
-    # mat.write('/NumWaves\t1\n')
-    # mat.write('/NumPoints\t221\n')
-    # mat.write('/PPheights\t\t1.000000e+00\n')
-    # mat.write('/Matrix\n')
-    # for i in xrange(221):
-    #     mat.write('1.000000e+00\n')
-    # mat.close()
-    #
-    # con = open('design.con','w')
-    # con.write('/ContrastName1\tgroup mean\n')
-    # con.write('/NumWaves\t1\n')
-    # con.write('/NumContrasts\t1\n')
-    # con.write('/PPheights\t\t1.000000e+00\n')
-    # con.write('/RequiredEffect\t\t3.121\n')
-    # con.write('\n')
-    # con.write('/Matrix\n')
-    # con.write('1.000000e+00')
-    # con.close()
-    #
-    # pproc_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in leipzig + hannover_a + paris]
-    # print len(pproc_list)
-    #
-    # meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
-    #
-    # # dual_regression <group_IC_maps> <des_norm> <design.mat> <design.con> <n_perm> <output_directory> <input1> <input2> <input3> .........
-    #
-    # os.system(' '.join(['dual_regression ',
-    #                     meta_ica,     # <group_IC_maps>
-    #                     '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-    #                     'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
-    #                     'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
-    #                     '500',        # <n_perm>
-    #                     dualreg_dir,
-    #                     ' '.join(pproc_list)]
-    #                    ))
+        # run meta ica
+        ica_run_dir_all = mkdir_path(os.path.join(meta_ica_dir, 'ICA_merged'))
+        os.system(' '.join(['melodic',
+                            '--in=' + os.path.join(meta_ica_dir, 'melodic_IC_all.nii.gz'),
+                            '--mask=' + brain_mask_4mm,
+                            '-v',
+                            '--outdir=' + ica_run_dir_all,
+                            '--Ostats --nobet --mmthresh=0.5 --report',
+                            '--tr=1', # + str(TR_mean)
+                            #'-d 50'
+                            ]))
+
+    # ###################################################################################################################
+    # # Run Dual Regression to extract spatial maps from each subject
+    # ###################################################################################################################
+
+    print 'Running dual Regression'
+
+    dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
+    os.chdir(dualreg_dir)
+
+    # Create a Design Matrix  ... same as Glm_gui
+    mat = open('design.mat', 'w')
+    mat.write('/NumWaves\t1\n')
+    mat.write('/NumPoints\t221\n')
+    mat.write('/PPheights\t\t1.000000e+00\n')
+    mat.write('/Matrix\n')
+    for i in xrange(221):
+        mat.write('1.000000e+00\n')
+    mat.close()
+
+    con = open('design.con','w')
+    con.write('/ContrastName1\tgroup mean\n')
+    con.write('/NumWaves\t1\n')
+    con.write('/NumContrasts\t1\n')
+    con.write('/PPheights\t\t1.000000e+00\n')
+    con.write('/RequiredEffect\t\t3.121\n')
+    con.write('\n')
+    con.write('/Matrix\n')
+    con.write('1.000000e+00')
+    con.close()
+
+    pproc_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in leipzig + hannover_a + paris]
+    print len(pproc_list)
+
+    meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
+
+    os.system(' '.join(['dual_regression ',
+                        meta_ica,     # <group_IC_maps>
+                        '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+                        'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
+                        'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
+                        '500',        # <n_perm>
+                        dualreg_dir,
+                        ' '.join(pproc_list)]
+                       ))
 
 make_meta_ica(tourettome_subjects, tourettome_workspace)
 
-
-def make_slices_dir(population, workspace):
-    for subject in population:
-        print subject
-        slices_dir = mkdir_path(os.path.join(workspace, 'META_ICA/slices_dir'))
-        os.chdir(slices_dir)
-        func = os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
-        #os.system('fslmaths %s -Tmean mean_%s' %(func, subject))
-        os.system('fslmaths %s -Tstd std_%s' %(func, subject))
+#
+# def make_slices_dir(population, workspace):
+#     for subject in population:
+#         print subject
+#         slices_dir = mkdir_path(os.path.join(workspace, 'META_ICA/slices_dir'))
+#         os.chdir(slices_dir)
+#         func = os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
+#         #os.system('fslmaths %s -Tmean mean_%s' %(func, subject))
+#         os.system('fslmaths %s -Tstd std_%s' %(func, subject))
 
 #make_slices_dir(tourettome_subjects, tourettome_workspace)
 
