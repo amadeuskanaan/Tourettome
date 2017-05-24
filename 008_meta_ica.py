@@ -195,14 +195,14 @@ def make_meta_ica(population, workspace):
     os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' %(meta_ica_dir, ' '.join(melodic_ICs)))
 
     # run meta ica
-    ica_run_dir_all = mkdir_path(os.path.join(meta_ica_dir, 'ICA_merged_30'))
+    ica_run_dir_all = mkdir_path(os.path.join(meta_ica_dir, 'ICA_merged'))
     os.system(' '.join(['melodic',
                         '--in=' + os.path.join(meta_ica_dir, 'melodic_IC_all.nii.gz'),
                         '--mask=' + brain_mask_4mm,
                         '-v',
                         '--outdir=' + ica_run_dir_all,
                         '--Ostats --nobet --mmthresh=0.5 --report',
-                        '--tr=1'# + str(TR_mean)
+                        '--tr=1', # + str(TR_mean)
                         '-d 50'
                         ]))
 
