@@ -254,7 +254,7 @@ def make_meta_ica(population, workspace):
 def make_slices_dir(population, workspace):
     for subject in population:
 
-        slices_dir = mkdir_path(os.path.join(workspace, subject, 'META_ICA/slices_dir'))
+        slices_dir = mkdir_path(os.path.join(workspace, 'META_ICA/slices_dir'))
         os.chdir(slices_dir)
         func = os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
         os.system('fslmaths %s -Tmean mean_%s' %(func, subject))
