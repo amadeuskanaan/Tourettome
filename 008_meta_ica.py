@@ -189,7 +189,7 @@ def make_meta_ica(population, workspace):
     melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
 
     #Merge all melodic runs
-    os.system('fslmerge -t %s/melodic_IC_all.nii.gz ' %(meta_ica_dir, ''.join(melodic_ICs)))
+    os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' %(meta_ica_dir, ''.join(melodic_ICs)))
 
     # run meta ica
     ica_run_dir_all = mkdir_path(ica_dir, 'ICA_merged')
