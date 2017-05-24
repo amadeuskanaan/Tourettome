@@ -141,77 +141,92 @@ def make_meta_ica(population, workspace):
 
     #def run_melodic_multi_processing(i):
     for i in xrange(30):
-        print 'Running Melodic Number %s' %i
 
-        func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
-                     for subject in meta_lists['meta_list_%s' %i]
-                     if os.path.isfile(os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz'))]
+        if not os.path.isfile(os.path.join(os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz'))):
+            print 'Running Melodic Number %s' %i
 
-        #fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
-        #fun_list_file.write(func_list)
+            func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz')
+                         for subject in meta_lists['meta_list_%s' %i]
+                         if os.path.isfile(os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz'))]
 
-        input_file = os.path.join(meta_ica_list_dir, 'input_list_%s.txt' %(i))
-        with open(input_file, 'w') as file:
-            for func in func_list:
-                file.write(func + '\n')
-        #print input_file
+            #fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
+            #fun_list_file.write(func_list)
 
-        melodic_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_%s'%i))
+            input_file = os.path.join(meta_ica_list_dir, 'input_list_%s.txt' %(i))
+            with open(input_file, 'w') as file:
+                for func in func_list:
+                    file.write(func + '\n')
+            #print input_file
 
-        os.system(' '.join(['melodic',
-                            '--in=' + input_file,#'%s/list_%s.txt' %(meta_ica_list_dir, i),
-                            '--mask=' + brain_mask_4mm,
-                            '-v',
-                            '--outdir=' + melodic_run_dir,
-                            '--report',
-                            '--tr=' + str(TR_mean)])
-                            # '--Ostats --nobet --mmthresh=0.5
-                            # '-d 30',
-                            )
+            melodic_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_%s'%i))
 
-make_meta_ica(tourettome_subjects, tourettome_workspace)
-# make_meta_ica(leipzig, tourettome_workspace)
-# make_meta_ica(paris, tourettome_workspace)
-# make_meta_ica(hannover_a, tourettome_workspace)
-# make_meta_ica(leipzig, tourettome_workspace)
+            os.system(' '.join(['melodic',
+                                '--in=' + input_file,#'%s/list_%s.txt' %(meta_ica_list_dir, i),
+                                '--mask=' + brain_mask_4mm,
+                                '-v',
+                                '--outdir=' + melodic_run_dir,
+                                '--report',
+                                '--tr=' + str(TR_mean)])
+                                # '--Ostats --nobet --mmthresh=0.5
+                                # '-d 30',
+                                )
 
-# if __name__ == "__main__":
-#     # Parallelize MELODIC runs on 26 cores
-#     number_processes = 26
-#     tasks_iterable   = range(30)
-#     pool             = multiprocessing.Pool(number_processes)
-#     pool.map_async(run_melodic_multi_processing, tasks_iterable)
-#     pool.close()
-#     pool.join()
 
-    # ####################################################################################################################
-    # # Run META ICA
-    # ####################################################################################################################
+    # to iterate 30 icas on multiple cores
+    # if __name__ == "__main__":
+    #     # Parallelize MELODIC runs on 26 cores
+    #     number_processes = 26
+    #     tasks_iterable   = range(30)
+    #     pool             = multiprocessing.Pool(number_processes)
+    #     pool.map_async(run_melodic_multi_processing, tasks_iterable)
+    #     pool.close()
+    #     pool.join()
+
+    ####################################################################################################################
+    # Run META ICA
+    ####################################################################################################################
+
+    melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
+
+    #Merge all melodic runs
+    os.system('fslmerge -t %s/melodic_IC_all.nii.gz ' %(meta_ica_dir, ''.join(melodic_ICs)))
+
+    # run meta ica
+    ica_run_dir_all = mkdir_path(ica_dir, 'ICA_merged')
+    os.system(' '.join(['melodic',
+                        '--in=' + os.path.join(meta_ica_dir, 'melodic_IC_all.nii.gz'),
+                        '--mask=' + brain_mask_4mm,
+                        '-v',
+                        '--outdir=' + ica_run_dir_all,
+                        '--Ostats --nobet --mmthresh=0.5 --report',
+                        '--tr=' + str(TR_mean)]))
+
+def make_dual_regression(population, workspace):
+
+    ####################################################################################################################
+    # Run Dual Regression to extract spatial maps from each subject
+    ####################################################################################################################
+
+    # Make sure you create a Design Matrix first
+
+    dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
+    os.chdir(dualreg_dir)
+
+    pproc_list = ' '.join([os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in population])
+    # meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
     #
-    # melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
+    # # dual_regression <group_IC_maps> <des_norm> <design.mat> <design.con> <n_perm> <output_directory> <input1> <input2> <input3> .........
     #
-    #
-    # #Merge all melodic runs
-    # os.system('fslmerge -t %s/melodic_IC_all.nii.gz ' %(meta_ica_dir, ''.join(melodic_ICs)))
+    # os.system(' '.join(['dual_regression ',
+    #                     meta_ica,     # <group_IC_maps>
+    #                     '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+    #                     'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
+    #                     'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
+    #                     '500',        # <n_perm>
+    #                     dualreg_dir,
+    #                     pproc_list]
+    #           ))
 
-    # # run meta ica
-    # ica_run_dir_all = mkdir_path(ica_dir, 'ICA_all')
-    # os.system(' '.join(['melodic',
-    #                     '--in=' + os.path.join(meta_ica_dir, 'melodic_IC_all.nii.gz'),
-    #                     '--mask=' + brain_mask_4mm,
-    #                     '-v',
-    #                     '--outdir=' + ica_run_dir_all,
-    #                     '--Ostats --nobet --mmthresh=0.5 --report',
-    #                     '--tr=' + str(TR_mean)]))
-    #
-    #
-    # ####################################################################################################################
-    # # Run Dual Regression to extract spatial maps from each subject
-    # ####################################################################################################################
-    #
-    # #    dual_regression <group_IC_maps> <des_norm> <design.mat> <design.con> <n_perm> <output_directory> <input1> <input2> <input3> .........
-    #
-    # os.system('dual_regression %s 1 design.mat design.con 500 dual_regression '
-    #           %(os.path.join(ica_run_dir_all, 'melodic_IC_thr.nii.gz'))
-    #           )
 
+make_dual_regression(tourettome_subjects, tourettome_workspace)
+#make_meta_ica(tourettome_subjects, tourettome_workspace)
