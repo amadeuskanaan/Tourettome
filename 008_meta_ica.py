@@ -213,6 +213,8 @@ def make_dual_regression(population, workspace):
     os.chdir(dualreg_dir)
 
     pproc_list = ' '.join([os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in population])
+    print pproc_list
+
     # meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
     #
     # # dual_regression <group_IC_maps> <des_norm> <design.mat> <design.con> <n_perm> <output_directory> <input1> <input2> <input3> .........
