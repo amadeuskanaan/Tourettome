@@ -186,6 +186,8 @@ def make_meta_ica(population, workspace):
     # Run META ICA
     ####################################################################################################################
 
+    print 'Running META_ICA'
+
     melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
 
     #Merge all melodic runs
