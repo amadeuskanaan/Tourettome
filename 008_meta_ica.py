@@ -21,6 +21,7 @@ def make_meta_ica(population, workspace):
 
     for subject in population:
         print 'Preparaing %s data for meta ICA' %subject
+
         # Input/Output
         subject_dir = os.path.join(workspace, subject)
         ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
@@ -32,13 +33,13 @@ def make_meta_ica(population, workspace):
 
             # Cut data to shortest time-point length
             ### n_vols: PA=196; LZ=418; HA=271; HB=174-.... Dataset HB will not be used
-            os.system('fslroi %s REST_EDIT_UNI_BRAIN_MNI2mm_XXX 0 196' %func_2mm)
-            os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_XXX -nan REST_EDIT_UNI_BRAIN_MNI2mm_n196')
+            os.system('fslroi %s REST_EDIT_UNI_BRAIN_MNI2mm_nan 0 196' %func_2mm)
+            os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_nan -nan REST_EDIT_UNI_BRAIN_MNI2mm_n196')
 
             # Calculate FD for new length
             FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
-            FD_n174 = np.loadtxt(FD)[:174]
-            np.savetxt('FD_n174.1D', FD_n174)
+            FD_n = np.loadtxt(FD)[:196]
+            np.savetxt('FD_n196.1D', FD_n)
 
             # Smoothing FWHM 6mm
             FWHM = 6.
@@ -46,9 +47,15 @@ def make_meta_ica(population, workspace):
             os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_n196 -s %s REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm' % (sigma))
 
             # High pass Temporal Filtering (100s)
-            TR = nb.load(func_2mm).header['pixdim'][4]
+            if subject[0:2] =='LZ':
+                TR = 1.4
+            elif subject[0:2] =='PA':
+                TR = 2.4
+            elif subject[0:2] == 'HA':
+                TR = 2.4
+
             highpass_cutoff = 0.01  # hz
-            highpass_sigma = 1. / (2 * TR * highpass_cutoff)
+            highpass_sigma = 1. / (2. * TR * highpass_cutoff)
             os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm -bptf %s -1.0 REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm_hp'
                       % highpass_sigma)
 
@@ -56,8 +63,8 @@ def make_meta_ica(population, workspace):
             os.system('flirt -in REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm_hp -ref %s -applyisoxfm 4 -nosearch '
                       '-out REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp'%(mni_brain_2mm))
 
-            #Clean folder
-            # os.system('rm -rf 2mm* REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm_hp')
+            # Clean folder
+            os.system('rm -rf 2mm*')
 
 
     # ####################################################################################################################
@@ -68,7 +75,7 @@ def make_meta_ica(population, workspace):
     #     print 'Detecting Motion Outliers'
     #     FD_median_dict = {}
     #     for subject in population:
-    #         FD_median_dict[subject] = np.median(np.loadtxt(os.path.join(workspace, subject, 'ICA/FD_n174.1D')))
+    #         FD_median_dict[subject] = np.median(np.loadtxt(os.path.join(workspace, subject, 'ICA/FD_n196.1D')))
     #     print FD_median_dict
     #
     #     # remove FD_mean above 1mm
