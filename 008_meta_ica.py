@@ -19,54 +19,54 @@ def make_meta_ica(population, workspace):
     # Prepare data for meta_ICA
     ####################################################################################################################
 
-    for subject in population:
-        print 'Preparaing %s data for meta ICA' %subject
-
-        # Input/Output
-        subject_dir = os.path.join(workspace, subject)
-        ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
-        func_2mm    = os.path.join(subject_dir,'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
-        # fun_2mm -> slice time correction, drop 4 TRs, RPI, BET, Intensity Normalization
-
-        if not os.path.isfile(os.path.join(ica_dir, 'REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz' )):
-            os.chdir(ica_dir)
-
-            # Cut data to shortest time-point length
-            ### n_vols: PA=196; LZ=418; HA=271; HB=174-.... Dataset HB will not be used
-            os.system('fslroi %s REST_EDIT_UNI_BRAIN_MNI2mm_nan 0 196' %func_2mm)
-            os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_nan -nan REST_EDIT_UNI_BRAIN_MNI2mm_n196')
-
-            # Calculate FD for new length
-            FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
-            FD_n = np.loadtxt(FD)[:196]
-            np.savetxt('FD_n196.1D', FD_n)
-
-            # Smoothing FWHM 6mm
-            FWHM = 6.
-            sigma = FWHM / 2.35482004503
-            os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_n196 -s %s REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm' % (sigma))
-
-            # High pass Temporal Filtering (100s)
-            if subject[0:2] =='LZ':
-                TR = 1.4
-            elif subject[0:2] =='PA':
-                TR = 2.4
-            elif subject[0:2] == 'HA':
-                TR = 2.4
-
-            highpass_cutoff = 0.01  # hz
-            highpass_sigma = 1. / (2. * TR * highpass_cutoff)
-            os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm -bptf %s -1.0 REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm_hp'
-                      % highpass_sigma)
-
-            # Resample data to 4mm
-            os.system('flirt -in REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm_hp -ref %s -applyisoxfm 4 -nosearch '
-                      '-out REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp'%(mni_brain_2mm))
-
-            # Clean folder
-            os.system('rm -rf 2mm*')
-
-
+    # for subject in population:
+    #     print 'Preparaing %s data for meta ICA' %subject
+    #
+    #     # Input/Output
+    #     subject_dir = os.path.join(workspace, subject)
+    #     ica_dir     = mkdir_path(os.path.join(subject_dir, 'ICA'))
+    #     func_2mm    = os.path.join(subject_dir,'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
+    #     # fun_2mm -> slice time correction, drop 4 TRs, RPI, BET, Intensity Normalization
+    #
+    #     if not os.path.isfile(os.path.join(ica_dir, 'REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz' )):
+    #         os.chdir(ica_dir)
+    #
+    #         # Cut data to shortest time-point length
+    #         ### n_vols: PA=196; LZ=418; HA=271; HB=174-.... Dataset HB will not be used
+    #         os.system('fslroi %s REST_EDIT_UNI_BRAIN_MNI2mm_n196_nan 0 196' %func_2mm)
+    #         os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_n196_nan -nan REST_EDIT_UNI_BRAIN_MNI2mm_n196')
+    #
+    #         # Calculate FD for new length
+    #         FD = calculate_FD_Power(os.path.join(subject_dir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par'))
+    #         FD_n = np.loadtxt(FD)[:196]
+    #         np.savetxt('FD_n196.1D', FD_n)
+    #
+    #         # Smoothing FWHM 6mm
+    #         FWHM = 6.
+    #         sigma = FWHM / 2.35482004503
+    #         os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_n196 -s %s REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm' % (sigma))
+    #
+    #         # High pass Temporal Filtering (100s)
+    #         if subject[0:2] =='LZ':
+    #             TR = 1.4
+    #         elif subject[0:2] =='PA':
+    #             TR = 2.4
+    #         elif subject[0:2] == 'HA':
+    #             TR = 2.4
+    #
+    #         highpass_cutoff = 0.01  # hz
+    #         highpass_sigma = 1. / (2. * TR * highpass_cutoff)
+    #         os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm -bptf %s -1.0 REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm_hp'
+    #                   % highpass_sigma)
+    #
+    #         # Resample data to 4mm
+    #         os.system('flirt -in REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm_hp -ref %s -applyisoxfm 4 -nosearch '
+    #                   '-out REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp'%(mni_brain_2mm))
+    #
+    #         # Clean folder
+    #         os.system('rm -rf *2mm*')
+    #
+    #
     # ####################################################################################################################
     # # Identify subjects with FD above 2SD from the mean
     # ####################################################################################################################
@@ -229,39 +229,49 @@ def make_meta_ica(population, workspace):
     #                         '--tr=1', # + str(TR_mean)
     #                         '-d 50'
     #                         ]))
+
+    # ###################################################################################################################
+    # # Run Dual Regression to extract spatial maps from each subject
+    # ###################################################################################################################
+
+    print 'Running dual Regression'
+
+    dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
+    os.chdir(dualreg_dir)
+
+    # Create a Design Matrix  ... same as Glm_gui
+    mat = open('design.mat', 'w')
+    mat.write('/NumWaves\t1\n')
+    mat.write('/NumPoints\t221\n')
+    mat.write('/PPheights\t\t1.000000e+00\n')
+    mat.write('/Matrix\n')
+    for i in xrange(221):
+        mat.write('1.000000e+00\n')
+    mat.close()
+
+    con = open('design.con','w')
+    con.write('/ContrastName1\tgroup mean\n')
+    con.write('/NumWaves\t1\n')
+    con.write('/NumContrasts\t1\n')
+    con.write('/PPheights\t\t1.000000e+00\n')
+    con.write('/RequiredEffect\t\t3.121\n')
+    con.write('\n')
+    con.write('/Matrix\n')
+    con.write('1.000000e+00')
+    con.close()
+
+    pproc_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in population]
+    print pproc_list
+
+    # #print len(pproc_list)
+    # dict_dualreg = {}
+    # for sub_id, dualreg_id enumerate(pproc_list[X:X]):
+    #     d[sub_id] = dualreg_id
     #
-    # # ###################################################################################################################
-    # # # Run Dual Regression to extract spatial maps from each subject
-    # # ###################################################################################################################
-    #
-    # print 'Running dual Regression'
-    #
-    # dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
-    # os.chdir(dualreg_dir)
-    #
-    # # Create a Design Matrix  ... same as Glm_gui
-    # mat = open('design.mat', 'w')
-    # mat.write('/NumWaves\t1\n')
-    # mat.write('/NumPoints\t221\n')
-    # mat.write('/PPheights\t\t1.000000e+00\n')
-    # mat.write('/Matrix\n')
-    # for i in xrange(221):
-    #     mat.write('1.000000e+00\n')
-    # mat.close()
-    #
-    # con = open('design.con','w')
-    # con.write('/ContrastName1\tgroup mean\n')
-    # con.write('/NumWaves\t1\n')
-    # con.write('/NumContrasts\t1\n')
-    # con.write('/PPheights\t\t1.000000e+00\n')
-    # con.write('/RequiredEffect\t\t3.121\n')
-    # con.write('\n')
-    # con.write('/Matrix\n')
-    # con.write('1.000000e+00')
-    # con.close()
-    #
-    # pproc_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in leipzig + hannover_a + paris]
-    # print len(pproc_list)
+    # with open('%s/dualreg_subject_list.json' %dualreg_dir , 'w') as file:
+    # file.write(json.dumps(dict_dualreg))
+
+
     #
     # meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
     #
@@ -276,7 +286,7 @@ def make_meta_ica(population, workspace):
     #                    ))
 
 # make_meta_ica(tourettome_subjects, tourettome_workspace)
-make_meta_ica(['LZ002'  ], tourettome_workspace)
+make_meta_ica(leipzig+paris+hannover_a, tourettome_workspace)
 
 #
 # def make_slices_dir(population, workspace):
