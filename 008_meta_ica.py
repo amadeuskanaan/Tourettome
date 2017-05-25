@@ -32,7 +32,7 @@ def make_meta_ica(population, workspace):
 
             # Cut data to shortest time-point length
             ### n_vols: PA=196; LZ=418; HA=271; HB=174-.... Dataset HB will not be used
-            os.system('fslroi %s XXX REST_EDIT_UNI_BRAIN_MNI2mm_XXX 0 196' %func_2mm)
+            os.system('fslroi %s REST_EDIT_UNI_BRAIN_MNI2mm_XXX 0 196' %func_2mm)
             os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_XXX -nan REST_EDIT_UNI_BRAIN_MNI2mm_n196')
 
             # Calculate FD for new length
