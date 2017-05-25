@@ -32,7 +32,7 @@ def make_meta_ica(population, workspace):
 
             # Cut data to shortest time-point length
             ### n_vols: PA=196; LZ=418; HA=271; HB=174-.... Dataset HB will not be used
-            os.system('fslroi %s XXX REST_EDIT_UNI_BRAIN_MNI2mm_XXX 196' %func_2mm)
+            os.system('fslroi %s XXX REST_EDIT_UNI_BRAIN_MNI2mm_XXX 0 196' %func_2mm)
             os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_XXX -nan REST_EDIT_UNI_BRAIN_MNI2mm_n196')
 
             # Calculate FD for new length
@@ -43,7 +43,7 @@ def make_meta_ica(population, workspace):
             # Smoothing FWHM 6mm
             FWHM = 6.
             sigma = FWHM / 2.35482004503
-            os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_n196 -s %s REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm.nii.gz' % (sigma))
+            os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm_n196 -s %s REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm' % (sigma))
 
             # High pass Temporal Filtering (100s)
             TR = nb.load(func_2mm).header['pixdim'][4]
@@ -65,7 +65,7 @@ def make_meta_ica(population, workspace):
     # ####################################################################################################################
     #
     # if not os.path.isfile('%s/outliers.json' %meta_ica_dir):
-    #
+    #     print 'Detecting Motion Outliers'
     #     FD_median_dict = {}
     #     for subject in population:
     #         FD_median_dict[subject] = np.median(np.loadtxt(os.path.join(workspace, subject, 'ICA/FD_n174.1D')))
@@ -269,7 +269,7 @@ def make_meta_ica(population, workspace):
     #                    ))
 
 # make_meta_ica(tourettome_subjects, tourettome_workspace)
-make_meta_ica(['LZ002', 'PA004', 'HA040'], tourettome_workspace)
+make_meta_ica(['LZ002'  ], tourettome_workspace)
 
 #
 # def make_slices_dir(population, workspace):
