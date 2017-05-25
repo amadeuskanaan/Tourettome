@@ -260,16 +260,18 @@ def make_meta_ica(population, workspace):
     con.write('1.000000e+00')
     con.close()
 
-    pproc_list = [os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz') for subject in population]
-    print pproc_list
+    pproc_list = []
+    pproc_dict = {}
+    for i, subject in enumerate(population):
+        pproc_list.append(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz'))
+        pproc_dict[i] = subject
 
-    # #print len(pproc_list)
-    # dict_dualreg = {}
-    # for sub_id, dualreg_id enumerate(pproc_list[X:X]):
-    #     d[sub_id] = dualreg_id
-    #
-    # with open('%s/dualreg_subject_list.json' %dualreg_dir , 'w') as file:
-    # file.write(json.dumps(dict_dualreg))
+    print pproc_list
+    print pproc_dict
+
+
+    with open('%s/dualreg_subject_list.json' %dualreg_dir , 'w') as file:
+        file.write(json.dumps(pproc_dict))
 
 
     #
