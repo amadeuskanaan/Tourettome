@@ -313,5 +313,5 @@ def make_meta_ica(population, workspace):
             os.system('fslmaths dr_stage1_subject%05d.nii.gz -bptf %s %s dr_stage1_subject%05d.nii.gz'
                   %(i, highpass_sigma, lowpass_sigma, i))
 
-make_meta_ica(leipzig+paris+hannover_a, tourettome_workspace)
+make_meta_ica(hannover_a, tourettome_workspace)
 
