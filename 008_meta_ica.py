@@ -110,6 +110,7 @@ def make_meta_ica(population, workspace):
     if not os.path.isfile('%s/meta_lists.json'% meta_ica_list_dir):
         phenotypic = pd.read_csv(os.path.join(tourettome_phenotypic, 'phenotypic_tourettome.csv'),
                                  index_col = 0).drop(outliers)
+        phenotypic.drop(['LZ001','LZ052','LZ055','HA053'])
 
         patients = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'patients']
         controls = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'controls']
