@@ -93,7 +93,7 @@ def make_meta_ica(population, workspace):
         # Define subjects above upper bound threshold
         population_qc = [i for i in population if i not in outlier_above_1mm]
         FD_outliers    = [subject for subject in population_qc if FD_median_dict[subject] > FD_upper_bound]
-        print FD_outliers
+        print 'FD OUTLIERS', FD_outliers
 
         #save outlier subjects in txt file
         outliers = FD_outliers + outlier_above_1mm
@@ -125,9 +125,9 @@ def make_meta_ica(population, workspace):
                 np.random.choice([subject for subject in controls if subject[0:2] == 'HA'], 10, replace=False)) + list(
                 np.random.choice([subject for subject in patients if subject[0:2] == 'HA'], 10, replace=False))
 
-            HB = list(
-                np.random.choice([subject for subject in controls if subject[0:2] == 'HB'], 10, replace=False)) + list(
-                np.random.choice([subject for subject in patients if subject[0:2] == 'HB'], 10, replace=False))
+            # HB = list(
+            #     np.random.choice([subject for subject in controls if subject[0:2] == 'HB'], 10, replace=False)) + list(
+            #     np.random.choice([subject for subject in patients if subject[0:2] == 'HB'], 10, replace=False))
 
             LZ = list(
                 np.random.choice([subject for subject in controls if subject[0:2] == 'LZ'], 10, replace=False)) + list(
@@ -135,7 +135,7 @@ def make_meta_ica(population, workspace):
 
             meta_lists['meta_list_%s' % i] = PA + HA + LZ #+ HB
 
-        print meta_lists
+        print 'META_LISTS', meta_lists
 
         with open('%s/meta_lists.json'% meta_ica_list_dir, 'w') as file:
             file.write(json.dumps(meta_lists))
