@@ -168,7 +168,7 @@ def make_meta_ica(population, workspace):
         if not os.path.isfile(os.path.join(os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz'))):
             print 'Running Melodic Number %s' %i
 
-            func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI2mm_n196_fwhm.nii.gz')
+            func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')
                          for subject in meta_lists['meta_list_%s' %i]]
 
             #fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
