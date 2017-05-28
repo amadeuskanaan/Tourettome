@@ -258,7 +258,7 @@ def make_meta_ica(population, workspace):
         # Create a Design Matrix  ... same as Glm_gui
         mat = open('design.mat', 'w')
         mat.write('/NumWaves\t1\n')
-        mat.write('/NumPoints\t221\n')
+        mat.write('/NumPoints\t%s\n'%len(population))
         mat.write('/PPheights\t\t1.000000e+00\n')
         mat.write('/Matrix\n')
         for i in xrange(len(population)):
