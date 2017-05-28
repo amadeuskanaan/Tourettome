@@ -244,7 +244,7 @@ def make_meta_ica(population, workspace):
         pproc_list = []
         pproc_dict = {}
         for i, subject in enumerate(population):
-            pproc_list.append(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz'))
+            pproc_list.append(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz'))
             pproc_dict[i] = subject
 
         print pproc_list
