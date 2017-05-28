@@ -247,8 +247,10 @@ def make_meta_ica(population, workspace):
             pproc_list.append(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz'))
             pproc_dict[i] = subject
 
-        print pproc_list
+        #print pproc_list
         print pproc_dict
+        print 'Pop siez =', len(population), len(pproc_dict), len(pproc_list)
+
 
         dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
         os.chdir(dualreg_dir)
@@ -259,7 +261,7 @@ def make_meta_ica(population, workspace):
         mat.write('/NumPoints\t221\n')
         mat.write('/PPheights\t\t1.000000e+00\n')
         mat.write('/Matrix\n')
-        for i in xrange(len(pproc_list)):
+        for i in xrange(len(population)):
             mat.write('1.000000e+00\n')
         mat.close()
 
