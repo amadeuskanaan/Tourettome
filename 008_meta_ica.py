@@ -91,7 +91,8 @@ def make_meta_ica(population, workspace):
         ### np.percentile(FD_median_dict.values(), 95)
 
         # Define subjects above upper bound threshold
-        population_qc = [i for i in population if i not in outlier_above_1mm]
+        population_qc = [i for i in population
+                         if i not in outlier_above_1mm]
         FD_outliers    = [subject for subject in population_qc if FD_median_dict[subject] > FD_upper_bound]
         print 'FD OUTLIERS', FD_outliers
 
@@ -240,7 +241,6 @@ def make_meta_ica(population, workspace):
 
         print 'Running dual Regression'
 
-
         pproc_list = []
         pproc_dict = {}
         for i, subject in enumerate(population):
@@ -249,8 +249,7 @@ def make_meta_ica(population, workspace):
 
         #print pproc_list
         print pproc_dict
-        print 'Pop siez =', len(population), len(pproc_dict), len(pproc_list)
-
+        print 'Pop size =', len(population), len(pproc_dict), len(pproc_list)
 
         dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
         os.chdir(dualreg_dir)
@@ -282,19 +281,19 @@ def make_meta_ica(population, workspace):
 
         meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
 
-        os.system(' '.join(['dual_regression ',
-                            meta_ica,     # <group_IC_maps>
-                            '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-                            'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
-                            'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
-                            '500',        # <n_perm>
-                            dualreg_dir,
-                            ' '.join(pproc_list)]
-                           ))
+        # os.system(' '.join(['dual_regression ',
+        #                     meta_ica,     # <group_IC_maps>
+        #                     '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+        #                     'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
+        #                     'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
+        #                     '500',        # <n_perm>
+        #                     dualreg_dir,
+        #                     ' '.join(pproc_list)]
+        #                    ))
 
         # Bandpass timeseries
         for i in pproc_dict.keys():
-            affine = os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz').get_affine()
+            affine = os.path.join(workspace, i, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz').get_affine()
             dr_sub = np.loadtxt(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.txt'%i))
             dr_sub_reshaped = dr_sub.reshape(1,1,dr_sub[1], dr_sub[0])
             img = nb.Nifti1Image(dr_sub_reshaped, affine)
