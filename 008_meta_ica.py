@@ -292,7 +292,7 @@ def make_meta_ica(population, workspace):
         #                    ))
 
         # Bandpass timeseries
-        for id in pproc_dict.values():
+        for id in pproc_dict.keys():
             print id
             affine = nb.load(os.path.join(workspace, pproc_dict[id], 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')).get_affine()
             dr_sub = np.loadtxt(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.txt'%i))
