@@ -292,13 +292,13 @@ def make_meta_ica(population, workspace):
         #                    ))
 
         # Bandpass timeseries
-        for subject in pproc_dict.values():
-            print subject
-            affine = nb.load(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')).get_affine()
+        for id in pproc_dict.values():
+            print id
+            affine = nb.load(os.path.join(workspace, pproc_dict[id], 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')).get_affine()
             dr_sub = np.loadtxt(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.txt'%i))
             dr_sub_reshaped = dr_sub.reshape(1,1,dr_sub.shape[1], dr_sub.shape[0])
             img = nb.Nifti1Image(dr_sub_reshaped, affine)
-            img.to_filename(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.nii.gz'%subject))
+            img.to_filename(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.nii.gz'%id))
 
             if subject[0:2] == 'LZ':
                 TR = 1.4
@@ -315,7 +315,7 @@ def make_meta_ica(population, workspace):
             os.chdir(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION'))
 
             os.system('fslmaths dr_stage1_subject%05d.nii.gz -bptf %s %s dr_stage1_subject%05d.nii.gz'
-                  %(i, highpass_sigma, lowpass_sigma, i))
+                  %(id, highpass_sigma, lowpass_sigma, id))
 
 make_meta_ica(leipzig+paris+hannover_a, tourettome_workspace)
 
