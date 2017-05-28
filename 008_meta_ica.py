@@ -240,6 +240,16 @@ def make_meta_ica(population, workspace):
 
         print 'Running dual Regression'
 
+
+        pproc_list = []
+        pproc_dict = {}
+        for i, subject in enumerate(population):
+            pproc_list.append(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz'))
+            pproc_dict[i] = subject
+
+        print pproc_list
+        print pproc_dict
+
         dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
         os.chdir(dualreg_dir)
 
@@ -249,7 +259,7 @@ def make_meta_ica(population, workspace):
         mat.write('/NumPoints\t221\n')
         mat.write('/PPheights\t\t1.000000e+00\n')
         mat.write('/Matrix\n')
-        for i in xrange(221):
+        for i in xrange(len(pproc_list)):
             mat.write('1.000000e+00\n')
         mat.close()
 
@@ -263,15 +273,6 @@ def make_meta_ica(population, workspace):
         con.write('/Matrix\n')
         con.write('1.000000e+00')
         con.close()
-
-        pproc_list = []
-        pproc_dict = {}
-        for i, subject in enumerate(population):
-            pproc_list.append(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n174.nii.gz'))
-            pproc_dict[i] = subject
-
-        print pproc_list
-        print pproc_dict
 
 
         with open('%s/dualreg_subject_list.json' %dualreg_dir , 'w') as file:
