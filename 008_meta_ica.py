@@ -298,7 +298,7 @@ def make_meta_ica(population, workspace):
             dr_sub = np.loadtxt(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.txt'%i))
             dr_sub_reshaped = dr_sub.reshape(1,1,dr_sub.shape[1], dr_sub.shape[0])
             img = nb.Nifti1Image(dr_sub_reshaped, affine)
-            img.to_filename(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.nii.gz'%i))
+            img.to_filename(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.nii.gz'%subject))
 
             if subject[0:2] == 'LZ':
                 TR = 1.4
