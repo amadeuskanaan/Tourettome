@@ -212,7 +212,7 @@ def make_meta_ica(population, workspace):
 
     print 'Running META_ICA'
 
-    if not os.path.isfile(os.path.join(meta_ica_dir, 'ICA_merged_50', 'melodic_IC.nii.gz')):
+    if not os.path.isfile(os.path.join(meta_ica_dir, 'ICA_merged', 'melodic_IC.nii.gz')):
 
         #melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
         melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
