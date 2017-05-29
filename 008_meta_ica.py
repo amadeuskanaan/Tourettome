@@ -230,92 +230,92 @@ def make_meta_ica(population, workspace):
                             '--outdir=' + ica_run_dir_all,
                             '--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=1', # + str(TR_mean)
-                            #'-d 50'
+                            '-d 30'
                             ]))
 
-    # ###################################################################################################################
-    # # Run Dual Regression to extract spatial maps from each subject
-    # ###################################################################################################################
-
-    if not os.path.isfile(os.path.join(meta_ica_dir,'DUAL_REGRESSION/dr_stage1_subject00000.nii.gz')):
-
-        print 'Running dual Regression'
-
-        pproc_list = []
-        pproc_dict = {}
-        for i, subject in enumerate(population):
-            pproc_list.append(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz'))
-            pproc_dict[i] = subject
-
-        #print pproc_list
-        print pproc_dict
-        print 'Pop size =', len(population), len(pproc_dict), len(pproc_list)
-
-        dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
-        os.chdir(dualreg_dir)
-
-        # Create a Design Matrix  ... same as Glm_gui
-        mat = open('design.mat', 'w')
-        mat.write('/NumWaves\t1\n')
-        mat.write('/NumPoints\t%s\n'%len(population))
-        mat.write('/PPheights\t\t1.000000e+00\n')
-        mat.write('/Matrix\n')
-        for i in xrange(len(population)):
-            mat.write('1.000000e+00\n')
-        mat.close()
-
-        con = open('design.con','w')
-        con.write('/ContrastName1\tgroup mean\n')
-        con.write('/NumWaves\t1\n')
-        con.write('/NumContrasts\t1\n')
-        con.write('/PPheights\t\t1.000000e+00\n')
-        con.write('/RequiredEffect\t\t3.121\n')
-        con.write('\n')
-        con.write('/Matrix\n')
-        con.write('1.000000e+00')
-        con.close()
-
-
-        with open('%s/dualreg_subject_list.json' %dualreg_dir , 'w') as file:
-            file.write(json.dumps(pproc_dict))
-
-        meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
-
-        os.system(' '.join(['dual_regression ',
-                            meta_ica,     # <group_IC_maps>
-                            '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-                            'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
-                            'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
-                            '500',        # <n_perm>
-                            dualreg_dir,
-                            ' '.join(pproc_list)]
-                           ))
-
-        # Bandpass timeseries
-        for id in pproc_dict.keys():
-            print id, ' ',pproc_dict[id]
-            affine = nb.load(os.path.join(workspace, pproc_dict[id], 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')).get_affine()
-            dr_sub = np.loadtxt(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.txt'%i))
-            dr_sub_reshaped = dr_sub.reshape(1,1,dr_sub.shape[1], dr_sub.shape[0])
-            img = nb.Nifti1Image(dr_sub_reshaped, affine)
-            img.to_filename(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.nii.gz'%id))
-
-            if subject[0:2] == 'LZ':
-                TR = 1.4
-            elif subject[0:2] == 'PA':
-                TR = 2.4
-            elif subject[0:2] == 'HA':
-                TR = 2.4
-
-            highpass_cutoff = 0.01  # hz
-            lowpass_cutoff = 0.1  # hz
-            highpass_sigma = 1. / (2. * TR * highpass_cutoff)
-            lowpass_sigma = 1. / (2. * TR * lowpass_cutoff)
-
-            os.chdir(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION'))
-
-            os.system('fslmaths dr_stage1_subject%05d.nii.gz -bptf %s %s dr_stage1_subject%05d_bp.nii.gz'
-                  %(id, highpass_sigma, lowpass_sigma, id))
+    # # ###################################################################################################################
+    # # # Run Dual Regression to extract spatial maps from each subject
+    # # ###################################################################################################################
+    #
+    # if not os.path.isfile(os.path.join(meta_ica_dir,'DUAL_REGRESSION/dr_stage1_subject00000.nii.gz')):
+    #
+    #     print 'Running dual Regression'
+    #
+    #     pproc_list = []
+    #     pproc_dict = {}
+    #     for i, subject in enumerate(population):
+    #         pproc_list.append(os.path.join(workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz'))
+    #         pproc_dict[i] = subject
+    #
+    #     #print pproc_list
+    #     print pproc_dict
+    #     print 'Pop size =', len(population), len(pproc_dict), len(pproc_list)
+    #
+    #     dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
+    #     os.chdir(dualreg_dir)
+    #
+    #     # Create a Design Matrix  ... same as Glm_gui
+    #     mat = open('design.mat', 'w')
+    #     mat.write('/NumWaves\t1\n')
+    #     mat.write('/NumPoints\t%s\n'%len(population))
+    #     mat.write('/PPheights\t\t1.000000e+00\n')
+    #     mat.write('/Matrix\n')
+    #     for i in xrange(len(population)):
+    #         mat.write('1.000000e+00\n')
+    #     mat.close()
+    #
+    #     con = open('design.con','w')
+    #     con.write('/ContrastName1\tgroup mean\n')
+    #     con.write('/NumWaves\t1\n')
+    #     con.write('/NumContrasts\t1\n')
+    #     con.write('/PPheights\t\t1.000000e+00\n')
+    #     con.write('/RequiredEffect\t\t3.121\n')
+    #     con.write('\n')
+    #     con.write('/Matrix\n')
+    #     con.write('1.000000e+00')
+    #     con.close()
+    #
+    #
+    #     with open('%s/dualreg_subject_list.json' %dualreg_dir , 'w') as file:
+    #         file.write(json.dumps(pproc_dict))
+    #
+    #     meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
+    #
+    #     os.system(' '.join(['dual_regression ',
+    #                         meta_ica,     # <group_IC_maps>
+    #                         '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+    #                         'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
+    #                         'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
+    #                         '500',        # <n_perm>
+    #                         dualreg_dir,
+    #                         ' '.join(pproc_list)]
+    #                        ))
+    #
+    #     # Bandpass timeseries
+    #     for id in pproc_dict.keys():
+    #         print id, ' ',pproc_dict[id]
+    #         affine = nb.load(os.path.join(workspace, pproc_dict[id], 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')).get_affine()
+    #         dr_sub = np.loadtxt(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.txt'%i))
+    #         dr_sub_reshaped = dr_sub.reshape(1,1,dr_sub.shape[1], dr_sub.shape[0])
+    #         img = nb.Nifti1Image(dr_sub_reshaped, affine)
+    #         img.to_filename(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.nii.gz'%id))
+    #
+    #         if subject[0:2] == 'LZ':
+    #             TR = 1.4
+    #         elif subject[0:2] == 'PA':
+    #             TR = 2.4
+    #         elif subject[0:2] == 'HA':
+    #             TR = 2.4
+    #
+    #         highpass_cutoff = 0.01  # hz
+    #         lowpass_cutoff = 0.1  # hz
+    #         highpass_sigma = 1. / (2. * TR * highpass_cutoff)
+    #         lowpass_sigma = 1. / (2. * TR * lowpass_cutoff)
+    #
+    #         os.chdir(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION'))
+    #
+    #         os.system('fslmaths dr_stage1_subject%05d.nii.gz -bptf %s %s dr_stage1_subject%05d_bp.nii.gz'
+    #               %(id, highpass_sigma, lowpass_sigma, id))
 
 make_meta_ica(leipzig+paris+hannover_a, tourettome_workspace)
 
