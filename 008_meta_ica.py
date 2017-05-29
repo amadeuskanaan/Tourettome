@@ -230,7 +230,7 @@ def make_meta_ica(population, workspace):
                             '--outdir=' + ica_run_dir_all,
                             '--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=1', # + str(TR_mean)
-                            '-d 50'
+                            #'-d 50'
                             ]))
 
     # ###################################################################################################################
