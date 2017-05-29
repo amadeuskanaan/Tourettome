@@ -281,15 +281,15 @@ def make_meta_ica(population, workspace):
 
         meta_ica  = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
 
-        # os.system(' '.join(['dual_regression ',
-        #                     meta_ica,     # <group_IC_maps>
-        #                     '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-        #                     'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
-        #                     'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
-        #                     '500',        # <n_perm>
-        #                     dualreg_dir,
-        #                     ' '.join(pproc_list)]
-        #                    ))
+        os.system(' '.join(['dual_regression ',
+                            meta_ica,     # <group_IC_maps>
+                            '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+                            'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
+                            'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
+                            '500',        # <n_perm>
+                            dualreg_dir,
+                            ' '.join(pproc_list)]
+                           ))
 
         # Bandpass timeseries
         for id in pproc_dict.keys():
