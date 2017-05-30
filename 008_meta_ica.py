@@ -292,31 +292,31 @@ def make_meta_ica(population, workspace):
                                 ' '.join(pproc_list)]
                                 ))
 
-        # # Bandpass timeseries
-        # for id in pproc_dict.keys():
-        #     print id, ' ',pproc_dict[id]
-        #     affine = nb.load(os.path.join(workspace, pproc_dict[id], 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')).get_affine()
-        #     dr_sub = np.loadtxt(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.txt'%i))
-        #     dr_sub_reshaped = dr_sub.reshape(1,1,dr_sub.shape[1], dr_sub.shape[0])
-        #     img = nb.Nifti1Image(dr_sub_reshaped, affine)
-        #     img.to_filename(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.nii.gz'%id))
-        #
-        #     if subject[0:2] == 'LZ':
-        #         TR = 1.4
-        #     elif subject[0:2] == 'PA':
-        #         TR = 2.4
-        #     elif subject[0:2] == 'HA':
-        #         TR = 2.4
-        #
-        #     highpass_cutoff = 0.01  # hz
-        #     lowpass_cutoff = 0.1  # hz
-        #     highpass_sigma = 1. / (2. * TR * highpass_cutoff)
-        #     lowpass_sigma = 1. / (2. * TR * lowpass_cutoff)
-        #
-        #     os.chdir(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION'))
-        #
-        #     os.system('fslmaths dr_stage1_subject%05d.nii.gz -bptf %s %s dr_stage1_subject%05d_bp.nii.gz'
-        #           %(id, highpass_sigma, lowpass_sigma, id))
+        # Bandpass timeseries
+        for id in pproc_dict.keys():
+            print id, ' ',pproc_dict[id]
+            affine = nb.load(os.path.join(workspace, pproc_dict[id], 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')).get_affine()
+            dr_sub = np.loadtxt(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.txt'%i))
+            dr_sub_reshaped = dr_sub.reshape(1,1,dr_sub.shape[1], dr_sub.shape[0])
+            img = nb.Nifti1Image(dr_sub_reshaped, affine)
+            img.to_filename(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION', 'dr_stage1_subject%05d.nii.gz'%id))
+
+            if subject[0:2] == 'LZ':
+                TR = 1.4
+            elif subject[0:2] == 'PA':
+                TR = 2.4
+            elif subject[0:2] == 'HA':
+                TR = 2.4
+
+            highpass_cutoff = 0.01  # hz
+            lowpass_cutoff = 0.1  # hz
+            highpass_sigma = 1. / (2. * TR * highpass_cutoff)
+            lowpass_sigma = 1. / (2. * TR * lowpass_cutoff)
+
+            os.chdir(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION'))
+
+            os.system('fslmaths dr_stage1_subject%05d.nii.gz -bptf %s %s dr_stage1_subject%05d_bp.nii.gz'
+                  %(id, highpass_sigma, lowpass_sigma, id))
 
 make_meta_ica(leipzig+paris+hannover_a, tourettome_workspace)
 
