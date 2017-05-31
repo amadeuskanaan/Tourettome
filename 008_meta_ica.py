@@ -237,7 +237,7 @@ def make_meta_ica(population, workspace):
     # # Run Dual Regression to extract spatial maps from each subject
     # ###################################################################################################################
 
-    if not os.path.isfile(os.path.join(meta_ica_dir,'DUAL_REGRESSION/dr_stage1_subject00000.nii.gz')):
+    if not os.path.isfile(os.path.join(meta_ica_dir,'DUAL_REGRESSION/dr_stage1_subject00000xxxxx.nii.gz')):
 
         print 'Running dual Regression'
 
