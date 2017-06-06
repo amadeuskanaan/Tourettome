@@ -203,18 +203,18 @@ def meta_dict_learning(workspace):
                 components_img = masker.inverse_transform(dict_learning.components_)
                 components_img.to_filename('%s/dl_components.nii.gz'%dl_dir)
 
-            # run meta dictionary learning
-            dict_learning = DictLearning(n_components=n_components, mask=mask,
-                                         memory="nilearn_cache", memory_level=20, n_jobs=20,
-                                         smoothing_fwhm=0, verbose=1, random_state=0, n_epochs=1)
+        # run meta dictionary learning
+        dict_learning = DictLearning(n_components=n_components, mask=mask,
+                                     memory="nilearn_cache", memory_level=20, n_jobs=20,
+                                     smoothing_fwhm=0, verbose=1, random_state=0, n_epochs=1)
 
-            dict_learning_all = [os.path.join(dict_learning_dir,'ndim_%s'%n_components,
-                                              'DL_%s'%i, 'dl_components.nii.gz') for i in xrange(30)]
-            dict_learning.fit(dict_learning_all)
-            masker = dict_learning.masker_
-            components_img = masker.inverse_transform(dict_learning.components_)
-            components_img.to_filename('%s/ndim_%s/dl_components_all.nii.gz'
-                                       %(dict_learning_dir, n_components))
+        dict_learning_all = [os.path.join(dict_learning_dir,'ndim_%s'%n_components,
+                                          'DL_%s'%i, 'dl_components.nii.gz') for i in xrange(30)]
+        dict_learning.fit(dict_learning_all)
+        masker = dict_learning.masker_
+        components_img = masker.inverse_transform(dict_learning.components_)
+        components_img.to_filename('%s/ndim_%s/dl_components_all.nii.gz'
+                                   %(dict_learning_dir, n_components))
 
     run_meta_dict_learning(20)
     run_meta_dict_learning(30)
