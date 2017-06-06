@@ -10,9 +10,10 @@ from quality.motion_statistics import calculate_FD_Power
 import nibabel as nb
 
 
-def meta_ica_pproc(population, workspace):
-    meta_ica_dir = mkdir_path(os.path.join(workspace, 'META_ICA'))
-    meta_ica_list_dir = mkdir_path(os.path.join(meta_ica_dir, 'meta_subject_lists'))
+def meta_decompsition_pproc(population, workspace):
+
+    workspace_dir = mkdir_path(os.path.join(workspace, 'META_DECOMPOSITION'))
+    lists_dir     = mkdir_path(os.path.join(workspace_dir, 'subject_lists'))
 
     ####################################################################################################################
     # Prepare data for meta_ICA
@@ -67,22 +68,34 @@ def meta_ica_pproc(population, workspace):
             os.system('rm -rf *2mm*')
 
     ####################################################################################################################
-    # Identify subjects with FD above 2SD from the mean
+    # Detect outliers
     ####################################################################################################################
 
-    if not os.path.isfile('%s/outliers.json' % meta_ica_dir):
+    if not os.path.isfile('%s/outliers.json' % workspace_dir):
+
         print 'Detecting Motion Outliers'
+
         FD_median_dict = {}
+        FD_max_dict = {}
         for subject in population:
             FD_median_dict[subject] = np.median(np.loadtxt(os.path.join(workspace, subject, 'ICA/FD_n196.1D')))
-        print FD_median_dict
+            FD_max_dict[subject] = np.max(np.loadtxt(os.path.join(workspace, subject, 'ICA/FD_n196.1D')))
 
-        # remove FD_mean above 1mm
-        outlier_above_1mm = [subject for subject in population if FD_median_dict[subject] > 1]
+        print 'FD_median', FD_median_dict
+        print 'FD_max', FD_max_dict
 
-        for subject in outlier_above_1mm:
+        # Remove subjects with FD_mean above 1mm and FD_max above 3mm
+        fd_mean_outliers = [subject for subject in population if FD_median_dict[subject] > 1.]
+        fd_max_outliers = [subject for subject in population if FD_max_dict[subject] > 4.]
+
+        for subject in FD_median_dict:
             print 'Subject %s is an outlier with FD_mean above 1mm' % subject
             del FD_median_dict[subject]
+
+        for subject in fd_max_outliers:
+            print 'Subject %s is an outlier with FD_mean above 1mm' % subject
+            del FD_median_dict[subject]
+
 
         # define upper bound
         FD_upper_bound = np.median(FD_median_dict.values()) + np.std(FD_median_dict.values()) * 2
@@ -90,12 +103,12 @@ def meta_ica_pproc(population, workspace):
 
         # Define subjects above upper bound threshold
         population_qc = [i for i in population
-                         if i not in outlier_above_1mm]
+                         if i not in fd_mean_outliers or i not in fd_max_outliers]
         FD_outliers = [subject for subject in population_qc if FD_median_dict[subject] > FD_upper_bound]
         print 'FD OUTLIERS', FD_outliers
 
         # save outlier subjects in txt file
-        outliers = FD_outliers + outlier_above_1mm
+        outliers = FD_outliers + fd_mean_outliers +  fd_max_outliers
 
     ####################################################################################################################
     # Create 30 random Lists of an equal number of controls/patients for each site
@@ -103,11 +116,11 @@ def meta_ica_pproc(population, workspace):
 
     # Take 10 controls and 10 patients from each site at random..
     # ie. total sample = 20* 4 = 80 subjects times 30 lists
-    if not os.path.isfile('%s/meta_lists.json' % meta_ica_list_dir):
+    if not os.path.isfile('%s/meta_lists.json' % lists_dir):
         phenotypic = pd.read_csv(os.path.join(tourettome_phenotypic, 'phenotypic_tourettome.csv'),
                                  index_col=0).drop(outliers, axis=0)
         phenotypic = phenotypic.drop(['LZ001', 'LZ052', 'LZ055', 'HA053'], axis=0)
-        phenotypic.to_csv('%s/pheno.csv' % meta_ica_list_dir)
+        phenotypic.to_csv('%s/pheno.csv' % lists_dir)
 
         patients = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'patients']
         controls = [subject for subject in phenotypic.index if phenotypic.loc[subject]['Group'] == 'controls']
@@ -134,8 +147,26 @@ def meta_ica_pproc(population, workspace):
 
         print 'META_LISTS', meta_lists
 
-        with open('%s/meta_lists.json' % meta_ica_list_dir, 'w') as file:
+        with open('%s/meta_lists.json' % lists_dir, 'w') as file:
             file.write(json.dumps(meta_lists))
+
+    ####################################################################################################################
+    # Create brain mask
+    ####################################################################################################################
+
+    os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out %s/MNI152_T1_4mm_brain_mask'
+              % (mni_brain_2mm_mask, mni_brain_2mm_mask, workspace_dir))
+
+    os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out %s/MNI152_T1_4mm_brain_mask'
+              % (mni_brain_2mm, mni_brain_2mm, workspace_dir))
+
+    os.system('fslmaths %s/MNI152_T1_4mm_brain_mask -thr 0.5 -bin %s/MNI152_T1_4mm_brain_mask_bin'
+              % (workspace_dir, workspace_dir))
+
+
+
+
+    brain_mask_4mm = os.path.join(workspace_dir, 'MNI152_T1_4mm_brain_mask_bin.nii.gz')
 
 def meta_dict_learning(population, workspace):
     from nilearn.decomposition import DictLearning
@@ -375,7 +406,7 @@ def meta_ica_dual_regression(population, workspace):
 population = tourettome_subjects
 workspace = tourettome_workspace
 
-# meta_ica_pproc(population, workspace)
+meta_decompsition_pproc(population, workspace)
 # meta_dict_learning(population, workspace)
 # meta_ica_melodic(population, workspace)
 # meta_ica_dual_regression(population, workspace)
