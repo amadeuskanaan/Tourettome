@@ -181,36 +181,44 @@ def meta_dict_learning(workspace):
     meta_lists = json.load(open('%s/meta_lists.json' % lists_dir))
 
     # run dict_learning 30 times
-    for i in xrange(30):
 
-        dl_dir = mkdir_path(os.path.join(dict_learning_dir, 'DL_%s'%i))
+    def run_meta_dict_learning(n_components):
+        for i in xrange(30):
 
-        if not os.path.isfile(os.path.join(dl_dir, 'dl_components.nii.gz')):
-            print 'Running Dictionary Learning Decomposition Number %s' % i
+            dl_dir = mkdir_path(os.path.join(dict_learning_dir, 'ndim_%s'%n_components,'DL_%s'%i))
 
-            func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')
-                         for subject in meta_lists['meta_list_%s' % i]]
+            if not os.path.isfile(os.path.join(dl_dir, 'dl_components.nii.gz')):
+                print 'Running Dictionary Learning Decomposition Number %s' % i
 
-            print func_list
-            dict_learning = DictLearning(n_components=50,mask = mask,
-                                         memory="nilearn_cache", memory_level=10, n_jobs = 4,
+                func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')
+                             for subject in meta_lists['meta_list_%s' % i]]
+
+                print func_list
+                dict_learning = DictLearning(n_components=n_components,mask = mask,
+                                             memory="nilearn_cache", memory_level=10, n_jobs = 4,
+                                             smoothing_fwhm=0, verbose=1, random_state=0, n_epochs=1)
+
+                dict_learning.fit(func_list)
+                masker = dict_learning.masker_
+                components_img = masker.inverse_transform(dict_learning.components_)
+                components_img.to_filename('%s/dl_components.nii.gz'%dl_dir)
+
+            # run meta dictionary learning
+            dict_learning = DictLearning(n_components=n_components, mask=mask,
+                                         memory="nilearn_cache", memory_level=10, n_jobs=4,
                                          smoothing_fwhm=0, verbose=1, random_state=0, n_epochs=1)
 
-            dict_learning.fit(func_list)
+            dict_learning_all = [os.path.join(dict_learning_dir,'ndim_%s'%n_components,
+                                              'DL_%s'%i, 'dl_components.nii.gz') for i in xrange(30)]
+            dict_learning.fit(dict_learning_all)
             masker = dict_learning.masker_
             components_img = masker.inverse_transform(dict_learning.components_)
-            components_img.to_filename('%s/dl_components.nii.gz'%dl_dir)
+            components_img.to_filename('%s/ndim_%s/dl_components_all.nii.gz'
+                                       %(dict_learning_dir, n_components))
 
-        # run meta dictionary learning
-        dict_learning = DictLearning(n_components=50, mask=mask,
-                                     memory="nilearn_cache", memory_level=10, n_jobs=4,
-                                     smoothing_fwhm=0, verbose=1, random_state=0, n_epochs=1)
-
-        dict_learning_all = [os.path.join(dict_learning_dir, 'DL_%s'%i, 'dl_components.nii.gz') for i in xrange(30)]
-        dict_learning.fit(dict_learning_all)
-        masker = dict_learning.masker_
-        components_img = masker.inverse_transform(dict_learning.components_)
-        components_img.to_filename('%s/dl_components_all.nii.gz' % dict_learning_dir)
+    run_meta_dict_learning(30)
+    run_meta_dict_learning(50)
+    run_meta_dict_learning(70)
 
 def meta_ica_melodic(population, workspace):
     meta_ica_dir = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA'))
