@@ -216,7 +216,7 @@ def meta_dict_learning(workspace):
         dict_learning.fit(dict_learning_all)
         masker = dict_learning.masker_
         components_img = masker.inverse_transform(dict_learning.components_)
-        components_img.to_filename('%s/ndim_%s/dl_components_all.nii.gz'
+        components_img.to_filename('%s/ndim_%s/dict_learning_IC.nii.gz'
                                    %(dict_learning_dir, n_components))
 
     run_meta_dict_learning(20)
@@ -306,12 +306,8 @@ def meta_dual_regression(decomposition, ndims):
     workspace_dir = os.path.join(workspace, 'META_DECOMPOSITION')
     lists_dir = os.path.join(workspace_dir, 'subject_lists')
 
-    if decomposition == 'dict_learning':
-        decomposition_dir = os.path.join(workspace_dir, 'dict_learning', ndims)
-        components_file   = os.path.join(decomposition_dir, 'dl_components_all.nii.gz')
-    elif decomposition == 'ica':
-        decomposition_dir = os.path.join(workspace_dir, 'META_DECOMPOSITION', 'melodic')
-        components_file = os.path.join(decomposition_dir, 'melodic_IC.nii.gz')
+    decomposition_dir = os.path.join(workspace_dir, decomposition, ndims)
+    components_file = os.path.join(decomposition_dir, '%s_IC.nii.gz'%decomposition)
 
     dualreg_dir = mkdir_path(os.path.join(decomposition_dir, 'dual_regression'))
     os.chdir(dualreg_dir)
