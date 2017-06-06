@@ -172,7 +172,7 @@ def meta_dict_learning(workspace):
 
     workspace_dir      = mkdir_path(os.path.join(workspace, 'META_DECOMPOSITION'))
     lists_dir          = mkdir_path(os.path.join(workspace_dir, 'subject_lists'))
-    dict_learning_dir  = mkdir_path(os.path.join(workspace_dir, 'META_DECOMPOSITION/dict_learning'))
+    dict_learning_dir  = mkdir_path(os.path.join(workspace_dir, 'dict_learning'))
 
     TR     = (2.4 + 2.4 + 1.4) / 3.
     mask   = os.path.join(workspace_dir, 'MNI_4mm_mask.nii.gz')
