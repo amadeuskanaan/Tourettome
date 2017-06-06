@@ -137,11 +137,77 @@ def meta_ica_pproc(population, workspace):
         with open('%s/meta_lists.json' % meta_ica_list_dir, 'w') as file:
             file.write(json.dumps(meta_lists))
 
+def meta_dict_learning(population, workspace):
+    from nilearn.decomposition import DictLearning
+
+    meta_ica_dir      = mkdir_path(os.path.join(workspace, 'META_ICA'))
+    meta_ica_list_dir = mkdir_path(os.path.join(meta_ica_dir, 'meta_subject_lists'))
+    dict_learning_dir = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA/dict_learning'))
+
+    TR_mean = (2.4 + 2.4 + 1.4) / 3.
+
+    # create brain mask
+    os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out %s/MNI152_T1_4mm_brain_mask'
+              % (mni_brain_2mm_mask, mni_brain_2mm_mask, meta_ica_dir))
+    os.system('fslmaths %s/MNI152_T1_4mm_brain_mask -thr 0.5 -bin %s/MNI152_T1_4mm_brain_mask_bin'
+              % (meta_ica_dir, meta_ica_dir))
+    brain_mask_4mm = os.path.join(meta_ica_dir, 'MNI152_T1_4mm_brain_mask_bin.nii.gz')
+
+    # load sub lists
+    meta_lists = json.load(open('%s/meta_lists.json' % meta_ica_list_dir))
+
+    for i in xrange(30):
+
+        dl_dir = mkdir_path(os.path.join(dict_learning_dir, 'DL_%s'%i))
+
+        if not os.path.isfile(os.path.join(dl_dir, 'dl_components.nii.gz')):
+            print 'Running Dictionary Learning Decomposition Number %s' % i
+
+            func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')
+                         for subject in meta_lists['meta_list_%s' % i]]#[0:10]
+
+            print func_list
+            dict_learning = DictLearning(n_components=30,
+                                         mask = os.path.join(meta_ica_dir, 'MNI152_T1_4mm_brain_mask_bin.nii.gz'),
+                                         memory="nilearn_cache",
+                                         smoothing_fwhm=0,
+                                         memory_level=10,
+                                         n_jobs = 4,
+                                         verbose=1,
+                                         random_state=0,
+                                         standardize=1,
+                                         n_epochs=1)
+
+            dict_learning.fit(func_list)
+            masker = dict_learning.masker_
+            # Drop output maps to a Nifti   file
+            components_img = masker.inverse_transform(dict_learning.components_)
+            components_img.to_filename('%s/dl_components.nii.gz'%dl_dir)
+
+        dict_learning = DictLearning(n_components=30,
+                                     mask=os.path.join(meta_ica_dir, 'MNI152_T1_4mm_brain_mask_bin.nii.gz'),
+                                     memory="nilearn_cache",
+                                     smoothing_fwhm=0,
+                                     memory_level=10,
+                                     n_jobs=4,
+                                     verbose=1,
+                                     random_state=0,
+                                     standardize=1,
+                                     n_epochs=1)
+
+        dict_learning_all = [os.path.join(dict_learning_dir, 'DL_%s'%i, 'dl_components.nii.gz') for i in xrange(30)]
+        print dict_learning_all
+        dict_learning.fit(dict_learning_all)
+        masker = dict_learning.masker_
+        # Drop output maps to a Nifti   file
+        components_img = masker.inverse_transform(dict_learning.components_)
+        components_img.to_filename('%s/dl_components.nii.gz' % dict_learning_dir)
+
 
 def meta_ica_melodic(population, workspace):
     meta_ica_dir = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA'))
     meta_ica_list_dir = mkdir_path(os.path.join(meta_ica_dir, 'meta_subject_lists'))
-
+    melodic_dir  = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA/melodic'))
     ####################################################################################################################
     # Run melodic on the 30 randomized lists
     ####################################################################################################################
@@ -166,9 +232,8 @@ def meta_ica_melodic(population, workspace):
         if not os.path.isfile(os.path.join(os.path.join(meta_ica_dir, 'ICA_%s' % i, 'melodic_IC.nii.gz'))):
             print 'Running Melodic Number %s' % i
 
-            func_list = [
-                os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')
-                for subject in meta_lists['meta_list_%s' % i]]
+            func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')
+                         for subject in meta_lists['meta_list_%s' % i]]
 
             # fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
             # fun_list_file.write(func_list)
@@ -179,7 +244,7 @@ def meta_ica_melodic(population, workspace):
                     file.write(func + '\n')
             # print input_file
 
-            melodic_run_dir = mkdir_path(os.path.join(meta_ica_dir, 'ICA_%s' % i))
+            melodic_run_dir = mkdir_path(os.path.join(melodic_dir, 'ICA_%s' % i))
 
             os.system(' '.join(['melodic',
                                 '--in=' + input_file,  # '%s/list_%s.txt' %(meta_ica_list_dir, i),
@@ -187,10 +252,9 @@ def meta_ica_melodic(population, workspace):
                                 '-v',
                                 '--outdir=' + melodic_run_dir,
                                 '--report',
-                                '--tr=' + str(TR_mean)])
-                      # '--Ostats --nobet --mmthresh=0.5
-                      # '-d 30',
-                      )
+                                '--tr=' + str(TR_mean),
+                                '-d 30'
+                                ]))
 
     ####################################################################################################################
     # Run META ICA
@@ -198,17 +262,17 @@ def meta_ica_melodic(population, workspace):
 
     print 'Running META_ICA'
 
-    if not os.path.isfile(os.path.join(meta_ica_dir, 'ICA_merged', 'melodic_IC.nii.gz')):
+    if not os.path.isfile(os.path.join(melodic_dir, 'ICA_merged', 'melodic_IC.nii.gz')):
         # melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
-        melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s' % i, 'melodic_IC.nii.gz') for i in xrange(30)]
+        melodic_ICs = [os.path.join(melodic_dir, 'ICA_%s' % i, 'melodic_IC.nii.gz') for i in xrange(30)]
 
         # Merge all melodic runs
-        os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' % (meta_ica_dir, ' '.join(melodic_ICs)))
+        os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' % (melodic_dir, ' '.join(melodic_ICs)))
 
         # run meta ica
-        ica_run_dir_all = mkdir_path(os.path.join(meta_ica_dir, 'ICA_merged'))
+        ica_run_dir_all = mkdir_path(os.path.join(melodic_dir, 'ICA_merged'))
         os.system(' '.join(['melodic',
-                            '--in=' + os.path.join(meta_ica_dir, 'melodic_IC_all.nii.gz'),
+                            '--in=' + os.path.join(melodic_dir, 'melodic_IC_all.nii.gz'),
                             '--mask=' + brain_mask_4mm,
                             '-v',
                             '--outdir=' + ica_run_dir_all,
@@ -311,8 +375,10 @@ def meta_ica_dual_regression(population, workspace):
 population = tourettome_subjects
 workspace = tourettome_workspace
 
-meta_ica_pproc(population, workspace)
-meta_ica_melodic(population, workspace)
-meta_ica_dual_regression(population, workspace)
+# meta_ica_pproc(population, workspace)
+# meta_dict_learning(population, workspace)
+# meta_ica_melodic(population, workspace)
+# meta_ica_dual_regression(population, workspace)
+
 
 
