@@ -109,6 +109,8 @@ def meta_decompsition_pproc(population, workspace):
         # save outlier subjects in txt file
         outliers = fd_std_outliers + fd_mean_outliers +  fd_max_outliers
 
+        print 'All outliers:', outliers
+
     ####################################################################################################################
     # Create 30 random Lists of an equal number of controls/patients for each site
     ####################################################################################################################
