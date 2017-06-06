@@ -104,7 +104,7 @@ def meta_decompsition_pproc(population, workspace):
         population_qc = [i for i in population
                          if i not in fd_mean_outliers or i not in fd_max_outliers]
         fd_std_outliers = [subject for subject in population_qc if FD_median_dict[subject] > FD_upper_bound]
-        print print 'Outlier subject with FD_mean > 2 * FS_std:', fd_std_outliers
+        print 'Outlier subject with FD_mean > 2 * FS_std:', fd_std_outliers
 
         # save outlier subjects in txt file
         outliers = fd_std_outliers + fd_mean_outliers +  fd_max_outliers
