@@ -103,11 +103,11 @@ def meta_decompsition_pproc(population, workspace):
         # Define subjects above upper bound threshold
         population_qc = [i for i in population
                          if i not in fd_mean_outliers or i not in fd_max_outliers]
-        FD_outliers = [subject for subject in population_qc if FD_median_dict[subject] > FD_upper_bound]
-        print 'FD OUTLIERS', FD_outliers
+        fd_std_outliers = [subject for subject in population_qc if FD_median_dict[subject] > FD_upper_bound]
+        print print 'Outlier subject with FD_mean > 2 * FS_std:', fd_std_outliers
 
         # save outlier subjects in txt file
-        outliers = FD_outliers + fd_mean_outliers +  fd_max_outliers
+        outliers = fd_std_outliers + fd_mean_outliers +  fd_max_outliers
 
     ####################################################################################################################
     # Create 30 random Lists of an equal number of controls/patients for each site
