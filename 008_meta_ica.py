@@ -93,7 +93,7 @@ def meta_decompsition_pproc(population, workspace):
             del FD_median_dict[subject]
 
         for subject in fd_max_outliers:
-            print 'Subject %s is an outlier with FD_mean above 1mm' % subject
+            print 'Subject %s is an outlier with FD_max above 4mm' % subject
             del FD_max_dict[subject]
 
         # define upper bound
