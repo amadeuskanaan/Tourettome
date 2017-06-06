@@ -394,7 +394,7 @@ def meta_ica_dual_regression(population, workspace):
 population = tourettome_subjects
 workspace = tourettome_workspace
 
-#meta_decompsition_pproc(population, workspace)
+meta_decompsition_pproc(population, workspace)
 meta_dict_learning(workspace)
 # meta_ica_melodic(population, workspace)
 # meta_ica_dual_regression(population, workspace)
