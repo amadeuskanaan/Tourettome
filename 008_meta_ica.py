@@ -155,19 +155,17 @@ def meta_decompsition_pproc(population, workspace):
     # Create brain mask
     ####################################################################################################################
 
-    os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out %s/MNI152_T1_4mm_brain_mask'
-              % (mni_brain_2mm_mask, mni_brain_2mm_mask, workspace_dir))
+    os.chdir(workspace_dir)
+    os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out MNI_4mm'
+              % (mni_brain_2mm, mni_brain_2mm))
 
-    os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out %s/MNI152_T1_4mm_brain_mask'
-              % (mni_brain_2mm, mni_brain_2mm, workspace_dir))
+    os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out MNI_4mm_mask_'
+              % (mni_brain_2mm_mask, mni_brain_2mm_mask))
 
-    os.system('fslmaths %s/MNI152_T1_4mm_brain_mask -thr 0.5 -bin %s/MNI152_T1_4mm_brain_mask_bin'
-              % (workspace_dir, workspace_dir))
+    os.system('fslmaths MNI_4mm_mask_ -thr 0.5 -bin MNI_4mm_mask')
 
+    os.system('rm -rf  MNI_4mm_mask_.nii.gz')
 
-
-
-    brain_mask_4mm = os.path.join(workspace_dir, 'MNI152_T1_4mm_brain_mask_bin.nii.gz')
 
 def meta_dict_learning(population, workspace):
     from nilearn.decomposition import DictLearning
@@ -178,11 +176,6 @@ def meta_dict_learning(population, workspace):
 
     TR_mean = (2.4 + 2.4 + 1.4) / 3.
 
-    # create brain mask
-    os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out %s/MNI152_T1_4mm_brain_mask'
-              % (mni_brain_2mm_mask, mni_brain_2mm_mask, meta_ica_dir))
-    os.system('fslmaths %s/MNI152_T1_4mm_brain_mask -thr 0.5 -bin %s/MNI152_T1_4mm_brain_mask_bin'
-              % (meta_ica_dir, meta_ica_dir))
     brain_mask_4mm = os.path.join(meta_ica_dir, 'MNI152_T1_4mm_brain_mask_bin.nii.gz')
 
     # load sub lists
