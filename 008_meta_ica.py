@@ -195,7 +195,7 @@ def meta_dict_learning(workspace):
 
                 print func_list
                 dict_learning = DictLearning(n_components=n_components,mask = mask,
-                                             memory="nilearn_cache", memory_level=20, n_jobs = 20,
+                                             memory_level=20, n_jobs = 20,
                                              smoothing_fwhm=0, verbose=1, random_state=0, n_epochs=1)
 
                 dict_learning.fit(func_list)
@@ -205,7 +205,7 @@ def meta_dict_learning(workspace):
 
         # run meta dictionary learning
         dict_learning = DictLearning(n_components=n_components, mask=mask,
-                                     memory="nilearn_cache", memory_level=20, n_jobs=20,
+                                     memory_level=20, n_jobs=20,
                                      smoothing_fwhm=0, verbose=1, random_state=0, n_epochs=1)
 
         dict_learning_all = [os.path.join(dict_learning_dir,'ndim_%s'%n_components,
