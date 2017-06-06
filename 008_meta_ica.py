@@ -306,7 +306,7 @@ def meta_dual_regression(workspace, decomposition, ndims):
     workspace_dir = os.path.join(workspace, 'META_DECOMPOSITION')
     lists_dir = os.path.join(workspace_dir, 'subject_lists')
 
-    decomposition_dir = os.path.join(workspace_dir, decomposition, ndims)
+    decomposition_dir = os.path.join(workspace_dir, decomposition, 'ndim_%s'%ndims)
     components_file = os.path.join(decomposition_dir, '%s_IC.nii.gz'%decomposition)
 
     dualreg_dir = mkdir_path(os.path.join(decomposition_dir, 'dual_regression'))
