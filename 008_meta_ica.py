@@ -170,9 +170,9 @@ def meta_dict_learning(workspace):
 
     from nilearn.decomposition import DictLearning
 
-    workspace_dir      = mkdir_path(os.path.join(workspace, 'META_ICA'))
-    lists_dir          = mkdir_path(os.path.join(workspace_dir, 'meta_subject_lists'))
-    dict_learning_dir  = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA/dict_learning'))
+    workspace_dir      = mkdir_path(os.path.join(workspace, 'META_DECOMPOSITION'))
+    lists_dir          = mkdir_path(os.path.join(workspace_dir, 'subject_lists'))
+    dict_learning_dir  = mkdir_path(os.path.join(workspace_dir, 'META_DECOMPOSITION/dict_learning'))
 
     TR     = (2.4 + 2.4 + 1.4) / 3.
     mask   = os.path.join(workspace_dir, 'MNI_4mm_mask.nii.gz')
@@ -383,7 +383,7 @@ def meta_ica_dual_regression(population, workspace):
 population = tourettome_subjects
 workspace = tourettome_workspace
 
-meta_decompsition_pproc(population, workspace)
+#meta_decompsition_pproc(population, workspace)
 meta_dict_learning(workspace)
 # meta_ica_melodic(population, workspace)
 # meta_ica_dual_regression(population, workspace)
