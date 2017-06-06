@@ -88,11 +88,11 @@ def meta_decompsition_pproc(population, workspace):
         fd_mean_outliers = [subject for subject in population if FD_median_dict[subject] > 1.]
         fd_max_outliers = [subject for subject in population if FD_max_dict[subject] > 4.]
 
-        for subject in FD_median_dict:
+        for subject in fd_mean_outliers:
             print 'Subject %s is an outlier with FD_mean above 1mm' % subject
             del FD_median_dict[subject]
 
-        for subject in FD_max_dict:
+        for subject in fd_max_outliers:
             print 'Subject %s is an outlier with FD_mean above 1mm' % subject
             del FD_max_dict[subject]
 
