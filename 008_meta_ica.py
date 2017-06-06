@@ -111,6 +111,9 @@ def meta_decompsition_pproc(population, workspace):
 
         print 'All outliers:', outliers
 
+        with open('%s/outliers.json' % lists_dir, 'w') as file:
+            file.write(json.dumps(outliers))
+
     ####################################################################################################################
     # Create 30 random Lists of an equal number of controls/patients for each site
     ####################################################################################################################
@@ -129,11 +132,11 @@ def meta_decompsition_pproc(population, workspace):
 
         for i in xrange(30):
             PA = list(
-                np.random.choice([subject for subject in controls if subject[0:2] == 'PA'], 10, replace=False)) + list(
-                np.random.choice([subject for subject in patients if subject[0:2] == 'PA'], 10, replace=False))
+                np.random.choice([subject for subject in controls if subject[0:2] == 'PA'], 20, replace=False)) + list(
+                np.random.choice([subject for subject in patients if subject[0:2] == 'PA'], 20, replace=False))
 
             HA = list(
-                np.random.choice([subject for subject in controls if subject[0:2] == 'HA'], 10, replace=False)) + list(
+                np.random.choice([subject for subject in controls if subject[0:2] == 'HA'], 20, replace=False)) + list(
                 np.random.choice([subject for subject in patients if subject[0:2] == 'HA'], 10, replace=False))
 
             # HB = list(
@@ -141,8 +144,8 @@ def meta_decompsition_pproc(population, workspace):
             #     np.random.choice([subject for subject in patients if subject[0:2] == 'HB'], 10, replace=False))
 
             LZ = list(
-                np.random.choice([subject for subject in controls if subject[0:2] == 'LZ'], 10, replace=False)) + list(
-                np.random.choice([subject for subject in patients if subject[0:2] == 'LZ'], 10, replace=False))
+                np.random.choice([subject for subject in controls if subject[0:2] == 'LZ'], 20, replace=False)) + list(
+                np.random.choice([subject for subject in patients if subject[0:2] == 'LZ'], 20, replace=False))
 
             meta_lists['meta_list_%s' % i] = PA + HA + LZ  # + HB
 
@@ -218,8 +221,7 @@ def meta_dict_learning(workspace):
 
     run_meta_dict_learning(20)
     run_meta_dict_learning(30)
-    run_meta_dict_learning(50)
-    run_meta_dict_learning(70)
+    run_meta_dict_learning(40)
 
 def meta_ica_melodic(population, workspace):
     meta_ica_dir = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA'))
