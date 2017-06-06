@@ -216,6 +216,7 @@ def meta_dict_learning(workspace):
             components_img.to_filename('%s/ndim_%s/dl_components_all.nii.gz'
                                        %(dict_learning_dir, n_components))
 
+    run_meta_dict_learning(20)
     run_meta_dict_learning(30)
     run_meta_dict_learning(50)
     run_meta_dict_learning(70)
