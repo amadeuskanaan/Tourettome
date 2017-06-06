@@ -81,8 +81,8 @@ def meta_decompsition_pproc(population, workspace):
             FD_median_dict[subject] = np.median(np.loadtxt(os.path.join(workspace, subject, 'ICA/FD_n196.1D')))
             FD_max_dict[subject] = np.max(np.loadtxt(os.path.join(workspace, subject, 'ICA/FD_n196.1D')))
 
-        print 'FD_median', FD_median_dict
-        print 'FD_max', FD_max_dict
+        #print 'FD_median', FD_median_dict
+        #print 'FD_max', FD_max_dict
 
         # Remove subjects with FD_mean above 1mm and FD_max above 3mm
         fd_mean_outliers = [subject for subject in population if FD_median_dict[subject] > 1.]
