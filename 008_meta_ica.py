@@ -320,7 +320,7 @@ def meta_dual_regression(workspace, population, decomposition, ndims):
 
         print 'Running dual Regression for decomposition:', decomposition
 
-        outliers = json.load(open('%s/outliers.json'%workspace_dir))
+        outliers = json.load(open('%s/outliers.json'%lists_dir))
         population = [subject for subject in population if subject not in outliers]
 
         pproc_list = []
