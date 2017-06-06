@@ -301,17 +301,28 @@ def meta_ica_melodic(population, workspace):
                             ]))
 
 
-def meta_ica_dual_regression(population, workspace):
-    meta_ica_dir = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA'))
-    meta_ica_list_dir = mkdir_path(os.path.join(meta_ica_dir, 'meta_subject_lists'))
+def meta_dual_regression(decomposition, ndims):
+
+    workspace_dir = os.path.join(workspace, 'META_DECOMPOSITION')
+    lists_dir = os.path.join(workspace_dir, 'subject_lists')
+
+    if decomposition == 'dict_learning':
+        decomposition_dir = os.path.join(workspace_dir, 'dict_learning', ndims)
+        components_file   = os.path.join(decomposition_dir, 'dl_components_all.nii.gz')
+    elif decomposition == 'ica':
+        decomposition_dir = os.path.join(workspace_dir, 'META_DECOMPOSITION', 'melodic')
+        components_file = os.path.join(decomposition_dir, 'melodic_IC.nii.gz')
+
+    dualreg_dir = mkdir_path(os.path.join(decomposition_dir, 'dual_regression'))
+    os.chdir(dualreg_dir)
 
     # ###################################################################################################################
     # # Run Dual Regression to extract spatial maps from each subject
     # ###################################################################################################################
 
-    if not os.path.isfile(os.path.join(meta_ica_dir, 'DUAL_REGRESSION/dr_stage1_subject00000.nii.gz')):
+    if not os.path.isfile(os.path.join(dualreg_dir, 'dr_stage1_subject00000.nii.gz')):
 
-        print 'Running dual Regression'
+        print 'Running dual Regression for decomposition:', decomposition
 
         pproc_list = []
         pproc_dict = {}
@@ -322,9 +333,6 @@ def meta_ica_dual_regression(population, workspace):
         # print pproc_list
         print pproc_dict
         print 'Pop size =', len(population), len(pproc_dict), len(pproc_list)
-
-        dualreg_dir = mkdir_path(os.path.join(workspace, 'META_ICA', 'DUAL_REGRESSION'))
-        os.chdir(dualreg_dir)
 
         # Create a Design Matrix  ... same as Glm_gui
         mat = open('design.mat', 'w')
@@ -350,18 +358,17 @@ def meta_ica_dual_regression(population, workspace):
         with open('%s/dualreg_subject_list.json' % dualreg_dir, 'w') as file:
             file.write(json.dumps(pproc_dict))
 
-        meta_ica = os.path.join(workspace, 'META_ICA', 'ICA_merged', 'melodic_IC.nii.gz')
-
-        # if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000.txt')):
-        #     os.system(' '.join(['dual_regression ',
-        #                         meta_ica,     # <group_IC_maps>
-        #                         '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-        #                         'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
-        #                         'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
-        #                         '500',        # <n_perm>
-        #                         dualreg_dir,
-        #                         ' '.join(pproc_list)]
-        #                         ))
+        # Run dual regression
+        if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000.txt')):
+            os.system(' '.join(['dual_regression ',
+                                components_file,     # <group_IC_maps>
+                                '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+                                'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
+                                'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
+                                '500',        # <n_perm>
+                                dualreg_dir,
+                                ' '.join(pproc_list)]
+                                ))
 
         # Bandpass timeseries
         for id in pproc_dict.keys():
@@ -385,8 +392,6 @@ def meta_ica_dual_regression(population, workspace):
             highpass_sigma = 1. / (2. * TR * highpass_cutoff)
             lowpass_sigma = 1. / (2. * TR * lowpass_cutoff)
 
-            os.chdir(os.path.join(workspace, 'META_ICA/DUAL_REGRESSION'))
-
             os.system('fslmaths dr_stage1_subject%05d.nii.gz -bptf %s %s dr_stage1_subject%05d_bp.nii.gz'
                       % (id, highpass_sigma, lowpass_sigma, id))
 
@@ -394,10 +399,8 @@ def meta_ica_dual_regression(population, workspace):
 population = tourettome_subjects
 workspace = tourettome_workspace
 
-meta_decompsition_pproc(population, workspace)
-meta_dict_learning(workspace)
-# meta_ica_melodic(population, workspace)
-# meta_ica_dual_regression(population, workspace)
-
+# meta_decompsition_pproc(population, workspace)
+# meta_dict_learning(workspace)
+meta_dual_regression(decomposition='dict_learning', ndims=20)
 
 
