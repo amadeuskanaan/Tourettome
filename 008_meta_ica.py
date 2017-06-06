@@ -301,7 +301,7 @@ def meta_ica_melodic(population, workspace):
                             ]))
 
 
-def meta_dual_regression(decomposition, ndims):
+def meta_dual_regression(workspace, decomposition, ndims):
 
     workspace_dir = os.path.join(workspace, 'META_DECOMPOSITION')
     lists_dir = os.path.join(workspace_dir, 'subject_lists')
@@ -397,6 +397,6 @@ workspace = tourettome_workspace
 
 # meta_decompsition_pproc(population, workspace)
 # meta_dict_learning(workspace)
-meta_dual_regression(decomposition='dict_learning', ndims=20)
+meta_dual_regression(workspace, decomposition='dict_learning', ndims=20)
 
 
