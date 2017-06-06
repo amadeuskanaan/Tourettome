@@ -301,7 +301,7 @@ def meta_ica_melodic(population, workspace):
                             ]))
 
 
-def meta_dual_regression(workspace, decomposition, ndims):
+def meta_dual_regression(workspace, population, decomposition, ndims):
 
     workspace_dir = os.path.join(workspace, 'META_DECOMPOSITION')
     lists_dir = os.path.join(workspace_dir, 'subject_lists')
@@ -319,6 +319,9 @@ def meta_dual_regression(workspace, decomposition, ndims):
     if not os.path.isfile(os.path.join(dualreg_dir, 'dr_stage1_subject00000.nii.gz')):
 
         print 'Running dual Regression for decomposition:', decomposition
+
+        outliers = json.load(open('%s/outliers.json'%workspace_dir))
+        population = [subject for subject in population if subject not in outliers]
 
         pproc_list = []
         pproc_dict = {}
@@ -397,6 +400,6 @@ workspace = tourettome_workspace
 
 # meta_decompsition_pproc(population, workspace)
 # meta_dict_learning(workspace)
-meta_dual_regression(workspace, decomposition='dict_learning', ndims=20)
+meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=20)
 
 
