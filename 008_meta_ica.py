@@ -316,9 +316,11 @@ def meta_dual_regression(workspace, population, decomposition, ndims):
     # # Run Dual Regression to extract spatial maps from each subject
     # ###################################################################################################################
 
-    if not os.path.isfile(os.path.join(dualreg_dir, 'dr_stage1_subject00000.nii.gz')):
+    if not os.path.isfile(os.path.join(dualreg_dir, 'design.con')):
 
         print 'Running dual Regression for decomposition:', decomposition
+
+        # Create a Design Matrix  ... same as Glm_gui
 
         outliers = json.load(open('%s/outliers.json'%lists_dir))
         population = [subject for subject in population if subject not in outliers]
@@ -333,7 +335,6 @@ def meta_dual_regression(workspace, population, decomposition, ndims):
         print pproc_dict
         print 'Pop size =', len(population), len(pproc_dict), len(pproc_list)
 
-        # Create a Design Matrix  ... same as Glm_gui
         mat = open('design.mat', 'w')
         mat.write('/NumWaves\t1\n')
         mat.write('/NumPoints\t%s\n' % len(population))
@@ -357,19 +358,20 @@ def meta_dual_regression(workspace, population, decomposition, ndims):
         with open('%s/dualreg_subject_list.json' % dualreg_dir, 'w') as file:
             file.write(json.dumps(pproc_dict))
 
-        # Run dual regression
-        if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000.txt')):
-            os.system(' '.join(['dual_regression ',
-                                components_file,     # <group_IC_maps>
-                                '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-                                'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
-                                'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
-                                '500',        # <n_perm>
-                                dualreg_dir,
-                                ' '.join(pproc_list)]
-                                ))
+    # Run dual regression
+    if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000.txt')):
+        os.system(' '.join(['dual_regression ',
+                            components_file,     # <group_IC_maps>
+                            '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+                            'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
+                            'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
+                            '500',        # <n_perm>
+                            dualreg_dir,
+                            ' '.join(pproc_list)]
+                            ))
 
-        # Bandpass timeseries
+    # Bandpass timeseries
+    if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000_bp.nii.gz')):
         for id in pproc_dict.keys():
             print id, ' ', pproc_dict[id]
             affine = nb.load(os.path.join(workspace, pproc_dict[id],
@@ -400,8 +402,8 @@ workspace = tourettome_workspace
 
 # meta_decompsition_pproc(population, workspace)
 # meta_dict_learning(workspace)
-meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=20)
+# meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=20)
 meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=30)
-meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=40)
+# meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=40)
 
 
