@@ -316,7 +316,7 @@ def meta_dual_regression(workspace, population, decomposition, ndims):
     # # Run Dual Regression to extract spatial maps from each subject
     # ###################################################################################################################
 
-    if not os.path.isfile(os.path.join(dualreg_dir, 'design.con')):
+    if not os.path.isfile(os.path.join(dualreg_dir, 'dr_stage1_subject00000_bp.nii.gz')):
 
         print 'Running dual Regression for decomposition:', decomposition
 
@@ -358,43 +358,43 @@ def meta_dual_regression(workspace, population, decomposition, ndims):
         with open('%s/dualreg_subject_list.json' % dualreg_dir, 'w') as file:
             file.write(json.dumps(pproc_dict))
 
-    # Run dual regression
-    if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000.txt')):
-        os.system(' '.join(['dual_regression ',
-                            components_file,     # <group_IC_maps>
-                            '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-                            'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
-                            'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
-                            '500',        # <n_perm>
-                            dualreg_dir,
-                            ' '.join(pproc_list)]
-                            ))
+        # Run dual regression
+        if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000.txt')):
+            os.system(' '.join(['dual_regression ',
+                                components_file,     # <group_IC_maps>
+                                '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+                                'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
+                                'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
+                                '500',        # <n_perm>
+                                dualreg_dir,
+                                ' '.join(pproc_list)]
+                                ))
 
-    # Bandpass timeseries
-    if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000_bp.nii.gz')):
-        for id in pproc_dict.keys():
-            print id, ' ', pproc_dict[id]
-            affine = nb.load(os.path.join(workspace, pproc_dict[id],
-                                          'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')).get_affine()
-            dr_sub = np.loadtxt(os.path.join(dualreg_dir, 'dr_stage1_subject%05d.txt' % id))
-            dr_sub_reshaped = dr_sub.reshape(1, 1, dr_sub.shape[1], dr_sub.shape[0])
-            img = nb.Nifti1Image(dr_sub_reshaped, affine)
-            img.to_filename(os.path.join(dualreg_dir, 'dr_stage1_subject%05d.nii.gz' % id))
+        # Bandpass timeseries
+        if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00200_bp.nii.gz')):
+            for id in pproc_dict.keys():
+                print id, ' ', pproc_dict[id]
+                affine = nb.load(os.path.join(workspace, pproc_dict[id],
+                                              'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')).get_affine()
+                dr_sub = np.loadtxt(os.path.join(dualreg_dir, 'dr_stage1_subject%05d.txt' % id))
+                dr_sub_reshaped = dr_sub.reshape(1, 1, dr_sub.shape[1], dr_sub.shape[0])
+                img = nb.Nifti1Image(dr_sub_reshaped, affine)
+                img.to_filename(os.path.join(dualreg_dir, 'dr_stage1_subject%05d.nii.gz' % id))
 
-            if subject[0:2] == 'LZ':
-                TR = 1.4
-            elif subject[0:2] == 'PA':
-                TR = 2.4
-            elif subject[0:2] == 'HA':
-                TR = 2.4
+                if subject[0:2] == 'LZ':
+                    TR = 1.4
+                elif subject[0:2] == 'PA':
+                    TR = 2.4
+                elif subject[0:2] == 'HA':
+                    TR = 2.4
 
-            highpass_cutoff = 0.01  # hz
-            lowpass_cutoff = 0.1  # hz
-            highpass_sigma = 1. / (2. * TR * highpass_cutoff)
-            lowpass_sigma = 1. / (2. * TR * lowpass_cutoff)
+                highpass_cutoff = 0.01  # hz
+                lowpass_cutoff = 0.1  # hz
+                highpass_sigma = 1. / (2. * TR * highpass_cutoff)
+                lowpass_sigma = 1. / (2. * TR * lowpass_cutoff)
 
-            os.system('fslmaths dr_stage1_subject%05d.nii.gz -bptf %s %s dr_stage1_subject%05d_bp.nii.gz'
-                      % (id, highpass_sigma, lowpass_sigma, id))
+                os.system('fslmaths dr_stage1_subject%05d.nii.gz -bptf %s %s dr_stage1_subject%05d_bp.nii.gz'
+                          % (id, highpass_sigma, lowpass_sigma, id))
 
 
 population = tourettome_subjects
