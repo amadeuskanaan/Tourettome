@@ -357,17 +357,17 @@ def meta_dual_regression(workspace, population, decomposition, ndims):
         with open('%s/dualreg_subject_list.json' % dualreg_dir, 'w') as file:
             file.write(json.dumps(pproc_dict))
 
-        # # Run dual regression
-        # if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000.txt')):
-        #     os.system(' '.join(['dual_regression ',
-        #                         components_file,     # <group_IC_maps>
-        #                         '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-        #                         'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
-        #                         'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
-        #                         '500',        # <n_perm>
-        #                         dualreg_dir,
-        #                         ' '.join(pproc_list)]
-        #                         ))
+        # Run dual regression
+        if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000.txt')):
+            os.system(' '.join(['dual_regression ',
+                                components_file,     # <group_IC_maps>
+                                '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+                                'design.mat', # <design.mat> Design matrix for final cross-subject modelling with randomise
+                                'design.con', # <design.con> Design contrasts for final cross-subject modelling with randomise
+                                '500',        # <n_perm>
+                                dualreg_dir,
+                                ' '.join(pproc_list)]
+                                ))
 
         # Bandpass timeseries
         for id in pproc_dict.keys():
@@ -401,5 +401,7 @@ workspace = tourettome_workspace
 # meta_decompsition_pproc(population, workspace)
 # meta_dict_learning(workspace)
 meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=20)
+meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=30)
+meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=40)
 
 
