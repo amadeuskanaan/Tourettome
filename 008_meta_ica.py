@@ -359,7 +359,7 @@ def meta_dual_regression(workspace, population, decomposition, ndims):
             file.write(json.dumps(pproc_dict))
 
         # Run dual regression
-        if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00000.txt')):
+        if not os.path.isfile(os.path.join(dualreg_dir, 'dr_stage1_subject00000.txt')):
             os.system(' '.join(['dual_regression ',
                                 components_file,     # <group_IC_maps>
                                 '1',          # <des_norm> 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
@@ -371,7 +371,7 @@ def meta_dual_regression(workspace, population, decomposition, ndims):
                                 ))
 
         # Bandpass timeseries
-        if not os.path.isfile(os.path.join('meta_ica_dir', 'DUAL_REGRESSION/dr_stage1_subject00200_bp.nii.gz')):
+        if not os.path.isfile(os.path.join(dualreg_dir, 'dr_stage1_subject00200_bp.nii.gz')):
             for id in pproc_dict.keys():
                 print id, ' ', pproc_dict[id]
                 affine = nb.load(os.path.join(workspace, pproc_dict[id],
