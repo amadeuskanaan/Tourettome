@@ -403,7 +403,7 @@ workspace = tourettome_workspace
 # meta_decompsition_pproc(population, workspace)
 # meta_dict_learning(workspace)
 # meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=20)
-meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=30)
-# meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=40)
+# meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=30)
+meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=40)
 
 
