@@ -263,7 +263,7 @@ def meta_ica_melodic(workspace):
                                     '--outdir=' + IC_dir,
                                     '--report',
                                     '--tr=' + str(TR),
-                                    '-d ' + n_components
+                                    '-d ' + str(n_components)
                                     ]))
 
         # Run meta ICA
@@ -281,7 +281,7 @@ def meta_ica_melodic(workspace):
                             '--outdir=' + IC_dir_all,
                             '--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=1',  # + str(TR_mean)
-                            '-d ' + n_components
+                            '-d ' + str(n_components)
                             ]))
 
     run_meta_melodic(20)
