@@ -1,9 +1,9 @@
 executable = /usr/bin/python
 arguments = /scr/sambesi2/Github/Tourettome/006_denoise.py $(Process)
 universe = vanilla
-output = /scr/sambesi2/Github/Tourettome/condor/logs_denoise/$(Process)_output.txt
-error = /scr/sambesi2/Github/Tourettome/condor/logs_denoise/$(Process)_error.txt
-log = /scr/sambesi2/Github/Tourettome/condor/logs_denoise/$(Process)_log.txt
+output = /scr/malta1/Github/Tourettome/condor/logs_denoise/$(Process)_output.txt
+error = /scr/malta1/Github/Tourettome/condor/logs_denoise/$(Process)_error.txt
+log = /scr/malta1/Github/Tourettome/condor/logs_denoise/$(Process)_log.txt
 getenv = True
 request_memory = 4000
 request_cpus = 1
