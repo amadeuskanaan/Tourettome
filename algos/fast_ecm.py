@@ -122,6 +122,7 @@ def fastECM(inputfile='',
         vcurr_1 = m.dot(vprev)  # part one of M*v
         vcurr_2 = m.T.dot(vcurr_1)  # part two of M*v
         vcurr_3 = vcurr_2 + prevsum  # adding sum -- same effect as [M+1]*v
+        print vcurr_3
         vcurr = vcurr_3 / np.linalg.norm(vcurr_3, 2)  # normalize L2-norm
 
         i += 1  # next iteration
@@ -147,7 +148,7 @@ def write_map(inputfile='',
               img=0,
               vcurr=0,
               msk=0,
-              atl=0,
+              matl=0,
               mapfile='',
               descrip=''):
     """
