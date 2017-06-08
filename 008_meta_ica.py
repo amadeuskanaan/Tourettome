@@ -284,9 +284,9 @@ def meta_ica_melodic(workspace):
                             '-d ' + n_components
                             ]))
 
-        run_meta_melodic(20)
-        # run_meta_melodic(30)
-        # run_meta_melodic(40)
+    run_meta_melodic(20)
+    run_meta_melodic(30)
+    run_meta_melodic(40)
 
 
 def meta_dual_regression(workspace, population, decomposition, ndims):
