@@ -275,7 +275,7 @@ def meta_ica_melodic(workspace):
 
         # run meta ica
         os.system(' '.join(['melodic',
-                            '--in=' + os.path.join(melodic_dir, 'melodic_IC_all.nii.gz'),
+                            '--in=' + os.path.join(IC_dir_all, 'melodic_IC_all.nii.gz'),
                             '--mask=' + mask,
                             '-v',
                             '--outdir=' + IC_dir_all,
@@ -283,6 +283,8 @@ def meta_ica_melodic(workspace):
                             '--tr=1',  # + str(TR_mean)
                             '-d ' + str(n_components)
                             ]))
+        os.system('cp %s/melodic_IC.nii.gz %s/melodic_IC.nii.gz' %(IC_dir_all,
+                                                                   os.path.join(melodic_dir, 'ndim_%s' % n_components)))
 
     run_meta_melodic(20)
     run_meta_melodic(30)
