@@ -246,7 +246,7 @@ def meta_ica_melodic(workspace):
             IC_dir = mkdir_path(os.path.join(melodic_dir, 'ndim_%s'%n_components,'ICA_%s'%i))
 
             if not os.path.isfile(os.path.join(IC_dir, 'melodic_IC.nii.gz')):
-                print 'Running Dictionary Learning Decomposition Number %s' % i
+                print 'Running ICA Decomposition Number %s' % i
 
                 func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')
                              for subject in meta_lists['meta_list_%s' % i]]
