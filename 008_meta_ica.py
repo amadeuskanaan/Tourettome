@@ -267,7 +267,7 @@ def meta_ica_melodic(workspace):
                                     ]))
 
         # Run meta ICA
-        IC_dir_all = mkdir_path(os.path.join(melodic_dir, 'ICA_merged'))
+        IC_dir_all = mkdir_path(os.path.join(melodic_dir, 'ndim_%s'%n_components, 'ICA_merged'))
         melodic_ICs = [os.path.join(IC_dir, 'ICA_%s' % i, 'melodic_IC.nii.gz') for i in xrange(30)]
 
         # Merge all melodic runs
