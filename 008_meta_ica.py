@@ -224,81 +224,69 @@ def meta_dict_learning(workspace):
     run_meta_dict_learning(40)
 
 def meta_ica_melodic(population, workspace):
-    meta_ica_dir = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA'))
-    meta_ica_list_dir = mkdir_path(os.path.join(meta_ica_dir, 'meta_subject_lists'))
-    melodic_dir  = mkdir_path(os.path.join(tourettome_workspace, 'META_ICA/melodic'))
+
+    workspace_dir = mkdir_path(os.path.join(workspace, 'META_DECOMPOSITION'))
+    lists_dir = mkdir_path(os.path.join(workspace_dir, 'subject_lists'))
+    melodic_dir = mkdir_path(os.path.join(workspace_dir, 'melodic'))
+
     ####################################################################################################################
     # Run melodic on the 30 randomized lists
     ####################################################################################################################
 
-    ### TR: PA=2.4; LZ=1.4; HA=2.0; HA=2.4; HB= 2.0. Average TR=2.05
-    # TR_mean = (2.4 + 2.4 +    2.0 + 1.4) / 4.
-    TR_mean = (2.4 + 2.4 + 1.4) / 3.
-
-    # create brain mask
-    os.system('flirt -in %s -ref %s -applyisoxfm 4 -nosearch -out %s/MNI152_T1_4mm_brain_mask'
-              % (mni_brain_2mm_mask, mni_brain_2mm_mask, meta_ica_dir))
-    os.system('fslmaths %s/MNI152_T1_4mm_brain_mask -thr 0.5 -bin %s/MNI152_T1_4mm_brain_mask_bin'
-              % (meta_ica_dir, meta_ica_dir))
-    brain_mask_4mm = os.path.join(meta_ica_dir, 'MNI152_T1_4mm_brain_mask_bin.nii.gz')
+    TR = (2.4 + 2.4 + 1.4) / 3.
+    mask = os.path.join(workspace_dir, 'MNI_4mm_mask.nii.gz')
 
     # load sub lists
-    meta_lists = json.load(open('%s/meta_lists.json' % meta_ica_list_dir))
+    meta_lists = json.load(open('%s/meta_lists.json' % lists_dir))
 
-    # def run_melodic_multi_processing(i):
-    for i in xrange(30):
+    def run_meta_melodic(n_components):
 
-        if not os.path.isfile(os.path.join(os.path.join(meta_ica_dir, 'ICA_%s' % i, 'melodic_IC.nii.gz'))):
-            print 'Running Melodic Number %s' % i
+        for i in xrange(30):
 
-            func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')
-                         for subject in meta_lists['meta_list_%s' % i]]
+            IC_dir = mkdir_path(os.path.join(melodic_dir, 'ndim_%s'%n_components,'ICA_%s'%i))
 
-            # fun_list_file = open('%s/list_%s.txt' %(meta_ica_list_dir, i), 'w')
-            # fun_list_file.write(func_list)
+            if not os.path.isfile(os.path.join(IC_dir, 'melodic_IC.nii.gz')):
+                print 'Running Dictionary Learning Decomposition Number %s' % i
 
-            input_file = os.path.join(meta_ica_list_dir, 'input_list_%s.txt' % (i))
-            with open(input_file, 'w') as file:
-                for func in func_list:
-                    file.write(func + '\n')
-            # print input_file
+                func_list = [os.path.join(tourettome_workspace, subject, 'ICA/REST_EDIT_UNI_BRAIN_MNI4mm_n196_fwhm_hp.nii.gz')
+                             for subject in meta_lists['meta_list_%s' % i]]
 
-            melodic_run_dir = mkdir_path(os.path.join(melodic_dir, 'ICA_%s' % i))
+                input_file = os.path.join(IC_dir, 'input_list_%s.txt' % (i))
+                with open(input_file, 'w') as file:
+                    for func in func_list:
+                        file.write(func + '\n')
 
-            os.system(' '.join(['melodic',
-                                '--in=' + input_file,  # '%s/list_%s.txt' %(meta_ica_list_dir, i),
-                                '--mask=' + brain_mask_4mm,
-                                '-v',
-                                '--outdir=' + melodic_run_dir,
-                                '--report',
-                                '--tr=' + str(TR_mean),
-                                '-d 30'
-                                ]))
+                os.system(' '.join(['melodic',
+                                    '--in=' + input_file,  # '%s/list_%s.txt' %(meta_ica_list_dir, i),
+                                    '--mask=' + mask,
+                                    '-v',
+                                    '--outdir=' + IC_dir,
+                                    '--report',
+                                    '--tr=' + str(TR),
+                                    '-d ' + n_components
+                                    ]))
 
-    ####################################################################################################################
-    # Run META ICA
-    ####################################################################################################################
-
-    print 'Running META_ICA'
-
-    if not os.path.isfile(os.path.join(melodic_dir, 'ICA_merged', 'melodic_IC.nii.gz')):
-        # melodic_ICs = [os.path.join(meta_ica_dir, 'ICA_%s'%i, 'melodic_IC.nii.gz') for i in xrange(30)]
-        melodic_ICs = [os.path.join(melodic_dir, 'ICA_%s' % i, 'melodic_IC.nii.gz') for i in xrange(30)]
+        # Run meta ICA
+        IC_dir_all = mkdir_path(os.path.join(melodic_dir, 'ICA_merged'))
+        melodic_ICs = [os.path.join(IC_dir, 'ICA_%s' % i, 'melodic_IC.nii.gz') for i in xrange(30)]
 
         # Merge all melodic runs
-        os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' % (melodic_dir, ' '.join(melodic_ICs)))
+        os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' % (IC_dir_all, ' '.join(melodic_ICs)))
 
         # run meta ica
-        ica_run_dir_all = mkdir_path(os.path.join(melodic_dir, 'ICA_merged'))
         os.system(' '.join(['melodic',
                             '--in=' + os.path.join(melodic_dir, 'melodic_IC_all.nii.gz'),
-                            '--mask=' + brain_mask_4mm,
+                            '--mask=' + mask,
                             '-v',
-                            '--outdir=' + ica_run_dir_all,
+                            '--outdir=' + IC_dir_all,
                             '--Ostats --nobet --mmthresh=0.5 --report',
                             '--tr=1',  # + str(TR_mean)
-                            '-d 30'
+                            '-d ' + n_components
                             ]))
+
+        run_meta_melodic(20)
+        # run_meta_melodic(30)
+        # run_meta_melodic(40)
 
 
 def meta_dual_regression(workspace, population, decomposition, ndims):
@@ -401,9 +389,13 @@ population = tourettome_subjects
 workspace = tourettome_workspace
 
 # meta_decompsition_pproc(population, workspace)
-# meta_dict_learning(workspace)
+meta_dict_learning(workspace)
 # meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=20)
 # meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=30)
-meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=40)
+# meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=40)
+
+# meta_dual_regression(workspace, population, decomposition='melodic', ndims=20)
+# meta_dual_regression(workspace, population, decomposition='melodic', ndims=30)
+# meta_dual_regression(workspace, population, decomposition='melodic', ndims=40)
 
 
