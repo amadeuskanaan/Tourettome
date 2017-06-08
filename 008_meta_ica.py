@@ -269,26 +269,26 @@ def meta_ica_melodic(workspace):
                                     ]))
 
         # Run meta ICA
-        IC_dir_all = mkdir_path(os.path.join(melodic_dir, 'ndim_%s'%n_components, 'ICA_merged'))
-        melodic_ICs = [os.path.join(IC_dir, 'ICA_%s' % i, 'melodic_IC.nii.gz') for i in xrange(30)]
-        print IC_dir_all
-        print melodic_ICs
+        IC_dir_all = mkdir_path(os.path.join(melodic_dir, 'ndim_%s'%n_components, 'ICA_all'))
+        if not os.path.isfile(os.path.join(IC_dir_all, 'melodic_IC.nii.gz')):
+            print 'Running melodic merge'
+            melodic_ICs = [os.path.join(melodic_dir, 'ndim_%s'%n_components,  'ICA_%s' % i, 'melodic_IC.nii.gz') for i in xrange(30)]
 
-        # Merge all melodic runs
-        os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' % (IC_dir_all, ' '.join(melodic_ICs)))
+            # Merge all melodic runs
+            os.system('fslmerge -t %s/melodic_IC_all.nii.gz %s' % (IC_dir_all, ' '.join(melodic_ICs)))
 
-        # run meta ica
-        os.system(' '.join(['melodic',
-                            '--in=' + os.path.join(IC_dir_all, 'melodic_IC_all.nii.gz'),
-                            '--mask=' + mask,
-                            '-v',
-                            '--outdir=' + IC_dir_all,
-                            '--Ostats --nobet --mmthresh=0.5 --report',
-                            '--tr=1',  # + str(TR_mean)
-                            '-d ' + str(n_components)
-                            ]))
-        os.system('cp %s/melodic_IC.nii.gz %s/melodic_IC.nii.gz' %(IC_dir_all,
-                                                                   os.path.join(melodic_dir, 'ndim_%s' % n_components)))
+            # run meta ica
+            os.system(' '.join(['melodic',
+                                '--in=' + os.path.join(IC_dir_all, 'melodic_IC_all.nii.gz'),
+                                '--mask=' + mask,
+                                '-v',
+                                '--outdir=' + IC_dir_all,
+                                '--Ostats --nobet --mmthresh=0.5 --report',
+                                '--tr=1',  # + str(TR_mean)
+                                '-d ' + str(n_components)
+                                ]))
+            os.system('cp %s/melodic_IC.nii.gz %s/melodic_IC.nii.gz' %(IC_dir_all,
+                                                                       os.path.join(melodic_dir, 'ndim_%s' % n_components)))
 
     run_meta_melodic(20)
     run_meta_melodic(30)
