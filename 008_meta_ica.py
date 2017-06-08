@@ -233,6 +233,8 @@ def meta_ica_melodic(workspace):
     # Run melodic on the 30 randomized lists
     ####################################################################################################################
 
+    print 'Running META-ICA'
+
     TR = (2.4 + 2.4 + 1.4) / 3.
     mask = os.path.join(workspace_dir, 'MNI_4mm_mask.nii.gz')
 
