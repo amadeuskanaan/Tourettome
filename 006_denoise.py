@@ -11,7 +11,6 @@ from quality.motion_statistics import *
 # assert len(sys.argv)== 2
 # subject_index=int(sys.argv[1])
 
-
 #requires FSL5, FREESURFER, CPAC
 
 def nuisance_signal_regression(population, workspace_dir):
@@ -29,9 +28,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
         # Output
         nuisance_dir = mkdir_path(os.path.join(subdir, 'DENOISE'))
-        wmcsf_dir    = mkdir_path(os.path.join(nuisance_dir, 'residuals_wmcsf'))
-        aroma_dir    = mkdir_path(os.path.join(nuisance_dir, 'residuals_ica_aroma'))
-        compcor_dir  = mkdir_path(os.path.join(nuisance_dir, 'residuals_compcor'))
+        wmcsf_dir     = mkdir_path(os.path.join(nuisance_dir, 'residuals_wmcsf'))
 
         # Smoothing kernel
         FWHM     = 6
@@ -41,8 +38,8 @@ def nuisance_signal_regression(population, workspace_dir):
         ##sigma = 1 / (2 * TR * cutoff_in_hz)
         highpass_cutoff = 0.01 #hz
         lowpass_cutoff  = 0.1  #hz
-        highpass_sigma  = 1./(2*TR*highpass_cutoff)
-        lowpass_sigma   = 1./(2*TR*lowpass_cutoff)
+        highpass_sigma  = 1./(2.*TR*highpass_cutoff)
+        lowpass_sigma   = 1./(2.*TR*lowpass_cutoff)
 
         print 'TR=%ss'%TR
         print 'Highpass filter=', highpass_sigma
@@ -78,7 +75,9 @@ def nuisance_signal_regression(population, workspace_dir):
         csfsig = os.path.join(wmcsf_dir, 'csf_signals.npy')
         gmsig  = os.path.join(wmcsf_dir, 'gm_signals.npy')
 
-        def denoise(run_dir, data, selector, wmsig  = wmsig,csfsig = csfsig, gmsig  = gmsig):
+        def denoise(denoise_type, data, selector, wmsig  = wmsig, csfsig = csfsig, gmsig  = gmsig):
+
+            run_dir = mkdir_path(os.path.join(nuisance_dir, 'residuals_%s'%denoise_type))
 
             os.chdir(run_dir)
             if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm6.nii.gz')):
@@ -125,7 +124,7 @@ def nuisance_signal_regression(population, workspace_dir):
         print '- Nuisance Signal regression :::: FUNC2mm_detrend_wmcsf_moco24_bp_std_fwhm '
         selector_std = {'wm'     : True, 'csf': True,  'motion': True,  'linear': True, 'quadratic': True,
                         'compcor': False, 'gm': False, 'global': False, 'pc1'   : False}
-        denoise(run_dir=wmcsf_dir,data=func_mni, selector=selector_std)
+        denoise(denoise_type='wmcsf',data=func_mni, selector=selector_std)
 
 
         # 2- Detrend (Linear-Quadratic), Motion-24, Compcor
@@ -133,7 +132,7 @@ def nuisance_signal_regression(population, workspace_dir):
         print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
         selector_cc = {'wm'     : False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
                         'compcor': True,  'gm' : False, 'global': False, 'pc1'  : False}
-        denoise(run_dir=compcor_dir, data=func_mni, selector=selector_cc)
+        denoise(denoise_type='compcor', data=func_mni, selector=selector_cc)
 
         ################################################################################################################
         ################################################################################################################
@@ -170,25 +169,27 @@ def nuisance_signal_regression(population, workspace_dir):
         #             gmsig =os.path.join(wmcsf_dir, 'gm_signals.npy'))
 
 
-#nuisance_signal_regression(['LZ032', 'PA070', 'HA033'], tourettome_workspace)
+nuisance_signal_regression(['LZ032'], tourettome_workspace)
+
+
+
 # nuisance_signal_regression(leipzig, tourettome_workspace)
 # nuisance_signal_regression(paris, tourettome_workspace)
 #nuisance_signal_regression(hannover_a, tourettome_workspace)
 # nuisance_signal_regression(leipzig, tourettome_workspace)
-
-import numpy as np
-X = np.asanyarray([])
-for i in hannover_a1[0:2]:
-    resid = os.path.isfile(os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual_bp.nii.gz'))
-    if os.path.isfile(resid):
-        data = nb.load(resid).get_data()
-        X.append(data)
-
-
-print X.shape
-
-
-os.chdir(tourettome_workspace)
+# import numpy as np
+# X = np.asanyarray([])
+# for i in hannover_a1[0:2]:
+#     resid = os.path.isfile(os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual_bp.nii.gz'))
+#     if os.path.isfile(resid):
+#         data = nb.load(resid).get_data()
+#         X.append(data)
+#
+#
+# print X.shape
+#
+#
+# os.chdir(tourettome_workspace)
 
 
 #os.system('fslmerge -t concat %s' % ' '.join(dn))
