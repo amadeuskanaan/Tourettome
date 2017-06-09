@@ -294,6 +294,7 @@ def meta_ica_melodic(workspace):
     run_meta_melodic(30)
     run_meta_melodic(40)
 
+
 def meta_dual_regression(workspace, population, decomposition, ndims):
 
     workspace_dir = os.path.join(workspace, 'META_DECOMPOSITION')
