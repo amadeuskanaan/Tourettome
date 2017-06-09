@@ -183,10 +183,11 @@ def register(population, workspace_dir):
         if not os.path.isfile(os.path.join(regdir, 'REST_CSF_MNI2mm.nii.gz')):
             print 'creating functional masks in 2mm'
             os.chdir(regdir)
-            os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm -thr 200 -bin -ero -s 3 -thr 0.5 -bin -fillh REST_BRAIN_MASK_MNI2mm')
+            os.system('fslroi REST_EDIT_UNI_BRAIN_MNI2mm roi 0 1 ')
+            os.system('fslmaths roi -thr 200 -bin -ero -s 3 -thr 0.5 -bin -fillh REST_BRAIN_MASK_MNI2mm')
             os.system('fslmaths ANATOMICAL_GM_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_GM_MNI2mm')
             os.system('fslmaths ANATOMICAL_WM_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_WM_MNI2mm')
             os.system('fslmaths ANATOMICAL_CSF_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_CSF_MNI2mm')
-
+            os.system('rm -rf roi')
 # register(tourettome_subjects, tourettome_workspace)
 register(['LZ002'], tourettome_workspace)
