@@ -183,6 +183,7 @@ def register(population, workspace_dir):
         # create functional masks in 2mm
 
         # Apply all xfms
+        os.chdir(regdir_mni)
         os.system('antsApplyTransforms '
                   '-d 3 '
                   '-i % '
