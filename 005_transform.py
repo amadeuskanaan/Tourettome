@@ -186,12 +186,12 @@ def register(population, workspace_dir):
         os.chdir(regdir_mni)
         os.system('antsApplyTransforms '
                   '-d 3 '
-                  '-i % '
-                  '-o %s/REST_BRAIN_MASK_2mm.nii.gz '
+                  '-i %s'
+                  '-o ../REST_BRAIN_MASK_2mm.nii.gz '
                   '-r %s '
                   '-n Linear '
-                  '-t ../transform1Warp.nii.gz ../transform0GenericAffine.mat'
-                  % (funcmask, regdir, mni_brain_2mm))
+                  '-t transform1Warp.nii.gz transform0GenericAffine.mat'
+                  % (funcmask, mni_brain_2mm))
 
 
 # register(tourettome_subjects, tourettome_workspace)
