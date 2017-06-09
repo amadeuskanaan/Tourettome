@@ -58,9 +58,9 @@ def nuisance_signal_regression(population, workspace_dir):
             os.chdir(wmcsf_dir)
             extract_tissue_data(data_file=func_mni,
                                 ventricles_mask_file=mni_HOLV_2mm,
-                                wm_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_WM_MNI2mm.nii.gz'),
-                                csf_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_CSF_MNI2mm.nii.gz'),
-                                gm_seg_file=os.path.join(subdir, 'REGISTRATION/ANATOMICAL_GM_MNI2mm.nii.gz'))
+                                wm_seg_file=os.path.join(subdir, 'REGISTRATION/REST_WM_MNI2mm.nii.gz'),
+                                csf_seg_file=os.path.join(subdir, 'REGISTRATION/REST_CSF_MNI2mm.nii.gz'),
+                                gm_seg_file=os.path.join(subdir, 'REGISTRATION/REST_GM_MNI2mm.nii.gz'))
 
         ################################################################################################################
         ######## Denoise MNI FUNC
@@ -169,7 +169,7 @@ def nuisance_signal_regression(population, workspace_dir):
         #             gmsig =os.path.join(wmcsf_dir, 'gm_signals.npy'))
 
 
-nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
+nuisance_signal_regression(['LZ032'], tourettome_workspace)
 
 
 
