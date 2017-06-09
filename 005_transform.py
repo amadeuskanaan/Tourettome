@@ -187,11 +187,11 @@ def register(population, workspace_dir):
         os.system('antsApplyTransforms '
                   '-d 3 '
                   '-i %s'
-                  '-o ../REST_BRAIN_MASK_2mm.nii.gz '
+                  '-o %s/REST_BRAIN_MASK_2mm.nii.gz '
                   '-r %s '
                   '-n Linear '
                   '-t transform1Warp.nii.gz transform0GenericAffine.mat'
-                  % (funcmask, mni_brain_2mm))
+                  % (funcmask,regdir, mni_brain_2mm))
 
 
 # register(tourettome_subjects, tourettome_workspace)
