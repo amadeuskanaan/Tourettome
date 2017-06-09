@@ -33,6 +33,7 @@ def register(population, workspace_dir):
         anat_first = os.path.join(anat_dir, 'seg_first/FIRST.nii.gz')
         func3d     = os.path.join(func_dir, 'REST_EDIT_MOCO_BRAIN_MEAN.nii.gz')
         func4d     = os.path.join(func_dir, 'REST_EDIT_BRAIN.nii.gz')
+        funcmask   = os.path.join(func_dir, 'REST_BRAIN_MASK.nii.gz')
 
         ################################################################################################################
         # ##### Non-linear ANATOMICAL to MNI
@@ -181,7 +182,15 @@ def register(population, workspace_dir):
         #if not os.path.isfile(os.path.join(regdir, 'REST_BRAIN_MASK_MNI2mm'))
         # create functional masks in 2mm
 
-
+        # Apply all xfms
+        os.system('antsApplyTransforms '
+                  '-d 3 '
+                  '-i % '
+                  '-o %s/REST_BRAIN_MASK_2mm.nii.gz '
+                  '-r %s '
+                  '-n Linear '
+                  '-t ../transform1Warp.nii.gz ../transform0GenericAffine.mat MAT_UNI_%s.tfm'
+                  % (funcmask, regdir, mni_brain_2mm, frame))
 
 
 # register(tourettome_subjects, tourettome_workspace)
