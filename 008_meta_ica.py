@@ -293,6 +293,9 @@ def meta_ica_melodic(workspace):
     run_meta_melodic(20)
     run_meta_melodic(30)
     run_meta_melodic(40)
+    run_meta_melodic(70)
+    run_meta_melodic(100)
+    run_meta_melodic(0)
 
 
 def meta_dual_regression(workspace, population, decomposition, ndims):
@@ -396,13 +399,16 @@ workspace = tourettome_workspace
 
 # meta_decompsition_pproc(population, workspace)
 # meta_dict_learning(workspace)
-# meta_ica_melodic(workspace)
+meta_ica_melodic(workspace)
 # meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=20)
 # meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=30)
 # meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=40)
 
-meta_dual_regression(workspace, population, decomposition='melodic', ndims=20)
-meta_dual_regression(workspace, population, decomposition='melodic', ndims=30)
+# meta_dual_regression(workspace, population, decomposition='melodic', ndims=0)
+# meta_dual_regression(workspace, population, decomposition='melodic', ndims=20)
+# meta_dual_regression(workspace, population, decomposition='melodic', ndims=30)
 # meta_dual_regression(workspace, population, decomposition='melodic', ndims=40)
+# meta_dual_regression(workspace, population, decomposition='melodic', ndims=70)
+# meta_dual_regression(workspace, population, decomposition='melodic', ndims=100)
 
 
