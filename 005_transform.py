@@ -188,6 +188,6 @@ def register(population, workspace_dir):
             os.system('fslmaths ANATOMICAL_GM_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_GM_MNI2mm')
             os.system('fslmaths ANATOMICAL_WM_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_WM_MNI2mm')
             os.system('fslmaths ANATOMICAL_CSF_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_CSF_MNI2mm')
-            os.system('rm -rf roi')
+            os.system('rm -rf roi*')
 # register(tourettome_subjects, tourettome_workspace)
 register(['LZ002'], tourettome_workspace)
