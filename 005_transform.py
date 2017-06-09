@@ -179,20 +179,13 @@ def register(population, workspace_dir):
             os.system('rm -rf %s' %concat_dir)
 
 
-        #if not os.path.isfile(os.path.join(regdir, 'REST_BRAIN_MASK_MNI2mm'))
-        # create functional masks in 2mm
-
-        # Apply all xfms
-        os.chdir(regdir_mni)
-        os.system('antsApplyTransforms '
-                  '-d 3 '
-                  '-i %s'
-                  '-o %s/REST_BRAIN_MASK_2mm.nii.gz '
-                  '-r %s '
-                  '-n Linear '
-                  '-t transform1Warp.nii.gz transform0GenericAffine.mat'
-                  % (funcmask,regdir, mni_brain_2mm))
-
+        # Create functional masks in 2mm
+        if not os.path.isfile(os.path.join(regdir, 'REST_CSF_MNI2mm.nii.gz')):
+            os.chdir(regdir)
+            os.system('fslmaths REST_EDIT_UNI_BRAIN_MNI2mm -thr 200 -bin -ero -s 3 -thr 0.5 -bin -fillh REST_BRAIN_MASK_MNI2mm')
+            os.system('fslmaths ANATOMICAL_GM_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_GM_MNI2mm')
+            os.system('fslmaths ANATOMICAL_WM_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_WM_MNI2mm')
+            os.system('fslmaths ANATOMICAL_CSF_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_CSF_MNI2mm')
 
 # register(tourettome_subjects, tourettome_workspace)
 register(['LZ032'], tourettome_workspace)
