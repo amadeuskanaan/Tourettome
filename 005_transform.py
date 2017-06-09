@@ -177,5 +177,11 @@ def register(population, workspace_dir):
             os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
             os.system('rm -rf %s' %concat_dir)
 
+
+        #if not os.path.isfile(os.path.join(regdir, 'REST_BRAIN_MASK_MNI2mm'))
+        # create functional masks in 2mm
+
+
+
 # register(tourettome_subjects, tourettome_workspace)
-register(['LZ061'], tourettome_workspace)
+register(['LZ032'], tourettome_workspace)
