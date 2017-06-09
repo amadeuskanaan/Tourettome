@@ -189,8 +189,8 @@ def register(population, workspace_dir):
                   '-o %s/REST_BRAIN_MASK_2mm.nii.gz '
                   '-r %s '
                   '-n Linear '
-                  '-t ../transform1Warp.nii.gz ../transform0GenericAffine.mat MAT_UNI_%s.tfm'
-                  % (funcmask, regdir, mni_brain_2mm, frame))
+                  '-t ../transform1Warp.nii.gz ../transform0GenericAffine.mat'
+                  % (funcmask, regdir, mni_brain_2mm))
 
 
 # register(tourettome_subjects, tourettome_workspace)
