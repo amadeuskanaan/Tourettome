@@ -404,11 +404,10 @@ workspace = tourettome_workspace
 # meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=30)
 # meta_dual_regression(workspace, population, decomposition='dict_learning', ndims=40)
 
+meta_dual_regression(workspace, population, decomposition='melodic', ndims=100)
+meta_dual_regression(workspace, population, decomposition='melodic', ndims=70)
 meta_dual_regression(workspace, population, decomposition='melodic', ndims=0)
 meta_dual_regression(workspace, population, decomposition='melodic', ndims=20)
 meta_dual_regression(workspace, population, decomposition='melodic', ndims=30)
 meta_dual_regression(workspace, population, decomposition='melodic', ndims=40)
-meta_dual_regression(workspace, population, decomposition='melodic', ndims=70)
-meta_dual_regression(workspace, population, decomposition='melodic', ndims=100)
-#
 
