@@ -38,8 +38,8 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
         os.system('fslchfiletype NIFTI %s/*hdr ANATOMICAL_.nii.gz' %anat_dir)
 
         # swap dims
-        os.system('fslswapdim ANATOMICAL_ ANATOMICAL')
-        os.system('fslswapdim REST_ REST')
+        os.system('fslswapdim ANATOMICAL_ RL PA IS ANATOMICAL')
+        os.system('fslswapdim REST_ RL PA IS REST')
         os.system('rm -rf *_*')
 
         # quick reg
