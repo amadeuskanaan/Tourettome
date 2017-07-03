@@ -2,7 +2,7 @@ __author__ = 'kanaan_01.07.2017'
 
 import os
 from utilities.utils import *
-
+from variables.subject_list_original import *
 
 
 
@@ -47,4 +47,4 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
 
 
 
-prep_hamburg_data(['HM001'],  , tourettome_afs)
+prep_hamburg_data(['HM001'], HAMBURG_orig_datadir , tourettome_afs)
