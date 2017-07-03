@@ -26,7 +26,7 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
 
 
         nifti_dir = mkdir_path(os.path.join(afs_dir, subject, 'NIFTI'))
-        rest_dir = os.path.join(orig_nifti_dir, 'REST1')
+        rest_dir = os.path.join(orig_nifti_dir, 'Rest1')
         anat_dir = os.path.join(orig_nifti_dir, 'T1')
 
 
