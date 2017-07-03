@@ -34,7 +34,7 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
 
 
         # convert all img/hdr to nifti
-        os.system('fslmerge -t REST_.nii.gz %s/*' %rest_dir)
+        os.system('fslmerge -t REST_.nii.gz %s/*hdr' %rest_dir)
         os.system('fslchfiletype NIFTI %s/*hdr ANATOMICAL_.nii.gz' %anat_dir)
 
         # swap dims
