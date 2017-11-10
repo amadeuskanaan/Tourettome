@@ -134,6 +134,13 @@ def nuisance_signal_regression(population, workspace_dir):
                         'compcor': True,  'gm' : False, 'global': False, 'pc1'  : False}
         denoise(denoise_type='compcor', data=func_mni, selector=selector_cc)
 
+        # 3- Detrend (Linear-Quadratic), Motion-24, Compcor
+
+        print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
+        selector_gsr = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+                       'compcor': True, 'gm': False, 'global': True, 'pc1': False}
+        denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr)
+
         ################################################################################################################
         ################################################################################################################
 
