@@ -137,7 +137,9 @@ def register(population, workspace_dir):
         ################################################################################################################
         ##### Resample FUNCTIONAL to MNI linear
 
-        if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')):
+
+        func_mni2  = os.path.join(regdir, 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
+        if not os.path.isfile(func_mni2):
 
             print '..... Transforming func2mni in one step.....'
             print '...........concatenating moco-affine/func2anat-affine/anat2mni-affine/anat2mni-warp'
@@ -178,7 +180,6 @@ def register(population, workspace_dir):
             os.system('fslmerge -t %s/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz %s/warped*' %(regdir, concat_dir))
             os.system('rm -rf %s' %concat_dir)
 
-
         # Create functional masks in 2mm
         if not os.path.isfile(os.path.join(regdir, 'REST_CSF_MNI2mm.nii.gz')):
             print 'creating functional masks in 2mm'
@@ -189,5 +190,19 @@ def register(population, workspace_dir):
             os.system('fslmaths ANATOMICAL_WM_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_WM_MNI2mm')
             os.system('fslmaths ANATOMICAL_CSF_MNI2mm.nii.gz -mul REST_BRAIN_MASK_MNI2mm REST_CSF_MNI2mm')
             os.system('rm -rf roi*')
+
+        # downsample func data to 3mm
+        if not os.path.isfile(os.path.join(regdir, 'REST_EDIT_UNI_BRAIN_MNI3mm.nii.gz')):
+            print 'downsampling to 3mm'
+            os.chdir(regdir)
+            os.system('flirt -in REST_EDIT_UNI_BRAIN_MNI2mm -ref %s -applyisoxfm 3 -out REST_EDIT_UNI_BRAIN_MNI3mm' % (mni_brain_3mm))
+            os.system('flirt -in REST_GM_MNI2mm -ref %s -applyisoxfm 3 -out REST_GM_MNI3mm_' % (mni_brain_3mm))
+            os.system('flirt -in REST_WM_MNI2mm -ref %s -applyisoxfm 3 -out REST_WM_MNI3mm_' % (mni_brain_3mm))
+            os.system('flirt -in REST_CSF_MNI2mm -ref %s -applyisoxfm 3 -out REST_CSF_MNI3mm_' % (mni_brain_3mm))
+            os.system('fslmaths REST_GM_MNI3mm_ -thr 0.5 -bin REST_GM_MNI3mm')
+            os.system('fslmaths REST_WM_MNI3mm_ -thr 0.5 -bin REST_WM_MNI3mm')
+            os.system('fslmaths REST_CSF_MNI3mm_ -thr 0.5 -bin REST_CSF_MNI3mm')
+            os.system('rm -rf REST_GM_MNI3mm_* REST_WM_MNI3mm_* REST_CSF_MNI3mm_')
+
 # register(tourettome_subjects, tourettome_workspace)
 register(['LZ002'], tourettome_workspace)

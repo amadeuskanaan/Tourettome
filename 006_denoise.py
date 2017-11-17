@@ -23,12 +23,12 @@ def nuisance_signal_regression(population, workspace_dir):
 
         # Input
         subdir   = os.path.join(workspace_dir, subject)
-        func_mni = os.path.join(subdir, 'REGISTRATION/REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
+        func_mni = os.path.join(subdir, 'REGISTRATION/REST_EDIT_UNI_BRAIN_MNI3mm.nii.gz')
         TR       = nb.load(os.path.join(subdir, 'FUNCTIONAL/REST.nii.gz')).header['pixdim'][4]
 
         # Output
         nuisance_dir = mkdir_path(os.path.join(subdir, 'DENOISE'))
-        wmcsf_dir     = mkdir_path(os.path.join(nuisance_dir, 'residuals_wmcsf'))
+        signals_dir     = mkdir_path(os.path.join(nuisance_dir, 'tissue_signals'))
 
         # Smoothing kernel
         FWHM     = 6
@@ -53,14 +53,13 @@ def nuisance_signal_regression(population, workspace_dir):
         calc_friston_twenty_four(movpar)
 
         # extract tissue data
-        if not os.path.isfile( os.path.join(wmcsf_dir, 'wm_signals.npy')):
+        if not os.path.isfile( os.path.join(signals_dir, 'wm_signals.npy')):
             print '......extracting tissue data'
-            os.chdir(wmcsf_dir)
-            extract_tissue_data(data_file=func_mni,
-                                ventricles_mask_file=mni_HOLV_2mm,
-                                wm_seg_file=os.path.join(subdir, 'REGISTRATION/REST_WM_MNI2mm.nii.gz'),
-                                csf_seg_file=os.path.join(subdir, 'REGISTRATION/REST_CSF_MNI2mm.nii.gz'),
-                                gm_seg_file=os.path.join(subdir, 'REGISTRATION/REST_GM_MNI2mm.nii.gz'))
+            os.chdir(signals_dir)
+            extract_tissue_data(data_file=func_mni, ventricles_mask_file=mni_HOLV_3mm,
+                                wm_seg_file=os.path.join(subdir, 'REGISTRATION/REST_WM_MNI3mm.nii.gz'),
+                                csf_seg_file=os.path.join(subdir, 'REGISTRATION/REST_CSF_MNI3mm.nii.gz'),
+                                gm_seg_file=os.path.join(subdir, 'REGISTRATION/REST_GM_MNI3mm.nii.gz'))
 
         ################################################################################################################
         ######## Denoise MNI FUNC
@@ -71,9 +70,9 @@ def nuisance_signal_regression(population, workspace_dir):
 
         ################################################################################################################
 
-        wmsig  = os.path.join(wmcsf_dir, 'wm_signals.npy')
-        csfsig = os.path.join(wmcsf_dir, 'csf_signals.npy')
-        gmsig  = os.path.join(wmcsf_dir, 'gm_signals.npy')
+        wmsig  = os.path.join(signals_dir, 'wm_signals.npy')
+        csfsig = os.path.join(signals_dir, 'csf_signals.npy')
+        gmsig  = os.path.join(signals_dir, 'gm_signals.npy')
 
         def denoise(denoise_type, data, selector, wmsig  = wmsig, csfsig = csfsig, gmsig  = gmsig):
 
@@ -119,27 +118,26 @@ def nuisance_signal_regression(population, workspace_dir):
 
         ################################################################################################################
 
-        # 1- Detrend (Linear-Quadratic), Motion-24, WM/CSF mean signal
-
-        print '- Nuisance Signal regression :::: FUNC2mm_detrend_wmcsf_moco24_bp_std_fwhm '
-        selector_std = {'wm'     : True, 'csf': True,  'motion': True,  'linear': True, 'quadratic': True,
-                        'compcor': False, 'gm': False, 'global': False, 'pc1'   : False}
-        denoise(denoise_type='wmcsf',data=func_mni, selector=selector_std)
-
+        # # 1- Detrend (Linear-Quadratic), Motion-24, WM/CSF mean signal
+        #
+        # print '- Nuisance Signal regression :::: FUNC2mm_detrend_wmcsf_moco24_bp_std_fwhm '
+        # selector_std = {'wm'     : True, 'csf': True,  'motion': True,  'linear': True, 'quadratic': True,
+        #                 'compcor': False, 'gm': False, 'global': False, 'pc1'   : False}
+        # denoise(denoise_type='wmcsf',data=func_mni, selector=selector_std)
+        #
 
         # 2- Detrend (Linear-Quadratic), Motion-24, Compcor
 
         print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
-        selector_cc = {'wm'     : False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+        selector_cc = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
                         'compcor': True,  'gm' : False, 'global': False, 'pc1'  : False}
         denoise(denoise_type='compcor', data=func_mni, selector=selector_cc)
 
         # 3- Detrend (Linear-Quadratic), Motion-24, Compcor
-
-        print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
-        selector_gsr = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
-                       'compcor': True, 'gm': False, 'global': True, 'pc1': False}
-        denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr)
+        # print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
+        # selector_gsr = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+        #                'compcor': True, 'gm': False, 'global': True, 'pc1': False}
+        # denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr)
 
         ################################################################################################################
         ################################################################################################################
