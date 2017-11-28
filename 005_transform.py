@@ -204,5 +204,5 @@ def register(population, workspace_dir):
             os.system('fslmaths REST_CSF_MNI3mm_ -thr 0.5 -bin REST_CSF_MNI3mm')
             os.system('rm -rf REST_GM_MNI3mm_* REST_WM_MNI3mm_* REST_CSF_MNI3mm_')
 
-# register(tourettome_subjects, tourettome_workspace)
-register(['LZ002'], tourettome_workspace)
+register(tourettome_subjects, tourettome_workspace)
+# register(['LZ002'], tourettome_workspace)
