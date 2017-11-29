@@ -111,5 +111,5 @@ def preprocess_anatomical(population, workspace):
         # df.to_csv(os.path.join(firstdir, 'bin_count_jac.csv'))
         # print df
 
-preprocess_anatomical(population = tourettome_subjects[1] , workspace = tourettome_workspace)
+preprocess_anatomical(population = tourettome_subjects[1:2] , workspace = tourettome_workspace)
 
