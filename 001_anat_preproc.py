@@ -111,7 +111,7 @@ def preprocess_anatomical(population, workspace):
         # df.to_csv(os.path.join(firstdir, 'bin_count_jac.csv'))
         # print df
 
-preprocess_anatomical(population = leipzig    , workspace = tourettome_workspace)
+preprocess_anatomical(population = ['LZ002']    , workspace = tourettome_workspace)
 # preprocess_anatomical(population = paris      , workspace = tourettome_workspace)
 # preprocess_anatomical(population = hannover_a , workspace = tourettome_workspace)
 # preprocess_anatomical(population = hannover_b , workspace = tourettome_workspace)
