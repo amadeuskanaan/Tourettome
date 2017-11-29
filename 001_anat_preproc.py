@@ -112,8 +112,8 @@ def preprocess_anatomical(population, workspace):
         # print df
 
 # preprocess_anatomical(population = leipzig    , workspace = tourettome_workspace)
-preprocess_anatomical(population = paris      , workspace = tourettome_workspace)
-# preprocess_anatomical(population = hannover_a , workspace = tourettome_workspace)
+# preprocess_anatomical(population = paris      , workspace = tourettome_workspace)
+preprocess_anatomical(population = hannover_a , workspace = tourettome_workspace)
 # preprocess_anatomical(population = hannover_b , workspace = tourettome_workspace)
 # preprocess_anatomical(population = hamburg    , workspace = tourettome_workspace)
 
