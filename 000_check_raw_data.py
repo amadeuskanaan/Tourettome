@@ -27,6 +27,7 @@ def preprocess_anatomical(population, afs_dir, workspace):
         if not os.path.isfile(os.path.join(raw_dir, 'REST.nii.gz')):
             shutil.copy(os.path.join(data_dir, 'REST.nii.gz'), raw_dir)
 
+print len(tourettome_subjects)
 preprocess_anatomical(population = tourettome_subjects,
                       afs_dir    = tourettome_afs,
                       workspace  = tourettome_workspace)
