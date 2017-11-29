@@ -63,10 +63,10 @@ def preprocess_anatomical(population, workspace):
             print '..... Deskulling'
 
             os.chdir(spmdir)
-            os.system('fslmaths c1ANATOMICAL -thr 0.1 -bin c1ANATOMICAL_thr01')
-            os.system('fslmaths c2ANATOMICAL -thr 0.1 -bin c2ANATOMICAL_thr01')
-            os.system('fslmaths c3ANATOMICAL -thr 0.9 -bin c3ANATOMICAL_thr09')
-            os.system('fslmaths c1ANATOMICAL_thr01 -add c2ANATOMICAL_thr01 -add c3ANATOMICAL_thr09 -bin -fillh -s 3 -thr 0.4 -bin ../ANATOMICAL_BRAIN_MASK')
+            os.system('fslmaths c1ANATOMICAL -thr 0.5 -bin c1ANATOMICAL_thr05')
+            os.system('fslmaths c2ANATOMICAL -thr 0.5 -bin c2ANATOMICAL_thr05')
+            os.system('fslmaths c3ANATOMICAL -thr 0.5 -bin c3ANATOMICAL_thr05')
+            os.system('fslmaths c1ANATOMICAL_thr01 -add c2ANATOMICAL_thr05 -add c3ANATOMICAL_thr05 -bin -fillh -s 3 -thr 0.5 -bin ../ANATOMICAL_BRAIN_MASK')
             os.system('fslmaths mANATOMICAL -mas ../ANATOMICAL_BRAIN_MASK ../ANATOMICAL_BRAIN')
 
 
@@ -111,8 +111,8 @@ def preprocess_anatomical(population, workspace):
         # df.to_csv(os.path.join(firstdir, 'bin_count_jac.csv'))
         # print df
 
-# preprocess_anatomical(population = leipzig    , workspace = tourettome_workspace)
-preprocess_anatomical(population = paris      , workspace = tourettome_workspace)
+preprocess_anatomical(population = leipzig[1:2]    , workspace = tourettome_workspace)
+# preprocess_anatomical(population = paris      , workspace = tourettome_workspace)
 # preprocess_anatomical(population = hannover_a , workspace = tourettome_workspace)
 # preprocess_anatomical(population = hannover_b , workspace = tourettome_workspace)
 # preprocess_anatomical(population = hamburg    , workspace = tourettome_workspace)
