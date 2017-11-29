@@ -30,15 +30,10 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
         nifti_dir = mkdir_path(os.path.join(subject_dir, 'NIFTI'))
         os.chdir(nifti_dir)
 
-        for rstring in ['Rest1', 'REST1']:
-            if os.path.isdir(os.path.join(orig_nifti_dir, rstring) ):
-                rest_dir = os.path.join(orig_nifti_dir, rstring)
+        rest_dir = os.path.join(orig_nifti_dir, 'Rest1')
+        anat_dir = os.path.join(orig_nifti_dir, 'T1')
 
-        for tstring in ['t1', 'T1']:
-            if os.path.isdir(os.path.join(orig_nifti_dir, tstring)):
-                anat_dir = os.path.join(orig_nifti_dir, tstring)
-
-        if not os.path.isfile(os.path.join(nifti_dir, 'ANATOMICAL.nii.gz')):
+        if not os.path.isfile(os.path.join(nifti_dir, 'REST.nii.gz')):
             # convert all img/hdr to nifti
             os.system('fslmerge -t REST_.nii.gz %s/*hdr' %rest_dir)
             os.system('fslchfiletype NIFTI %s/*hdr ANATOMICAL_.nii.gz' %anat_dir)
