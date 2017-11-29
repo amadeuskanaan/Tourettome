@@ -15,22 +15,21 @@ def make_nifti(population, afs_dir):
         print '%s-Converting dicom to Nifti for %s' %(count, subject)
         #input
         dicom_dir  = os.path.join(afs_dir, subject, 'DICOM')
-        nifti_dir = os.path.join(afs_dir, subject, 'NIFTI')
-        nifti_dir = mkdir_path(nifti_dir)
+        nifti_dir = mkdir_path(os.path.join(afs_dir, subject, 'NIFTI'))
         string = '%p_%t_%u_%s'
-
 
         if not os.path.isfile(os.path.join(nifti_dir, 'ANATOMICAL.nii.gz')):
             if subject[0:2] == 'LZ':
                 os.system('dcm2niix -b n -o %s %s'%(nifti_dir, dicom_dir))
                 anat    = [os.path.join(nifti_dir,fname) for fname in os.listdir(nifti_dir) if 'mp2rage' in fname][0]
+                print anat
+
                 rest    = [os.path.join(nifti_dir,fname) for fname in os.listdir(nifti_dir) if 'resting' in fname][0]
                 se      = sorted([os.path.join(nifti_dir,fname) for fname in os.listdir(nifti_dir) if '_se_' in fname])
                 shutil.move(anat,  os.path.join(nifti_dir, 'ANATOMICAL.nii.gz'))
                 shutil.move(rest,  os.path.join(nifti_dir, 'REST.nii.gz'))
                 shutil.move(se[0], os.path.join(nifti_dir, 'REST_SE.nii.gz'))
                 shutil.move(se[1], os.path.join(nifti_dir, 'REST_SEINV.nii.gz'))
-
 
             if subject[0:2] == 'HA':
                 os.system('dcm2niix  -b n -o %s %s' % (nifti_dir, dicom_dir))
@@ -55,7 +54,6 @@ def make_nifti(population, afs_dir):
                 shutil.move(bvc, os.path.join(nifti_dir, 'DWI.bvec.gz'))
                 shutil.move(bva, os.path.join(nifti_dir, 'DWI.bval.gz'))
 
-
             if subject[0:2] == 'PA':
                 os.system('dcm2niix -b n -o %s %s' % (nifti_dir, dicom_dir))
                 anat = sorted([os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 't1' in fname])[-1]
@@ -74,7 +72,7 @@ def make_nifti(population, afs_dir):
                 t1 = [os.path.join(dicom_dir_t1, fname) for fname in os.listdir(dicom_dir_t1) if 'mp2rage' in fname][0]
                 shutil.move(t1, os.path.join(nifti_dir, 'T1MAPS.nii.gz'))
 
-# make_nifti(population= leipzig,    afs_dir=tourettome_afs)
-# make_nifti(population= hannover_a, afs_dir=tourettome_afs)
-# make_nifti(population= hannover_b, afs_dir=tourettome_afs)
+make_nifti(population= leipzig,    afs_dir=tourettome_afs)
+make_nifti(population= hannover_a, afs_dir=tourettome_afs)
+make_nifti(population= hannover_b, afs_dir=tourettome_afs)
 make_nifti(population= paris,      afs_dir=tourettome_afs)
