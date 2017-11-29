@@ -29,8 +29,14 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
         subject_dir = mkdir_path(os.path.join(afs_dir, subject))
         nifti_dir = mkdir_path(os.path.join(subject_dir, 'NIFTI'))
         os.chdir(nifti_dir)
-        rest_dir  = os.path.join(orig_nifti_dir, 'Rest1')
-        anat_dir  = os.path.join(orig_nifti_dir, 'T1')
+
+        for rstring in ['Rest1', 'REST1']:
+            if os.path.isdir(os.path.join(orig_nifti_dir, rstring) ):
+                rest_dir = os.path.join(orig_nifti_dir, rstring)
+
+        for tstring in ['t1', 'T1']:
+            if os.path.isdir(os.path.join(orig_nifti_dir, tstring)):
+                anat_dir = os.path.join(orig_nifti_dir, tstring)
 
         if not os.path.isfile(os.path.join(nifti_dir, 'ANATOMICAL.nii.gz')):
             # convert all img/hdr to nifti
