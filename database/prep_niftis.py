@@ -1,10 +1,11 @@
 __author__ = 'kanaan_06.03.2017'
 
-import os
+import os, sys
 import shutil
-
-from utilities.utils import mkdir_path
+sys.path.append(os.path.expanduser('/scr/malta1/Github/Tourettome'))
+from utilities.utils import *
 from variables.subject_list import *
+
 
 def make_nifti(population, afs_dir):
     count = 0
@@ -73,7 +74,7 @@ def make_nifti(population, afs_dir):
                 t1 = [os.path.join(dicom_dir_t1, fname) for fname in os.listdir(dicom_dir_t1) if 'mp2rage' in fname][0]
                 shutil.move(t1, os.path.join(nifti_dir, 'T1MAPS.nii.gz'))
 
-make_nifti(population= leipzig,    afs_dir=tourettome_afs)
-#make_nifti(population= hannover_a, afs_dir=tourettome_afs)
+# make_nifti(population= leipzig,    afs_dir=tourettome_afs)
+# make_nifti(population= hannover_a, afs_dir=tourettome_afs)
 # make_nifti(population= hannover_b, afs_dir=tourettome_afs)
-# make_nifti(population= paris,      afs_dir=tourettome_afs)
+make_nifti(population= paris,      afs_dir=tourettome_afs)

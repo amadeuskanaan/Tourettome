@@ -1,16 +1,14 @@
 __author__ = 'kanaan_07.10.2016'
 
-import fnmatch
-import os
-import shutil
 
+
+import os, sys, glob, shutil, zipfile, fnmatch
 import dicom as pydcm
 import numpy as np
 import pandas as pd
-
-from utilities.utils import mkdir_path
+sys.path.append(os.path.expanduser('/scr/malta1/Github/Tourettome'))
+from utilities.utils import *
 from variables.subject_list_original import *
-
 
 def make_paris_afs(population, original_datadir, afs_dir):
 
@@ -31,16 +29,16 @@ def make_paris_afs(population, original_datadir, afs_dir):
             group_id = 'controls'
 
 
-        print '%s. Organizing data for PARIS %s %s [%s] in new afs dir' % (count, group_id[:-1], subject_id, subject)
+        print '%s. Organizing data for PARIS %s %s [%s] in new database dir' % (count, group_id[:-1], subject_id, subject)
 
         tar_file    = [os.path.join(original_datadir, file) for file in os.listdir(original_datadir) if fnmatch.fnmatch(file, '*%s*' % subject)][0]
         subject_dir = mkdir_path(os.path.join(afs_dir, subject_id))
         dicom_dir   = mkdir_path(os.path.join(subject_dir, 'DICOM'))
         param_file  = os.path.join(subject_dir, '%s_param.csv' % subject_id)
 
-        # copy anat and rest dicom data to afs directory
+        # copy anat and rest dicom data to database directory
         if not os.listdir(dicom_dir):
-            print '....Copying dicom data to new afs'
+            print '....Copying dicom data to new database'
             os.system('tar -xvf %s -C %s' % (tar_file, dicom_dir))
             for root, dirs, files in os.walk(dicom_dir):
                 for i, file in enumerate(files):

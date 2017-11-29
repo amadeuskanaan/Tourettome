@@ -1,13 +1,12 @@
 __author__ = 'kanaan_07.11.2016'
 
-import os
+import os, sys
 import shutil
 import zipfile
-
 import dicom as pydcm
 import numpy as np
 import pandas as pd
-
+sys.path.append(os.path.expanduser('/scr/malta1/Github/Tourettome'))
 from utilities.utils import *
 from variables.subject_list_original import *
 
@@ -27,7 +26,7 @@ def make_hannoverB_afs(population, original_datadir, afs_dir):
         subject_id = 'HB%03d' % count
         HB_subjects[subject] = subject_id
 
-        print '%s. Organizing data for HANNOVER_B subject %s [%s] in new afs dir' % (count, subject_id, subject)
+        print '%s. Organizing data for HANNOVER_B subject %s [%s] in new database dir' % (count, subject_id, subject)
 
         # create output files and directories
         subject_dir = mkdir_path(os.path.join(afs_dir, subject_id))
@@ -37,7 +36,7 @@ def make_hannoverB_afs(population, original_datadir, afs_dir):
         # unzip all files into one directory
         zip_orig = zipfile.ZipFile(os.path.join(original_datadir, '%s.zip' % subject), 'r')
         if not os.listdir(dicom_dir):
-            print '....Copying dicom data to new afs'
+            print '....Copying dicom data to new database'
             zip_orig.extractall(dicom_dir)
             for root, dirs, files in os.walk(dicom_dir):
                 for i, file in enumerate(files):

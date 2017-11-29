@@ -1,17 +1,15 @@
 __author__ = 'kanaan_07.11.2016'
-import glob
-import os
-import shutil
 
+import os, sys, glob, shutil, zipfile
 import dicom as pydcm
 import numpy as np
 import pandas as pd
-
+sys.path.append(os.path.expanduser('/scr/malta1/Github/Tourettome'))
 from utilities.utils import *
 from variables.subject_list_original import *
 
 
-# Function to copy leipzig data from original datadir to new afs directory.
+# Function to copy leipzig data from original datadir to new database directory.
 # Creates new project specific subject_ids
 
 
@@ -31,14 +29,14 @@ def make_leipzig_afs(population, original_datadir, afs_dir):
         subject_id = 'LZ%03d' %count
         LZ_subjects[subject] = subject_id
 
-        print '%s. Organizing data for LEIPZIG subject %s [%s] in new afs dir' % (count, subject_id, subject)
+        print '%s. Organizing data for LEIPZIG subject %s [%s] in new database dir' % (count, subject_id, subject)
 
         #create output files and directories
         subject_dir = mkdir_path(os.path.join(afs_dir, subject_id))
         dicom_dir   = mkdir_path(os.path.join(subject_dir, 'DICOM'))
         param_file  = os.path.join(subject_dir, '%s_param.csv' % subject_id)
 
-        # grab correct datadir from old afs
+        # grab correct datadir from old database
         if os.path.isdir(os.path.join(original_datadir, 'probands', subject)):
             data_dir = os.path.join(original_datadir, 'probands', subject)
             group_id = 'controls'
@@ -60,7 +58,7 @@ def make_leipzig_afs(population, original_datadir, afs_dir):
         uni_id   = str([line for line in open(scans).readlines() if 'UNI' in line and 'SLAB' not in line])[2:6]
 
 
-        # copy anat and rest dicom data to afs directory
+        # copy anat and rest dicom data to database directory
         if not os.listdir(dicom_dir):
             for id in [rest_id, se_id, seinv_id, uni_id]:
                 print id
@@ -71,7 +69,7 @@ def make_leipzig_afs(population, original_datadir, afs_dir):
         ######## GET T1MAPS .  introduced 16.04.2017
         dicom_dir_t1 = mkdir_path(os.path.join(subject_dir, 'DICOM_T1MAPS'))
         t1_id = str([line for line in open(scans).readlines() if 'T1_Images' in line and 'SLAB' not in line])[2:6]
-        # copy anat and rest dicom data to afs directory
+        # copy anat and rest dicom data to database directory
         if not os.listdir(dicom_dir_t1):
                 for file in glob.glob(os.path.join(data_dir, 'DICOM/%s*' % t1_id)):
                     shutil.copy(file, dicom_dir_t1)
@@ -115,17 +113,18 @@ def make_leipzig_afs(population, original_datadir, afs_dir):
                                                 })
             df.to_csv(param_file)
 
-            print LZ_subjects
+    print LZ_subjects
 
-            # grab all header info into one df
-            param_group = []
-            for subject in population:
-                param_subject = pd.read_csv(os.path.join(afs_dir, LZ_subjects[subject], '%s_param.csv' % LZ_subjects[subject]),
-                                            index_col=0)
-                param_group.append(param_subject)
+    # grab all header info into one df
+    param_group = []
+    for subject in population:
+        param_subject = pd.read_csv(os.path.join(afs_dir, LZ_subjects[subject], '%s_param.csv' % LZ_subjects[subject]),
+                                    index_col=0)
+        param_group.append(param_subject)
 
-            param_group = pd.concat(param_group, ignore_index=False)  # .sort(columns='Age')
-            param_group.to_csv(os.path.join(tourettome_phenotypic, 'phenotypic_leipzig.csv'))
+    param_group = pd.concat(param_group, ignore_index=False)  # .sort(columns='Age')
+    param_group.to_csv(os.path.join(tourettome_phenotypic, 'phenotypic_leipzig.csv'))
+
 
 make_leipzig_afs(population = LEIPZIG_orig_subject_list,
                  original_datadir =LEIPZIG_orig_datadir,
