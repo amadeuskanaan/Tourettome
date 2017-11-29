@@ -1,31 +1,25 @@
-__author__ = 'Bayrak&Kanaan 28.11.2017'
+__author__ = 'Seyma Bayrak & Ahmad Seif Kanaan 28.11.2017, based on work by Daniel Margulies (PNAS, 2016)'
 
-
-import os, sys
+sys.path.append(os.path.expanduser('/scr/malta1/Github/Tourettome/algorithms/mapalign/mapalign'))
+import os, sysm, h5py, embed
 import numpy as np
-import numexpr as ne
-import h5py
 import nibabel as nb
-import matplotlib as mpl
 from sklearn.metrics import pairwise_distances
-ne.set_num_threads(ne.ncores) # inclusive HyperThreading cores
-import argparse
-sys.path.append(os.path.expanduser('/scr/malta1/Github/Tourettome/algos/mapalign/mapalign'))
-import embed
-import h5py
-import matplotlib.pyplot as plt
-import seaborn as sns
-import nipype.interfaces.freesurfer as fs
-from nilearn.plotting.surf_plotting import load_surf_mesh
+from nilearn import plotting, input_data, connectome
+import numexpr as ne
 from utilities.utils import *
 from variables.subject_list import *
-from nilearn import plotting, input_data, connectome
+ne.set_num_threads(ne.ncores) # inclusive HyperThreading cores
 
-#embed_dir = mkdir_path(os.path.join(subject_dir, 'EMBED'))
-# os.chdir(embed_dir)
+def create_group_gm(population, workspace):
 
+    os.chdir(tourettome_embedding)
+    masks = [os.path.join(workspace, subject, 'REGISTRATION', 'REST_GM_MNI3mm.nii.gz') for subject in population]
+    os.system('fslmaths %s tourettome_GM_MNI3mm'%((' -add '.join(masks))))
 
-def make_corrmat(population, workspace, popname):
+create_group_gm(tourettome_subjects, tourettome_workspace)
+
+def diffusion_embedding(population, workspace, popname):
 
     mask          =   os.path.join(workspace, 'PA001', 'REGISTRATION/REST_GM_MNI3mm.nii.gz')
     corrmat_shape = np.count_nonzero(nb.load(mask).get_data())
@@ -125,4 +119,4 @@ def make_corrmat(population, workspace, popname):
         nb.save(img_temp, name_temp)
 
 
-make_corrmat(paris[1:3], tourettome_workspace, 'test_paris')
+# diffusion_embedding(paris[1:3], tourettome_workspace, 'test_paris')
