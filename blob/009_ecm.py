@@ -3,7 +3,7 @@ __author__ = 'kanaan 06.08.2017'
 import os
 from variables.subject_list import *
 from utilities.utils import *
-from algos.fast_ecm import *
+from algorithms.fast_ecm import *
 import subprocess
 
 def make_eigenvector_centrality(population,workspace_dir):
