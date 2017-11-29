@@ -1,3 +1,5 @@
+import os, sys
+sys.path.append(os.path.expanduser('/scr/malta1/Github/Tourettome/'))
 from variables.subject_list import *
 
 print 'PARIS len =', len(paris)
