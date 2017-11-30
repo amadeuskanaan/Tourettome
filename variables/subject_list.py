@@ -1,26 +1,17 @@
 
 
-tourettome_afs          = '/data/pt_nmr093_gts'
-tourettome_workspace    = '/scr/malta4/workspace/project_TOURETTOME/preproc'
-tourettome_embedding    = '/scr/malta4/workspace/project_TOURETTOME/EMBEDDING'
-tourettome_phenotypic   = '/scr/malta4/workspace/project_TOURETTOME/phenotypic'
-tourettome_freesurfer   = '/scr/malta2/TOURETTOME/FS_SUBJECTS'
+########################################################################################################################
+#### Input/output
+
+tourettome_afs        = '/data/pt_nmr093_gts'
+tourettome_base       = '/scr/malta4/workspace/project_TOURETTOME'
+tourettome_workspace  = '/scr/malta4/workspace/project_TOURETTOME/preproc'
+tourettome_phenotypic = '/scr/malta4/workspace/project_TOURETTOME/phenotypic'
+tourettome_freesurfer = '/scr/malta4/workspace/project_TOURETTOME/freesurfer'
+tourettome_embedding  = '/scr/malta4/workspace/project_TOURETTOME/embedding'
 
 ########################################################################################################################
-mni_brain_1mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_1mm_brain.nii.gz'
-mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii.gz'
-mni_brain_2mm_mask   = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain_mask.nii.gz'
-mni_brain_3mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_3mm_symmetric.nii.gz'
-mni_HOLV_2mm         = '/scr/malta1/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
-mni_HOLV_3mm         = '/scr/malta1/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-3mm.nii.gz'
-bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
-fs_mni_reg           = '/database/cbs.mpg.de/software/freesurfer/6.0.0/ubuntu-xenial-amd64/average/mni152.register.dat'
-
-rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta', 'R_Pall', 'L_Pall', 'R_Amyg', 'L_Amyg', 'R_Hipp', 'L_Hipp',
-        'R_Accu', 'L_Accu', 'R_Thal', 'L_Thal']
-rois_bilateral = ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']
-
-########################################################################################################################
+#### Subject Lists
 
 paris = ['PA001', 'PA002', 'PA003', 'PA004', 'PA005', 'PA006', 'PA007', 'PA008', 'PA009', 'PA010',
          'PA011', 'PA012', 'PA013', 'PA014', 'PA015', 'PA016', 'PA017', 'PA018', 'PA019', 'PA020',
@@ -59,4 +50,20 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
            'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
 
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b + hamburg
+
+########################################################################################################################
+#### Resources
+
+mni_brain_1mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_1mm_brain.nii.gz'
+mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii.gz'
+mni_brain_2mm_mask   = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain_mask.nii.gz'
+mni_brain_3mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_3mm_symmetric.nii.gz'
+mni_HOLV_2mm         = '/scr/malta1/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
+mni_HOLV_3mm         = '/scr/malta1/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-3mm.nii.gz'
+bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
+fs_mni_reg           = '/database/cbs.mpg.de/software/freesurfer/6.0.0/ubuntu-xenial-amd64/average/mni152.register.dat'
+
+rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta', 'R_Pall', 'L_Pall', 'R_Amyg', 'L_Amyg', 'R_Hipp', 'L_Hipp',
+        'R_Accu', 'L_Accu', 'R_Thal', 'L_Thal']
+rois_bilateral = ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']
 
