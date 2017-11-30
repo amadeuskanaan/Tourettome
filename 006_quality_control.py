@@ -1,4 +1,55 @@
-__author__ = 'kanaan 23.03.2017'
+__author__ = 'kanaan 30.11.2017'
+
+
+'''
+
+Quality Control
+
+1- Visualize greymatter segmentation on anatomical data 
+2- 
+
+'''
+# Quality Control
+
+def MAKE_QC_REPORT(population, workspace):
+    print '========================================================================================'
+    print ''
+    print '                    Tourettome - 006. QUALITY CONTROL                                   '
+    print ''
+    print '========================================================================================'
+
+    count = 0
+    for subject in population:
+
+        count +=1
+        site_id     = subject[0:2]
+        subject_dir = os.path.join(workspace, subject)
+        quality_dir = mkdir_path(os.path.join(workspace, subject, 'QUALITY_CONTROL'))
+
+
+        #############################
+        ######## Plot anat-GM
+
+        native_anat = os.path.join(subject_dir, 'ANATOMICAL', 'ANATOMICAL_BRAIN.nii.gz')
+        native_gm   = os.path.join(subject_dir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz')
+
+        if os.path.isfile(native_gm):
+            print 'Plotting anatomical GM overlay for subject', subject
+            plot_quality(native_anat, native_gm, site_id, '%s-AnatGM' % subject,
+                         cmap='r', alpha=0.9, title = os.path.join(quality_dir, 'anat_gm_native.png'))
+        else:
+            print 'Subject %s is missing SPM segementation' %subject
+
+
+        #############################
+        ######## Plot anat-GM
+
+        # mni_anat =
+
+
+
+
+
 
 import os
 
@@ -117,7 +168,7 @@ def quality_control(population, workspace):
         ################################################################################################################
         ## plot image quality
 
-quality_control(['PA040'], tourettome_workspace)
+# quality_control(['PA040'], tourettome_workspace)
 
 
 
@@ -184,11 +235,9 @@ quality_control(['PA040'], tourettome_workspace)
 import os
 from variables.subject_list import *
 from utilities.utils import *
-from plots.plot_volumes_qc import *
-
+from plotting.plot_volumes import *
 
 def make_quality_reports(population, workspace):
-
 
     for subject in population:
 
@@ -200,14 +249,22 @@ def make_quality_reports(population, workspace):
         qcdir  = mkdir_path(os.path.join(subdir, 'QUALITY'))
         os.chdir(qcdir)
 
-        anat      = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_BRAIN.nii.gz' )
-        gm        = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_GM.nii.gz')
-        gm2mni    = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI1mm.nii.gz')
-        func2anat = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
+        ####################################
+        ######## Plot anatomical grey matter
 
-        # Plot native anatomical with GM
-        if not os.path.isfile(os.path.join(qcdir, 'plot_anat_native.png')):
-            plot_vol_quality(anat, gm, subject[0:2], '%s - Native Anatomical' %subject, 'plot_anat_native.png', cmap = 'r')
+        anat  = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_BRAIN.nii.gz' )
+        gm    = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_GM.nii.gz')
+        site  = subject[0:2]
+
+        plot_quality(anat, gm, site, '%s-AnatGM' % subject, cmap='r', alpha=0.9)
+
+        #
+        # gm2mni    = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI1mm.nii.gz')
+        # func2anat = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
+        #
+        # # Plot native anatomical with GM
+        # if not os.path.isfile(os.path.join(qcdir, 'plot_anat_native.png')):
+        #     plot_vol_quality(anat, gm, subject[0:2], '%s - Native Anatomical' %subject, 'plot_anat_native.png', cmap = 'r')
 
         # Plot anat2mni reg quality using GM as a boundary
         #plot_vol_quality(mni_brain_1mm, gm2mni, 'MNI', '%s - Anatomical to MNI xfm' %subject, 'plot_anat_mni.png', cmap = 'r' )
@@ -217,7 +274,7 @@ def make_quality_reports(population, workspace):
 
 
 
-make_quality_reports(tourettome_subjects, tourettome_workspace)
+# make_quality_reports(tourettome_subjects, tourettome_workspace)
 
 ###########
 # Functional

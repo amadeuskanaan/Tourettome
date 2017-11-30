@@ -1,6 +1,5 @@
 __author__ = 'Seyma Bayrak & Ahmad Seif Kanaan 28.11.2017, based on work by Daniel Margulies (PNAS, 2016)'
 
-sys.path.append(os.path.expanduser('/scr/malta1/Github/Tourettome/algorithms/mapalign/mapalign'))
 import os, sysm, h5py, embed
 import numpy as np
 import nibabel as nb
@@ -10,6 +9,8 @@ import numexpr as ne
 from utilities.utils import *
 from variables.subject_list import *
 ne.set_num_threads(ne.ncores) # inclusive HyperThreading cores
+sys.path.append(os.path.expanduser('/scr/malta1/Github/Tourettome/algorithms/mapalign/mapalign'))
+
 
 def create_group_gm(population, workspace):
 

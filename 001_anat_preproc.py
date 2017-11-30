@@ -46,14 +46,15 @@ def preprocess_anatomical(population, workspace):
                 print '..... Running SPM segmentation'
 
                 os.chdir(spmdir)
-                shutil.copy(os.path.join(rawdir, 'ANATOMICAL.nii.gz'), os.path.join(spmdir, 'ANATOMICAL.nii.gz'))
-                os.system('fslchfiletype NIFTI %s' % os.path.join(spmdir, 'ANATOMICAL'))
+                if not os.path.isfile(os.path.join(spmdir, 'ANATOMICAL.nii')):
+                    shutil.copy(os.path.join(rawdir, 'ANATOMICAL.nii.gz'), os.path.join(spmdir, 'ANATOMICAL.nii.gz'))
+                    os.system('fslchfiletype NIFTI %s' % os.path.join(spmdir, 'ANATOMICAL'))
 
-                seg = spm.NewSegment()
-                seg.inputs.channel_files = os.path.join(spmdir, 'ANATOMICAL.nii')
-                seg.inputs.channel_info = (0.0001, 60, (True, True))
-                seg.base_dir = spmdir
-                seg.run()
+                    seg = spm.NewSegment()
+                    seg.inputs.channel_files = os.path.join(spmdir, 'ANATOMICAL.nii')
+                    seg.inputs.channel_info = (0.0001, 60, (True, True))
+                    seg.base_dir = spmdir
+                    seg.run()
 
 
         ####### DESKULL data using segmentation
@@ -111,9 +112,9 @@ def preprocess_anatomical(population, workspace):
         # df.to_csv(os.path.join(firstdir, 'bin_count_jac.csv'))
         # print df
 
-# preprocess_anatomical(population = leipzig    , workspace = tourettome_workspace)
-# preprocess_anatomical(population = paris      , workspace = tourettome_workspace)
+# preprocess_anatomical(population = leipzig[0:25]  , workspace = tourettome_workspace)
+# preprocess_anatomical(population = paris[50:]     , workspace = tourettome_workspace)
 # preprocess_anatomical(population = hannover_a , workspace = tourettome_workspace)
-preprocess_anatomical(population = hannover_b , workspace = tourettome_workspace)
+# preprocess_anatomical(population = hannover_b , workspace = tourettome_workspace)
 preprocess_anatomical(population = hamburg    , workspace = tourettome_workspace)
 

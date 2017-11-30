@@ -7,13 +7,13 @@ from utilities.utils import mkdir_path
 from variables.subject_list import *
 
 
-#assert len(sys.argv)== 2
-#subject_index=int(sys.argv[1])
+# assert len(sys.argv)== 2
+# subject_index=int(sys.argv[1])
 
 def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 
     for subject in population:
-        #subject = population[subject_index]
+        # subject = population[subject_index]
         print '========================================================================================'
         print '%s-Preprocessing anatomical data for %s' %(subject, subject)
 
@@ -23,6 +23,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
         # Freesurfer Reconall
         ## For best results across the multi-site data, Reconall is run on skull stripped Anatomical data.
         ## This is mainly done since stripping out-of-head noise on MP2RAGE data usually fails with BET algorithms.
+        ## Erroneous segmentation may also occur for MP2RAGE data with abnormal morphology
 
         if freesurfer_dir:
             if not os.path.isfile(os.path.join(freesurfer_dir, subject, 'mri', 'aparc.DKTatlas+aseg.mgz' )):
@@ -35,31 +36,31 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
                 recon_flow.inputs.inputspec.subjects_dir = freesurfer_dir
                 recon_flow.run()
 
-            # Runs thick2surf
-            if not os.path.isfile(os.path.join(freesurfer_dir, "CT", "%s_rh2fsaverage5_20.mgh" %subject)):
-                print '.... Running thick2surf'
-                os.system('sh /scr/sambesi1/workspace/Projects/Tourettome/surfstats/thick2surf.sh %s %s %s %s %s'
-                          %(subject,
-                            os.path.join(freesurfer_dir, subject),
-                            '20',  # FWHM
-                            os.path.join(freesurfer_dir, 'CT'),
-                            '5'    # FSAVERAGE5
-                            ))
+            # # Runs thick2surf
+            # if not os.path.isfile(os.path.join(freesurfer_dir, "CT", "%s_rh2fsaverage5_20.mgh" %subject)):
+            #     print '.... Running thick2surf'
+            #     os.system('sh /scr/sambesi1/workspace/Projects/Tourettome/surfstats/thick2surf.sh %s %s %s %s %s'
+            #               %(subject,
+            #                 os.path.join(freesurfer_dir, subject),
+            #                 '20',  # FWHM
+            #                 os.path.join(freesurfer_dir, 'CT'),
+            #                 '5'    # FSAVERAGE5
+            #                 ))
 
-             # Runs recon-checker
-            if not os.path.isfile(os.path.join(freesurfer_dir, 'QA', subject, 'rgb/snaps/%s.html'%subject)):
+            #  # Runs recon-checker
+            # if not os.path.isfile(os.path.join(freesurfer_dir, 'QA', subject, 'rgb/snaps/%s.html'%subject)):
+            #
+            #     # Source freesurfer
+            #     os.system('export SUBJECTS_DIR=%s'%freesurfer_dir)
+            #     os.system('export QA_TOOLS=/scr/sambesi1/Software/QAtools_v1.2')
+            #     os.system('$QA_TOOLS/recon_checker -s %s -snaps-out -snaps-detailed -gen-outputFOF'%(subject))
 
-                # Source freesurfer
-                os.system('export SUBJECTS_DIR=%s'%freesurfer_dir)
-                os.system('export QA_TOOLS=/scr/sambesi1/Software/QAtools_v1.2')
-                os.system('$QA_TOOLS/recon_checker -s %s -snaps-out -snaps-detailed -gen-outputFOF'%(subject))
+# recon_checker = [subject for subject in tourettome_subjects if subject not in missing]
+# preprocess_anatomical(population = ['HA053', 'HA054'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+# preprocess_anatomical(population = recon_checker, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 
-missing = ['LZ040', 'LZ052', 'LZ053', 'LZ057', 'LZ058', 'LZ066',
-           'HB003', 'HB004', 'HB005', 'HB008', 'HB014', 'HB015',
-           'HA053', 'HA054', #running
-           'PA055' ]
-
-recon_checker = [subject for subject in tourettome_subjects if subject not in missing]
-
-#preprocess_anatomical(population = ['HA053', 'HA054'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-preprocess_anatomical(population = recon_checker, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+# preprocess_anatomical(population = ['LZ002'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+# preprocess_anatomical(population = ['HM002'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+# preprocess_anatomical(population = ['HB006'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+preprocess_anatomical(population = ['HA009'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+# preprocess_anatomical(population = ['PA016'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
