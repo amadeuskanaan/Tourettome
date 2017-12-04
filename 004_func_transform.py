@@ -93,6 +93,8 @@ def register(population, workspace_dir):
                 os.system('fslmaths anat_%s_MNI2mm -thr 0.5 -bin ../ANATOMICAL_%s_MNI2mm' %(tissue_name, tissue_name))
 
         ################################################################################################################
+        # ##### Warp FSL-FIRST subcortical structures to MNI space
+
         if not os.path.isfile(os.path.join(first_dir, 'L_STR_MNI2mm.nii.gz')):
             print 'warping subcortex'
 
@@ -110,8 +112,6 @@ def register(population, workspace_dir):
 
             os.system('fslmaths L_Caud_MNI2mm -add L_Puta_MNI2mm L_STR_MNI2mm')
             os.system('fslmaths R_Caud_MNI2mm -add R_Puta_MNI2mm R_STR_MNI2mm')
-
-
 
         ################################################################################################################
         ##### Linear FUNCTIONAL to ANATOMICAL
@@ -136,7 +136,6 @@ def register(population, workspace_dir):
 
         ################################################################################################################
         ##### Resample FUNCTIONAL to MNI linear
-
 
         func_mni2  = os.path.join(regdir, 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
         if not os.path.isfile(func_mni2):
@@ -204,5 +203,5 @@ def register(population, workspace_dir):
             os.system('fslmaths REST_CSF_MNI3mm_ -thr 0.5 -bin REST_CSF_MNI3mm')
             os.system('rm -rf REST_GM_MNI3mm_* REST_WM_MNI3mm_* REST_CSF_MNI3mm_')
 
-register(tourettome_subjects, tourettome_workspace)
-# register(['LZ002'], tourettome_workspace)
+# register(tourettome_subjects, tourettome_workspace)
+register(['PA005'], tourettome_workspace)

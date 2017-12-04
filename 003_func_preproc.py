@@ -34,13 +34,14 @@ def preprocess_functional(population, workspace):
             os.chdir(func_dir)
 
             # get data
-            shutil.copy(os.path.join(raw_dir, 'REST.nii.gz'), os.path.join(func_dir, 'REST.nii.gz'))
+            os.system('fslchfiletype NIFTI_GZ  %s/REST.nii.gz %s/REST.nii.gz' %(raw_dir, func_dir))
+            # shutil.copy(os.path.join(raw_dir, 'REST.nii.gz'), os.path.join(func_dir, 'REST.nii.gz'))
 
             # get params
             img_hdr = nb.load('REST.nii.gz').header
-            TR    = img_hdr['pixdim'][4]
-            nvols = img_hdr['dim'][4]
-            frames = '[%s..%s]' % (4, nvols -1)
+            TR      = img_hdr['pixdim'][4]
+            nvols   = img_hdr['dim'][4]
+            frames  = '[%s..%s]' % (4, nvols -1)
 
             print 'TR =', TR
             print 'N-Vols=', nvols
@@ -99,5 +100,5 @@ def preprocess_functional(population, workspace):
 # preprocess_functional(population = paris, workspace = tourettome_workspace)
 # preprocess_functional(population = hannover_a, workspace = tourettome_workspace)
 # preprocess_functional(population = hannover_b, workspace = tourettome_workspace)
-# preprocess_functional(population = tourettome_subjects, workspace = tourettome_workspace)
-preprocess_functional(population = ['LZ061'], workspace = tourettome_workspace)
+preprocess_functional(population = tourettome_subjects, workspace = tourettome_workspace)
+# preprocess_functional(population = ['HB006'], workspace = tourettome_workspace)
