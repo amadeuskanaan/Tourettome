@@ -50,6 +50,8 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
            'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
 
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b + hamburg
+unsuable_datasets   = ['LZ001']
+tourettome_subjects = [subject for subject in tourettome_subjects if subject not in unsuable_datasets]
 
 ########################################################################################################################
 #### Resources
