@@ -43,7 +43,8 @@ def make_nifti(population, afs_dir):
                 # os.system('rm -rf %s/*' % nifti_dir)
                 os.system('dcm2niix -b n -o %s %s' % (nifti_dir, dicom_dir))
                 anat = [os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 'HighResolution' in fname][0]
-                rest = [os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 'REST_AKTIVITY' in fname][0]
+                rest = sorted([os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 'REST_AKTIVITY' in fname])[0]
+                print rest
                 dti_str = ['_12_', '12_', 'dti', 'DTI']
                 dti  = [os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 'nii' in fname and any(x in fname  for x in dti_str)][0]
                 bvc  = [os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 'bvec' in fname][0]
@@ -57,7 +58,12 @@ def make_nifti(population, afs_dir):
             if subject[0:2] == 'PA':
                 os.system('dcm2niix -b n -o %s %s' % (nifti_dir, dicom_dir))
                 anat = sorted([os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 't1' in fname])[-1]
-                rest = sorted([os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 'Rest' in fname])[-1]
+
+                if subject =='PA049':
+                    rest = sorted([os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 'Rest' in fname])[0]
+                else:
+                    rest = sorted([os.path.join(nifti_dir, fname) for fname in os.listdir(nifti_dir) if 'Rest' in fname])[-1]
+
                 shutil.move(anat, os.path.join(nifti_dir, 'ANATOMICAL.nii.gz'))
                 shutil.move(rest, os.path.join(nifti_dir, 'REST.nii.gz'))
 
@@ -72,7 +78,8 @@ def make_nifti(population, afs_dir):
                 t1 = [os.path.join(dicom_dir_t1, fname) for fname in os.listdir(dicom_dir_t1) if 'mp2rage' in fname][0]
                 shutil.move(t1, os.path.join(nifti_dir, 'T1MAPS.nii.gz'))
 
-make_nifti(population= leipzig,    afs_dir=tourettome_afs)
-make_nifti(population= hannover_a, afs_dir=tourettome_afs)
-make_nifti(population= hannover_b, afs_dir=tourettome_afs)
-make_nifti(population= paris,      afs_dir=tourettome_afs)
+# make_nifti(population= leipzig,    afs_dir=tourettome_afs)
+# make_nifti(population= hannover_a, afs_dir=tourettome_afs)
+# make_nifti(population= hannover_b, afs_dir=tourettome_afs)
+# make_nifti(population= paris,      afs_dir=tourettome_afs)
+make_nifti(population= ['PA049'],      afs_dir=tourettome_afs)
