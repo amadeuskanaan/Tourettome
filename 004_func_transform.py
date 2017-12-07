@@ -7,7 +7,6 @@ import nipype.interfaces.ants as ants
 from utilities.utils import *
 from variables.subject_list import *
 
-
 #assert len(sys.argv)== 2
 #subject_index=int(sys.argv[1])
 
