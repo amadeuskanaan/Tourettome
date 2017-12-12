@@ -217,4 +217,4 @@ def register(population, workspace_dir):
 # register(hannover_b[0:15], tourettome_workspace)
 # register(hannover_b[15:], tourettome_workspace)
 # register(hamburg[0:15], tourettome_workspace)
-register(hamburg[15:], tourettome_workspace)
+# register(hamburg[15:], tourettome_workspace)
