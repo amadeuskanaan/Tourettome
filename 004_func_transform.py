@@ -202,7 +202,7 @@ def register(population, workspace_dir):
             os.system('fslmaths REST_CSF_MNI3mm_ -thr 0.5 -bin REST_CSF_MNI3mm')
             os.system('rm -rf REST_GM_MNI3mm_* REST_WM_MNI3mm_* REST_CSF_MNI3mm_')
 
-# register(tourettome_subjects, tourettome_workspace)
+register(tourettome_subjects, tourettome_workspace)
 # register(leipzig[1:20], tourettome_workspace)
 # register(leipzig[20:40], tourettome_workspace)
 # register(leipzig[40:60], tourettome_workspace)
@@ -216,5 +216,6 @@ def register(population, workspace_dir):
 # register(hannover_a[25:], tourettome_workspace)
 # register(hannover_b[0:15], tourettome_workspace)
 # register(hannover_b[15:], tourettome_workspace)
-# register(hamburg[0:15], tourettome_workspace)
-# register(hamburg[15:], tourettome_workspace)
+# register(hamburg, tourettome_workspace)
+# register(hannover_b, tourettome_workspace)
+# register(hannover_a, tourettome_workspace)

@@ -14,10 +14,12 @@ from variables.subject_list import *
 
 def preprocess_functional(population, workspace):
 
+    count = 0
     for subject in population:
+        count +=1
         #subject = population[subject_index]
         print '========================================================================================'
-        print 'Preprocessing functional data for %s' %(subject)
+        print '%s. Preprocessing functional data for %s' %(count,subject)
 
 
         raw_dir   = mkdir_path(os.path.join(workspace, subject, 'RAW'))
