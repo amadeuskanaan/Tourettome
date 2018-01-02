@@ -7,13 +7,13 @@ from utilities.utils import mkdir_path
 from variables.subject_list import *
 
 
-assert len(sys.argv)== 2
-subject_index=int(sys.argv[1])
+#assert len(sys.argv)== 2
+#subject_index=int(sys.argv[1])
 
 def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 
-    #for subject in population:
-        subject = population[subject_index]
+    for subject in population:
+        #subject = population[subject_index]
         print '========================================================================================'
         print '%s-Preprocessing anatomical data for %s' %(subject, subject)
 
@@ -57,17 +57,17 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 
 # recon_checker = [subject for subject in tourettome_subjects if subject not in missing]
 
-#preprocess_anatomical(population = leipzig[1:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population = leipzig[30:50], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population = leipzig[52:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population = leipzig[65:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population = hamburg, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population = hannover_b, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population = hannover_b[20:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population = hannover_a[0:30], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population = hannover_a[30:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population =paris[0:25], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population = leipzig[1:30], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population = leipzig[30:50], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population = leipzig[58:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+preprocess_anatomical(population = hamburg, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+preprocess_anatomical(population = hannover_b, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population = hannover_a[0:30], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population = hannover_a[30:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population =paris[0:25], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 #preprocess_anatomical(population =paris[25:50], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population =paris[50:75], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-# preprocess_anatomical(population =paris[75:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-preprocess_anatomical(population = leipzig[20:22], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population =paris[50:57], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population =paris[57:63], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population =paris[63:75], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population =paris[75:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+#preprocess_anatomical(population =paris[44:50], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
