@@ -50,7 +50,7 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
                          '--noreshape'
                         ]
 
-            print ' '.join[surf2surf]
+            print ' '.join(surf2surf)
 
 
 make_derivatives_struct(['PA005'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
