@@ -50,7 +50,7 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
                          '--noreshape '
                          ]
 
-            print os_system(surf2surf)
+            os_system(surf2surf)
 
         print '##################################'
         print '2- Extracting Geodesic Distance'
