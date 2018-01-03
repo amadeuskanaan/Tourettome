@@ -3,12 +3,12 @@
 ########################################################################################################################
 #### Input/output
 
-tourettome_afs        = '/data/pt_nmr093_gts'
-tourettome_base       = '/scr/malta4/workspace/project_TOURETTOME'
-tourettome_workspace  = '/scr/malta4/workspace/project_TOURETTOME/preproc'
-tourettome_phenotypic = '/scr/malta4/workspace/project_TOURETTOME/phenotypic'
-tourettome_freesurfer = '/scr/malta4/workspace/project_TOURETTOME/freesurfer'
-tourettome_embedding  = '/scr/malta4/workspace/project_TOURETTOME/embedding'
+tourettome_afs         = '/data/pt_nmr093_gts'
+tourettome_base        = '/scr/malta4/workspace/project_TOURETTOME'
+tourettome_workspace   = '/scr/malta4/workspace/project_TOURETTOME/preproc'
+tourettome_phenotypic  = '/scr/malta4/workspace/project_TOURETTOME/phenotypic'
+tourettome_freesurfer  = '/scr/malta4/workspace/project_TOURETTOME/freesurfer'
+tourettome_derivatives = '/scr/malta4/workspace/project_TOURETTOME/derivatives'
 
 ########################################################################################################################
 #### Subject Lists
