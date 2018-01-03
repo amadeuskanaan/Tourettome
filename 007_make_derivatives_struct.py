@@ -34,7 +34,7 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
 
         print '1- Extracting Feature -- > Cortical Thickness'
 
-        FWHM_CT = 20
+        FWHM_CT = '20'
         fsaverage = 'fsaverage5'
         ct_dir = os.path.join(derivatives_dir, 'cortical_thickness')
 
