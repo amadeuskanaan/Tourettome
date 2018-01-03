@@ -29,14 +29,12 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
 
         subject_dir     = os.path.join(workspace_dir, subject)
         freesurfer_dir  = os.path.join(freesurfer_dir, subject)
-
-
+        ct_dir          = mkdir_path(os.path.join(derivatives_dir, 'cortical_thickness'))
 
         print '1- Extracting Feature -- > Cortical Thickness'
 
         FWHM_CT = '20'
         fsaverage = 'fsaverage5'
-        ct_dir = os.path.join(derivatives_dir, 'cortical_thickness')
 
         for hemi in ['lh', 'rh']:
             surf2surf = ['mri_surf2surf ',
