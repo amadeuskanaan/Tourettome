@@ -41,11 +41,11 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
         for hemi in ['lh', 'rh']:
             surf2surf = ['mri_surf2surf ',
                          '--s '          + subject,
-                         '--sval '       + os.path.join(freesurfer_dir, subject, 'surf/lh.thickness'),
+                         '--sval '       + os.path.join(freesurfer_dir, 'surf/%s.thickness'%hemi),
+                         '--hemi '       + hemi,
                          '--trgsubject ' + fsaverage,
                          '--fwhm-src '   + FWHM_CT,
                          '--tval '       + os.path.join(ct_dir, '%s_%s2%s_fwhm%s.mgh' % (subject,hemi, fsaverage, FWHM_CT)),
-                         '--hemi '       + hemi,
                          '--cortex '
                          '--noreshape '
                          ]
