@@ -11,8 +11,6 @@ from variables.subject_list import *
 ### 3- Subcortical Volume
 ### 4- Surface Area
 
-
-
 def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivatives_dir) :
 
     print '========================================================================================'
@@ -29,8 +27,11 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
 
         subject_dir     = os.path.join(workspace_dir, subject)
         freesurfer_dir  = os.path.join(freesurfer_dir, subject)
-        ct_dir          = mkdir_path(os.path.join(derivatives_dir, 'cortical_thickness'))
-
+        ct_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_cortical_thickness'))
+        gd_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_geodesic_distance'))
+        sa_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_surface_area'))
+        ic_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_intensity_contrast'))
+        sv_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_subcortical_volume'))
 
         print '##################################'
         print '1- Extracting Cortical Thickness'
@@ -88,6 +89,5 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
         #
         # df.to_csv(os.path.join(firstdir, 'bin_count_jac.csv'))
         # print df
-
 
 make_derivatives_struct(['PA005'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
