@@ -15,6 +15,8 @@ from quality.motion_statistics import *
 
 def nuisance_signal_regression(population, workspace_dir):
 
+
+
     for subject in population:
         # subject = population[subject_index]
         print '###############################################################################'

@@ -36,25 +36,6 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
                 recon_flow.inputs.inputspec.subjects_dir = freesurfer_dir
                 recon_flow.run()
 
-            # # Runs thick2surf
-            # if not os.path.isfile(os.path.join(freesurfer_dir, "CT", "%s_rh2fsaverage5_20.mgh" %subject)):
-            #     print '.... Running thick2surf'
-            #     os.system('sh /scr/sambesi1/workspace/Projects/Tourettome/surfstats/thick2surf.sh %s %s %s %s %s'
-            #               %(subject,
-            #                 os.path.join(freesurfer_dir, subject),
-            #                 '20',  # FWHM
-            #                 os.path.join(freesurfer_dir, 'CT'),
-            #                 '5'    # FSAVERAGE5
-            #                 ))
-
-            #  # Runs recon-checker
-            # if not os.path.isfile(os.path.join(freesurfer_dir, 'QA', subject, 'rgb/snaps/%s.html'%subject)):
-            #
-            #     # Source freesurfer
-            #     os.system('export SUBJECTS_DIR=%s'%freesurfer_dir)
-            #     os.system('export QA_TOOLS=/scr/sambesi1/Software/QAtools_v1.2')
-            #     os.system('$QA_TOOLS/recon_checker -s %s -snaps-out -snaps-detailed -gen-outputFOF'%(subject))
-
 # recon_checker = [subject for subject in tourettome_subjects if subject not in missing]
 
 #preprocess_anatomical(population = leipzig[1:30], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
