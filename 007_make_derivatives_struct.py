@@ -31,7 +31,9 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
         freesurfer_dir  = os.path.join(freesurfer_dir, subject)
         ct_dir          = mkdir_path(os.path.join(derivatives_dir, 'cortical_thickness'))
 
-        print '1- Extracting Feature -- > Cortical Thickness'
+
+        print '##################################'
+        print '1- Extracting Cortical Thickness'
 
         FWHM_CT = '20'
         fsaverage = 'fsaverage5'
@@ -49,6 +51,10 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
                          ]
 
             print ' '.join(surf2surf)
+
+        print '##################################'
+        print '2- Extracting Geodesic Distance'
+
 
 
 make_derivatives_struct(['PA005'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
