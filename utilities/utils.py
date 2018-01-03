@@ -147,3 +147,5 @@ def find_cut_coords(img, mask=None, activation_threshold=None):
     # Return as a list of scalars
     return coords
 
+def os_system(list_cmd):
+    os.system(' '.join[list_cmd])
