@@ -1,17 +1,7 @@
-
-
-def plot_surf_stat_all(fsaverage,
-                       surf_map_l,
-                       surf_map_r,
-                       threshold=None,
-                       alpha=0.7,
-                       cmap='hot',
-                       output_file=None, title=None):
-    """
-    Functions for surface visualization.
-    Only matplotlib is required.
-    """
-
+def plot_surf(fsaverage, surf_map_l, surf_map_r,
+              threshold=None, alpha=0.7, cmap='hot', vmin=None, vmax=None,
+              bg_on_data=1, output_file=None,
+              ):
     # Import libraries
     import nibabel
     import numpy as np
@@ -23,7 +13,6 @@ def plot_surf_stat_all(fsaverage,
     from nilearn._utils.compat import _basestring
     from nilearn.plotting.img_plotting import _get_colorbar_and_data_ranges
     from nilearn.plotting.surf_plotting import load_surf_data, load_surf_mesh
-
 
     # load mesh and derive axes limits
     mesh_left = load_surf_mesh(fsaverage['pial_left'])
@@ -45,9 +34,7 @@ def plot_surf_stat_all(fsaverage,
         if isinstance(cmap, _basestring):
             cmap = plt.cm.get_cmap(cmap)
 
-    def subplot(surf_map, bg_map, subplot_id, coords, faces, elev, azim, vmin=None, vmax=None):
-
-        bg_on_data = False
+    def subplot(surf_map, bg_map, subplot_id, coords, faces, elev, azim, vmin=vmin, vmax=vmax, bg_on_data=bg_on_data):
 
         ax = fig.add_subplot(subplot_id, projection='3d', xlim=limits, ylim=limits)
         ax.view_init(elev=elev, azim=azim)
@@ -118,19 +105,17 @@ def plot_surf_stat_all(fsaverage,
 
             p3dcollec.set_facecolors(face_colors)
 
-    fig = plt.figure(figsize=(55, 20))
+    fig = plt.figure(figsize=(60, 20))
 
-    subplot(surf_map_l, fsaverage['sulc_left'], 141, coords_left, faces_left, elev=0, azim=180)
-    subplot(surf_map_l, fsaverage['sulc_left'], 142, coords_left, faces_left, elev=0, azim=0)
-    subplot(surf_map_r, fsaverage['sulc_right'], 143, coords_right, faces_right, elev=0, azim=180)
-    subplot(surf_map_r, fsaverage['sulc_right'], 144, coords_right, faces_right, elev=0, azim=0)
+    subplot(surf_map_l, fsaverage['sulc_left'], 141, coords_left, faces_left, elev=0, azim=180, bg_on_data=bg_on_data)
+    subplot(surf_map_l, fsaverage['sulc_left'], 142, coords_left, faces_left, elev=0, azim=0, bg_on_data=bg_on_data)
+    subplot(surf_map_r, fsaverage['sulc_right'], 143, coords_right, faces_right, elev=0, azim=180,
+            bg_on_data=bg_on_data)
+    subplot(surf_map_r, fsaverage['sulc_right'], 144, coords_right, faces_right, elev=0, azim=0, bg_on_data=bg_on_data)
 
-    if title is not None:
-        plt.title(title)
     plt.tight_layout()
+
     # save figure if output file is given
     if output_file is not None:
         fig.savefig(output_file)
         plt.close(fig)
-        # else:
-        #    return fig
