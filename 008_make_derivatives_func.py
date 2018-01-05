@@ -71,7 +71,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         print '##################################################################'
         print '1. Calculating Centrality Measures'
 
-        subject_dir_ecm = mkdir_path(ecm_dir, subject)
+        subject_dir_ecm = mkdir_path(os.path.join(ecm_dir, subject))
         os.chdir(subject_dir_ecm)
 
         # copy file locally
