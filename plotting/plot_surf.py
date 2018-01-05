@@ -6,6 +6,7 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
     import nibabel
     import numpy as np
     import matplotlib.pyplot as plt
+    import matplotlib as mpl
 
     from mpl_toolkits.mplot3d import Axes3D
     from nibabel import gifti
