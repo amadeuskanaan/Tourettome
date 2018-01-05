@@ -1,6 +1,7 @@
 __author__ = 'kanaan 01.01.2018'
 
 import os
+import shutil
 from utilities.utils import *
 from variables.subject_list import *
 
