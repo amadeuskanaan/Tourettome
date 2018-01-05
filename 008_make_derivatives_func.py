@@ -31,7 +31,7 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
     print '##############################'
     print 'Creating Group GM Mask '
     derivatives_dir = mkdir_path(os.path.join(derivatives_dir, 'MASKS'))
-    gm_group_mask = os.path.join(derivatives_dir, 'GROUP_GM_FUNC_3mm.nii.gz')
+    gm_group_mask = os.path.join(derivatives_dir, 'GROUP_GM_FUNC_3mm.nii')
 
     if not os.path.isfile(gm_group_mask):
         gm_masks_list = ' '.join(['%s -add' %(os.path.join(workspace_dir, subject, 'REGISTRATION/REST_GM_MNI3mm.nii.gz'))
@@ -90,6 +90,23 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                   '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"'
                   % (os.path.join(subject_dir_ecm, 'residual.nii'), gm_group_mask)]
     subprocess.call(matlab_cmd)
+
+    if not os.path.isfile(os.path.join(run_dir, 'residual_fastECM_rh.mgh')):
+        print '...... project to surface'  #### take non-smoothed data and smooth on surface
+        for hemi in ['lh', 'rh']:
+            os.system('mri_vol2surf '
+                      '--mov residual_fastECM.nii '
+                      '--reg %s '
+                      '--trgsubject fsaverage5 '
+                      '--projfrac-avg 0.2 0.8 0.1 '
+                      '--hemi %s '
+                      '--interp nearest '
+                      '--cortex '
+                      '--o residual_bp_z_%s.mgh'
+                      % (fs_mni_reg, hemi, hemi))
+
+
+
 
     # def z_score_centrality(image, outname):
     #     print '...... z-scoring %s' % outname
