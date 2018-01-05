@@ -68,7 +68,7 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
         print '5- Extracting Subcortical Volumes'
 
         # ####### Count number of non-zero voxels for FSL-FIRST subcortical segmentations
-        #
+
         # # create bilateral masks
         # for roi in ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']:
         #     if not os.path.isfile(os.path.join(anatdir, 'seg_first/FIRST-%s_first.nii.gz'%roi)):
