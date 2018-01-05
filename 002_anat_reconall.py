@@ -18,7 +18,8 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
         print '%s-Preprocessing anatomical data for %s' %(subject, subject)
 
         # input
-        anatdir = mkdir_path(os.path.join(workspace, subject, 'ANATOMICAL'))
+        anatdir = os.path.join(workspace, subject, 'ANATOMICAL')
+        anatdir = os.path.join(afs_dir, subject, 'NIFI')
 
         # Freesurfer Reconall
         ## For best results across the multi-site data, Reconall is run on skull stripped Anatomical data.
