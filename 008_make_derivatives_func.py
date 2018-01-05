@@ -85,7 +85,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
             os.system('rm -rf residual.nii.gz')
 
 
-        if not os.pah.isfile('residual_fastECM.nii'):
+        if not os.path.isfile('residual_fastECM.nii'):
             # Run Fast ECM
             matlab_cmd = ['matlab', '-nodesktop', '-nosplash', '-nojvm',
                           '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"'
