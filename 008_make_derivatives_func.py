@@ -29,31 +29,37 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
     derivatives_dir = mkdir_path(os.path.join(derivatives_dir, 'MASKS'))
     gm_group_mask = os.path.join(derivatives_dir, 'GROUP_GM_FUNC_3mm.nii.gz')
 
-    if not os.path.isfile(gm_group_mask):
-        gm_masks_list = ['%s -add' %(' '.join(os.path.join(workspace_dir, subject, 'REGISTRATION/REST_GM_MNI3mm.nii.gz')))
+    # if not os.path.isfile(gm_group_mask):
+    gm_masks_list = ['%s -add' %(' '.join(os.path.join(workspace_dir, subject, 'REGISTRATION/REST_GM_MNI3mm.nii.gz')))
                     for subject in population][:-4]
-        os.system('fslmaths %s %s' %(gm_masks_list, gm_group_mask))
+    #os.system('fslmaths %s %s' %(gm_masks_list, gm_group_mask))
 
-    return gm_group_mask
+    print gm_masks_list
+
+make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
 
 
-def make_functional_derivatives(population, workspace_dir, freesurfer_dir, derivatives_dir):
 
-    print '========================================================================================'
-    print ''
-    print '                Tourettome - 008. CREATING FUNCTIONAL FEATURES                          '
-    print ''
-    print '========================================================================================'
+    #return gm_group_mask
 
-    ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_cenrality'))
-    #sca_dir      = mkdir_path(os.path.join(derivatives_dir, 'func_sca'))
-    #alff_dir     = mkdir_path(os.path.join(derivatives_dir, 'func_alff'))
-    gm_group_mask = make_group_masks(population, workspace_dir, derivatives_dir)
 
-    print gm_group_mask
-
-make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-
+# def make_functional_derivatives(population, workspace_dir, freesurfer_dir, derivatives_dir):
+#
+#     print '========================================================================================'
+#     print ''
+#     print '                Tourettome - 008. CREATING FUNCTIONAL FEATURES                          '
+#     print ''
+#     print '========================================================================================'
+#
+#     ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_CENTRALITY'))
+#     #sca_dir      = mkdir_path(os.path.join(derivatives_dir, 'FUNC_SEED_CORRELATION'))
+#     #alff_dir     = mkdir_path(os.path.join(derivatives_dir, 'FUNC_ALFF'))
+#     gm_group_mask = make_group_masks(population, workspace_dir, derivatives_dir)
+#
+#     print gm_group_mask
+#
+# make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+#
 
     # count = 0
     # for subject in population:
