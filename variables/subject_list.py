@@ -64,7 +64,7 @@ mni_brain_3mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_3mm_symmetric
 mni_HOLV_2mm         = '/scr/malta1/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-2mm.nii.gz'
 mni_HOLV_3mm         = '/scr/malta1/Github/Tourettome/resources/HarvardOxford-lateral-ventricles-thr25-3mm.nii.gz'
 bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
-fs_mni_reg           = '/database/cbs.mpg.de/software/freesurfer/6.0.0/ubuntu-xenial-amd64/average/mni152.register.dat'
+fs_mni_reg           = '/afs/cbs.mpg.de/software/freesurfer/6.0.0/ubuntu-xenial-amd64/average/mni152.register.dat'
 
 rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta',
         'R_Pall', 'L_Pall', 'R_Amyg', 'L_Amyg',
