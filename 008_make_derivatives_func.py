@@ -76,17 +76,14 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         subject_dir_ecm = mkdir_path(os.path.join(ecm_dir, subject))
         os.chdir(subject_dir_ecm)
 
-        # copy file locally
-        shutil.copy(func_denoised, subject_dir_ecm)
+        # gunzip for matlab
+        os.system('fslchfiletype NIFTI  %s ./residuals.nii' %func_denoised)
 
-        # gunzip
-        if not os.path.isfile('residual.nii'):
-            os.system('gunzip residual.nii.gz')
-            os.system('rm -rf residual.nii.gz')
 
         # Run Fast ECM
         matlab_cmd = ['matlab', '-version', '8.2', '-nodesktop', '-nosplash', '-nojvm',
-                      '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"' % (func_denoised, gm_group_mask)]
+                      '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"'
+                      % (os.path.join(subject_dir_ecm, 'residuals.nii'), gm_group_mask)]
         subprocess.call(matlab_cmd)
 
         def z_score_centrality(image, outname):
