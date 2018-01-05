@@ -33,7 +33,7 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
         gm_masks_list = ' '.join(['%s -add' %(os.path.join(workspace_dir, subject, 'REGISTRATION/REST_GM_MNI3mm.nii.gz'))
                         for subject in population])[:-4]
 
-        os.system('fslmaths %s -thrP 50 bin %s' %(gm_masks_list, gm_group_mask))
+        os.system('fslmaths %s -thrp 50 bin %s' %(gm_masks_list, gm_group_mask))
 
 make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
 
