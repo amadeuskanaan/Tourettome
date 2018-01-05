@@ -135,12 +135,12 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
             seed_masker = input_data.NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache',
                                                       verbose=5)
-            seed_time_series = seed_masker.fit_transform(func)
+            seed_time_series = seed_masker.fit_transform(func_denoised)
 
             brain_masker = input_data.NiftiMasker(smoothing_fwhm=6, detrend=None, standardize=True,
                                                   low_pass=None, high_pass=None, t_r=2., memory='nilearn_cache',
                                                   memory_level=1, verbose=0)
-            brain_time_series = brain_masker.fit_transform(func)
+            brain_time_series = brain_masker.fit_transform(func_denoised)
 
             #  correlate the seed signal with the signal of each voxel.
             # see http://nilearn.github.io/auto_examples/03_connectivity/plot_seed_to_voxel_correlation.html#sphx-glr-auto-examples-03-connectivity-plot-seed-to-voxel-correlation-py
