@@ -77,11 +77,9 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
            'HM011', 'HM012', 'HM014', 'HM015', 'HM017', 'HM019', 'HM020', 'HM022', 'HM023', 'HM024',
            'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
 
-
-
 fsdir = '/data/pt_nmr093_gts/freesurfer'
-os.system('export SUBJECTS_DIR=/data/pt_nmr093_gts/freesurfer')
-os.system('$SUBJECTS_DIR')
+# os.system('export SUBJECTS_DIR=/data/pt_nmr093_gts/freesurfer')
+# os.system('$SUBJECTS_DIR')
 
 tourettome_afs         = '/data/pt_nmr093_gts'
 tourettome_base        = '/scr/malta4/workspace/project_TOURETTOME'
