@@ -103,22 +103,20 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                           '--hemi %s '
                           '--interp nearest '
                           '--cortex '
-                          '--o residual_bp_z_%s.mgh'
+                          '--o residual_fastECM_%s.mgh'
                           % (fs_mni_reg, hemi, hemi))
 
+        # z-score
+        def z_score_centrality(image, outname):
+            print '...... z-scoring %s' % outname
+            std  = commands.getoutput('fslstats %s -k %s -s | awk \'{print $1}\'' % (image, group_gm_mask))
+            mean = commands.getoutput('fslstats %s -k %s -m | awk \'{print $1}\'' % (image, group_gm_mask))
+            os.system('fslmaths %s -sub %s -div %s -mas %s %s' % (image, mean, std, group_gm_mask, outname))
 
-
-
-    # def z_score_centrality(image, outname):
-    #     print '...... z-scoring %s' % outname
-    #     std  = commands.getoutput('fslstats %s -k %s -s | awk \'{print $1}\'' % (image, group_gm_mask))
-    #     mean = commands.getoutput('fslstats %s -k %s -m | awk \'{print $1}\'' % (image, group_gm_mask))
-    #     os.system('fslmaths %s -sub %s -div %s -mas %s %s' % (image, mean, std, group_gm_mask, outname))
-    #
-    # z_score_centrality('residual_fastECM.nii', 'zscore_fastECM')
-    # z_score_centrality('residual_degCM.nii', 'zscore_degCM')
-    # z_score_centrality('residual_normECM.nii', 'zscore_normECM')
-    # z_score_centrality('residual_rankECM.nii', 'zscore_rankECM')
+        z_score_centrality('residual_fastECM.nii', 'zscore_fastECM')
+        z_score_centrality('residual_degCM.nii', 'zscore_degCM')
+        z_score_centrality('residual_normECM.nii', 'zscore_normECM')
+        z_score_centrality('residual_rankECM.nii', 'zscore_rankECM')
 
 
 make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
