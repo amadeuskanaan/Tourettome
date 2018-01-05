@@ -26,7 +26,7 @@ from variables.subject_list import *
 def make_group_masks(population, workspace_dir, derivatives_dir):
 
     print '### Creating Group GM Mask ###'
-    derivatives_dir = mkdir_path(os.join(derivatives_dir, 'MASKS'))
+    derivatives_dir = mkdir_path(os.path.join(derivatives_dir, 'MASKS'))
     gm_group_mask = os.path.join(derivatives_dir, 'GROUP_GM_FUNC_3mm.nii.gz')
 
     if not os.path.isfile(gm_group_mask):
