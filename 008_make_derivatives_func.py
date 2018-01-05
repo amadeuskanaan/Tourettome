@@ -6,7 +6,7 @@ import subprocess
 from algorithms.fast_ecm import fastECM
 from utilities.utils import *
 from variables.subject_list import *
-
+import commands
 
 # Calculate functional derivatives
 
