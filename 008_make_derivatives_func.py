@@ -128,32 +128,34 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         print '2. Calculating Seed-Based Correlation'
 
-        seeds = {'STR3_MOTOR':   str3_motor,
-                 'STR3_LIMBIC':  str3_limbic,
-                 'STR3_EXEC':    str3_limbic}
+        if not os.path.isfile(os.path.join(sca_dir, '%s_sca_z_STR3_MOTOR.nii.gz'%(subject, seed_name))):
 
-        for seed_name in seeds:
-            seed = seeds[seed_name]
+            seeds = {'STR3_MOTOR':   str3_motor,
+                     'STR3_LIMBIC':  str3_limbic,
+                     'STR3_EXEC':    str3_exec}
 
-            seed_masker = input_data.NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache',
-                                                      verbose=5)
-            seed_time_series = seed_masker.fit_transform(func_denoised)
+            for seed_name in seeds:
+                seed = seeds[seed_name]
 
-            brain_masker = input_data.NiftiMasker(smoothing_fwhm=6, detrend=None, standardize=True,
-                                                  low_pass=None, high_pass=None, t_r=2., memory='nilearn_cache',
-                                                  memory_level=1, verbose=0)
-            brain_time_series = brain_masker.fit_transform(func_denoised)
+                seed_masker = input_data.NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache',
+                                                          verbose=5)
+                seed_time_series = seed_masker.fit_transform(func_denoised)
 
-            #  correlate the seed signal with the signal of each voxel.
-            # see http://nilearn.github.io/auto_examples/03_connectivity/plot_seed_to_voxel_correlation.html#sphx-glr-auto-examples-03-connectivity-plot-seed-to-voxel-correlation-py
-            seed_based_correlations = np.dot(brain_time_series.T, seed_time_series) / seed_time_series.shape[0]
+                brain_masker = input_data.NiftiMasker(smoothing_fwhm=6, detrend=None, standardize=True,
+                                                      low_pass=None, high_pass=None, t_r=2., memory='nilearn_cache',
+                                                      memory_level=1, verbose=0)
+                brain_time_series = brain_masker.fit_transform(func_denoised)
 
-            seed_based_correlations_fisher_z = np.arctanh(seed_based_correlations)
-            print("seed-based correlation Fisher-z transformed: min = %.3f; max = %.3f" % (
-                seed_based_correlations_fisher_z.min(),seed_based_correlations_fisher_z.max()))
+                #  correlate the seed signal with the signal of each voxel.
+                # see http://nilearn.github.io/auto_examples/03_connectivity/plot_seed_to_voxel_correlation.html#sphx-glr-auto-examples-03-connectivity-plot-seed-to-voxel-correlation-py
+                seed_based_correlations = np.dot(brain_time_series.T, seed_time_series) / seed_time_series.shape[0]
 
-            seed_based_correlation_img = brain_masker.inverse_transform(seed_based_correlations.T)
-            seed_based_correlation_img.to_filename(os.path.join(sca_dir,'%s_sca_z_%s.nii.gz'%(subject, seed_name)))
+                seed_based_correlations_fisher_z = np.arctanh(seed_based_correlations)
+                print("seed-based correlation Fisher-z transformed: min = %.3f; max = %.3f" % (
+                    seed_based_correlations_fisher_z.min(),seed_based_correlations_fisher_z.max()))
+
+                seed_based_correlation_img = brain_masker.inverse_transform(seed_based_correlations.T)
+                seed_based_correlation_img.to_filename(os.path.join(sca_dir,'%s_sca_z_%s.nii.gz'%(subject, seed_name)))
 
 make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 

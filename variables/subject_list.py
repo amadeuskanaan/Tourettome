@@ -71,9 +71,9 @@ rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta',
         'R_Hipp', 'L_Hipp', 'R_Accu', 'L_Accu',
         'R_Thal', 'L_Thal']
 
-str3_motor = '/scr/malta1/Github/Tourettome/atlases/STR/STR3_MOTOR.nii.gz'
+str3_motor  = '/scr/malta1/Github/Tourettome/atlases/STR/STR3_MOTOR.nii.gz'
 str3_limbic = '/scr/malta1/Github/Tourettome/atlases/STR/STR3_LIMBIC.nii.gz'
-str3_exec = '/scr/malta1/Github/Tourettome/atlases/STR/STR3_EXEC.nii.gz'
+str3_exec   = '/scr/malta1/Github/Tourettome/atlases/STR/STR3_EXEC.nii.gz'
 
 rois_bilateral = ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']
 
