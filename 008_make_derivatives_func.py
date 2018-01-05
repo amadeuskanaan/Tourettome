@@ -59,7 +59,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
     print '========================================================================================'
 
     # global IO
-    #ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_centrality'))
+    ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_centrality'))
     sca_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_sca'))
     gm_group_mask = os.path.join(derivatives_dir, 'MASKS/GROUP_GM_FUNC_3mm.nii')
 
@@ -126,8 +126,9 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
             z_score_centrality('residual_normECM.nii', 'zscore_normECM')
             z_score_centrality('residual_rankECM.nii', 'zscore_rankECM')
 
-        print '2. Calculating Seed-Based Correlation'
+            os.system('cp zscore_normECM.nii.gz %s/%s_zscore_normECM.nii.gz' %(ecm_dir, subject))
 
+        print '2. Calculating Seed-Based Correlation'
         if not os.path.isfile(os.path.join(sca_dir, '%s_sca_z_STR3_MOTOR.nii.gz'%subject)):
 
             seeds = {'STR3_MOTOR':   str3_motor,
@@ -155,41 +156,9 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                     seed_based_correlations_fisher_z.min(),seed_based_correlations_fisher_z.max()))
 
                 seed_based_correlation_img = brain_masker.inverse_transform(seed_based_correlations.T)
-                seed_based_correlation_img.to_filename(os.path.join(sca_dir,'zscore_SCA_%s_%s.nii.gz'%(seed_name,subject)))
+                seed_based_correlation_img.to_filename(os.path.join(sca_dir,'%s_%s_sca_z.nii.gz'%(subject, seed_name)))
 
-make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-
-
-
-# print '#######################'
-    # print '2. Calculating Seed Correlation Measures'
-    #
-    # seeds = ['STR', 'STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXECUTIVE',
-    #          'INSULA', 'ACC', 'M1', '']
-    #
-    # print '#######################'
-    # print '3. Calculating fractional Amplitude of low frequency fluctuations'
-
-
-# def run_sca(pproc, mask, mask_name, string):
-#     sca_dir        = os.path.join(subject_dir, 'SCA/%s'%mask_name)
-#     mkdir_path(sca_dir)
-#     os.chdir(sca_dir)
-#
-#     print string
-#     if not os.path.isfile('SCA_Z_%s.nii.gz'%string):
-#
-#         ##'1. Extract Timeseries'
-#         os.system('3dROIstats -quiet -mask_f2short -mask %s %s > rest_native.1d'%(mask, pproc))
-#
-#         ##'2. Compute voxel-wise correlation with Seed Timeseries'
-#         os.system('3dfim+ -input %s -ideal_file rest_native.1d -out Correlation -bucket corr.nii.gz'%pproc)
-#
-#         ##'3. Z-transform correlation'
-#         eq = ['log((a+1)/(a-1))/2']
-#         os.system('3dcalc -a corr.nii.gz -expr %s -prefix SCA_Z_%s.nii.gz'%(eq,string))
-#         os.system('rm -rf rest_native.1d corr.nii.gz')
-
+make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
 
