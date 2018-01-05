@@ -34,7 +34,7 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
                     for subject in population][:-4]
         os.system('fslmaths %s %s' %(gm_masks_list, gm_group_mask))
 
-    return gm_mask
+    return gm_group_mask
 
 
 def make_functional_derivatives(population, workspace_dir, freesurfer_dir, derivatives_dir):
