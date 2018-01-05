@@ -25,7 +25,8 @@ from variables.subject_list import *
 
 def make_group_masks(population, workspace_dir, derivatives_dir):
 
-    print '### Creating Group GM Mask ###'
+    print '##############################'
+    print 'Creating Group GM Mask '
     derivatives_dir = mkdir_path(os.path.join(derivatives_dir, 'MASKS'))
     gm_group_mask = os.path.join(derivatives_dir, 'GROUP_GM_FUNC_3mm.nii.gz')
 
@@ -33,7 +34,7 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
         gm_masks_list = ' '.join(['%s -add' %(os.path.join(workspace_dir, subject, 'REGISTRATION/REST_GM_MNI3mm.nii.gz'))
                         for subject in population])[:-4]
 
-        os.system('fslmaths %s -thrp 75 -bin %s' %(gm_masks_list, gm_group_mask))
+        os.system('fslmaths %s -thrp 55 -bin %s' %(gm_masks_list, gm_group_mask))
 
 make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
 
@@ -42,67 +43,64 @@ make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivativ
     #return gm_group_mask
 
 
-# def make_functional_derivatives(population, workspace_dir, freesurfer_dir, derivatives_dir):
-#
-#     print '========================================================================================'
-#     print ''
-#     print '                Tourettome - 008. CREATING FUNCTIONAL FEATURES                          '
-#     print ''
-#     print '========================================================================================'
-#
-#     ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_CENTRALITY'))
-#     #sca_dir      = mkdir_path(os.path.join(derivatives_dir, 'FUNC_SEED_CORRELATION'))
-#     #alff_dir     = mkdir_path(os.path.join(derivatives_dir, 'FUNC_ALFF'))
-#     gm_group_mask = make_group_masks(population, workspace_dir, derivatives_dir)
-#
-#     print gm_group_mask
-#
-# make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-#
+def make_functional_derivatives(population, workspace_dir, freesurfer_dir, derivatives_dir):
 
-    # count = 0
-    # for subject in population:
-    #     count +=1
-    #
-    #     print 'Extracting structural features for subject %s' %subject
-    #
-    #     #I/0
-    #     subject_dir     = os.path.join(workspace_dir, subject)
-    #     func_denoised   = os.path,join(subject_dir, 'DENOISE/residual_compcor/residual_bp_z_fwhm6.nii.gz')
+    print '========================================================================================'
+    print ''
+    print '                Tourettome - 008. CREATING FUNCTIONAL FEATURES                          '
+    print ''
+    print '========================================================================================'
+
+    ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_CENTRALITY'))
+    #sca_dir      = mkdir_path(os.path.join(derivatives_dir, 'FUNC_SEED_CORRELATION'))
+    #alff_dir     = mkdir_path(os.path.join(derivatives_dir, 'FUNC_ALFF'))
+    gm_group_mask = os.path.join(derivatives_dir, 'MASKS/GROUP_GM_FUNC_3mm.nii.gz')
 
 
-        # print '##################################################################'
-        # print '1. Calculating Centrality Measures'
-        #
-        # subject_dir_ecm = mkdir_path(ecm_dir, subject)
-        # os.chdir(subject_dir_ecm)
-        #
-        # # copy file locally
-        # shutil.copy(nuisance_file, './residual.nii.gz')
-        #
-        # # gunzip
-        # if not os.path.isfile('residual.nii'):
-        #     os.system('gunzip residual.nii.gz')
-        #     os.system('rm -rf residual.nii.gz')
-        #
-        # # Run Fast ECM
-        # pproc = os.path.join(dir, 'residual.nii')
-        # matlab_cmd = ['matlab', '-version', '8.2', '-nodesktop', '-nosplash', '-nojvm',
-        #               '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"' % (pproc, gm_mask)]
-        # subprocess.call(matlab_cmd)
-        #
-        # def z_score_centrality(image, outname):
-        #     print '...... z-scoring %s' % outname
-        #     std  = commands.getoutput('fslstats %s -k %s -s | awk \'{print $1}\'' % (image, group_gm_mask))
-        #     mean = commands.getoutput('fslstats %s -k %s -m | awk \'{print $1}\'' % (image, group_gm_mask))
-        #     os.system('fslmaths %s -sub %s -div %s -mas %s %s' % (image, mean, std, group_gm_mask, outname))
-        #
-        # z_score_centrality('residual_fastECM.nii', 'zscore_fastECM')
-        # z_score_centrality('residual_degCM.nii', 'zscore_degCM')
-        # z_score_centrality('residual_normECM.nii', 'zscore_normECM')
-        # z_score_centrality('residual_rankECM.nii', 'zscore_rankECM')
-        #
-        #
+    count = 0
+    for subject in population:
+        count +=1
+
+        print 'Extracting structural features for subject %s' %subject
+
+        #I/0
+        subject_dir     = os.path.join(workspace_dir, subject)
+        func_denoised   = os.path,join(subject_dir, 'DENOISE/residual_compcor/residual_bp_z_fwhm6.nii.gz')
+
+
+        print '##################################################################'
+        print '1. Calculating Centrality Measures'
+
+        subject_dir_ecm = mkdir_path(ecm_dir, subject)
+        os.chdir(subject_dir_ecm)
+
+        # copy file locally
+        shutil.copy(nuisance_file, subject_dir_ecm)
+
+        # gunzip
+        if not os.path.isfile('residual.nii'):
+            os.system('gunzip residual.nii.gz')
+            os.system('rm -rf residual.nii.gz')
+
+        # Run Fast ECM
+        matlab_cmd = ['matlab', '-version', '8.2', '-nodesktop', '-nosplash', '-nojvm',
+                      '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"' % (func_denoised, gm_group_mask)]
+        subprocess.call(matlab_cmd)
+
+        def z_score_centrality(image, outname):
+            print '...... z-scoring %s' % outname
+            std  = commands.getoutput('fslstats %s -k %s -s | awk \'{print $1}\'' % (image, group_gm_mask))
+            mean = commands.getoutput('fslstats %s -k %s -m | awk \'{print $1}\'' % (image, group_gm_mask))
+            os.system('fslmaths %s -sub %s -div %s -mas %s %s' % (image, mean, std, group_gm_mask, outname))
+
+        z_score_centrality('residual_fastECM.nii', 'zscore_fastECM')
+        z_score_centrality('residual_degCM.nii', 'zscore_degCM')
+        z_score_centrality('residual_normECM.nii', 'zscore_normECM')
+        z_score_centrality('residual_rankECM.nii', 'zscore_rankECM')
+
+
+
+make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
 
@@ -114,10 +112,7 @@ make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivativ
 
 
 
-
-
-
-        # print '#######################'
+    # print '#######################'
         # print '2. Calculating Seed Correlation Measures'
         #
         # seeds = ['STR', 'STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXECUTIVE',
