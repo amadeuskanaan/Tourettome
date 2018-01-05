@@ -83,7 +83,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
             os.system('gunzip residual.nii.gz')
             os.system('rm -rf residual.nii.gz')
 
-        fastECM(inputfile='./residual.nii.gz', maskfile= gm_group_mask,)
+        fastECM(inputfile='./residual.nii.gz', maskfile= gm_group_mask, atlasfile=None)
 
 
     # # Run Fast ECM
