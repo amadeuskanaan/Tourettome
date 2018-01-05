@@ -4,6 +4,8 @@ import os
 import shutil
 import subprocess
 import commands
+import numpy as np
+import nibabel as nb
 from nilearn import input_data
 from algorithms.fast_ecm import fastECM
 from utilities.utils import *
