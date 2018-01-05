@@ -76,7 +76,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         os.chdir(subject_dir_ecm)
 
         # copy file locally
-        shutil.copy(nuisance_file, subject_dir_ecm)
+        shutil.copy(func_denoised, subject_dir_ecm)
 
         # gunzip
         if not os.path.isfile('residual.nii'):
