@@ -91,7 +91,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                   % (os.path.join(subject_dir_ecm, 'residual.nii'), gm_group_mask)]
     subprocess.call(matlab_cmd)
 
-    if not os.path.isfile(os.path.join(run_dir, 'residual_fastECM_rh.mgh')):
+    if not os.path.isfile(os.path.join(subject_dir_ecm, 'residual_fastECM_rh.mgh')):
         print '...... project to surface'  #### take non-smoothed data and smooth on surface
         for hemi in ['lh', 'rh']:
             os.system('mri_vol2surf '
