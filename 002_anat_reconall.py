@@ -5,10 +5,6 @@ import sys
 # from variables.subject_list import *
 
 
-
-
-os.system('export $SUBJECTS_DIR=')
-
 assert len(sys.argv)== 2
 subject_index=int(sys.argv[1])
 
@@ -82,6 +78,7 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
            'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
 
 
+
 fsdir = '/data/pt_nmr093_gts/freesurfer'
 os.system('export SUBJECTS_DIR=/data/pt_nmr093_gts/freesurfer')
 os.system('$SUBJECTS_DIR')
@@ -93,11 +90,7 @@ tourettome_phenotypic  = '/scr/malta4/workspace/project_TOURETTOME/phenotypic'
 tourettome_freesurfer  = '/scr/malta4/workspace/project_TOURETTOME/freesurfer'
 tourettome_derivatives = '/scr/malta4/workspace/project_TOURETTOME/derivatives'
 
-#preprocess_anatomical(population = leipzig[1:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-#preprocess_anatomical(population = hannover_a, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-#preprocess_anatomical(population = hannover_b, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-#preprocess_anatomical(population = hamburg, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-#preprocess_anatomical(population =paris[50:57], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-#preprocess_anatomical(population =paris[58:63], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-#preprocess_anatomical(population =paris[63:75], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-preprocess_anatomical(population =hamburg, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+all_pops = leipzig+paris+hamburg+hannover_b+hannover_a
+
+# preprocess_anatomical(population =hamburg, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+preprocess_anatomical(population =all_pops, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
