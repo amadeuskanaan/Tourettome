@@ -78,7 +78,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         os.chdir(subject_dir_ecm)
 
         # gunzip for matlab
-        if not os.path.isfile('residual.nii'):
+        if not os.path.isfile('%s/residual.nii'%subject_dir_ecm):
             shutil.copy(func_denoised, './residual.nii.gz')
             os.system('gunzip residual.nii.gz')
             os.system('rm -rf residual.nii.gz')
