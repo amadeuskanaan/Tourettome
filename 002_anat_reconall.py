@@ -18,7 +18,7 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
         print '%s-Preprocessing anatomical data for %s' %(subject, subject)
 
         # input
-        anatdir = os.path.join(workspace, subject, 'ANATOMICAL')
+        # anatdir = os.path.join(workspace, subject, 'ANATOMICAL')
         anatdir = os.path.join(afs_dir, subject, 'NIFTI')
 
 
@@ -41,6 +41,47 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 # recon_checker = [subject for subject in tourettome_subjects if subject not in missing]
 
 
+
+
+paris = ['PA001', 'PA002', 'PA003', 'PA004', 'PA005', 'PA006', 'PA007', 'PA008', 'PA009', 'PA010',
+         'PA011', 'PA012', 'PA013', 'PA014', 'PA015', 'PA016', 'PA017', 'PA018', 'PA019', 'PA020',
+         'PA021', 'PA022', 'PA023', 'PA024', 'PA025', 'PA026', 'PA027', 'PA028', 'PA029', 'PA030',
+         'PA031', 'PA032', 'PA033', 'PA035', 'PA036', 'PA037', 'PA038', 'PA039', 'PA040', 'PA041',
+         'PA042', 'PA043', 'PA044', 'PA045', 'PA046', 'PA047', 'PA048', 'PA049', 'PA050', 'PA051',
+         'PA052', 'PA053', 'PA054', 'PA055', 'PA056', 'PA058', 'PA059', 'PA060', 'PA061', 'PA062',
+         'PA063', 'PA064', 'PA066', 'PA067', 'PA068', 'PA069', 'PA070', 'PA071', 'PA072', 'PA073',
+         'PA074', 'PA075', 'PA076', 'PA077', 'PA078', 'PA079', 'PA080', 'PA081', 'PA082', 'PA083',
+         'PA084', 'PA085', 'PA087', 'PA088', 'PA089', 'PA090', 'PA091', 'PA092', 'PA093', 'PA094',
+         'PA095', 'PA096']
+
+leipzig = ['LZ001', 'LZ002', 'LZ003', 'LZ004', 'LZ005', 'LZ006', 'LZ007', 'LZ008', 'LZ009', 'LZ010',
+           'LZ011', 'LZ012', 'LZ013', 'LZ014', 'LZ015', 'LZ016', 'LZ017', 'LZ018', 'LZ019', 'LZ020',
+           'LZ021', 'LZ022', 'LZ023', 'LZ024', 'LZ025', 'LZ026', 'LZ027', 'LZ028', 'LZ029', 'LZ030',
+           'LZ031', 'LZ032', 'LZ033', 'LZ034', 'LZ035', 'LZ036', 'LZ037', 'LZ038', 'LZ039', 'LZ040',
+           'LZ041', 'LZ042', 'LZ043', 'LZ044', 'LZ045', 'LZ046', 'LZ047', 'LZ048', 'LZ049', 'LZ050',
+           'LZ051', 'LZ052', 'LZ053', 'LZ054', 'LZ055', 'LZ056', 'LZ057', 'LZ058', 'LZ059', 'LZ060',
+           'LZ061', 'LZ062', 'LZ063', 'LZ064', 'LZ065', 'LZ066', 'LZ067', 'LZ068', 'LZ069', 'LZ070',
+           'LZ071', 'LZ072', 'LZ073', 'LZ074', 'LZ075', 'LZ076']
+
+hannover_a = ['HA001', 'HA002', 'HA003', 'HA004', 'HA005', 'HA006', 'HA007', 'HA008', 'HA009', 'HA010',
+              'HA011', 'HA012', 'HA013', 'HA014', 'HA015', 'HA016', 'HA017', 'HA018', 'HA019', 'HA020',
+              'HA021', 'HA022', 'HA023', 'HA024', 'HA025', 'HA026', 'HA027', 'HA028', 'HA029', 'HA030',
+              'HA031', 'HA032', 'HA033', 'HA034', 'HA035', 'HA036', 'HA037', 'HA038', 'HA039', 'HA040',
+              'HA041', 'HA042', 'HA043', 'HA044', 'HA045', 'HA046', 'HA047', 'HA048', 'HA049', 'HA050',
+              'HA051', 'HA052', 'HA053', 'HA054']
+
+hannover_b = ['HB001', 'HB002', 'HB003', 'HB004', 'HB005', 'HB006', 'HB007', 'HB008', 'HB009', 'HB010',
+              'HB011', 'HB012', 'HB013', 'HB014', 'HB015', 'HB016', 'HB017', 'HB018', 'HB019', 'HB020',
+              'HB021', 'HB022', 'HB023', 'HB024', 'HB025', 'HB026', 'HB027', 'HB028', 'HB029', 'HB030',
+              'HB031', 'HB032', 'HB033']
+
+hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008', 'HM009', 'HM010',
+           'HM011', 'HM012', 'HM014', 'HM015', 'HM017', 'HM019', 'HM020', 'HM022', 'HM023', 'HM024',
+           'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
+
+
+fsdir = '/data/pt_nmr093_gts/freesurfer'
+
 #preprocess_anatomical(population = leipzig[1:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 #preprocess_anatomical(population = hannover_a, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 #preprocess_anatomical(population = hannover_b, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
@@ -48,4 +89,4 @@ def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 #preprocess_anatomical(population =paris[50:57], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 #preprocess_anatomical(population =paris[58:63], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 #preprocess_anatomical(population =paris[63:75], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
-preprocess_anatomical(population =hamburg, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
+preprocess_anatomical(population =hamburg, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
