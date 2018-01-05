@@ -15,8 +15,6 @@ from quality.motion_statistics import *
 
 def nuisance_signal_regression(population, workspace_dir):
 
-
-
     for subject in population:
         # subject = population[subject_index]
         print '###############################################################################'
@@ -36,8 +34,9 @@ def nuisance_signal_regression(population, workspace_dir):
         FWHM     = 6
         sigma    = FWHM / 2.35482004503
 
-        # Band-pass frequencies  #https://www.jiscmail.ac.uk/cgi-bin/webadmin?A2=ind1205&L=FSL&P=R57592&1=FSL&9=A&I=-3&J=on&d=No+Match%3BMatch%3BMatches&z=4
+        # Band-pass frequencies
         ##sigma = 1 / (2 * TR * cutoff_in_hz)
+        ## #https://www.jiscmail.ac.uk/cgi-bin/webadmin?A2=ind1205&L=FSL&P=R57592&1=FSL&9=A&I=-3&J=on&d=No+Match%3BMatch%3BMatches&z=4
         highpass_cutoff = 0.01 #hz
         lowpass_cutoff  = 0.1  #hz
         highpass_sigma  = 1./(2.*TR*highpass_cutoff)
@@ -179,29 +178,3 @@ def nuisance_signal_regression(population, workspace_dir):
 nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
 
 
-
-# nuisance_signal_regression(leipzig, tourettome_workspace)
-# nuisance_signal_regression(paris, tourettome_workspace)
-#nuisance_signal_regression(hannover_a, tourettome_workspace)
-# nuisance_signal_regression(leipzig, tourettome_workspace)
-# import numpy as np
-# X = np.asanyarray([])
-# for i in hannover_a1[0:2]:
-#     resid = os.path.isfile(os.path.join(tourettome_workspace, i, 'DENOISE/residuals_wmcsf/residual_bp.nii.gz'))
-#     if os.path.isfile(resid):
-#         data = nb.load(resid).get_data()
-#         X.append(data)
-#
-#
-# print X.shape
-#
-#
-# os.chdir(tourettome_workspace)
-
-
-#os.system('fslmerge -t concat %s' % ' '.join(dn))
-#os.system('fslmaths %s/concat -Tmean %s/mean' %(tourettome_workspace, tourettome_workspace))
-#
-# qsm_list = [os.path.join(workspace, subject, 'REGISTRATION/QSM_MNI1mm.nii.gz') for subject in population]
-# os.system('fslmerge -t concat_qsm.nii.gz %s' % ' '.join(qsm_list))
-# os.system('fslmaths concat_qsm.nii.gz -Tmean QSM_mean.nii.gz')
