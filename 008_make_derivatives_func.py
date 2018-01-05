@@ -129,7 +129,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
             os.system('cp zscore_normECM.nii.gz %s/%s_zscore_normECM.nii.gz' %(ecm_dir, subject))
 
         print '2. Calculating Seed-Based Correlation'
-        if not os.path.isfile(os.path.join(sca_dir, '%s_sca_z_STR3_MOTOR.nii.gz'%subject)):
+        if not os.path.isfile(os.path.join(sca_dir,'%s_STR3_MOTOR_sca_z.nii.gz'%subject)):
 
             seeds = {'STR3_MOTOR':   str3_motor,
                      'STR3_LIMBIC':  str3_limbic,
