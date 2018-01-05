@@ -37,11 +37,11 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
     return gm_mask
 
 
-def make_derivatives_func(population, workspace_dir, freesurfer_dir, derivatives_dir):
+def make_functional_derivatives(population, workspace_dir, freesurfer_dir, derivatives_dir):
 
     print '========================================================================================'
     print ''
-    print '                    Tourettome - 007. STRUCTURAL FEATURES                               '
+    print '                Tourettome - 008. CREATING FUNCTIONAL FEATURES                          '
     print ''
     print '========================================================================================'
 
@@ -51,6 +51,9 @@ def make_derivatives_func(population, workspace_dir, freesurfer_dir, derivatives
     gm_group_mask = make_group_masks(population, workspace_dir, derivatives_dir)
 
     print gm_group_mask
+
+make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+
 
     # count = 0
     # for subject in population:
