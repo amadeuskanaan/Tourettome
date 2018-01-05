@@ -66,7 +66,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         #I/0
         subject_dir     = os.path.join(workspace_dir, subject)
-        func_denoised   = os.path.join(subject_dir, 'DENOISE/residual_compcor/residual_bp_z_fwhm6.nii.gz')
+        func_denoised   = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_z_fwhm6.nii.gz')
 
 
         print '##################################################################'
