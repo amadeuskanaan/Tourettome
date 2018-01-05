@@ -119,3 +119,5 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
     if output_file is not None:
         fig.savefig(output_file)
         plt.close(fig)
+
+        return fig
