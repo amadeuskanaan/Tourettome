@@ -58,7 +58,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
     ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_CENTRALITY'))
     #sca_dir      = mkdir_path(os.path.join(derivatives_dir, 'FUNC_SEED_CORRELATION'))
     #alff_dir     = mkdir_path(os.path.join(derivatives_dir, 'FUNC_ALFF'))
-    gm_group_mask = os.path.join(derivatives_dir, 'MASKS/GROUP_GM_FUNC_3mm.nii.gz')
+    gm_group_mask = os.path.join(derivatives_dir, 'MASKS/GROUP_GM_FUNC_3mm.nii')
 
 
     count = 0
