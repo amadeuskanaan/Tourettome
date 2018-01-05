@@ -108,7 +108,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
             print '...... z-scoring %s' % outname
             std  = commands.getoutput('fslstats %s -k %s -s | awk \'{print $1}\'' % (image, gm_group_mask))
             mean = commands.getoutput('fslstats %s -k %s -m | awk \'{print $1}\'' % (image, gm_group_mask))
-            os.system('fslmaths %s -sub %s -div %s -mas %s %s' % (image, mean, std, group_gm_mask, outname))
+            os.system('fslmaths %s -sub %s -div %s -mas %s %s' % (image, mean, std, gm_group_mask, outname))
 
         z_score_centrality('residual_fastECM.nii', 'zscore_fastECM')
         z_score_centrality('residual_degCM.nii', 'zscore_degCM')
