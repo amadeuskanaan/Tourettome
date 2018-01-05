@@ -105,7 +105,8 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
 
             p3dcollec.set_facecolors(face_colors)
 
-    fig = plt.figure(figsize=(60, 20))
+    #fig = plt.figure(figsize=(60, 20))
+    fig = plt.figure(figsize=(70, 20))
 
     subplot(surf_map_l, fsaverage['sulc_left'], 141, coords_left, faces_left, elev=0, azim=180, bg_on_data=bg_on_data)
     subplot(surf_map_l, fsaverage['sulc_left'], 142, coords_left, faces_left, elev=0, azim=0, bg_on_data=bg_on_data)
@@ -115,9 +116,15 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
 
     plt.tight_layout()
 
+
+    # add CBAR
+    # fig.subplots_adjust(wspace=0.05, hspace=0.1, right=0.83)
+    fig.subplots_adjust(right=0.83)
+    ax_cb = fig.add_axes([0.85, 0.25, 0.020, 0.53])  # x,y,w,h
+    cbar = mpl.colorbar.ColorbarBase(ax_cb, cmap=cmap, orientation='vertical')
+    cbar.ax.tick_params(labelsize=50)
+
     # save figure if output file is given
     if output_file is not None:
         fig.savefig(output_file)
         plt.close(fig)
-
-        return fig
