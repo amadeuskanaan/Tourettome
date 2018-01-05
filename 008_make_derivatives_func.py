@@ -29,12 +29,10 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
     derivatives_dir = mkdir_path(os.path.join(derivatives_dir, 'MASKS'))
     gm_group_mask = os.path.join(derivatives_dir, 'GROUP_GM_FUNC_3mm.nii.gz')
 
-    # if not os.path.isfile(gm_group_mask):
-    gm_masks_list = ' '.join(['%s -add' %(os.path.join(workspace_dir, subject, 'REGISTRATION/REST_GM_MNI3mm.nii.gz'))
-                    for subject in population])[:-4]
-    #os.system('fslmaths %s %s' %(gm_masks_list, gm_group_mask))
-
-    print gm_masks_list
+    if not os.path.isfile(gm_group_mask):
+        gm_masks_list = ' '.join(['%s -add' %(os.path.join(workspace_dir, subject, 'REGISTRATION/REST_GM_MNI3mm.nii.gz'))
+                        for subject in population])[:-4]
+        os.system('fslmaths %s %s' %(gm_masks_list, gm_group_mask))
 
 make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
 
