@@ -3,10 +3,11 @@ __author__ = 'kanaan 01.01.2018'
 import os
 import shutil
 import subprocess
+import commands
+from nilearn import input_data
 from algorithms.fast_ecm import fastECM
 from utilities.utils import *
 from variables.subject_list import *
-import commands
 
 # Calculate functional derivatives
 
@@ -57,25 +58,24 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
     # global IO
     #ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_CENTRALITY'))
+    sca_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_SEEDCORR'))
     gm_group_mask = os.path.join(derivatives_dir, 'MASKS/GROUP_GM_FUNC_3mm.nii')
 
     count = 0
     for subject in population:
         count +=1
-
         print '###################################################################'
-        print 'Extracting structural features for subject %s' %subject
+        print 'Extracting structural features for subject %s' % subject
 
-        #subject I/0
-        subject_dir     = os.path.join(workspace_dir, subject)
-        func_denoised   = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp.nii.gz')
+        # subject I/0
+        subject_dir = os.path.join(workspace_dir, subject)
+        func_denoised = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp.nii.gz')
+
+
 
         print '1. Calculating Centrality Measures'
-
-        subject_dir_ecm = mkdir_path(os.path.join(subject_dir, 'CENTRALITY'))
-
-
-        if not os.path.isfile(os.path.join(subject_dir_ecm, 'zscore_fastECM_lh.mgh')):
+        if not os.path.isfile(os.path.join(subject_dir, 'CENTRALITY/zscore_fastECM_lh.mgh')):
+            subject_dir_ecm = mkdir_path(os.path.join(subject_dir, 'CENTRALITY'))
 
             os.chdir(subject_dir_ecm)
 
@@ -124,6 +124,34 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
             z_score_centrality('residual_normECM.nii', 'zscore_normECM')
             z_score_centrality('residual_rankECM.nii', 'zscore_rankECM')
 
+        print '2. Calculating Seed-Based Correlation'
+
+        seeds = {'STR3_MOTOR':   str3_motor,
+                 'STR3_LIMBIC':  str3_limbic,
+                 'STR3_EXEC':    str3_limbic}
+
+        for seed_name in seeds:
+            seed = seeds[seed_name]
+
+            seed_masker = input_data.NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache',
+                                                      verbose=5)
+            seed_time_series = seed_masker.fit_transform(func)
+
+            brain_masker = input_data.NiftiMasker(smoothing_fwhm=6, detrend=None, standardize=True,
+                                                  low_pass=None, high_pass=None, t_r=2., memory='nilearn_cache',
+                                                  memory_level=1, verbose=0)
+            brain_time_series = brain_masker.fit_transform(func)
+
+            #  correlate the seed signal with the signal of each voxel.
+            # see http://nilearn.github.io/auto_examples/03_connectivity/plot_seed_to_voxel_correlation.html#sphx-glr-auto-examples-03-connectivity-plot-seed-to-voxel-correlation-py
+            seed_based_correlations = np.dot(brain_time_series.T, seed_time_series) / seed_time_series.shape[0]
+
+            seed_based_correlations_fisher_z = np.arctanh(seed_based_correlations)
+            print("seed-based correlation Fisher-z transformed: min = %.3f; max = %.3f" % (
+                seed_based_correlations_fisher_z.min(),seed_based_correlations_fisher_z.max()))
+
+            seed_based_correlation_img = brain_masker.inverse_transform(seed_based_correlations.T)
+            seed_based_correlation_img.to_filename(os.path.join(sca_dir,'%s_sca_z_%s.nii.gz'%(subject, seed)))
 
 make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
