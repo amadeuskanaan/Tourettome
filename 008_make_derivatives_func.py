@@ -85,25 +85,26 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
             os.system('rm -rf residual.nii.gz')
 
 
-    # Run Fast ECM
-    matlab_cmd = ['matlab', '-nodesktop', '-nosplash', '-nojvm',
-                  '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"'
-                  % (os.path.join(subject_dir_ecm, 'residual.nii'), gm_group_mask)]
-    subprocess.call(matlab_cmd)
+        if not os.pah.isfile('residual_fastECM.nii'):
+            # Run Fast ECM
+            matlab_cmd = ['matlab', '-nodesktop', '-nosplash', '-nojvm',
+                          '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"'
+                          % (os.path.join(subject_dir_ecm, 'residual.nii'), gm_group_mask)]
+            subprocess.call(matlab_cmd)
 
-    if not os.path.isfile(os.path.join(subject_dir_ecm, 'residual_fastECM_rh.mgh')):
-        print '...... project to surface'  #### take non-smoothed data and smooth on surface
-        for hemi in ['lh', 'rh']:
-            os.system('mri_vol2surf '
-                      '--mov residual_fastECM.nii '
-                      '--reg %s '
-                      '--trgsubject fsaverage5 '
-                      '--projfrac-avg 0.2 0.8 0.1 '
-                      '--hemi %s '
-                      '--interp nearest '
-                      '--cortex '
-                      '--o residual_bp_z_%s.mgh'
-                      % (fs_mni_reg, hemi, hemi))
+        if not os.path.isfile(os.path.join(subject_dir_ecm, 'residual_fastECM_rh.mgh')):
+            print '...... project to surface'  #### take non-smoothed data and smooth on surface
+            for hemi in ['lh', 'rh']:
+                os.system('mri_vol2surf '
+                          '--mov residual_fastECM.nii '
+                          '--reg %s '
+                          '--trgsubject fsaverage5 '
+                          '--projfrac-avg 0.2 0.8 0.1 '
+                          '--hemi %s '
+                          '--interp nearest '
+                          '--cortex '
+                          '--o residual_bp_z_%s.mgh'
+                          % (fs_mni_reg, hemi, hemi))
 
 
 
