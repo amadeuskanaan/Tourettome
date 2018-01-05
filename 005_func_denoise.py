@@ -112,7 +112,7 @@ def nuisance_signal_regression(population, workspace_dir):
                               '--projfrac-avg 0.2 0.8 0.1 '
                               '--hemi %s '
                               '--interp nearest '
-                              '--surfstats-fwhm 6 '
+                              '--fwhm 6 '
                               '--cortex '
                               '--o residual_bp_z_%s.mgh'
                               % (fs_mni_reg, hemi, hemi))
