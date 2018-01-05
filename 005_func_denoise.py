@@ -175,7 +175,8 @@ def nuisance_signal_regression(population, workspace_dir):
         #             gmsig =os.path.join(wmcsf_dir, 'gm_signals.npy'))
 
 
-nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
+# nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
+nuisance_signal_regression(paris, tourettome_workspace)
 # nuisance_signal_regression(['PA060'], tourettome_workspace)
 
 
