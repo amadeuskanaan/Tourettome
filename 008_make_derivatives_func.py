@@ -59,8 +59,8 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
     print '========================================================================================'
 
     # global IO
-    #ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_CENTRALITY'))
-    sca_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_SEEDCORR'))
+    #ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_centrality'))
+    sca_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_sca'))
     gm_group_mask = os.path.join(derivatives_dir, 'MASKS/GROUP_GM_FUNC_3mm.nii')
 
     count = 0
@@ -155,7 +155,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                     seed_based_correlations_fisher_z.min(),seed_based_correlations_fisher_z.max()))
 
                 seed_based_correlation_img = brain_masker.inverse_transform(seed_based_correlations.T)
-                seed_based_correlation_img.to_filename(os.path.join(sca_dir,'%s_sca_z_%s.nii.gz'%(subject, seed_name)))
+                seed_based_correlation_img.to_filename(os.path.join(sca_dir,'zscore_SCA_%s_%s.nii.gz'%(seed_name,subject)))
 
 make_functional_derivatives(['PA060'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
