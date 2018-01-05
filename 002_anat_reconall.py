@@ -2,10 +2,9 @@ __author__ = 'kanaan_02.12.2016'
 
 import os
 import sys
+# from variables.subject_list import *
 
-from utilities.utils import mkdir_path
-from variables.subject_list import *
-
+os.system('export $SUBJECTS_DIR=')
 
 assert len(sys.argv)== 2
 subject_index=int(sys.argv[1])
@@ -81,6 +80,8 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
 
 
 fsdir = '/data/pt_nmr093_gts/freesurfer'
+os.system('export SUBJECTS_DIR=/data/pt_nmr093_gts/freesurfer')
+os.system('$SUBJECTS_DIR')
 
 #preprocess_anatomical(population = leipzig[1:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 #preprocess_anatomical(population = hannover_a, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
