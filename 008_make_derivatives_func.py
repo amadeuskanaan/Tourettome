@@ -37,7 +37,7 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
         gm_masks_list = ' '.join(['%s -add' %(os.path.join(workspace_dir, subject, 'REGISTRATION/REST_GM_MNI3mm.nii.gz'))
                         for subject in population])[:-4]
 
-        os.system('fslmaths %s -thrp 55 -bin %s' %(gm_masks_list, gm_group_mask))
+        os.system('fslmaths %s -thrp 25 -bin %s' %(gm_masks_list, gm_group_mask))
         os.system('gunzip %s'%gm_group_mask)
 
 make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
@@ -55,11 +55,9 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
     print ''
     print '========================================================================================'
 
-    ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_CENTRALITY'))
-    #sca_dir      = mkdir_path(os.path.join(derivatives_dir, 'FUNC_SEED_CORRELATION'))
-    #alff_dir     = mkdir_path(os.path.join(derivatives_dir, 'FUNC_ALFF'))
+    # global IO
+    #ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'FUNC_CENTRALITY'))
     gm_group_mask = os.path.join(derivatives_dir, 'MASKS/GROUP_GM_FUNC_3mm.nii')
-
 
     count = 0
     for subject in population:
@@ -67,15 +65,14 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         print 'Extracting structural features for subject %s' %subject
 
-        #I/0
+        #subject I/0
         subject_dir     = os.path.join(workspace_dir, subject)
-        func_denoised   = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_z_fwhm6.nii.gz')
-
+        func_denoised   = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp.nii.gz')
 
         print '##################################################################'
         print '1. Calculating Centrality Measures'
 
-        subject_dir_ecm = mkdir_path(os.path.join(ecm_dir, subject))
+        subject_dir_ecm = mkdir_path(os.path.join(subject_dir, 'CENTRALITY'))
         os.chdir(subject_dir_ecm)
 
         # gunzip for matlab
