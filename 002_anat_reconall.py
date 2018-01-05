@@ -4,6 +4,9 @@ import os
 import sys
 # from variables.subject_list import *
 
+
+
+
 os.system('export $SUBJECTS_DIR=')
 
 assert len(sys.argv)== 2
@@ -82,6 +85,13 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
 fsdir = '/data/pt_nmr093_gts/freesurfer'
 os.system('export SUBJECTS_DIR=/data/pt_nmr093_gts/freesurfer')
 os.system('$SUBJECTS_DIR')
+
+tourettome_afs         = '/data/pt_nmr093_gts'
+tourettome_base        = '/scr/malta4/workspace/project_TOURETTOME'
+tourettome_workspace   = '/scr/malta4/workspace/project_TOURETTOME/preproc'
+tourettome_phenotypic  = '/scr/malta4/workspace/project_TOURETTOME/phenotypic'
+tourettome_freesurfer  = '/scr/malta4/workspace/project_TOURETTOME/freesurfer'
+tourettome_derivatives = '/scr/malta4/workspace/project_TOURETTOME/derivatives'
 
 #preprocess_anatomical(population = leipzig[1:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
 #preprocess_anatomical(population = hannover_a, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= tourettome_freesurfer)
