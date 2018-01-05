@@ -38,6 +38,7 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
                         for subject in population])[:-4]
 
         os.system('fslmaths %s -thrp 55 -bin %s' %(gm_masks_list, gm_group_mask))
+        os.system('gunzup %s'%gm_group_mask)
 
 make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
 
