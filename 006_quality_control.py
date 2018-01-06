@@ -42,6 +42,9 @@ def make_quality_control(population, workspace):
     for subject in population:
 
         count +=1
+
+        print '%s.Running Quality Controls for subject %s' %(count, subject)
+
         site_id = subject[0:2]
         subdir  = os.path.join(workspace, subject)
         qcdir   = mkdir_path(os.path.join(workspace, subject, 'QUALITY_CONTROL'))
