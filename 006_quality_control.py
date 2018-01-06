@@ -122,7 +122,7 @@ def make_quality_control(population, workspace):
         # Calculate TSNR map
         if not os.path.isfile(os.path.join(qcdir, 'tsnr.nii.gz')):
              tsnr = TSNR()
-             tsnr.inputs.in_file = func_edit
+             tsnr.inputs.in_file = os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT.nii.gz')
              tsnr.run()
 
         if not os.path.isfile('TSNR_data.npy'):
