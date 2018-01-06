@@ -50,7 +50,7 @@ def make_quality_control(population, workspace):
         qcdir   = mkdir_path(os.path.join(workspace, subject, 'QUALITY_CONTROL'))
         os.chdir(qcdir)
 
-        columns = ['qc_anat_cjv', 'qc_ant_cnr', 'qc_anat_snr', 'qc_anat_snrd', 'qc_anat_efc', 'qc_anat_fber', 'qc_anat_fwhm',
+        columns = ['qc_anat_cjv', 'qc_anat_cnr', 'qc_anat_snr', 'qc_anat_snrd', 'qc_anat_efc', 'qc_anat_fber', 'qc_anat_fwhm',
                    'qc_func_snr', 'qc_func_efc', 'qc_func_fber', 'qc_func_fwhm', 'qc_func_fd', 'qc_func_fd_in',
                    'qc_func_fd_max', 'qc_func_dvars', 'qc_func_tsnr']
 
@@ -117,7 +117,7 @@ def make_quality_control(population, workspace):
         # Calculate DVARS
         func_proc = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
         func_gm = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI2mm.nii.gz')
-        df.loc[subject]['qc_func_dvars']    = calculate_DVARS(func_proc, func_gm)
+        df.loc[subject]['qc_func_dvars']    = np.mean(np.load(calculate_DVARS(func_proc, func_gm)))
 
         # Calculate TSNR map
         if not os.path.isfile(os.path.join(qcdir, 'tsnr.nii.gz')):
@@ -133,8 +133,6 @@ def make_quality_control(population, workspace):
              np.save(os.path.join(os.getcwd(), 'TSNR_data.npy'), data)
 
         df.loc[subject]['TSNR'] = str(np.round(np.median(np.load('TSNR_data.npy')), 3))
-
-
 
         df.to_csv('quality_paramters.csv')
 
