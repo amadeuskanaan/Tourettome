@@ -116,7 +116,7 @@ def make_quality_control(population, workspace):
 
         # Calculate DVARS
         func_proc = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
-        func_mask = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI2mm.nii.gz')
+        func_gm = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI2mm.nii.gz')
         df.loc[subject]['qc_func_dvars']    = calculate_DVARS(func_proc, func_gm)
 
         # Calculate TSNR map
