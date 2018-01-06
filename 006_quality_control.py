@@ -1,17 +1,37 @@
-__author__ = 'kanaan 30.11.2017'
+__author__ = 'kanaan 06.01.2018'
+
+import os
+import nibabel as nb
+import numpy as np
+import pandas as pd
+from nipype.algorithms.misc import TSNR
+from quality.motion_statistics import *
+from quality.spatial_qc import *
+from utilities.utils import *
+from variables.subject_list import *
+import mriqc.qc.anatomical as mriqca
+
+# IMAGE QUALITY METRICS
+
+# anatomical measures based on noise measurements
+#### CJV  - coefficient of joint variation
+#### CNR  - contrast-to-noise ratio
+#### SNR  - signal-to-noise ratio
+#### SNRd - Dietrich’s SNR
+#### QI2  - Mortamet’s quality index 2
+
+# anatomical measures based on information theory
+#### EFC  - Shannons entropy focus criterion
+#### FBER - foreground-to-background ratio
+
+# anatomical measures targeting specific artifacts
+#### QI1  -  Mortamet’s quality index 1
+
+# anatomical other measures
+#### fwhm -  spatial distribution of the image intensity
 
 
-'''
-
-Quality Control
-
-1- Visualize greymatter segmentation on anatomical data 
-2- 
-
-'''
-# Quality Control
-
-def MAKE_QC_REPORT(population, workspace):
+def make_quality_control(population, workspace):
     print '========================================================================================'
     print ''
     print '                    Tourettome - 006. QUALITY CONTROL                                   '
@@ -22,63 +42,20 @@ def MAKE_QC_REPORT(population, workspace):
     for subject in population:
 
         count +=1
-        site_id     = subject[0:2]
-        subject_dir = os.path.join(workspace, subject)
-        quality_dir = mkdir_path(os.path.join(workspace, subject, 'QUALITY_CONTROL'))
-
-
-        #############################
-        ######## Plot anat-GM
-
-        native_anat = os.path.join(subject_dir, 'ANATOMICAL', 'ANATOMICAL_BRAIN.nii.gz')
-        native_gm   = os.path.join(subject_dir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz')
-
-        if os.path.isfile(native_gm):
-            print 'Plotting anatomical GM overlay for subject', subject
-            plot_quality(native_anat, native_gm, site_id, '%s-AnatGM' % subject,
-                         cmap='r', alpha=0.9, title = os.path.join(quality_dir, 'anat_gm_native.png'))
-        else:
-            print 'Subject %s is missing SPM segementation' %subject
-
-
-        #############################
-        ######## Plot anat-GM
-
-        # mni_anat =
-
-
-
-
-
-
-import os
-
-import nibabel as nb
-import numpy as np
-import pandas as pd
-from nipype.algorithms.misc import TSNR
-from quality.motion_statistics import *
-from quality.spatial_qc import *
-from utilities.utils import *
-from variables.subject_list import *
-
-
-def quality_control(population, workspace):
-
-    for subject in population:
-        print '###############################################################################'
-        print 'Calculating quality metrics for  %s' % subject
-        print ''
-
-        #input
-        subdir       = os.path.join(workspace, subject)
-
-        #output
-        qcdir = mkdir_path(os.path.join(subdir, 'QUALITY'))
+        site_id = subject[0:2]
+        subdir  = os.path.join(workspace, subject)
+        qcdir   = mkdir_path(os.path.join(workspace, subject, 'QUALITY_CONTROL'))
         os.chdir(qcdir)
 
-        ################################################################################################################
-        #### Spatial Quality metrics - MP2RAGE
+        columns = ['qc_anat_cjv', 'qc_ant_cnr', 'qc_anat_snr', 'qc_anat_snrd', 'qc_anat_efc', 'qc_anat_fber', 'qc_anat_fwhm',
+                   'qc_func_snr', 'qc_func_efc', 'qc_func_fber', 'qc_func_fwhm', 'qc_func_fd', 'qc_func_fd_in',
+                   'qc_func_fd_max', 'qc_func_dvars', 'qc_func_tsnr']
+
+        df = pd.DataFrame(index=['%s' % subject], columns=columns)
+
+
+        ############################################################################################
+        #  Anatomical measures
 
         # Load data
         anat       = nb.load(os.path.join(subdir, 'RAW',        'ANATOMICAL.nii.gz' )).get_data()
@@ -86,7 +63,6 @@ def quality_control(population, workspace):
         anat_gm    = nb.load(os.path.join(subdir, 'ANATOMICAL', 'seg_spm/c1ANATOMICAL.nii' )).get_data()
         anat_wm    = nb.load(os.path.join(subdir, 'ANATOMICAL', 'seg_spm/c2ANATOMICAL.nii' )).get_data()
         anat_csf   = nb.load(os.path.join(subdir, 'ANATOMICAL', 'seg_spm/c3ANATOMICAL.nii' )).get_data()
-        anat_first = nb.load(os.path.join(subdir, 'ANATOMICAL', 'seg_first/FIRST.nii.gz' )).get_data()
 
         # Intermediate measures
         anat_fg_mu, anat_fg_sd, anat_fg_size    = summary_mask(anat, anat_mask)
@@ -96,33 +72,49 @@ def quality_control(population, workspace):
         anat_bg_data, anat_bg_mask              = get_background(anat, anat_mask)
         anat_bg_mu, anat_bg_sd, anat_bg_size    = summary_mask(anat, anat_bg_mask)
 
-        # Calcualte spatial anatomical summary measures
-        anat_CNR  = cnr(anat_gm_mu, anat_wm_mu, anat_bg_sd)
-        anat_SNR  = snr(anat_fg_mu, anat_bg_sd)
-        anat_EFC  = efc(anat)
-        anat_FBER = fber(anat, anat_mask, anat_bg_mask)
-        anat_QI1  = artifacts(anat, anat_mask, anat_bg_data)
-        anat_FWHM = fwhm(os.path.join(subdir, 'RAW','ANATOMICAL.nii.gz' ),
-                         os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_BRAIN_MASK.nii.gz'),
-                         out_vox=False)
+        # Calculate spatial anatomical summary measures
+        df.loc[subject]['qc_anat_cjv']  = mriqca.cjv(anat_wm_mu, anat_gm_mu, anat_wm_sd, anat_gm_sd)
+        df.loc[subject]['qc_anat_cnr']  = mriqca.cnr(anat_wm_mu, anat_gm_mu, anat_bg_sd)
+        df.loc[subject]['qc_anat_snr']  = mriqca.snr(anat_fg_mu, anat_fg_sd, anat_fg_size)
+        df.loc[subject]['qc_anat_snrd'] = mriqca.snr_dietrich(anat_fg_mu, anat_bg_sd)
+        df.loc[subject]['qc_anat_efc']  = mriqca.efc(anat)
+        df.loc[subject]['qc_anat_fber'] = mriqca.fber(anat, anat_mask)
+        df.loc[subject]['qc_anat_fwhm'] = fwhm(os.path.join(subdir, 'RAW','ANATOMICAL.nii.gz' ),
+                                               os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_BRAIN_MASK.nii.gz'),out_vox=False)
+
+        ############################################################################################
+        # Functional measures
 
 
-        ###############################################################################################################
-        # Temporal Quality metrics - REST
+        # Load data
+        func      =  os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT.nii.gz' )
+        func_mask =  os.path.join(subdir, 'FUNCTIONAL', 'REST_BRAIN_MASK.nii.gz' )
+        movpar    =  os.path.join(subdir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
 
+        # Calculate spatial functional summary measures
+        func_fg_mu, func_fg_sd, func_fg_size = summary_mask(nb.load(func).get_data(),nb.load(func_mask).get_data())
+        df.loc[subject]['qc_func_snr']  = mriqca.snr(func_fg_mu, func_fg_sd, func_fg_size)
+        df.loc[subject]['qc_func_efc']  = mriqca.efc(func)
+        df.loc[subject]['qc_func_fber'] = mriqca.fber(func, func_mask)
+        df.loc[subject]['qc_func_fwhm'] = fwhm(func, func_mask, out_vox=False)
 
+        # Calculate temporal functional summary measures
+        FD1D          = np.loadtxt(calculate_FD_Power(movpar))
+        frames_in     = [frame for frame, val in enumerate(FD1D) if val < 0.2]
+        quat          = int(len(FD1D) / 4)
+        fd_in_percent = (float(len(frames_in)) / float(len(FD1D))) * 100.
 
-
-        # Calculate Framewise-Displacment
-        movpar = os.path.join(subdir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
-        FD1D = np.loadtxt(calculate_FD_Power(movpar))
-        frames_in = [frame for frame, val in enumerate(FD1D) if val < 0.2]
+        df.loc[subject]['qc_func_fd']     = str(np.round(np.mean(FD1D), 3))
+        df.loc[subject]['qc_func_fd_in']  = str(np.round(fd_in_percent, 2))
+        df.loc[subject]['qc_func_fd']     = str(np.round(np.mean(FD1D), 3))
+        df.loc[subject]['qc_func_fd_max'] = str(np.round(np.max(FD1D), 3))
+        df.loc[subject]['FD_Q4'] = str(np.round(np.mean(np.sort(FD1D)[::-1][:quat]), 3))
+        df.loc[subject]['FD_RMS'] = str(np.round(np.sqrt(np.mean(FD1D)), 3))
 
         # Calculate DVARS
         func_proc = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
         func_mask = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI2mm.nii.gz')
-        DVARS = calculate_DVARS(func_proc, func_gm)
-
+        df.loc[subject]['qc_func_dvars']    = calculate_DVARS(func_proc, func_gm)
 
         # Calculate TSNR map
         if not os.path.isfile(os.path.join(qcdir, 'tsnr.nii.gz')):
@@ -135,158 +127,10 @@ def quality_control(population, workspace):
              nan_mask = np.logical_not(np.isnan(tsnr_data))
              mask = nb.load(func_mask).get_data() > 0
              data = tsnr_data[np.logical_and(nan_mask, mask)]
-             np.save(os.path.join(os.getcwd(), 'TSNR_data.npy'), data)  #######################################
+             np.save(os.path.join(os.getcwd(), 'TSNR_data.npy'), data)
 
-        # Calculate DVARS
-        # DVARS = calculate_DVARS(func_wmcsf, func_gm)
-
-        ################################################################################################################
-        ## Save quality paramters
-
-        columns = [ 'SNR', 'CNR', 'FBER', 'EFC', 'FWHM', 'QI1', 'FD', 'FD_in', 'FD_max', 'FD_Q4', 'DVARS', 'TSNR']
-
-        df = pd.DataFrame(index=['%s'%subject], columns = columns)
-        df.loc[subject]['SNR']  = anat_SNR
-        df.loc[subject]['CNR']  = anat_CNR
-        df.loc[subject]['EFC']  = anat_EFC
-        df.loc[subject]['FBER'] = anat_FBER
-        df.loc[subject]['QI1']  = anat_QI1
-        df.loc[subject]['FWHM'] = anat_FWHM[3]
-        df.loc[subject]['FD'] = str(np.round(np.mean(FD1D), 3))
-        fd_in_percent = (float(len(frames_in)) / float(len(FD1D))) * 100.
-        df.loc[subject]['FD_in']  = str(np.round(fd_in_percent, 2))
-        quat = int(len(FD1D) / 4)
-        df.loc[subject]['FD_Q4'] = str(np.round(np.mean(np.sort(FD1D)[::-1][:quat]), 3))
-        df.loc[subject]['FD_max'] = str(np.round(np.max(FD1D), 3))
-        df.loc[subject]['FD_RMS'] = str(np.round(np.sqrt(np.mean(FD1D)), 3))
-        #df.loc[subject]['DVARS'] = str(np.round(np.mean(np.load(DVARS)), 3))
         df.loc[subject]['TSNR'] = str(np.round(np.median(np.load('TSNR_data.npy')), 3))
         df.to_csv('quality_paramters.csv')
 
-        print df
 
-        ################################################################################################################
-        ## plot image quality
-
-# quality_control(['PA040'], tourettome_workspace)
-
-
-
-
-
-
-
-
-#
-# import os
-# from variables.subject_list import *
-# from utilities.utils import *
-# from plots.plot_volumes_qc import *
-#
-#
-# def make_quality_reports(population, workspace):
-#
-#     for subject in population:
-#
-#         print '###############################################################################'
-#         print 'Creating Quality Control Report for subject %s' % subject
-#         print ''
-#
-#         subdir = os.path.join(workspace, subject)
-#         qcdir  = mkdir_path(os.path.join(subdir, 'QUALITY'))
-#         os.chdir(qcdir)
-#
-#         anat      = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_BRAIN.nii.gz' )
-#         gm        = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_GM.nii.gz')
-#         gm2mni    = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI1mm.nii.gz')
-#         func2anat = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
-#
-#         # Plot native anatomical with GM
-#         if not os.path.isfile(os.path.join(qcdir, 'plot_anat_native.png')):
-#             plot_vol_quality(anat, gm, subject[0:2], '%s - Native Anatomical' %subject, 'plot_anat_native.png', cmap = 'r')
-#
-#         # Plot anat2mni reg quality using GM as a boundary
-#         #plot_vol_quality(mni_brain_1mm, gm2mni, 'MNI', '%s - Anatomical to MNI xfm' %subject, 'plot_anat_mni.png', cmap = 'r' )
-#
-#         # Plot func2anat reg quality using GM as a boundary
-#         #plot_vol_quality(func2anat, gm, subject[0:2], '%s - Func to Anat xfm' %subject, 'plot_func2anat-png', cmap = 'r' )
-#
-#
-#
-# make_quality_reports(tourettome_subjects, tourettome_workspace)
-#
-# ###########
-# # Functional
-# # 1- Raw Mean
-# # 2- TSNR
-# # 3- FD
-# # 4- DVARS
-# # 5- denoised imshow
-#
-# # GM/WM/CSF
-# # PLOT FUNCTIONAL MEAN ax-cor-sagg at level of BG
-#
-#
-#
-# # make qap pipe
-
-
-
-import os
-from variables.subject_list import *
-from utilities.utils import *
-from plotting.plot_volumes import *
-
-def make_quality_reports(population, workspace):
-
-    for subject in population:
-
-        print '###############################################################################'
-        print 'Creating Quality Control Report for subject %s' % subject
-        print ''
-
-        subdir = os.path.join(workspace, subject)
-        qcdir  = mkdir_path(os.path.join(subdir, 'QUALITY'))
-        os.chdir(qcdir)
-
-        ####################################
-        ######## Plot anatomical grey matter
-
-        anat  = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_BRAIN.nii.gz' )
-        gm    = os.path.join(subdir, 'ANATOMICAL',   'ANATOMICAL_GM.nii.gz')
-        site  = subject[0:2]
-
-        plot_quality(anat, gm, site, '%s-AnatGM' % subject, cmap='r', alpha=0.9)
-
-        #
-        # gm2mni    = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI1mm.nii.gz')
-        # func2anat = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz')
-        #
-        # # Plot native anatomical with GM
-        # if not os.path.isfile(os.path.join(qcdir, 'plot_anat_native.png')):
-        #     plot_vol_quality(anat, gm, subject[0:2], '%s - Native Anatomical' %subject, 'plot_anat_native.png', cmap = 'r')
-
-        # Plot anat2mni reg quality using GM as a boundary
-        #plot_vol_quality(mni_brain_1mm, gm2mni, 'MNI', '%s - Anatomical to MNI xfm' %subject, 'plot_anat_mni.png', cmap = 'r' )
-
-        # Plot func2anat reg quality using GM as a boundary
-        #plot_vol_quality(func2anat, gm, subject[0:2], '%s - Func to Anat xfm' %subject, 'plot_func2anat-png', cmap = 'r' )
-
-
-
-# make_quality_reports(tourettome_subjects, tourettome_workspace)
-
-###########
-# Functional
-# 1- Raw Mean
-# 2- TSNR
-# 3- FD
-# 4- DVARS
-# 5- denoised imshow
-
-# GM/WM/CSF
-# PLOT FUNCTIONAL MEAN ax-cor-sagg at level of BG
-
-
-
-# make qap pipe
+make_quality_control(['PA060'], tourettome_workspace)
