@@ -90,7 +90,7 @@ def make_quality_control(population, workspace):
 
 
         # Load data
-        func      =  os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT.nii.gz' )
+        func      =  os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT_BRAIN_MEAN.nii.gz' )
         func_mask =  os.path.join(subdir, 'FUNCTIONAL', 'REST_BRAIN_MASK.nii.gz' )
         movpar    =  os.path.join(subdir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
 
