@@ -132,7 +132,7 @@ def make_quality_control(population, workspace):
              data = tsnr_data[np.logical_and(nan_mask, mask)]
              np.save(os.path.join(os.getcwd(), 'TSNR_data.npy'), data)
 
-        df.loc[subject]['TSNR'] = str(np.round(np.median(np.load('TSNR_data.npy')), 3))
+        df.loc[subject]['qc_func_tsnr'] = str(np.round(np.median(np.load('TSNR_data.npy')), 3))
 
         df.to_csv('quality_paramters.csv')
 
