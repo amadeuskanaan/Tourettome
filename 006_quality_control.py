@@ -82,57 +82,57 @@ def make_quality_control(population, workspace):
         # df.loc[subject]['qc_anat_fwhm'] = fwhm(os.path.join(subdir, 'RAW','ANATOMICAL.nii.gz' ),
         #                                        os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_BRAIN_MASK.nii.gz'),out_vox=False)
 
-        # ############################################################################################
-        # # Functional measures
-        #
-        #
-        # # Load data
-        # func      =  os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT.nii.gz' )
-        # func_mask =  os.path.join(subdir, 'FUNCTIONAL', 'REST_BRAIN_MASK.nii.gz' )
-        # movpar    =  os.path.join(subdir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
-        #
-        # # Calculate spatial functional summary measures
-        # func_fg_mu, func_fg_sd, func_fg_size = summary_mask(nb.load(func).get_data(),nb.load(func_mask).get_data())
-        # df.loc[subject]['qc_func_snr']  = mriqca.snr(func_fg_mu, func_fg_sd, func_fg_size)
-        # df.loc[subject]['qc_func_efc']  = mriqca.efc(func)
-        # df.loc[subject]['qc_func_fber'] = mriqca.fber(func, func_mask)
+        ############################################################################################
+        # Functional measures
+
+
+        # Load data
+        func      =  os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT.nii.gz' )
+        func_mask =  os.path.join(subdir, 'FUNCTIONAL', 'REST_BRAIN_MASK.nii.gz' )
+        movpar    =  os.path.join(subdir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
+
+        # Calculate spatial functional summary measures
+        func_fg_mu, func_fg_sd, func_fg_size = summary_mask(nb.load(func).get_data(),nb.load(func_mask).get_data())
+        df.loc[subject]['qc_func_snr']  = mriqca.snr(func_fg_mu, func_fg_sd, func_fg_size)
+        df.loc[subject]['qc_func_efc']  = mriqca.efc(func)
+        df.loc[subject]['qc_func_fber'] = mriqca.fber(func, func_mask)
         # df.loc[subject]['qc_func_fwhm'] = fwhm(func, func_mask, out_vox=False)
-        #
-        # # Calculate temporal functional summary measures
-        # FD1D          = np.loadtxt(calculate_FD_Power(movpar))
-        # frames_in     = [frame for frame, val in enumerate(FD1D) if val < 0.2]
-        # quat          = int(len(FD1D) / 4)
-        # fd_in_percent = (float(len(frames_in)) / float(len(FD1D))) * 100.
-        #
-        # df.loc[subject]['qc_func_fd']     = str(np.round(np.mean(FD1D), 3))
-        # df.loc[subject]['qc_func_fd_in']  = str(np.round(fd_in_percent, 2))
-        # df.loc[subject]['qc_func_fd']     = str(np.round(np.mean(FD1D), 3))
-        # df.loc[subject]['qc_func_fd_max'] = str(np.round(np.max(FD1D), 3))
-        # df.loc[subject]['FD_Q4'] = str(np.round(np.mean(np.sort(FD1D)[::-1][:quat]), 3))
-        # df.loc[subject]['FD_RMS'] = str(np.round(np.sqrt(np.mean(FD1D)), 3))
-        #
-        # # Calculate DVARS
-        # func_proc = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
-        # func_mask = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI2mm.nii.gz')
-        # df.loc[subject]['qc_func_dvars']    = calculate_DVARS(func_proc, func_gm)
-        #
-        # # Calculate TSNR map
-        # if not os.path.isfile(os.path.join(qcdir, 'tsnr.nii.gz')):
-        #      tsnr = TSNR()
-        #      tsnr.inputs.in_file = func_edit
-        #      tsnr.run()
-        #
-        # if not os.path.isfile('TSNR_data.npy'):
-        #      tsnr_data = nb.load('./tsnr.nii.gz').get_data()
-        #      nan_mask = np.logical_not(np.isnan(tsnr_data))
-        #      mask = nb.load(func_mask).get_data() > 0
-        #      data = tsnr_data[np.logical_and(nan_mask, mask)]
-        #      np.save(os.path.join(os.getcwd(), 'TSNR_data.npy'), data)
-        #
-        # df.loc[subject]['TSNR'] = str(np.round(np.median(np.load('TSNR_data.npy')), 3))
-        #
-        #
-        #
+
+        # Calculate temporal functional summary measures
+        FD1D          = np.loadtxt(calculate_FD_Power(movpar))
+        frames_in     = [frame for frame, val in enumerate(FD1D) if val < 0.2]
+        quat          = int(len(FD1D) / 4)
+        fd_in_percent = (float(len(frames_in)) / float(len(FD1D))) * 100.
+
+        df.loc[subject]['qc_func_fd']     = str(np.round(np.mean(FD1D), 3))
+        df.loc[subject]['qc_func_fd_in']  = str(np.round(fd_in_percent, 2))
+        df.loc[subject]['qc_func_fd']     = str(np.round(np.mean(FD1D), 3))
+        df.loc[subject]['qc_func_fd_max'] = str(np.round(np.max(FD1D), 3))
+        df.loc[subject]['FD_Q4'] = str(np.round(np.mean(np.sort(FD1D)[::-1][:quat]), 3))
+        df.loc[subject]['FD_RMS'] = str(np.round(np.sqrt(np.mean(FD1D)), 3))
+
+        # Calculate DVARS
+        func_proc = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
+        func_mask = os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI2mm.nii.gz')
+        df.loc[subject]['qc_func_dvars']    = calculate_DVARS(func_proc, func_gm)
+
+        # Calculate TSNR map
+        if not os.path.isfile(os.path.join(qcdir, 'tsnr.nii.gz')):
+             tsnr = TSNR()
+             tsnr.inputs.in_file = func_edit
+             tsnr.run()
+
+        if not os.path.isfile('TSNR_data.npy'):
+             tsnr_data = nb.load('./tsnr.nii.gz').get_data()
+             nan_mask = np.logical_not(np.isnan(tsnr_data))
+             mask = nb.load(func_mask).get_data() > 0
+             data = tsnr_data[np.logical_and(nan_mask, mask)]
+             np.save(os.path.join(os.getcwd(), 'TSNR_data.npy'), data)
+
+        df.loc[subject]['TSNR'] = str(np.round(np.median(np.load('TSNR_data.npy')), 3))
+
+
+
         df.to_csv('quality_paramters.csv')
 
 
