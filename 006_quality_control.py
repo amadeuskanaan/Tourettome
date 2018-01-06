@@ -79,8 +79,8 @@ def make_quality_control(population, workspace):
         df.loc[subject]['qc_anat_snrd'] = mriqca.snr_dietrich(anat_fg_mu, anat_bg_sd)
         df.loc[subject]['qc_anat_efc']  = mriqca.efc(anat)
         df.loc[subject]['qc_anat_fber'] = mriqca.fber(anat, anat_mask)
-        df.loc[subject]['qc_anat_fwhm'] = fwhm(os.path.join(subdir, 'RAW','ANATOMICAL.nii.gz' ),
-                                               os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_BRAIN_MASK.nii.gz'),out_vox=False)
+        # df.loc[subject]['qc_anat_fwhm'] = fwhm(os.path.join(subdir, 'RAW','ANATOMICAL.nii.gz' ),
+        #                                        os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_BRAIN_MASK.nii.gz'),out_vox=False)
 
         # ############################################################################################
         # # Functional measures
