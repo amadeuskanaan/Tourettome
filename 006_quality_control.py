@@ -4,7 +4,7 @@ import os
 import nibabel as nb
 import numpy as np
 import pandas as pd
-from nipype.algorithms.misc import TSNR
+from nipype.algorithms.confounds import TSNR
 from quality.motion_statistics import *
 from quality.spatial_qc import *
 from utilities.utils import *
