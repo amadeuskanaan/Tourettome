@@ -17,15 +17,15 @@ import mriqc.qc.anatomical as mriqca
 #### CJV  - coefficient of joint variation
 #### CNR  - contrast-to-noise ratio
 #### SNR  - signal-to-noise ratio
-#### SNRd - Dietrich’s SNR
-#### QI2  - Mortamet’s quality index 2
+#### SNRd - Dietrichs SNR
+#### QI2  - Mortamets quality index 2
 
 # anatomical measures based on information theory
 #### EFC  - Shannons entropy focus criterion
 #### FBER - foreground-to-background ratio
 
 # anatomical measures targeting specific artifacts
-#### QI1  -  Mortamet’s quality index 1
+#### QI1  -  Mortamets quality index 1
 
 # anatomical other measures
 #### fwhm -  spatial distribution of the image intensity
