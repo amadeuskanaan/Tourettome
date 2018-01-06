@@ -90,15 +90,15 @@ def make_quality_control(population, workspace):
 
 
         # Load data
-        func      =  os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT_BRAIN_MEAN.nii.gz' )
-        func_mask =  os.path.join(subdir, 'FUNCTIONAL', 'REST_BRAIN_MASK.nii.gz' )
+        func      =  np.mean(nb.load(os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT.nii.gz' )).get_data(), axis =3)
+        func_mask =  nb.load(os.path.join(subdir, 'FUNCTIONAL', 'REST_BRAIN_MASK.nii.gz' )).get_data()
         movpar    =  os.path.join(subdir, 'FUNCTIONAL', 'moco/REST_EDIT_moco2.par')
 
         # Calculate spatial functional summary measures
-        func_fg_mu, func_fg_sd, func_fg_size = summary_mask(nb.load(func).get_data(),nb.load(func_mask).get_data())
+        func_fg_mu, func_fg_sd, func_fg_size = summary_mask(func, func_mask)
         df.loc[subject]['qc_func_snr']  = mriqca.snr(func_fg_mu, func_fg_sd, func_fg_size)
-        df.loc[subject]['qc_func_efc']  = mriqca.efc(nb.load(func).get_data())
-        df.loc[subject]['qc_func_fber'] = mriqca.fber(nb.load(func).get_data(), nb.load(func_mask).get_data())
+        df.loc[subject]['qc_func_efc']  = mriqca.efc(func)
+        df.loc[subject]['qc_func_fber'] = mriqca.fber(func, func_mask)
         # df.loc[subject]['qc_func_fwhm'] = fwhm(func, func_mask, out_vox=False)
 
         # Calculate temporal functional summary measures
