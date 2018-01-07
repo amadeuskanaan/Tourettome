@@ -192,4 +192,4 @@ def make_group_qc(population, workspace, phenoyptic_dir):
     df.to_csv(os.path.join(phenoyptic_dir, 'tourettome_phenotypic.csv'))
 
 #make_subject_qc(tourettome_subjects, tourettome_workspace)
-make_group_qc(tourettome_subjects, tourettome_workspace)
+make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
