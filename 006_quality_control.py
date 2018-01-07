@@ -54,7 +54,7 @@ def make_subject_qc(population, workspace):
 
         # EXTRACT ANATOMICAL AND FUNCTIONAL IMAGE QUALITY METRICS
 
-        if not os.path.isfile(os.path.join(qcdir, 'quality_paramtersx.csv')):
+        if not os.path.isfile(os.path.join(qcdir, 'quality_paramters.csv')):
 
             ############################################################################################
             #  Anatomical measures
@@ -165,29 +165,37 @@ def make_subject_qc(population, workspace):
             plot_quality(os.path.join(subdir, 'QUALITY_CONTROL', 'tsnr.nii.gz'), None,
                          'TSNR', '%s-func_tsnr' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
 
-            # 6. plot FD
+        # 6. plot FD, DVARS, CARPET
 
-            # 7. DVARS
+        resid = nb.load(os.path.join(subdir, 'DENOISE/residuals_compcor/residual_bp_z.nii.gz')).get_data().astype(np.float32)
+        gm = resid[nb.load(os.path.join(subdir, 'DENOISE/tissue_signals/gm_mask.nii.gz')).get_data().astype('bool')]
+        wm = resid[nb.load(os.path.join(subdir, 'DENOISE/tissue_signals/wm_mask.nii.gz')).get_data().astype('bool')]
+        cm = resid[nb.load(os.path.join(subdir, 'DENOISE/tissue_signals/csf_mask.nii.gz')).get_data().astype('bool')]
+        fd = np.loadtxt(os.path.join(subdir, 'QUALITY_CONTROL/FD.1D'))
+        dv = np.loadtxt(os.path.join(subdir, 'QUALITY_CONTROL/DVARS.npy'))
 
-            # 8. carpet plot
+        plot_temporal(gm, wm, cm, fd, dv, os.path.join('plot_func_motion.png'))
 
-def make_group_qc(population, workspace, phenotypic_dir):
-    def get_dcm_header(site_id):
-        df = pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_%s.csv' % site_id), index_col=0)
-        #df = df[['Group', 'Site', 'Age', 'Sex']]
-        return df
 
-    df_dcm = pd.concat([get_dcm_header('hannover_a'),
-                        get_dcm_header('hannover_b'),
-                        get_dcm_header('leipzig'),
-                        get_dcm_header('hamburg'),
-                        get_dcm_header('paris')]
-                       )
 
-    df_qc = pd.concat([pd.read_csv(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'),index_col=0)
-                       for s in population if os.path.isfile(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'))])
-    df = pd.concat([df_dcm, df_qc], axis=1)
-    df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
+
+# def make_group_qc(population, workspace, phenotypic_dir):
+#     def get_dcm_header(site_id):
+#         df = pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_%s.csv' % site_id), index_col=0)
+#         #df = df[['Group', 'Site', 'Age', 'Sex']]
+#         return df
+#
+#     df_dcm = pd.concat([get_dcm_header('hannover_a'),
+#                         get_dcm_header('hannover_b'),
+#                         get_dcm_header('leipzig'),
+#                         get_dcm_header('hamburg'),
+#                         get_dcm_header('paris')]
+#                        )
+#
+#     df_qc = pd.concat([pd.read_csv(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'),index_col=0)
+#                        for s in popu    lation if os.path.isfile(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'))])
+#     df = pd.concat([df_dcm, df_qc], axis=1)
+#     df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
 make_subject_qc(tourettome_subjects, tourettome_workspace)
-make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
+# make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
