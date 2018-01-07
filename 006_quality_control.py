@@ -123,7 +123,7 @@ def make_quality_control(population, workspace):
         if not os.path.isfile('TSNR_data.npy'):
              tsnr_data = nb.load('./tsnr.nii.gz').get_data()
              nan_mask = np.logical_not(np.isnan(tsnr_data))
-             mask = nb.load(func_mask).get_data() > 0
+             mask = func_mask > 0
              data = tsnr_data[np.logical_and(nan_mask, mask)]
              np.save(os.path.join(os.getcwd(), 'TSNR_data.npy'), data)
 
