@@ -133,4 +133,4 @@ def plot_quality(img, tissue, site, caption, color='red', alpha=1., title=None, 
     plt.figtext(0.13, 0.625, caption, fontsize=50, color='r', alpha=alpha)
 
     if title:
-        plt.save(title, bbox_inches='tight')
+        plt.savefig(title, transparent = True, bbox_inches='tight')
