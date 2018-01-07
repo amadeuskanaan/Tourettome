@@ -81,7 +81,6 @@ def plot_quality(img, tissue, site, caption, color='red', alpha=1., title=None, 
     midpoint = img_data.shape[2] * 0.5
     if site == 'HB':
         midpoint = midpoint - 30
-    coords = [midpoint - 20, midpoint, midpoint + 20, midpoint + 30, midpoint + 50]
 
     if site == 'MNI':
         midpoint = midpoint - 45
