@@ -52,8 +52,6 @@ def make_subject_qc(population, workspace):
 
         df = pd.DataFrame(index=['%s' % subject])
 
-
-
         # EXTRACT ANATOMICAL AND FUNCTIONAL IMAGE QUALITY METRICS
 
         if not os.path.isfile(os.path.join(qcdir, 'quality_paramters.csv')):
@@ -111,8 +109,8 @@ def make_subject_qc(population, workspace):
             df.loc[subject, 'qc_func_fd_in']  = str(np.round(fd_in_percent, 2))
             df.loc[subject, 'qc_func_fd']     = str(np.round(np.mean(FD1D), 3))
             df.loc[subject, 'qc_func_fd_max'] = str(np.round(np.max(FD1D), 3))
-            df.loc[subject, 'FD_Q4'] = str(np.round(np.mean(np.sort(FD1D)[::-1][:quat]), 3))
-            df.loc[subject, 'FD_RMS'] = str(np.round(np.sqrt(np.mean(FD1D)), 3))
+            df.loc[subject, 'qc_func_fd_q4 '] = str(np.round(np.mean(np.sort(FD1D)[::-1][:quat]), 3))
+            df.loc[subject, 'qc_func_fd_rms'] = str(np.round(np.sqrt(np.mean(FD1D)), 3))
 
             # Calculate DVARS
             func_proc = os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_UNI_BRAIN_MNI2mm.nii.gz')
