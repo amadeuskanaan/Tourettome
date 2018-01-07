@@ -31,7 +31,7 @@ import mriqc.qc.anatomical as mriqca
 #### fwhm -  spatial distribution of the image intensity
 
 
-def make_quality_control(population, workspace):
+def make_subject_qc(population, workspace):
     print '========================================================================================'
     print ''
     print '                    Tourettome - 006. QUALITY CONTROL                                   '
@@ -138,4 +138,4 @@ def make_quality_control(population, workspace):
 
 
 
-make_quality_control(['PA042'], tourettome_workspace)
+make_subject_qc(tourettome_subjects, tourettome_workspace)
