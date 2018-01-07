@@ -50,7 +50,7 @@ def make_quality_control(population, workspace):
         qcdir   = mkdir_path(os.path.join(workspace, subject, 'QUALITY_CONTROL'))
         os.chdir(qcdir)
 
-        df = pd.DataFrame(index=['%s' % subject], columns=columns)
+        df = pd.DataFrame(index=['%s' % subject])
 
 
         ############################################################################################
