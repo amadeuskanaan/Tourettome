@@ -54,7 +54,7 @@ def make_subject_qc(population, workspace):
 
         # EXTRACT ANATOMICAL AND FUNCTIONAL IMAGE QUALITY METRICS
 
-        if not os.path.isfile(os.path.join(qcdir, 'quality_paramters.csv')):
+        if not os.path.isfile(os.path.join(qcdir, 'quality_paramtersx.csv')):
 
             ############################################################################################
             #  Anatomical measures
