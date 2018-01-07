@@ -162,7 +162,7 @@ def make_subject_qc(population, workspace):
         # 5. func_tsnr
         plot_quality(os.path.join(subdir, 'QUALITY_CONTROL', 'tsnr.nii.gz'),
                      None,
-                     subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
+                     subject[0:2], '%s-func_tsnr' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
 
 
 

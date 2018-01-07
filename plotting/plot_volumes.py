@@ -87,8 +87,8 @@ def plot_quality(img, tissue, site, caption, color='red', alpha=1., title=None, 
         midpoint = midpoint - 45
         coords = [midpoint - 20, midpoint, midpoint + 20, midpoint + 30, midpoint + 50]
 
-    if site == 'FIRST':
-        coords = [midpoint - 5, midpoint, midpoint + 5, midpoint + 10, midpoint + 20]
+    if site == 'TSNR':
+        coords = [midpoint - 10, midpoint - 5, midpoint, midpoint + 5, midpoint + 10]
 
     print coords
 
