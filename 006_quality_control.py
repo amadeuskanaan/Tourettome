@@ -154,10 +154,10 @@ def make_subject_qc(population, workspace):
                      os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
                      'MNI', '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='plot_anat2mni.png')
 
-        # # 4. func2mni
-        # plot_quality(os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz'),
-        #              os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
-        #              subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='plot_func2anat.png')
+        # 4. func2mni
+        plot_quality(os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz'),
+                     os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
+                     subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='plot_func2anat.png')
 
         # 5. func_tsnr
         plot_quality(os.path.join(subdir, 'QUALITY_CONTROL', 'tsnr.nii.gz'),
