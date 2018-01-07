@@ -142,27 +142,27 @@ def make_subject_qc(population, workspace):
         # 1. anat brain mask
         plot_quality(os.path.join(subdir, 'RAW', 'ANATOMICAL.nii.gz'),
                      os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_BRAIN_MASK.nii.gz'),
-                     subject[0:2], '%s-anat_brain_mask' % subject, 'r', alpha=0.9, title='anat_brain_mask.png')
+                     subject[0:2], '%s-anat_brain_mask' % subject, 'r', alpha=0.9, title='plot_anat_brain_mask.png')
 
         # 2. anat gm seg
         plot_quality(os.path.join(subdir, 'RAW', 'ANATOMICAL.nii.gz'),
                      os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
-                     subject[0:2], '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='anat_gm_seg.png')
+                     subject[0:2], '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='plot_anat_gm_seg.png')
 
         # 3. anat2mni
         plot_quality(mni_head_1mm,
                      os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
-                     'MNI', '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='anat2mni.png')
+                     'MNI', '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='plot_anat2mni.png')
 
-        # 4. func2mni
-        plot_quality(os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz'),
-                     os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
-                     subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='func2anat.png')
+        # # 4. func2mni
+        # plot_quality(os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz'),
+        #              os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
+        #              subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='plot_func2anat.png')
 
         # 5. func_tsnr
         plot_quality(os.path.join(subdir, 'QUALITY_CONTROL', 'tsnr.nii.gz'),
                      None,
-                     subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='func_tsnr.png')
+                     subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
 
 
 
