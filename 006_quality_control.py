@@ -8,9 +8,12 @@ from nipype.algorithms.confounds import TSNR
 from quality.motion_statistics import *
 from quality.spatial_qc import *
 from utilities.utils import *
+from plotting.plot_volumes import *
 from variables.subject_list import *
 import mriqc.qc.anatomical as mriqca
-from plotting.plot_volumes import plot_quality, plot_temporal
+
+
+
 # IMAGE QUALITY METRICS
 
 # anatomical measures based on noise measurements
@@ -174,7 +177,7 @@ def make_subject_qc(population, workspace):
         fd = np.loadtxt(os.path.join(subdir, 'QUALITY_CONTROL/FD.1D'))
         dv = np.load(os.path.join(subdir, 'QUALITY_CONTROL/DVARS.npy'))
 
-        plot_temporal(gm, wm, cm, fd, dv, os.path.join('plot_func_motion.png'))
+        plot_temporal(gm, wm, cm, fd, dv, os.path.join(qcdir,'plot_func_motion.png'))
 
 
 
