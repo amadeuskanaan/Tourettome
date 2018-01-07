@@ -10,7 +10,7 @@ from quality.spatial_qc import *
 from utilities.utils import *
 from variables.subject_list import *
 import mriqc.qc.anatomical as mriqca
-
+from plotting.plot_volumes import plot_quality
 # IMAGE QUALITY METRICS
 
 # anatomical measures based on noise measurements
