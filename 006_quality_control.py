@@ -173,7 +173,7 @@ def make_subject_qc(population, workspace):
 
             # 8. carpet plot
 
-def make_group_qc(population, workspace, phenoyptic_dir):
+def make_group_qc(population, workspace, phenotypic_dir):
     def get_dcm_header(site_id):
         df = pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_%s.csv' % site_id), index_col=0)
         #df = df[['Group', 'Site', 'Age', 'Sex']]
