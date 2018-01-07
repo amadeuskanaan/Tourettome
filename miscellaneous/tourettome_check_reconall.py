@@ -26,7 +26,7 @@ fsdir = '/data/pt_nmr093_gts/freesurfer'
 
 fsdir_subs    = [sub for sub in os.listdir(fsdir) if sub in tourettome_subjects]
 
-finished_subs = [sub for sub in fsdir_subs if  'rh.thickness' in os.listdir(os.path.join(fsdir, sub, 'surf'))]
+finished_subs = sorted([sub for sub in fsdir_subs if  'rh.thickness' in os.listdir(os.path.join(fsdir, sub, 'surf'))])
 print 'Recon-all completed for %s subjects --> %s' %(len(finished_subs), finished_subs)
 # missing_files = [sub for sub in fsdir_subs if 'aparc.DKTatlas+aseg.mgz' not in os.listdir(os.path.join(fsdir, sub, 'mri'))]
 # missing_dirs  = [sub for sub in tourettome_subjects if not os.path.isdir(os.path.join(fsdir, sub))]
