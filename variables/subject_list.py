@@ -57,6 +57,7 @@ tourettome_subjects = [subject for subject in tourettome_subjects if subject not
 ########################################################################################################################
 #### Resources
 
+mni_head_1mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_1mm.nii.gz'
 mni_brain_1mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_1mm_brain.nii.gz'
 mni_brain_2mm        = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii.gz'
 mni_brain_2mm_mask   = '/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain_mask.nii.gz'
