@@ -166,4 +166,4 @@ def make_subject_qc(population, workspace):
                      'TSNR', '%s-func_tsnr' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
 
 
-make_subject_qc(['PA020'], tourettome_workspace)
+make_subject_qc(hamburg+hannover_a+hannover_b, tourettome_workspace)
