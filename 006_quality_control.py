@@ -166,4 +166,4 @@ def make_subject_qc(population, workspace):
 
 
 
-make_subject_qc(['PA050'], tourettome_workspace)
+make_subject_qc(['PA020'], tourettome_workspace)
