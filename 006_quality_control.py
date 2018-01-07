@@ -172,7 +172,7 @@ def make_subject_qc(population, workspace):
         wm = resid[nb.load(os.path.join(subdir, 'DENOISE/tissue_signals/wm_mask.nii.gz')).get_data().astype('bool')]
         cm = resid[nb.load(os.path.join(subdir, 'DENOISE/tissue_signals/csf_mask.nii.gz')).get_data().astype('bool')]
         fd = np.loadtxt(os.path.join(subdir, 'QUALITY_CONTROL/FD.1D'))
-        dv = np.loadtxt(os.path.join(subdir, 'QUALITY_CONTROL/DVARS.npy'))
+        dv = np.load(os.path.join(subdir, 'QUALITY_CONTROL/DVARS.npy'))
 
         plot_temporal(gm, wm, cm, fd, dv, os.path.join('plot_func_motion.png'))
 
