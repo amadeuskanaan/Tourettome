@@ -43,7 +43,7 @@ def make_subject_qc(population, workspace):
 
         count +=1
 
-        print '%s.Running Quality Controls for subject %s' %(count, subject)
+        print '%s.Running Quality Control for subject %s' %(count, subject)
 
         site_id = subject[0:2]
         subdir  = os.path.join(workspace, subject)
