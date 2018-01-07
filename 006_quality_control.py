@@ -150,8 +150,7 @@ def make_subject_qc(population, workspace):
                      subject[0:2], '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='plot_anat_gm_seg.png')
 
         # 3. anat2mni
-        plot_quality(mni_head_1mm,
-                     tissue= os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI1mm.nii.gz'),
+        plot_quality(mni_head_1mm, os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI1mm.nii.gz'),
                      'MNI', '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='plot_anat2mni.png',
                      tissue2=os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_CSF_MNI1mm.nii.gz'))
 
