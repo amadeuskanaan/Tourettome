@@ -167,5 +167,29 @@ def make_subject_qc(population, workspace):
             plot_quality(os.path.join(subdir, 'QUALITY_CONTROL', 'tsnr.nii.gz'), None,
                          'TSNR', '%s-func_tsnr' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
 
+            # 6. plot FD
 
-make_subject_qc(tourettome_subjects[123:], tourettome_workspace)
+            # 7. DVARS
+
+            # 8. carpet plot
+
+def make_group_qc(population, workspace, phenoyptic_dir):
+    def get_dcm_header(site_id):
+        df = pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_%s.csv' % site_id), index_col=0)
+        #df = df[['Group', 'Site', 'Age', 'Sex']]
+        return df
+
+    df_dcm = pd.concat([get_dcm_header('hannover_a'),
+                        get_dcm_header('hannover_b'),
+                        get_dcm_header('leipzig'),
+                        get_dcm_header('hamburg'),
+                        get_dcm_header('paris')]
+                       )
+
+    df_qc = pd.concat([pd.read_csv(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'),index_col=0)
+                       for s in population if os.path.isfile(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'))])
+    df = pd.concat([df_dcm, df_qc], axis=1)
+    df.to_csv(os.path.join(phenoyptic_dir, 'tourettome_phenotypic.csv'))
+
+#make_subject_qc(tourettome_subjects, tourettome_workspace)
+make_group_qc(tourettome_subjects, tourettome_workspace)
