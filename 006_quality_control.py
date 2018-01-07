@@ -124,6 +124,7 @@ def make_subject_qc(population, workspace):
                  tsnr = TSNR()
                  tsnr.inputs.in_file = os.path.join(subdir, 'FUNCTIONAL', 'REST_EDIT.nii.gz')
                  tsnr.run()
+                 # os.system('flirt -in tsnr -ref ../ANATOMICAL/ANATOMICAL -applxfm -init ../REGISTRATION/reg_anat/rest2anat_2.mat -out tsnr2anat')
 
             if not os.path.isfile('TSNR_data.npy'):
                  tsnr_data = nb.load('./tsnr.nii.gz').get_data()
@@ -131,6 +132,7 @@ def make_subject_qc(population, workspace):
                  mask = func_mask > 0
                  data = tsnr_data[np.logical_and(nan_mask, mask)]
                  np.save(os.path.join(os.getcwd(), 'TSNR_data.npy'), data)
+
 
             df.loc[subject, 'qc_func_tsnr'] = str(np.round(np.median(np.load('TSNR_data.npy')), 3))
 
@@ -160,10 +162,8 @@ def make_subject_qc(population, workspace):
                      subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='plot_func2anat.png')
 
         # 5. func_tsnr
-        plot_quality(os.path.join(subdir, 'QUALITY_CONTROL', 'tsnr.nii.gz'),
-                     None,
-                     subject[0:2], '%s-func_tsnr' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
-
+        plot_quality(os.path.join(subdir, 'QUALITY_CONTROL', 'tsnr.nii.gz'), None,
+                     'TSNR', '%s-func_tsnr' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
 
 
 make_subject_qc(['PA020'], tourettome_workspace)
