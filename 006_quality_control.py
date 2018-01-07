@@ -141,29 +141,31 @@ def make_subject_qc(population, workspace):
         ############################################################################################
         #  Make Image Quality Plots
 
-        # 1. anat brain mask
-        plot_quality(os.path.join(subdir, 'RAW', 'ANATOMICAL.nii.gz'),
-                     os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_BRAIN_MASK.nii.gz'),
-                     subject[0:2], '%s-anat_brain_mask' % subject, 'r', alpha=0.9, title='plot_anat_brain_mask.png')
+        if not os.path.isfile(os.path.join(qcdir, 'plot_func_tsnr.png')):
 
-        # 2. anat gm seg
-        plot_quality(os.path.join(subdir, 'RAW', 'ANATOMICAL.nii.gz'),
-                     os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
-                     subject[0:2], '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='plot_anat_gm_seg.png')
+            # 1. anat brain mask
+            plot_quality(os.path.join(subdir, 'RAW', 'ANATOMICAL.nii.gz'),
+                         os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_BRAIN_MASK.nii.gz'),
+                         subject[0:2], '%s-anat_brain_mask' % subject, 'r', alpha=0.9, title='plot_anat_brain_mask.png')
 
-        # 3. anat2mni
-        plot_quality(mni_head_1mm, os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI1mm.nii.gz'),
-                     'MNI', '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='plot_anat2mni.png',
-                     tissue2=os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_CSF_MNI1mm.nii.gz'))
+            # 2. anat gm seg
+            plot_quality(os.path.join(subdir, 'RAW', 'ANATOMICAL.nii.gz'),
+                         os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
+                         subject[0:2], '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='plot_anat_gm_seg.png')
 
-        # 4. func2mni
-        plot_quality(os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz'),
-                     os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
-                     subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='plot_func2anat.png')
+            # 3. anat2mni
+            plot_quality(mni_head_1mm, os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_GM_MNI1mm.nii.gz'),
+                         'MNI', '%s-anat_gm_seg' % subject, 'r', alpha=0.9, title='plot_anat2mni.png',
+                         tissue2=os.path.join(subdir, 'REGISTRATION', 'ANATOMICAL_CSF_MNI1mm.nii.gz'))
 
-        # 5. func_tsnr
-        plot_quality(os.path.join(subdir, 'QUALITY_CONTROL', 'tsnr.nii.gz'), None,
-                     'TSNR', '%s-func_tsnr' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
+            # 4. func2mni
+            plot_quality(os.path.join(subdir, 'REGISTRATION', 'REST_EDIT_MOCO_BRAIN_MEAN_BBR_ANAT1mm.nii.gz'),
+                         os.path.join(subdir, 'ANATOMICAL', 'ANATOMICAL_GM.nii.gz'),
+                         subject[0:2], '%s-func2mni' % subject, 'r', alpha=0.9, title='plot_func2anat.png')
+
+            # 5. func_tsnr
+            plot_quality(os.path.join(subdir, 'QUALITY_CONTROL', 'tsnr.nii.gz'), None,
+                         'TSNR', '%s-func_tsnr' % subject, 'r', alpha=0.9, title='plot_func_tsnr.png')
 
 
 make_subject_qc(hamburg+hannover_a+hannover_b, tourettome_workspace)
