@@ -70,6 +70,7 @@ def plot_quality_old(img, tissue, site, caption, cmap='red', title=None):
 def plot_quality(img, tissue, site, caption, color='red', alpha=1., title=None, tissue2=None, tissue3=None):
     import numpy as np
     import nibabel as nb
+    import matplotlib; matplotlib.use('agg')
     import matplotlib.pyplot as plt
     from matplotlib import cm
     from matplotlib.colors import ListedColormap
