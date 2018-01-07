@@ -13,7 +13,10 @@ print 'Tourettome - Leipzig      N=', len(leipzig)
 print 'Tourettome - Paris        N=', len(paris)
 print 'Tourettome - Hannover_a   N=', len(hannover_a)
 print 'Tourettome - Hannover_b   N=', len(hannover_b)
+print 'Tourettome - Hannover_b   N=', len(hamburg)
 print ''
+print 'Tourettome - All          N=', len(tourettome_subjects)
+print 'Tourettome - Unusable     N=', len(unsuable_datasets)
 print '---------------------------------------------'
 
 
