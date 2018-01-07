@@ -189,7 +189,7 @@ def make_group_qc(population, workspace, phenotypic_dir):
     df_qc = pd.concat([pd.read_csv(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'),index_col=0)
                        for s in population if os.path.isfile(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'))])
     df = pd.concat([df_dcm, df_qc], axis=1)
-    df.to_csv(os.path.join(phenoyptic_dir, 'tourettome_phenotypic.csv'))
+    df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
 #make_subject_qc(tourettome_subjects, tourettome_workspace)
 make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
