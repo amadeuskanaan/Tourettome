@@ -138,4 +138,4 @@ def make_quality_control(population, workspace):
 
 
 
-make_quality_control(tourettome_subjects, tourettome_workspace)
+make_quality_control(['PA042'], tourettome_workspace)
