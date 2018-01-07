@@ -189,5 +189,5 @@ def make_group_qc(population, workspace, phenotypic_dir):
     df = pd.concat([df_dcm, df_qc], axis=1)
     df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
-#make_subject_qc(tourettome_subjects, tourettome_workspace)
+make_subject_qc(tourettome_subjects, tourettome_workspace)
 make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
