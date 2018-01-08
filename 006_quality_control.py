@@ -208,7 +208,12 @@ def make_group_qc(population, workspace, phenotypic_dir):
     df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
     df_fd = pd.DataFrame(df['qc_func_fd']).dropna()
+    df_tsnr = pd.DataFrame(df_pheno['qc_func_tsnr']).dropna()
+
+    count = 0
     for subject in df_fd.index:
+        count +=1
+        print '%s. Plotting FD/TSNR distribution for subject %s' %(count, subject)
         fig = plt.figure()
         fig.set_size_inches(20, 4)
         sns.distplot(df_fd['qc_func_fd'], rug=True, hist=True, kde=True, color='b')
@@ -220,8 +225,6 @@ def make_group_qc(population, workspace, phenotypic_dir):
         plt.savefig('plot_distribution_fd.png', bbox_inches='tight')
         plt.close()
 
-    df_tsnr = pd.DataFrame(df_pheno['qc_func_tsnr']).dropna()
-    for subject in df_tsnr.index:
         fig = plt.figure()
         fig.set_size_inches(20, 4)
         sns.distplot(df_tsnr['qc_func_tsnr'], rug=True, hist=True, color='g')
