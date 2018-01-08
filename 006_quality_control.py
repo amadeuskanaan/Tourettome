@@ -207,8 +207,8 @@ def make_group_qc(population, workspace, phenotypic_dir):
     df = pd.concat([df_dcm, df_qc], axis=1)
     df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
-    df_fd = pd.DataFrame(df['qc_func_fd']).dropna()
-    df_tsnr = pd.DataFrame(df_pheno['qc_func_tsnr']).dropna()
+    df_fd   = pd.DataFrame(df['qc_func_fd']).dropna()
+    df_tsnr = pd.DataFrame(df['qc_func_tsnr']).dropna()
 
     count = 0
     for subject in df_fd.index:
