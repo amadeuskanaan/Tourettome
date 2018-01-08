@@ -182,7 +182,8 @@ def make_subject_qc(population, workspace):
         fd = np.loadtxt(os.path.join(subdir, 'QUALITY_CONTROL/FD.1D'))
         dv = np.load(os.path.join(subdir, 'QUALITY_CONTROL/DVARS.npy'))
 
-        plot_temporal(gm, wm, cm, fd, dv, os.path.join(qcdir,'plot_func_motion.png'))
+        if not os.path.isfile(os.path.join(qcdir,'plot_func_motion.png')):
+            plot_temporal(gm, wm, cm, fd, dv, os.path.join(qcdir,'plot_func_motion.png'))
 
 
 
@@ -207,38 +208,40 @@ def make_group_qc(population, workspace, phenotypic_dir):
     df = pd.concat([df_dcm, df_qc], axis=1)
     df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
-    df_fd   = pd.DataFrame(df['qc_func_fd']).dropna()
-    df_tsnr = pd.DataFrame(df['qc_func_tsnr']).dropna()
 
-    count = 0
-    for subject in df_fd.index:
-        count +=1
-        print '%s. Plotting FD/TSNR distribution for subject %s' %(count, subject)
 
-        qc_dir = os.path.join(workspace, subject, 'QUALITY_CONTROL')
-        os.chdir(qc_dir)
-
-        fig = plt.figure()
-        fig.set_size_inches(20, 2)
-        sns.distplot(df_fd['qc_func_fd'], rug=True, hist=True, kde=True, color='b')
-        plt.axvline(df_fd.loc[subject]['qc_func_fd'], color='r', linestyle='dashed', linewidth=3.5)
-        plt.ylabel('Density', size=20, weight='bold')
-        plt.xlabel('Framewise-Dispalcement (mm)', size=20, weight='bold')
-        plt.yticks(fontsize=15, weight='bold')
-        plt.xticks(fontsize=15, weight='bold')
-        plt.savefig('plot_distribution_fd.png', bbox_inches='tight')
-        plt.close()
-
-        fig = plt.figure()
-        fig.set_size_inches(20, 2)
-        sns.distplot(df_tsnr['qc_func_tsnr'], rug=True, hist=True, color='g')
-        plt.axvline(df_tsnr.loc[subject]['qc_func_tsnr'], color='r', linestyle='dashed', linewidth=3.5)
-        plt.ylabel('Density', size=20, weight='bold')
-        plt.xlabel('TSNR', size=20, weight='bold')
-        plt.yticks(fontsize=15, weight='bold')
-        plt.xticks(fontsize=15, weight='bold')
-        plt.savefig('plot_distribution_tsnr.png', bbox_inches='tight')
-        plt.close()
+    # df_fd   = pd.DataFrame(df['qc_func_fd']).dropna()
+    # df_tsnr = pd.DataFrame(df['qc_func_tsnr']).dropna()
+    #
+    # count = 0
+    # for subject in df_fd.index:
+    #     count +=1
+    #     print '%s. Plotting FD/TSNR distribution for subject %s' %(count, subject)
+    #
+    #     qc_dir = os.path.join(workspace, subject, 'QUALITY_CONTROL')
+    #     os.chdir(qc_dir)
+    #
+    #     fig = plt.figure()
+    #     fig.set_size_inches(20, 2)
+    #     sns.distplot(df_fd['qc_func_fd'], rug=True, hist=True, kde=True, color='b')
+    #     plt.axvline(df_fd.loc[subject]['qc_func_fd'], color='r', linestyle='dashed', linewidth=3.5)
+    #     plt.ylabel('Density', size=20, weight='bold')
+    #     plt.xlabel('Framewise-Dispalcement (mm)', size=20, weight='bold')
+    #     plt.yticks(fontsize=15, weight='bold')
+    #     plt.xticks(fontsize=15, weight='bold')
+    #     plt.savefig('plot_distribution_fd.png', bbox_inches='tight')
+    #     plt.close()
+    #
+    #     fig = plt.figure()
+    #     fig.set_size_inches(20, 2)
+    #     sns.distplot(df_tsnr['qc_func_tsnr'], rug=True, hist=True, color='g')
+    #     plt.axvline(df_tsnr.loc[subject]['qc_func_tsnr'], color='r', linestyle='dashed', linewidth=3.5)
+    #     plt.ylabel('Density', size=20, weight='bold')
+    #     plt.xlabel('TSNR', size=20, weight='bold')
+    #     plt.yticks(fontsize=15, weight='bold')
+    #     plt.xticks(fontsize=15, weight='bold')
+    #     plt.savefig('plot_distribution_tsnr.png', bbox_inches='tight')
+    #     plt.close()
 
     # for subject in population:
     #     qc_dir = os.path.join(workspace, subject,'QUALITY_CONTROL')
