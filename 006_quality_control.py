@@ -14,6 +14,8 @@ import mriqc.qc.anatomical as mriqca
 
 import matplotlib;matplotlib.use('agg')
 import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set_style('white')
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm, mm, inch, pica
 
