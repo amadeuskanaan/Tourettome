@@ -207,12 +207,12 @@ def make_group_qc(population, workspace, phenotypic_dir):
     df = pd.concat([df_dcm, df_qc], axis=1)
     df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
-
-    for subject in population:
+    df_fd = df['fd'].dropna()
+    for subject in df_fd.index:
         fig = plt.figure()
         fig.set_size_inches(24, 10)
-        sns.distplot(df['qc_func_fd'])
-        plt.axvline(df.loc[subject]['qc_func_fd'], color='r', linestyle='dashed', linewidth=3.5)
+        sns.distplot(df_fd['qc_func_fd'])
+        plt.axvline(df_fd.loc[subject]['qc_func_fd'], color='r', linestyle='dashed', linewidth=3.5)
 
     # for subject in population:
     #     qc_dir = os.path.join(workspace, subject,'QUALITY_CONTROL')
