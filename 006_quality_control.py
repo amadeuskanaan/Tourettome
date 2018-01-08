@@ -213,7 +213,8 @@ def make_group_qc(population, workspace, phenotypic_dir):
         fig.set_size_inches(24, 10)
         sns.distplot(df_fd['qc_func_fd'])
         plt.axvline(df_fd.loc[subject]['qc_func_fd'], color='r', linestyle='dashed', linewidth=3.5)
-
+        plt.tight()
+        plt.savefig('plot_distribution_fd.png', bbox_inches='tight')
     # for subject in population:
     #     qc_dir = os.path.join(workspace, subject,'QUALITY_CONTROL')
     #     os.chdir(qc_dir)
