@@ -183,6 +183,8 @@ def make_subject_qc(population, workspace):
 
 
 def make_group_qc(population, workspace, phenotypic_dir):
+
+
     from reportlab.pdfgen import canvas
     from reportlab.lib.units import cm, mm, inch, pica
 
@@ -205,21 +207,27 @@ def make_group_qc(population, workspace, phenotypic_dir):
 
 
     for subject in population:
-        qc_dir = os.path.join(workspace, subject,'QUALITY_CONTROL')
-        os.chdir(qc_dir)
-        report = canvas.Canvas('_report.pdf', pagesize=(8.27 * 500, 11.69 * 500))
-        report.drawImage(os.path.join(qc_dir, 'plot_anat_gm_seg.png'), 150, 4550)
-        report.drawImage(os.path.join(qc_dir, 'plot_anat2mni.png'), 150, 3600)
-        report.drawImage(os.path.join(qc_dir, 'plot_func2anat.png'), 150, 2600)
-        report.drawImage(os.path.join(qc_dir, 'plot_func_tsnr.png'), 150, 1900)
-        report.drawImage(os.path.join(qc_dir, 'plot_func_motion.png'), 0, 100, width=1977 * 2.05, height=886 * 2)
-        report.setFont("Helvetica", 180)
-        report.drawString(1900, 5650, '%s' % subject)
-        report.save()
+        fig = plt.figure()
+        fig.set_size_inches(24, 10)
+        sns.displot(df['qc_func_fd'], 'b', linewidth='3')
+        plt.axvline(df.loc[subject]['qc_func_fd'], color='r', linestyle='dashed', linewidth=3.5)
 
-        os.system('convert -density 50x50 -quality 50 -compress jpeg _report.pdf report.pdf')
-        os.system('rm -rf _report.pdf')
+    # for subject in population:
+    #     qc_dir = os.path.join(workspace, subject,'QUALITY_CONTROL')
+    #     os.chdir(qc_dir)
+    #     report = canvas.Canvas('_report.pdf', pagesize=(8.27 * 500, 11.69 * 500))
+    #     report.drawImage(os.path.join(qc_dir, 'plot_anat_gm_seg.png'), 150, 4550)
+    #     report.drawImage(os.path.join(qc_dir, 'plot_anat2mni.png'), 150, 3600)
+    #     report.drawImage(os.path.join(qc_dir, 'plot_func2anat.png'), 150, 2600)
+    #     report.drawImage(os.path.join(qc_dir, 'plot_func_tsnr.png'), 150, 1900)
+    #     report.drawImage(os.path.join(qc_dir, 'plot_func_motion.png'), 0, 100, width=1977 * 2.05, height=886 * 2)
+    #     report.setFont("Helvetica", 180)
+    #     report.drawString(1900, 5650, '%s' % subject)
+    #     report.save()
+    #
+    #     os.system('convert -density 50x50 -quality 50 -compress jpeg _report.pdf report.pdf')
+    #     os.system('rm -rf _report.pdf')
 
 # make_subject_qc(tourettome_subjects, tourettome_workspace)
 # make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
-make_group_qc(['LZ007'], tourettome_workspace, tourettome_phenotypic)
+make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)

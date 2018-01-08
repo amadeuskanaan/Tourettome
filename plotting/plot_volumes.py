@@ -148,34 +148,29 @@ def plot_temporal(gm, wm, cm, fd, dv, title):
     fd_mu = np.round(np.mean(fd), 2)
     dv_mu = np.round(np.mean(dv), 2)
 
-    ax1 = plt.subplot2grid((4, 1), (0, 0), colspan=1, rowspan=2)
+    ax1 = plt.subplot2grid((3, 1), (0, 0), colspan=1, rowspan=1)
     ax1.imshow(np.concatenate([gm, wm, cm]), interpolation='nearest', aspect='auto', cmap='Greys', vmin=-10, vmax=10)
     ax1.axes.get_xaxis().set_visible(False)
-    # ax1.hlines(gm.shape[0], 0,fd.shape[0], linestyles='-', colors='r', linewidth='2')
-    # ax1.hlines(gm.shape[0]+wm.shape[0], 0,fd.shape[0], linestyles='-', colors='r', linewidth='2')
-    # ax1.hlines(gm.shape[0]+wm.shape[0]+cm.shape[0], 0,fd.shape[0], linestyles='-', colors='r', linewidth='2')
-    # ax1.axes.get_yaxis().set_visible(False)
     ax1.set_ylabel('Voxels', size=25, weight='bold')
     plt.yticks([])
 
-    ax2 = plt.subplot2grid((4, 1), (2, 0), colspan=1, rowspan=1)
+    ax2 = plt.subplot2grid((3, 1), (1, 0), colspan=1, rowspan=1)
     ax2.plot(fd, 'b', linewidth='3')
     ax2.hlines(0.2, 0, fd.shape[0], linestyles='--', colors='r', linewidth='3')
     ax2.set_ylabel('FD', size=25, weight='bold')
     ax2.axes.get_xaxis().set_visible(False)
-    # plt.title('FD_mu = %s'%fd_mu, size=30, loc='left', weight='bold')
     plt.yticks(fontsize=15, weight='bold')
     ylim = ax2.get_ylim()
-    ax2.text(10, ylim[0] + (ylim[1] - ylim[0]) * 0.75, 'FD=%smm' % fd_mu, va='center', size=25, color='r',
+    ax2.text(5, ylim[0] + (ylim[1] - ylim[0]) * 0.75, 'FD=%smm' % fd_mu, va='center', size=25, color='r',
              weight='bold')
 
-    ax3 = plt.subplot2grid((4, 1), (3, 0), colspan=1, rowspan=1)
+    ax3 = plt.subplot2grid((43, 1), (2, 0), colspan=1, rowspan=1)
     ax3.plot(dv, 'maroon', linewidth='3', )
     ax3.set_ylabel('DVARS', size=25, weight='bold')
     ax3.set_xlabel('Volumes', size=25, weight='bold')
     plt.yticks(fontsize=15, weight='bold')
     ylim = ax3.get_ylim()
-    ax3.text(10, ylim[0] + (ylim[1] - ylim[0]) * 0.75, 'DVARS=%s' % dv_mu, va='center', size=25, color='r',
+    ax3.text(5, ylim[0] + (ylim[1] - ylim[0]) * 0.75, 'DVARS=%s' % dv_mu, va='center', size=25, color='r',
              weight='bold')
 
     plt.xticks(fontsize=15, weight='bold')
