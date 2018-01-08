@@ -211,7 +211,7 @@ def make_group_qc(population, workspace, phenotypic_dir):
     for subject in population:
         fig = plt.figure()
         fig.set_size_inches(24, 10)
-        sns.displot(df['qc_func_fd'], 'b', linewidth='3')
+        sns.distplot(df['qc_func_fd'], 'b', linewidth='3')
         plt.axvline(df.loc[subject]['qc_func_fd'], color='r', linestyle='dashed', linewidth=3.5)
 
     # for subject in population:
