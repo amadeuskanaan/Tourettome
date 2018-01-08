@@ -182,23 +182,44 @@ def make_subject_qc(population, workspace):
 
 
 
-# def make_group_qc(population, workspace, phenotypic_dir):
-#     def get_dcm_header(site_id):
-#         df = pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_%s.csv' % site_id), index_col=0)
-#         #df = df[['Group', 'Site', 'Age', 'Sex']]
-#         return df
-#
-#     df_dcm = pd.concat([get_dcm_header('hannover_a'),
-#                         get_dcm_header('hannover_b'),
-#                         get_dcm_header('leipzig'),
-#                         get_dcm_header('hamburg'),
-#                         get_dcm_header('paris')]
-#                        )
-#
-#     df_qc = pd.concat([pd.read_csv(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'),index_col=0)
-#                        for s in popu    lation if os.path.isfile(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'))])
-#     df = pd.concat([df_dcm, df_qc], axis=1)
-#     df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
+def make_group_qc(population, workspace, phenotypic_dir):
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.units import cm, mm, inch, pica
 
-make_subject_qc(tourettome_subjects, tourettome_workspace)
+    def get_dcm_header(site_id):
+        df = pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_%s.csv' % site_id), index_col=0)
+        #df = df[['Group', 'Site', 'Age', 'Sex']]
+        return df
+
+    df_dcm = pd.concat([get_dcm_header('hannover_a'),
+                        get_dcm_header('hannover_b'),
+                        get_dcm_header('leipzig'),
+                        get_dcm_header('hamburg'),
+                        get_dcm_header('paris')]
+                       )
+
+    df_qc = pd.concat([pd.read_csv(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'),index_col=0)
+                       for s in population if os.path.isfile(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'))])
+    df = pd.concat([df_dcm, df_qc], axis=1)
+    df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
+
+
+    for subject in population:
+        qc_dir = os.path.join(workspace, subject,'QUALITY_CONTROL')
+        os.chdir()
+
+        report = canvas.Canvas('_report.pdf', pagesize=(8.27 * 500, 11.69 * 500))
+        report.drawImage(os.path.join(qc_dir, 'plot_anat_gm_seg.png'), 150, 4550)
+        report.drawImage(os.path.join(qc_dir, 'plot_anat2mni.png'), 150, 3600)
+        report.drawImage(os.path.join(qc_dir, 'plot_func2anat.png'), 150, 2600)
+        report.drawImage(os.path.join(qc_dir, 'plot_func_tsnr.png'), 150, 1900)
+        report.drawImage(os.path.join(qc_dir, 'plot_func_motion.png'), 0, 100, width=1977 * 2.05, height=886 * 2)
+        report.setFont("Helvetica", 180)
+        report.drawString(1900, 5650, '%s' % subject)
+        report.save()
+
+        os.system('convert -density 50x50 -quality 50 -compress jpeg _report.pdf report.pdf')
+        os.system('rm -rf _report.pdf')
+
+make_subject_qc(['LZ007'], tourettome_workspace)
 # make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
