@@ -108,4 +108,6 @@ all_pops = leipzig+paris+hamburg+hannover_b+hannover_a
 #preprocess_anatomical(population =hannover_b[10:15], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =hannover_b[15:20], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =hannover_b[20:25], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-preprocess_anatomical(population =hannover_b[25:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =hannover_b[25:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+
+#preprocess_anatomical(population =['LZ043'], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
