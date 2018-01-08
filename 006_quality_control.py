@@ -12,7 +12,10 @@ from plotting.plot_volumes import *
 from variables.subject_list import *
 import mriqc.qc.anatomical as mriqca
 
-
+import matplotlib;matplotlib.use('agg')
+import matplotlib.pyplot as plt
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm, mm, inch, pica
 
 # IMAGE QUALITY METRICS
 
@@ -184,9 +187,6 @@ def make_subject_qc(population, workspace):
 
 def make_group_qc(population, workspace, phenotypic_dir):
 
-    import matplotlib.pyplot as plt
-    from reportlab.pdfgen import canvas
-    from reportlab.lib.units import cm, mm, inch, pica
 
     def get_dcm_header(site_id):
         df = pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_%s.csv' % site_id), index_col=0)
