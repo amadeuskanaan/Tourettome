@@ -214,8 +214,12 @@ def make_group_qc(population, workspace, phenotypic_dir):
     for subject in df_fd.index:
         count +=1
         print '%s. Plotting FD/TSNR distribution for subject %s' %(count, subject)
+
+        qc_dir = os.path.join(workspace, subject, 'QUALITY_CONTROL')
+        os.chdir(qc_dir)
+
         fig = plt.figure()
-        fig.set_size_inches(20, 4)
+        fig.set_size_inches(20, 2)
         sns.distplot(df_fd['qc_func_fd'], rug=True, hist=True, kde=True, color='b')
         plt.axvline(df_fd.loc[subject]['qc_func_fd'], color='r', linestyle='dashed', linewidth=3.5)
         plt.ylabel('Density', size=20, weight='bold')
@@ -226,7 +230,7 @@ def make_group_qc(population, workspace, phenotypic_dir):
         plt.close()
 
         fig = plt.figure()
-        fig.set_size_inches(20, 4)
+        fig.set_size_inches(20, 2)
         sns.distplot(df_tsnr['qc_func_tsnr'], rug=True, hist=True, color='g')
         plt.axvline(df_tsnr.loc[subject]['qc_func_tsnr'], color='r', linestyle='dashed', linewidth=3.5)
         plt.ylabel('Density', size=20, weight='bold')
