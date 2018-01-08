@@ -91,4 +91,9 @@ tourettome_derivatives = '/scr/malta4/workspace/project_TOURETTOME/derivatives'
 all_pops = leipzig+paris+hamburg+hannover_b+hannover_a
 
 # preprocess_anatomical(population =hamburg, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-preprocess_anatomical(population =hamburg[0:10], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+preprocess_anatomical(population =hamburg[0:5], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+# preprocess_anatomical(population =hamburg[5:10], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+# preprocess_anatomical(population =hamburg[10:15], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+# preprocess_anatomical(population =hamburg[15:20], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+# preprocess_anatomical(population =hamburg[20:25], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+# preprocess_anatomical(population =hamburg[25:30], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
