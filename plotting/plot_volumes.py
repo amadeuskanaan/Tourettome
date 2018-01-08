@@ -149,7 +149,7 @@ def plot_temporal(gm, wm, cm, fd, dv, title):
     dv_mu = np.round(np.mean(dv), 2)
 
     ax1 = plt.subplot2grid((4, 1), (0, 0), colspan=1, rowspan=2)
-    ax1.imshow(np.concatenate([gm, wm, cm]), interpolation='nearest', aspect='auto', cmap='Greys', vmin=-5, vmax=5)
+    ax1.imshow(np.concatenate([gm, wm, cm]), interpolation='nearest', aspect='auto', cmap='Greys', vmin=-10, vmax=10)
     ax1.axes.get_xaxis().set_visible(False)
     # ax1.hlines(gm.shape[0], 0,fd.shape[0], linestyles='-', colors='r', linewidth='2')
     # ax1.hlines(gm.shape[0]+wm.shape[0], 0,fd.shape[0], linestyles='-', colors='r', linewidth='2')
