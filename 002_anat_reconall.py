@@ -5,13 +5,13 @@ import sys
 # from variables.subject_list import *
 
 
-assert len(sys.argv)== 2
-subject_index=int(sys.argv[1])
+# assert len(sys.argv)== 2
+# subject_index=int(sys.argv[1])
 
 def preprocess_anatomical(population, afs_dir, workspace, freesurfer_dir):
 
-    # for subject in population:
-        subject = population[subject_index]
+    for subject in population:
+        # subject = population[subject_index]
         print '========================================================================================'
         print '%s-Preprocessing anatomical data for %s' %(subject, subject)
 
@@ -91,4 +91,4 @@ tourettome_derivatives = '/scr/malta4/workspace/project_TOURETTOME/derivatives'
 all_pops = leipzig+paris+hamburg+hannover_b+hannover_a
 
 # preprocess_anatomical(population =hamburg, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-preprocess_anatomical(population =all_pops, afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+preprocess_anatomical(population =hamburg[0:10], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
