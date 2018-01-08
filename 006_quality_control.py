@@ -206,8 +206,7 @@ def make_group_qc(population, workspace, phenotypic_dir):
 
     for subject in population:
         qc_dir = os.path.join(workspace, subject,'QUALITY_CONTROL')
-        os.chdir()
-
+        os.chdir(qc_dir)
         report = canvas.Canvas('_report.pdf', pagesize=(8.27 * 500, 11.69 * 500))
         report.drawImage(os.path.join(qc_dir, 'plot_anat_gm_seg.png'), 150, 4550)
         report.drawImage(os.path.join(qc_dir, 'plot_anat2mni.png'), 150, 3600)
