@@ -184,7 +184,7 @@ def make_subject_qc(population, workspace):
 
 def make_group_qc(population, workspace, phenotypic_dir):
 
-    import matplotlib,pyplot as plt
+    import matplotlib.pyplot as plt
     from reportlab.pdfgen import canvas
     from reportlab.lib.units import cm, mm, inch, pica
 
