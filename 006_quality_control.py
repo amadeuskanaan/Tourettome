@@ -207,7 +207,7 @@ def make_group_qc(population, workspace, phenotypic_dir):
     df = pd.concat([df_dcm, df_qc], axis=1)
     df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
-    df_fd = df['fd'].dropna()
+    df_fd = df['qc_func_fd'].dropna()
     for subject in df_fd.index:
         fig = plt.figure()
         fig.set_size_inches(24, 10)
