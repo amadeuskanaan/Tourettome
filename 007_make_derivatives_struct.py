@@ -55,7 +55,7 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
 
             else:
                 print '..........Subject missing reconall data'
-                print os.path.join(freesurfer_dir, 'surf/lh.thickness')
+                print os.path.join(fs_dir, 'surf/lh.thickness')
         ################################################################################################################
         ### 2- Subcortical Volume
         ################################################################################################################
@@ -68,6 +68,7 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
                       %(subject,  aseg_stats_out))
             else:
                 print '..........Subject missing reconall data'
+                print os.path.join(fs_dir, 'stats/aseg.stats')
 
 tourettome_freesurfer = '/data/pt_nmr093_gts/freesurfer'
-make_derivatives_struct(leipzig, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
+make_derivatives_struct(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
