@@ -11,7 +11,7 @@ from variables.subject_list import *
 ### 3- Subcortical Volume
 ### 4- Surface Area
 
-def make_derivatives_struct(population, workspace_dir, fs_dir, derivatives_dir) :
+def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivatives_dir) :
 
     print '========================================================================================'
     print ''
@@ -26,7 +26,7 @@ def make_derivatives_struct(population, workspace_dir, fs_dir, derivatives_dir) 
         print '##################################'
         print 'Extracting structural features for subject %s' %subject
 
-        fs_dir  = os.path.join(fs_dir, subject)
+        fs_dir  = os.path.join(freesurfer_dir, subject)
         ct_dir  = mkdir_path(os.path.join(derivatives_dir, 'struct_cortical_thickness'))
         vol_dir = mkdir_path(os.path.join(derivatives_dir, 'struct_subcortical_volume'))
 
@@ -55,7 +55,7 @@ def make_derivatives_struct(population, workspace_dir, fs_dir, derivatives_dir) 
 
             else:
                 print '..........Subject missing reconall data'
-                print os.path.join(fs_dir, 'surf/lh.thickness')
+                print os.path.join(freesurfer_dir, 'surf/lh.thickness')
         ################################################################################################################
         ### 2- Subcortical Volume
         ################################################################################################################
