@@ -131,3 +131,16 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
     if output_file is not None:
         fig.savefig(output_file)
         plt.close(fig)
+
+def return_fsaverage_data(freesurfer_dir, fsaverage_id):
+    import os
+    datadir = os.path.join(freesurfer_dir, fsaverage_id, 'surf')
+
+    fsaverage = dict()
+    fsaverage['infl_left'] = os.path.join(datadir, 'lh.inflated')
+    fsaverage['infl_right'] = os.path.join(datadir, 'rh.inflated')
+    fsaverage['pial_left'] = os.path.join(datadir, 'lh.pial')
+    fsaverage['pial_right'] = os.path.join(datadir, 'rh.pial')
+    fsaverage['sulc_left'] = os.path.join(datadir, 'lh.sulc')
+    fsaverage['sulc_right'] = os.path.join(datadir, 'rh.sulc')
+    return fsaverage
