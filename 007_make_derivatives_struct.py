@@ -23,19 +23,22 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
     for subject in population:
         count +=1
 
+        print '##################################'
         print 'Extracting structural features for subject %s' %subject
 
         freesurfer_dir  = os.path.join(freesurfer_dir, subject)
         ct_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_cortical_thickness'))
         vol_dir         = mkdir_path(os.path.join(derivatives_dir, 'struct_subcortical_volume'))
 
-        print '##################################'
-        print '1- Extracting Cortical Thickness'
 
-        FWHM_CT = '20'
-        fsaverage = 'fsaverage5'
+        ################################################################################################################
+        ### 1- Cortical Thickness
+        ################################################################################################################
 
         if not os.path.isfile(os.path.join(ct_dir, '%s_rh2fsaverage5_fwhm20.mgh'%subject)):
+            print '1- Extracting Cortical Thickness'
+            FWHM_CT = '20'
+            fsaverage = 'fsaverage5'
             for hemi in ['lh', 'rh']:
                     surf2surf = ['mri_surf2surf ',
                                  '--s '          + subject,
@@ -43,16 +46,19 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
                                  '--hemi '       + hemi,
                                  '--trgsubject ' + fsaverage,
                                  '--fwhm-src '   + FWHM_CT,
-                                 '--tval '       + os.path.join(ct_dir, '%s_%s2%s_fwhm%s.mgh' % (subject, hemi, fsaverage, FWHM_CT)),
+                                 '--tval '       + os.path.join(ct_dir, '%s_%s2%s_fwhm%s.mgh' %
+                                                                (subject, hemi, fsaverage, FWHM_CT)),
                                  '--cortex '
                                  '--noreshape ']
                     os_system(surf2surf)
 
-        print '##################################'
-        print '2- Extracting Subcortical Volumes'
+        ################################################################################################################
+        ### 2- Subcortical Volume
+        ################################################################################################################
 
         aseg_stats_out = os.path.join(vol_dir, 'aseg_stats_%s.txt'%subject)
-        if not os.path.join(vol_dir, '%s_aseg_stats.txt'%subject):
+        if not os.path.isfile(aseg_stats_out):
+            print '2- Extracting Subcortical Volumes'
             os.system('asegstats2table -s %s --meas volume --delimiter comma -t %s'
                       %(subject,  aseg_stats_out))
 
