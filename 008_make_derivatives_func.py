@@ -66,13 +66,13 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         # subject I/0
         subject_dir = os.path.join(workspace_dir, subject)
-        func_denoised = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp.nii.gz')
-        func_denoised_lh = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_z_lh.mgh')
-        func_denoised_rh = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_z_rh.mgh')
+        func_denoised = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_fwhm.nii.gz')
 
         ################################################################################################################
         ### 1- Seed-Based Correlation
         ################################################################################################################
+
+        print '1. Calculating Seed-Based Correlation'
 
         seeds = {'STR'         : mask_str,
                  # 'STR3_MOTOR'  : mask_str_motor,
@@ -87,53 +87,42 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                  # 'AMYG'        : mask_amyg,
                  }
 
-        for seed in seeds:
+        for seed_name in seeds:
+            if not os.path.isfile(os.path.join(sca_dir, '%s_sca_z_fwhm6.nii.gz'%subject)):
+                print seed_name
 
-            # Extract seed timeseries
-            seed            = seeds[seed_name]
-            masker_seed     = NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache', verbose=1)
-            timeseries_seed = masker_seed.fit_transform(func_denoised)
-
-            # Extract surface timeseries
-            masker_cortex =   NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache', verbose=1)
-
-
-
-
-
-
-
-
-        print '2. Calculating Seed-Based Correlation'
-        if not os.path.isfile(os.path.join(sca_dir,'%s_STR3_MOTOR_sca_z.nii.gz'%subject)):
-
-            seeds = {'STR3_MOTOR':   str3_motor,
-                     'STR3_LIMBIC':  str3_limbic,
-                     'STR3_EXEC':    str3_exec}
-
-            for seed_name in seeds:
+                # Extract seed timeseries
                 seed = seeds[seed_name]
+                masker_seed = NiftiLabelsMasker(labels_img=seed, smoothing_fwhm=None, standardize=True, memory='nilearn_cache', verbose=0)
+                timeseries_seed = masker_seed.fit_transform(func_denoised)
+                print 'seed_timeseries_shape', timeseries_seed.shape
 
-                seed_masker = NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache', verbose=1)
-                seed_time_series = seed_masker.fit_transform(func_denoised)
+                # Extract brain timeseries
+                masker_brain = NiftiMasker(smoothing_fwhm=None, detrend=None, standardize=True, low_pass=None,
+                                           high_pass=None, t_r=2., memory='nilearn_cache', memory_level=1, verbose=0)
+                timeseries_brain = masker_brain.fit_transform(func_denoised)
+                print 'brain_timeseries_shape', timeseries_brain.shape
 
-                brain_masker = input_data.NiftiMasker(smoothing_fwhm=6, detrend=None, standardize=True,
-                                                      low_pass=None, high_pass=None, t_r=2., memory='nilearn_cache',
-                                                      memory_level=1, verbose=0)
-                brain_time_series = brain_masker.fit_transform(func_denoised)
+                # Seed Based Correlation
+                # see Nilearn http://nilearn.github.io/auto_examples/03_connectivity/plot_seed_to_voxel_correlation.html#sphx-glr-auto-examples-03-connectivity-plot-seed-to-voxel-correlation-py
+                sca = np.dot(timeseries_brain.T, timeseries_seed) / timeseries_seed.shape[0]
+                sca_rz = np.arctanh(sca)
+                print("seed-based correlation Fisher-z transformed: min = %.3f; max = %.3f" % (sca_rz.min(), sca_rz.max()))
 
-                #  correlate the seed signal with the signal of each voxel.
-                # see http://nilearn.github.io/auto_examples/03_connectivity/plot_seed_to_voxel_correlation.html#sphx-glr-auto-examples-03-connectivity-plot-seed-to-voxel-correlation-py
-                seed_based_correlations = np.dot(brain_time_series.T, seed_time_series) / seed_time_series.shape[0]
+                # Save seed-to-brain correlation as a  Nifti image
+                sca_img = masker_brain.inverse_transform(sca.T)
+                sca_img.to_filename(os.path.join(sca_dir, '%s_sca_z_fwhm6.nii.gz'%subject))
 
-                seed_based_correlations_fisher_z = np.arctanh(seed_based_correlations)
-                print("seed-based correlation Fisher-z transformed: min = %.3f; max = %.3f" % (
-                    seed_based_correlations_fisher_z.min(),seed_based_correlations_fisher_z.max()))
+                # Map seed-to-voxel onto surface
+                sca_lh = surface.vol_to_surf(sca_img, fsaverage5['pial_left']).ravel()
+                sca_rh = surface.vol_to_surf(sca_img, fsaverage5['pial_right']).ravel()
 
-                seed_based_correlation_img = brain_masker.inverse_transform(seed_based_correlations.T)
-                seed_based_correlation_img.to_filename(os.path.join(sca_dir,'%s_%s_sca_z.nii.gz'%(subject, seed_name)))
+                # Save seed-to-vertex correlation as a txt file
+                np.save(os.path.join(sca_dir, '%s_sca_z_fwhm6_lh.npy'%subject), sca_lh)
+                np.save(os.path.join(sca_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
 
-make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+
+make_functional_derivatives(['LZ006'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
 
