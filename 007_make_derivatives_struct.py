@@ -55,6 +55,7 @@ def make_derivatives_struct(population, workspace_dir, fs_dir, derivatives_dir) 
 
             else:
                 print '..........Subject missing reconall data'
+                print os.path.isfile(os.path.join(fs_dir, 'surf/lh.thickness'))
         ################################################################################################################
         ### 2- Subcortical Volume
         ################################################################################################################
