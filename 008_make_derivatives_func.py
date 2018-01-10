@@ -12,6 +12,10 @@ from nilearn import surface
 from algorithms.fast_ecm import fastECM
 from utilities.utils import *
 from variables.subject_list import *
+from plotting.plot_surf import return_fsaverage_data
+
+freesurfer_dir = '/data/pt_nmr093_gts/freesurfer'
+fsaverage5 = return_fsaverage_data(freesurfer_dir, 'fsaverage5')
 
 # Calculate functional derivatives
 
@@ -56,8 +60,8 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
     print '========================================================================================'
 
     # global IO
+    sca_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_seed_correlation'))
     ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_centrality'))
-    sca_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_sca'))
     gm_group_mask = os.path.join(derivatives_dir, 'MASKS/GROUP_GM_FUNC_3mm.nii')
 
     count = 0
@@ -68,7 +72,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         # subject I/0
         subject_dir = os.path.join(workspace_dir, subject)
-        func_denoised = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_z_fwhm6.nii.gz')
+        func_denoised = os.path.join(subject_dir, 'DENOISE', 'residuals_compcor', 'residual_bp_z_fwhm6.nii.gz')
 
         ################################################################################################################
         ### 1- Seed-Based Correlation
