@@ -1,5 +1,3 @@
-
-
 ########################################################################################################################
 #### Input/output
 
@@ -67,21 +65,15 @@ mni_HOLV_3mm         = '/scr/malta1/Github/Tourettome/resources/HarvardOxford-la
 bbr_schedule         = '/usr/share/fsl/5.0/etc/flirtsch/bbr.sch'
 fs_mni_reg           = '/afs/cbs.mpg.de/software/freesurfer/6.0.0/ubuntu-xenial-amd64/average/mni152.register.dat'
 
-rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta',
-        'R_Pall', 'L_Pall', 'R_Amyg', 'L_Amyg',
-        'R_Hipp', 'L_Hipp', 'R_Accu', 'L_Accu',
-        'R_Thal', 'L_Thal']
-
 mask_str        = '/scr/malta1/Github/Tourettome/atlases/STR.nii.gz'
 mask_str_motor  = '/scr/malta1/Github/Tourettome/atlases/STR3_MOTOR.nii.gz'
 mask_str_limbic = '/scr/malta1/Github/Tourettome/atlases/STR3_LIMBIC.nii.gz'
 mask_str_exec   = '/scr/malta1/Github/Tourettome/atlases/STR3_EXEC.nii.gz'
 mask_caud    = '/scr/malta1/Github/Tourettome/atlases/Caud.nii.gz'
 mask_puta   = '/scr/malta1/Github/Tourettome/atlases/Puta.nii.gz'
+mask_pall   = '/scr/malta1/Github/Tourettome/atlases/Pall.nii.gz'
 mask_accu   = '/scr/malta1/Github/Tourettome/atlases/Accu.nii.gz'
 mask_thal   = '/scr/malta1/Github/Tourettome/atlases/Thal.nii.gz'
 mask_hipp   = '/scr/malta1/Github/Tourettome/atlases/Hipp.nii.gz'
 mask_amyg   = '/scr/malta1/Github/Tourettome/atlases/Amyg.nii.gz'
-
-rois_bilateral = ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']
 
