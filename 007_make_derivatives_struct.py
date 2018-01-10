@@ -69,4 +69,4 @@ def make_derivatives_struct(population, workspace_dir, fs_dir, derivatives_dir) 
                 print '..........Subject missing reconall data'
 
 tourettome_freesurfer = '/data/pt_nmr093_gts/freesurfer'
-make_derivatives_struct(['PA050'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
+make_derivatives_struct(['PA039'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
