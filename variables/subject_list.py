@@ -77,3 +77,7 @@ mask_thal   = '/scr/malta1/Github/Tourettome/atlases/Thal.nii.gz'
 mask_hipp   = '/scr/malta1/Github/Tourettome/atlases/Hipp.nii.gz'
 mask_amyg   = '/scr/malta1/Github/Tourettome/atlases/Amyg.nii.gz'
 
+nuclei_bilateral   = ['Caudate', 'Putamen', 'Accumbens-area', 'Pallidum', 'Hippocampus', 'Amygdala', 'Thalamus-Proper']
+nuclei_left        = ['Left-' + nucleus for nucleus in nuclei_bilateral]
+nuclei_right       = ['Right-' + nucleus for nucleus in nuclei_bilateral]
+nuclei_subcortical = nuclei_left + nuclei_right
