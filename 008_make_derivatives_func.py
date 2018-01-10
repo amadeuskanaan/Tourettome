@@ -43,7 +43,7 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
         os.system('fslmaths %s -thrp 25 -bin %s' %(gm_masks_list, gm_group_mask))
         os.system('gunzip %s'%gm_group_mask)
 
-make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
+# make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
 
 def make_functional_derivatives(population, workspace_dir, freesurfer_dir, derivatives_dir):
 
