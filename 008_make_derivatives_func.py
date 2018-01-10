@@ -96,7 +96,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         for seed_name in seeds:
             if not os.path.isfile(os.path.join(sca_dir, seed_name, '%s_sca_z_fwhm6.nii.gz'%subject)):
                 print seed_name
-                seed_dir = mkdir_path(seed_name)
+                seed_dir = mkdir_path(os.path.join(sca_dir, 'seed_%s'%seed_name))
 
                 # Extract seed timeseries
                 seed = seeds[seed_name]
