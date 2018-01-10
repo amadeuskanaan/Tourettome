@@ -66,7 +66,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         # subject I/0
         subject_dir = os.path.join(workspace_dir, subject)
-        func_denoised = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_fwhm.nii.gz')
+        func_denoised = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_z_fwhm6.nii.gz')
 
         ################################################################################################################
         ### 1- Seed-Based Correlation
