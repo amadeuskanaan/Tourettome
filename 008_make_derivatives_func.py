@@ -6,7 +6,9 @@ import subprocess
 import commands
 import numpy as np
 import nibabel as nb
-from nilearn.input_data import NiftiLabelsMasker
+from nilearn.input_data import NiftiLabelsMasker, NiftiMasker
+from sklearn import preprocessing
+from nilearn import surface
 from algorithms.fast_ecm import fastECM
 from utilities.utils import *
 from variables.subject_list import *
@@ -75,21 +77,22 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         print '1. Calculating Seed-Based Correlation'
 
         seeds = {'STR'         : mask_str,
-                 # 'STR3_MOTOR'  : mask_str_motor,
-                 # 'STR3_LIMBIC' : mask_str_limbic,
-                 # 'STR3_EXEC'   : mask_str_exec,
-                 # 'CAUD'        : mask_caud,
-                 # 'PUTA'        : mask_puta,
-                 # 'ACCU'        : mask_accu,
-                 # 'PALL'        : mask_pall,
-                 # 'THAL'        : mask_thal,
-                 # 'HIPP'        : mask_hipp,
-                 # 'AMYG'        : mask_amyg,
+                 'STR3_MOTOR'  : mask_str_motor,
+                 'STR3_LIMBIC' : mask_str_limbic,
+                 'STR3_EXEC'   : mask_str_exec,
+                 'CAUD'        : mask_caud,
+                 'PUTA'        : mask_puta,
+                 'ACCU'        : mask_accu,
+                 'PALL'        : mask_pall,
+                 'THAL'        : mask_thal,
+                 'HIPP'        : mask_hipp,
+                 'AMYG'        : mask_amyg,
                  }
 
         for seed_name in seeds:
-            if not os.path.isfile(os.path.join(sca_dir, '%s_sca_z_fwhm6.nii.gz'%subject)):
+            if not os.path.isfile(os.path.join(sca_dir, seed_name, '%s_sca_z_fwhm6.nii.gz'%subject)):
                 print seed_name
+                seed_dir = mkdir_path(seed_name)
 
                 # Extract seed timeseries
                 seed = seeds[seed_name]
@@ -111,15 +114,15 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
                 # Save seed-to-brain correlation as a  Nifti image
                 sca_img = masker_brain.inverse_transform(sca.T)
-                sca_img.to_filename(os.path.join(sca_dir, '%s_sca_z_fwhm6.nii.gz'%subject))
+                sca_img.to_filename(os.path.join(seed_dir, '%s_sca_z_fwhm6.nii.gz'%subject))
 
                 # Map seed-to-voxel onto surface
                 sca_lh = surface.vol_to_surf(sca_img, fsaverage5['pial_left']).ravel()
                 sca_rh = surface.vol_to_surf(sca_img, fsaverage5['pial_right']).ravel()
 
                 # Save seed-to-vertex correlation as a txt file
-                np.save(os.path.join(sca_dir, '%s_sca_z_fwhm6_lh.npy'%subject), sca_lh)
-                np.save(os.path.join(sca_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
+                np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_lh.npy'%subject), sca_lh)
+                np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
 
 
 make_functional_derivatives(['LZ006'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
