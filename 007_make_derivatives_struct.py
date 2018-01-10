@@ -60,7 +60,7 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
         ### 2- Subcortical Volume
         ################################################################################################################
 
-        aseg_stats_out = os.path.join(vol_dir, 'aseg_stats_%s.txt'%subject)
+        aseg_stats_out = os.path.join(vol_dir, '%s_aseg_stats.txt'%subject)
         if not os.path.isfile(aseg_stats_out):
             print '2- Extracting Subcortical Volumes'
             if os.path.isfile(os.path.join(fs_dir, 'stats/aseg.stats')):
