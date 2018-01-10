@@ -14,7 +14,7 @@ def return_fsaverage_data(freesurfer_dir, fsaverage_id):
 
 def plot_surf(fsaverage, surf_map_l, surf_map_r,
               threshold=None, alpha=0.7, cmap='hot', vmin=None, vmax=None,
-              bg_on_data=1, output_file=None,
+              bg_on_data=1, output_file=None, texture_type = 'sulc',
               ):
     # Import libraries
     import nibabel
@@ -123,11 +123,10 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
     #fig = plt.figure(figsize=(60, 20))
     fig = plt.figure(figsize=(70, 20))
 
-    subplot(surf_map_l, fsaverage['sulc_left'], 141, coords_left, faces_left, elev=0, azim=180, bg_on_data=bg_on_data)
-    subplot(surf_map_l, fsaverage['sulc_left'], 142, coords_left, faces_left, elev=0, azim=0, bg_on_data=bg_on_data)
-    subplot(surf_map_r, fsaverage['sulc_right'], 143, coords_right, faces_right, elev=0, azim=180,
-            bg_on_data=bg_on_data)
-    subplot(surf_map_r, fsaverage['sulc_right'], 144, coords_right, faces_right, elev=0, azim=0, bg_on_data=bg_on_data)
+    subplot(surf_map_l, fsaverage['%s_left'%texture_type], 141, coords_left, faces_left, elev=0, azim=180, bg_on_data=bg_on_data)
+    subplot(surf_map_l, fsaverage['%s_left'%texture_type], 142, coords_left, faces_left, elev=0, azim=0, bg_on_data=bg_on_data)
+    subplot(surf_map_r, fsaverage['%s_right'%texture_type], 143, coords_right, faces_right, elev=0, azim=180,bg_on_data=bg_on_data)
+    subplot(surf_map_r, fsaverage['%s_right'%texture_type], 144, coords_right, faces_right, elev=0, azim=0, bg_on_data=bg_on_data)
 
     plt.tight_layout()
 
