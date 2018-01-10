@@ -11,7 +11,7 @@ from variables.subject_list import *
 ### 3- Subcortical Volume
 ### 4- Surface Area
 
-def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivatives_dir) :
+def make_derivatives_struct(population, workspace_dir, fs_dir, derivatives_dir) :
 
     print '========================================================================================'
     print ''
@@ -26,32 +26,35 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
         print '##################################'
         print 'Extracting structural features for subject %s' %subject
 
-        freesurfer_dir  = os.path.join(freesurfer_dir, subject)
-        ct_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_cortical_thickness'))
-        vol_dir         = mkdir_path(os.path.join(derivatives_dir, 'struct_subcortical_volume'))
-
+        fs_dir  = os.path.join(fs_dir, subject)
+        ct_dir  = mkdir_path(os.path.join(derivatives_dir, 'struct_cortical_thickness'))
+        vol_dir = mkdir_path(os.path.join(derivatives_dir, 'struct_subcortical_volume'))
 
         ################################################################################################################
         ### 1- Cortical Thickness
         ################################################################################################################
 
-        if not os.path.isfile(os.path.join(ct_dir, '%s_rh2fsaverage5_fwhm20.mgh'%subject)):
+        if not os.path.isfile(os.path.join(ct_dir, '%s_ct2fsaverage5_fwhm20_rh.mgh'%subject)):
             print '1- Extracting Cortical Thickness'
             FWHM_CT = '20'
             fsaverage = 'fsaverage5'
-            for hemi in ['lh', 'rh']:
-                    surf2surf = ['mri_surf2surf ',
-                                 '--s '          + subject,
-                                 '--sval '       + os.path.join(freesurfer_dir, 'surf/%s.thickness'%hemi),
-                                 '--hemi '       + hemi,
-                                 '--trgsubject ' + fsaverage,
-                                 '--fwhm-src '   + FWHM_CT,
-                                 '--tval '       + os.path.join(ct_dir, '%s_%s2%s_fwhm%s.mgh' %
-                                                                (subject, hemi, fsaverage, FWHM_CT)),
-                                 '--cortex '
-                                 '--noreshape ']
-                    os_system(surf2surf)
 
+            if os.path.isfile(os.path.join(fs_dir, 'surf/lh.thickness')):
+                for hemi in ['lh', 'rh']:
+                        surf2surf = ['mri_surf2surf ',
+                                     '--s '          + subject,
+                                     '--sval '       + os.path.join(fs_dir, 'surf/%s.thickness' % hemi),
+                                     '--hemi '       + hemi,
+                                     '--trgsubject ' + fsaverage,
+                                     '--fwhm-src '   + FWHM_CT,
+                                     '--tval '       + os.path.join(ct_dir, '%s_ct2%s_fwhm%s_%s.mgh' %
+                                                                    (subject, fsaverage, FWHM_CT, hemi)),
+                                     '--cortex '
+                                     '--noreshape ']
+                        os_system(surf2surf)
+
+            else:
+                print '..........Subject missing reconall data'
         ################################################################################################################
         ### 2- Subcortical Volume
         ################################################################################################################
@@ -59,9 +62,11 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
         aseg_stats_out = os.path.join(vol_dir, 'aseg_stats_%s.txt'%subject)
         if not os.path.isfile(aseg_stats_out):
             print '2- Extracting Subcortical Volumes'
-            os.system('asegstats2table -s %s --meas volume --delimiter comma -t %s'
+            if os.path.isfile(os.path.join(fs_dir, 'stats/aseg.stats')):
+                os.system('asegstats2table -s %s --meas volume --delimiter comma -t %s'
                       %(subject,  aseg_stats_out))
-
+            else:
+                print '..........Subject missing reconall data'
 
 tourettome_freesurfer = '/data/pt_nmr093_gts/freesurfer'
-make_derivatives_struct(['LZ067'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
+make_derivatives_struct(['PA050'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
