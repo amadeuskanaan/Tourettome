@@ -137,7 +137,7 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
     fig.subplots_adjust(right=0.83)
     ax_cb = fig.add_axes([0.85, 0.25, 0.020, 0.53])  # x,y,w,h
     cbar = mpl.colorbar.ColorbarBase(ax_cb, cmap=cmap, orientation='vertical')
-    print vmin, vmax
+    #print vmin, vmax
     cbar.set_ticks([vmin, vmax])
     cbar.ax.tick_params(labelsize=50)
 

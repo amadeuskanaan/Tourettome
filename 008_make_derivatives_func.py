@@ -6,7 +6,7 @@ import subprocess
 import commands
 import numpy as np
 import nibabel as nb
-from nilearn import input_data
+from nilearn.input_data import NiftiLabelsMasker
 from algorithms.fast_ecm import fastECM
 from utilities.utils import *
 from variables.subject_list import *
@@ -74,13 +74,32 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         ### 1- Seed-Based Correlation
         ################################################################################################################
 
-        seeds = {
-                 'STR3_MOTOR': str3_motor,
-                 'STR3_LIMBIC': str3_limbic,
-                 'STR3_EXEC': str3_exec}
+        seeds = {'STR'         : mask_str,
+                 # 'STR3_MOTOR'  : mask_str_motor,
+                 # 'STR3_LIMBIC' : mask_str_limbic,
+                 # 'STR3_EXEC'   : mask_str_exec,
+                 # 'CAUD'        : mask_caud,
+                 # 'PUTA'        : mask_puta,
+                 # 'ACCU'        : mask_accu,
+                 # 'PALL'        : mask_pall,
+                 # 'THAL'        : mask_thal,
+                 # 'HIPP'        : mask_hipp,
+                 # 'AMYG'        : mask_amyg,
+                 }
 
         for seed in seeds:
-            seed = seeds[seed_name]
+
+            # Extract seed timeseries
+            seed            = seeds[seed_name]
+            masker_seed     = NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache', verbose=1)
+            timeseries_seed = masker_seed.fit_transform(func_denoised)
+
+            # Extract surface timeseries
+            masker_cortex =   NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache', verbose=1)
+
+
+
+
 
 
 
@@ -95,8 +114,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
             for seed_name in seeds:
                 seed = seeds[seed_name]
 
-                seed_masker = input_data.NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache',
-                                                          verbose=5)
+                seed_masker = NiftiLabelsMasker(labels_img=seed, standardize=True, memory='nilearn_cache', verbose=1)
                 seed_time_series = seed_masker.fit_transform(func_denoised)
 
                 brain_masker = input_data.NiftiMasker(smoothing_fwhm=6, detrend=None, standardize=True,

@@ -91,14 +91,11 @@ tourettome_derivatives = '/scr/malta4/workspace/project_TOURETTOME/derivatives'
 all_pops = leipzig+paris+hamburg+hannover_b+hannover_a
 
 #preprocess_anatomical(population =hamburg[25:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =hannover_a[5:10], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =hannover_a[15:20], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =hannover_a[20:25], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =hannover_a[25:30], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =hannover_a[30:35], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =hannover_a[0:35], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =hannover_a[35:40], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =hannover_a[40:45], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =hannover_a[45:50], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =hannover_a[50:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 
 #preprocess_anatomical(population =hannover_b[0:5], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =hannover_b[5:10], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
@@ -108,15 +105,20 @@ all_pops = leipzig+paris+hamburg+hannover_b+hannover_a
 #preprocess_anatomical(population =hannover_b[25:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 
 #preprocess_anatomical(population =leipzig[1:5], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =leipzig[5:10], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =leipzig[10:15], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =leipzig[15:20], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =leipzig[20:25], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =leipzig[25:30], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =leipzig[30:35], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =leipzig[35:40], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =leipzig[40:45], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-preprocess_anatomical(population =leipzig[45:50], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =leipzig[45:50], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =leipzig[52:55], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =leipzig[55:60], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =leipzig[60:65], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)#preprocess_anatomical(population =leipzig[70:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =leipzig[57:60], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =leipzig[60:65], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =leipzig[65:70], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =leipzig[70:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 
 
 #preprocess_anatomical(population =paris[0:5], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
@@ -135,6 +137,18 @@ preprocess_anatomical(population =leipzig[45:50], afs_dir = tourettome_afs, work
 #preprocess_anatomical(population =paris[65:70], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =paris[70:75], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
 #preprocess_anatomical(population =paris[75:80], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =paris[80:85], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =paris[85:90], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
-#preprocess_anatomical(population =paris[90:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+# preprocess_anatomical(population =paris[80:85], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+# preprocess_anatomical(population =paris[85:90], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+# preprocess_anatomical(population =paris[90:], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+
+
+
+preprocess_anatomical(population =paris[48:50], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =paris[54:55], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =paris[59:60], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =paris[64:65], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =paris[69:70], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =paris[74:75], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =paris[79:80], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =paris[84:85], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
+#preprocess_anatomical(population =paris[88:90], afs_dir = tourettome_afs, workspace = tourettome_workspace, freesurfer_dir= fsdir)
