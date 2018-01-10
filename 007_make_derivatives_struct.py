@@ -35,9 +35,8 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
         FWHM_CT = '20'
         fsaverage = 'fsaverage5'
 
-        if not os.path.isfile(ct_out):
+        if not os.path.isfile(os.path.isfile(os.path.join(ct_dir, '%s_rh2fsaverage5_fwhm20.mgh'%subject))):
             for hemi in ['lh', 'rh']:
-                if not os.path.isfile(os.path.join(ct_dir, '%s_rh2fsaverage5_fwhm20.mgh'%subject)):
                     surf2surf = ['mri_surf2surf ',
                                  '--s '          + subject,
                                  '--sval '       + os.path.join(freesurfer_dir, 'surf/%s.thickness'%hemi),
