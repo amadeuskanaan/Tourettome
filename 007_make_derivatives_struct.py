@@ -59,5 +59,5 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
                       %(subject,  aseg_stats_out))
 
 
-
+tourettome_freesurfer = '/data/pt_nmr093_gts/freesurfer'
 make_derivatives_struct(['LZ067'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
