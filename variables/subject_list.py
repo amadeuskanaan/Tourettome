@@ -72,9 +72,16 @@ rois = ['R_Caud', 'L_Caud', 'R_Puta', 'L_Puta',
         'R_Hipp', 'L_Hipp', 'R_Accu', 'L_Accu',
         'R_Thal', 'L_Thal']
 
-str3_motor  = '/scr/malta1/Github/Tourettome/atlases/STR/STR3_MOTOR.nii.gz'
-str3_limbic = '/scr/malta1/Github/Tourettome/atlases/STR/STR3_LIMBIC.nii.gz'
-str3_exec   = '/scr/malta1/Github/Tourettome/atlases/STR/STR3_EXEC.nii.gz'
+mask_str        = '/scr/malta1/Github/Tourettome/atlases/STR.nii.gz'
+mask_str_motor  = '/scr/malta1/Github/Tourettome/atlases/STR3_MOTOR.nii.gz'
+mask_str_limbic = '/scr/malta1/Github/Tourettome/atlases/STR3_LIMBIC.nii.gz'
+mask_str_exec   = '/scr/malta1/Github/Tourettome/atlases/STR3_EXEC.nii.gz'
+mask_caud    = '/scr/malta1/Github/Tourettome/atlases/Caud.nii.gz'
+mask_puta   = '/scr/malta1/Github/Tourettome/atlases/Puta.nii.gz'
+mask_accu   = '/scr/malta1/Github/Tourettome/atlases/Accu.nii.gz'
+mask_thal   = '/scr/malta1/Github/Tourettome/atlases/Thal.nii.gz'
+mask_hipp   = '/scr/malta1/Github/Tourettome/atlases/Hipp.nii.gz'
+mask_amyg   = '/scr/malta1/Github/Tourettome/atlases/Amyg.nii.gz'
 
 rois_bilateral = ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']
 

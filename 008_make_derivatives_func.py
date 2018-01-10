@@ -45,11 +45,6 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
 
 make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
 
-
-
-    #return gm_group_mask
-
-
 def make_functional_derivatives(population, workspace_dir, freesurfer_dir, derivatives_dir):
 
     print '========================================================================================'
@@ -72,61 +67,23 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         # subject I/0
         subject_dir = os.path.join(workspace_dir, subject)
         func_denoised = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp.nii.gz')
+        func_denoised_lh = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_z_lh.mgh')
+        func_denoised_rh = os.path.join(subject_dir, 'DENOISE/residuals_compcor/residual_bp_z_rh.mgh')
+
+        ################################################################################################################
+        ### 1- Seed-Based Correlation
+        ################################################################################################################
+
+        seeds = {
+                 'STR3_MOTOR': str3_motor,
+                 'STR3_LIMBIC': str3_limbic,
+                 'STR3_EXEC': str3_exec}
+
+        for seed in seeds:
+            seed = seeds[seed_name]
 
 
 
-        print '1. Calculating Centrality Measures'
-        if not os.path.isfile(os.path.join(subject_dir, 'CENTRALITY/zscore_fastECM_lh.mgh')):
-            subject_dir_ecm = mkdir_path(os.path.join(subject_dir, 'CENTRALITY'))
-
-            os.chdir(subject_dir_ecm)
-
-            # gunzip for matlab
-            if not os.path.isfile('%s/residual.nii'%subject_dir_ecm):
-                shutil.copy(func_denoised, './residual.nii.gz')
-                os.system('gunzip residual.nii.gz')
-                os.system('rm -rf residual.nii.gz')
-
-
-            if not os.path.isfile('residual_fastECM.nii'):
-                # Run Fast ECM
-                matlab_cmd = ['matlab', '-nodesktop', '-nosplash', '-nojvm',
-                              '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"'
-                              % (os.path.join(subject_dir_ecm, 'residual.nii'), gm_group_mask)]
-                subprocess.call(matlab_cmd)
-
-            if not os.path.isfile(os.path.join(subject_dir_ecm, 'residual_fastECM_rh.mgh')):
-                print '...... project to surface'  #### take non-smoothed data and smooth on surface
-                for hemi in ['lh', 'rh']:
-                    os.system('mri_vol2surf '
-                              '--mov residual_fastECM.nii '
-                              '--reg %s '
-                              '--trgsubject fsaverage5 '
-                              '--projfrac-avg 0.2 0.8 0.1 '
-                              '--hemi %s '
-                              '--interp nearest '
-                              '--cortex '
-                              '--o residual_fastECM_%s.mgh'
-                              % (fs_mni_reg, hemi, hemi))
-
-            # z-score and map to surf
-            def z_score_centrality(image, outname):
-                print '...... z-scoring %s' % outname
-                std  = commands.getoutput('fslstats %s -k %s -s | awk \'{print $1}\'' % (image, gm_group_mask))
-                mean = commands.getoutput('fslstats %s -k %s -m | awk \'{print $1}\'' % (image, gm_group_mask))
-                os.system('fslmaths %s -sub %s -div %s -mas %s %s' % (image, mean, std, gm_group_mask, outname))
-
-                for hemi in ['lh','rh']:
-                    os.system('mri_vol2surf --mov %s --reg %s --trgsubject fsaverage5 --projfrac-avg 0.2 0.8 0.1 --hemi %s '
-                              '--interp nearest --fwhm 3 --cortex --o %s/%s_%s.mgh'
-                              % (image, fs_mni_reg, hemi, subject_dir_ecm, outname, hemi))
-
-            z_score_centrality('residual_fastECM.nii', 'zscore_fastECM')
-            z_score_centrality('residual_degCM.nii', 'zscore_degCM')
-            z_score_centrality('residual_normECM.nii', 'zscore_normECM')
-            z_score_centrality('residual_rankECM.nii', 'zscore_rankECM')
-
-            os.system('cp zscore_normECM.nii.gz %s/%s_zscore_normECM.nii.gz' %(ecm_dir, subject))
 
         print '2. Calculating Seed-Based Correlation'
         if not os.path.isfile(os.path.join(sca_dir,'%s_STR3_MOTOR_sca_z.nii.gz'%subject)):
