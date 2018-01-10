@@ -112,14 +112,22 @@ def nuisance_signal_regression(population, workspace_dir):
                               '--projfrac-avg 0.2 0.8 0.1 '
                               '--hemi %s '
                               '--interp nearest '
-                              #'--fwhm 6 ' 
+                              #'--fwhm 6 '
                               '--cortex '
                               '--o residual_bp_z_%s.mgh'
                               % (fs_mni_reg, hemi, hemi))
 
         ################################################################################################################
 
-        # 1- Detrend (Linear-Quadratic + Motion-24 +  Compcor n5
+        # # 1- Detrend (Linear-Quadratic), Motion-24, WM/CSF mean signal
+        #
+        # print '- Nuisance Signal regression :::: FUNC2mm_detrend_wmcsf_moco24_bp_std_fwhm '
+        # selector_std = {'wm'     : True, 'csf': True,  'motion': True,  'linear': True, 'quadratic': True,
+        #                 'compcor': False, 'gm': False, 'global': False, 'pc1'   : False}
+        # denoise(denoise_type='wmcsf',data=func_mni, selector=selector_std)
+        #
+
+        # 2- Detrend (Linear-Quadratic + Motion-24 +  Compcor n5
 
         print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
         selector_cc = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
@@ -132,9 +140,44 @@ def nuisance_signal_regression(population, workspace_dir):
         #                'compcor': True, 'gm': False, 'global': True, 'pc1': False}
         # denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr)
 
+        ################################################################################################################
+        ################################################################################################################
+
+        # # 3- ICA-AROMA, Detrend (Linear-Quadratic), Motion-24, WM/CSF mean signal
+        # print '- Nuisance Signal regression :::: FUNC2mm_fwhm_ICA-AROMA_detrend_wmcsf_moco24 '
+        #
+        #
+        # if not os.path.isfile(os.path.join(aroma_dir, 'denoised_func_data_nonaggr')):
+        #     os.chdir(aroma_dir)
+        #     print '......smoothing to FWHM=6mm'
+        #     os.system('fslmaths %s -s %s REST_EDIT_UNI_BRAIN_MNI2mm_fwhm6mm.nii.gz' %(func_mni, sigma))
+        #     os.system('fslmaths %s -Tmean -thr 200 -bin REST_EDIT_UNI_BRAIN_MNI2mm_mask'%func_mni)
+        #
+        #     if not os.path.isfile(os.path.join(aroma_dir, 'denoised_func_data_nonaggr')):
+        #         print '......ica_aroma'
+        #         os.system('python /scr/sambesi4/SCR/Software/ICA-AROMA/ICA_AROMA.py '
+        #                   '-in %s -out %s -mc %s -m %s -tr %s'
+        #                   %(os.path.join(aroma_dir, 'REST_EDIT_UNI_BRAIN_MNI2mm_fwhm6mm.nii.gz'),
+        #                     aroma_dir, movpar, os.path.join(aroma_dir, 'REST_EDIT_UNI_BRAIN_MNI2mm_mask.nii.gz'),TR))
+        #
+        #
+        #     print '......extracting tissue data'
+        #     extract_tissue_data(data_file = os.path.join(aroma_dir, 'denoised_func_data_nonaggr.nii.gz'),
+        #                         ventricles_mask_file = mni_HOLV_2mm,
+        #                         wm_seg_file  = os.path.join(subdir, 'REGISTRATION/ANATOMICAL_WM_MNI2mm.nii.gz'),
+        #                         csf_seg_file = os.path.join(subdir, 'REGISTRATION/ANATOMICAL_CSF_MNI2mm.nii.gz'),
+        #                         gm_seg_file  = os.path.join(subdir, 'REGISTRATION/ANATOMICAL_GM_MNI2mm.nii.gz'))
+        #
+        #
+        #     denoise(run_dir=aroma_dir, data=, selector=selector_std,
+        #             wmsig =os.path.join(wmcsf_dir, 'wm_signals.npy'),
+        #             csfsig =os.path.join(wmcsf_dir, 'csf_signals.npy'),
+        #             gmsig =os.path.join(wmcsf_dir, 'gm_signals.npy'))
+
+
 nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
 # nuisance_signal_regression(paris, tourettome_workspace)
-#nuisance_signal_regression(hamburg, tourettome_workspace)
+nuisance_signal_regression(hamburg, tourettome_workspace)
 # nuisance_signal_regression(['PA060'], tourettome_workspace)
 
 
