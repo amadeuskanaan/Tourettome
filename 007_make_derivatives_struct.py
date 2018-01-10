@@ -25,69 +25,39 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
 
         print 'Extracting structural features for subject %s' %subject
 
-        subject_dir     = os.path.join(workspace_dir, subject)
         freesurfer_dir  = os.path.join(freesurfer_dir, subject)
         ct_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_cortical_thickness'))
-        gd_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_geodesic_distance'))
-        sa_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_surface_area'))
-        ic_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_intensity_contrast'))
-        sv_dir          = mkdir_path(os.path.join(derivatives_dir, 'struct_subcortical_volume'))
+        vol_dir         = mkdir_path(os.path.join(derivatives_dir, 'struct_subcortical_volume'))
 
         print '##################################'
         print '1- Extracting Cortical Thickness'
 
         FWHM_CT = '20'
         fsaverage = 'fsaverage5'
+        ct_out = os.path.join(ct_dir, '%s_%s2%s_fwhm%s.mgh' % (subject, hemi, fsaverage, FWHM_CT))
 
-        for hemi in ['lh', 'rh']:
-            ct_out = os.path.join(ct_dir, '%s_%s2%s_fwhm%s.mgh' % (subject,hemi, fsaverage, FWHM_CT))
-            if not os.path.isfile(ct_out):
-                surf2surf = ['mri_surf2surf ',
-                             '--s '          + subject,
-                             '--sval '       + os.path.join(freesurfer_dir, 'surf/%s.thickness'%hemi),
-                             '--hemi '       + hemi,
-                             '--trgsubject ' + fsaverage,
-                             '--fwhm-src '   + FWHM_CT,
-                             '--tval '       + ct_out,
-                             '--cortex '
-                             '--noreshape '
-                             ]
-
-                os_system(surf2surf)
-
-        print '##################################'
-        print '2- Extracting Geodesic Distance'
+        if not os.path.isfile(ct_out):
+            for hemi in ['lh', 'rh']:
+                if not os.path.isfile(ct_out):
+                    surf2surf = ['mri_surf2surf ',
+                                 '--s '          + subject,
+                                 '--sval '       + os.path.join(freesurfer_dir, 'surf/%s.thickness'%hemi),
+                                 '--hemi '       + hemi,
+                                 '--trgsubject ' + fsaverage,
+                                 '--fwhm-src '   + FWHM_CT,
+                                 '--tval '       + ct_out,
+                                 '--cortex '
+                                 '--noreshape ']
+                    os_system(surf2surf)
 
         print '##################################'
-        print '3- Extracting Surface Area'
+        print '2- Extracting Subcortical Volumes'
 
-        print '##################################'
-        print '4- Extracting Intensity Contrast'
+        aseg_stats_out = os.path.join(vol_dir, 'aseg_stats_%s.txt'%subject)
+        if not os.path.join(vol_dir, '%s_aseg_stats.txt'%subject):
+            os.system('asegstats2table -s %s --meas volume --delimiter comma -t %s'
+                      %(subject,  aseg_stats_out))
 
-        print '##################################'
-        print '5- Extracting Subcortical Volumes'
 
-        # ####### Count number of non-zero voxels for FSL-FIRST subcortical segmentations
 
-        # # create bilateral masks
-        # for roi in ['Caud', 'Puta', 'Pall',  'Amyg', 'Hipp', 'Accu', 'Thal']:
-        #     if not os.path.isfile(os.path.join(anatdir, 'seg_first/FIRST-%s_first.nii.gz'%roi)):
-        #         os.chdir(firstdir)
-        #         os.system('fslmaths FIRST-R_%s_first.nii.gz -add FIRST-L_%s_first.nii.gz -bin FIRST-%s_first.nii.gz' %(roi, roi, roi))
-        #
-        # # Get jacobian deteminant from anat2mni.mat and multiply by bincount
-        # jacobian_det = np.linalg.det(np.genfromtxt(os.path.join(anatdir, 'seg_first', 'anat2mni.mat')))
-        # print jacobian_det
-        #
-        # # Make count
-        # df = pd.DataFrame(index = ['%s'%subject], columns = rois)
-        # if not os.path.isfile(os.path.join(anatdir, 'seg_first/first_count_jac.csv')):
-        #     for roi in rois:
-        #         first = os.path.join(firstdir,'FIRST-%s_first.nii.gz' %roi )
-        #         count = np.count_nonzero(nb.load(first).get_data()) * jacobian_det
-        #         df.ix['%s'%subject, roi] = count
-        #
-        # df.to_csv(os.path.join(firstdir, 'bin_count_jac.csv'))
-        # print df
-
-make_derivatives_struct(['PA005'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
+make_derivatives_struct(['LZ067'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
