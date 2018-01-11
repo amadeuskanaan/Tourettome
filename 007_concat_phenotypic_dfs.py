@@ -17,10 +17,8 @@ def concat_dataframes(population, workspace, phenotypic_dir)
                          #pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_hamburg.csv'),index_col =0),
                          ])
 
-    df_cln = pd.concat[[pd.read_csv(os.path.join(phenotypic_dir, 'CLINICAL/clinical_leipzig.csv'),index_col =0),
-
-
-                        ])
+    #df_cln = pd.concat[[pd.read_csv(os.path.join(phenotypic_dir, 'CLINICAL/clinical_leipzig.csv'),index_col =0),
+    #])
 
 
 
