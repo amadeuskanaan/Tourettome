@@ -138,6 +138,9 @@ def plot_temporal(gm, wm, cm, fd, dv, title):
     import numpy as np
     import matplotlib.pyplot as plt
 
+    fd_mu = np.round(np.mean(fd), 2)
+    dv_mu = np.round(np.mean(dv), 2)
+
     fig = plt.figure()
     fig.subplots_adjust(wspace=0.5, hspace=0.1)
     fig.set_size_inches(24, 10)
