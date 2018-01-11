@@ -71,7 +71,7 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
                       %(subject,  aseg_stats_out))
         else:
             print '..........Subject missing reconall data'
-            print os.path.join(fs_dir, 'stats/aseg.stats')
+            #print os.path.join(fs_dir, 'stats/aseg.stats')
 
 
 
