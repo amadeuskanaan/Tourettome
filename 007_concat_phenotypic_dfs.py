@@ -11,7 +11,7 @@ from utilities.utils import *
 def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     print '####################################################################'
-    print '1. Concatenating img_header, clinical and quality control dataframes'
+    print '1. Concatenating dcm,cln,qc dataframes'
 
     df_dcm =  pd.concat([pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_leipzig.csv'),index_col =0),
                          pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_paris.csv'),index_col =0),
@@ -34,13 +34,13 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     df_pheno = pd.concat([df_dcm, df_qc, df_cln], axis=1).sort_index()
     df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
-    print '####################################################################'
-    print '1. Create design matrix dataframe for surfstat'
+    print '##############################################'
+    print '2. Create design matrix dataframe for surfstat'
 
     design_columns = ['Group', 'Age', 'Gender', 'Site', 'qc_func_fd']
     df_design = df_pheno.drop([i for i in df_pheno.columns if i not in design_columns], axis=1)
 
-    tourettome_outliers = ['LZ001']
+    tourettome_outliers = ['LZ001'] + hamburg
     df_design.drop(tourettome_outliers,axis =0)
     df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic_design.csv'))
 
