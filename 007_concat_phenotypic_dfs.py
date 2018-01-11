@@ -40,7 +40,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     design_columns = ['Group', 'Age', 'Gender', 'Site', 'qc_func_fd']
     df_design = df_pheno.drop([i for i in df_pheno.columns if i not in design_columns], axis=1)
 
-    tourettome_outliers = []
+    tourettome_outliers = ['LZ001']
     df_design.drop(tourettome_outliers,axis =0)
     df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic_design.csv'))
 
