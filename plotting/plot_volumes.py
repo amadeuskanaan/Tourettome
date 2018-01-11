@@ -134,6 +134,8 @@ def plot_quality(img, tissue, site, caption, color='red', alpha=1., title=None, 
         plt.savefig(title, transparent = True, bbox_inches='tight')
 
 def plot_temporal(gm, wm, cm, fd, dv, title):
+    import matplotlib.pyplot as plt
+
     fig = plt.figure()
     fig.subplots_adjust(wspace=0.5, hspace=0.1)
     fig.set_size_inches(24, 10)
