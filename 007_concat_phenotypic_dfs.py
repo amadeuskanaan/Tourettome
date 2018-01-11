@@ -10,7 +10,7 @@ from utilities.utils import *
 
 def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
-    df_dcm =  pd.concat([pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_leipzig.csv'),index_col =0),
+    df_dcm =  pd.concat([pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_leipzig.csv'),index_col =0),
                          #pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_paris.csv'),index_col =0),
                          #pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_hannover_a.csv'),index_col =0),
                          #pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_hannover_b.csv'),index_col =0),
