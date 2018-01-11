@@ -10,7 +10,8 @@ from utilities.utils import *
 
 def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
-    print 'Concatenating img_header, clinical and quality control dataframes'
+    print '####################################################################'
+    print '1. Concatenating img_header, clinical and quality control dataframes'
 
     df_dcm =  pd.concat([pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_leipzig.csv'),index_col =0),
                          #pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_paris.csv'),index_col =0),
