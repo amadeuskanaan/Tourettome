@@ -186,10 +186,9 @@ def make_subject_qc(population, workspace):
             plot_temporal(gm, wm, cm, fd, dv, os.path.join(qcdir,'plot_func_motion.png'))
 
 
-
-
 def make_group_qc(population, workspace, phenotypic_dir):
 
+    print 'Creating Group QC dataframe'
 
     def get_dcm_header(site_id):
         df = pd.read_csv(os.path.join(phenotypic_dir, 'phenotypic_%s.csv' % site_id), index_col=0)
@@ -206,13 +205,13 @@ def make_group_qc(population, workspace, phenotypic_dir):
     df_qc = pd.concat([pd.read_csv(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'),index_col=0)
                        for s in population if os.path.isfile(os.path.join(workspace,s ,'QUALITY_CONTROL/quality_paramters.csv'))])
     df = pd.concat([df_dcm, df_qc], axis=1)
-    df.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
+    df.to_csv(os.path.join(phenotypic_dir, 'phenotypic_tourettome.csv'))
 
 
 
-    # df_fd   = pd.DataFrame(df['qc_func_fd']).dropna()
-    # df_tsnr = pd.DataFrame(df['qc_func_tsnr']).dropna()
-    #
+    df_fd   = pd.DataFrame(df['qc_func_fd']).dropna()
+    df_tsnr = pd.DataFrame(df['qc_func_tsnr']).dropna()
+
     # count = 0
     # for subject in df_fd.index:
     #     count +=1
@@ -243,21 +242,23 @@ def make_group_qc(population, workspace, phenotypic_dir):
     #     plt.savefig('plot_distribution_tsnr.png', bbox_inches='tight')
     #     plt.close()
 
-    # for subject in population:
-    #     qc_dir = os.path.join(workspace, subject,'QUALITY_CONTROL')
-    #     os.chdir(qc_dir)
-    #     report = canvas.Canvas('_report.pdf', pagesize=(8.27 * 500, 11.69 * 500))
-    #     report.drawImage(os.path.join(qc_dir, 'plot_anat_gm_seg.png'), 150, 4550)
-    #     report.drawImage(os.path.join(qc_dir, 'plot_anat2mni.png'), 150, 3600)
-    #     report.drawImage(os.path.join(qc_dir, 'plot_func2anat.png'), 150, 2600)
-    #     report.drawImage(os.path.join(qc_dir, 'plot_func_tsnr.png'), 150, 1900)
-    #     report.drawImage(os.path.join(qc_dir, 'plot_func_motion.png'), 0, 100, width=1977 * 2.05, height=886 * 2)
-    #     report.setFont("Helvetica", 180)
-    #     report.drawString(1900, 5650, '%s' % subject)
-    #     report.save()
-    #
-    #     os.system('convert -density 50x50 -quality 50 -compress jpeg _report.pdf report.pdf')
-    #     os.system('rm -rf _report.pdf')
+    for subject in population:
+        print '.......Creating QC_REPORT for subject:',subject
+        qc_dir = os.path.join(workspace, subject,'QUALITY_CONTROL')
+        os.chdir(qc_dir)
+        report = canvas.Canvas('_report.pdf', pagesize=(8.27 * 500, 11.69 * 500))
+        report.drawImage(os.path.join(qc_dir, 'plot_anat_gm_seg.png'), 150, 4550)
+        report.drawImage(os.path.join(qc_dir, 'plot_anat2mni.png'), 150, 3600)
+        report.drawImage(os.path.join(qc_dir, 'plot_func2anat.png'), 150, 2600)
+        report.drawImage(os.path.join(qc_dir, 'plot_func_tsnr.png'), 150, 1900)
+        report.drawImage(os.path.join(qc_dir, 'plot_func_motion.png'), 0, 100, width=1977 * 2.05, height=886 * 2)
+        report.setFont("Helvetica", 180)
+        report.drawString(1900, 5650, '%s' % subject)
+        report.save()
 
-# make_subject_qc(tourettome_subjects, tourettome_workspace)
+        os.system('convert -density 50x50 -quality 50 -compress jpeg _report.pdf report.pdf')
+        os.system('rm -rf _report.pdf')
+
+tourettome_subjects = ['LZ008', 'HM003']
+make_subject_qc(tourettome_subjects, tourettome_workspace)
 make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
