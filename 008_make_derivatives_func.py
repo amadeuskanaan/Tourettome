@@ -19,20 +19,8 @@ fsaverage5 = return_fsaverage_data(freesurfer_dir, 'fsaverage5')
 
 # Calculate functional derivatives
 
-### 1- Seed Correlation Analysis - STRIATUM
-### 2- Seed Correlation Analysis - STR3_MOTOR
-### 3- Seed Correlation Analysis - STR3_LIMBIC
-### 4- Seed Correlation Analysis - STR4_EXEC
-
-### 5- fALFF
-### 6- ECM
-### 7- DCM
-
-#????
-
-### 8- REHO
-### 9- VHMC
-
+### 1- SBCA - Seed Correlation Analysis - Various subcortical nuclei.. see seed list below
+### 2- ECM  - Eigenvector Centrality Mapping
 
 
 def make_group_masks(population, workspace_dir, derivatives_dir):

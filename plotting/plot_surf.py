@@ -122,6 +122,7 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
                     face_colors[kept_indices] = cmap(surf_map_faces[kept_indices])
 
             p3dcollec.set_facecolors(face_colors)
+        return vmin, vmax
 
     # fig = plt.figure(figsize=(60, 20))
     fig = plt.figure(figsize=(70, 20))
@@ -131,11 +132,10 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
     elif texture_type == 'infl':
         fig = plt.figure(figsize=(75, 20))
 
-    subplot(surf_map_l, fsaverage['sulc_left'], 141, coords_left, faces_left, elev=0, azim=180, bg_on_data=bg_on_data)
-    subplot(surf_map_l, fsaverage['sulc_left'], 142, coords_left, faces_left, elev=0, azim=0, bg_on_data=bg_on_data)
-    subplot(surf_map_r, fsaverage['sulc_right'], 143, coords_right, faces_right, elev=0, azim=180,
-            bg_on_data=bg_on_data)
-    subplot(surf_map_r, fsaverage['sulc_right'], 144, coords_right, faces_right, elev=0, azim=0, bg_on_data=bg_on_data)
+    vmin, vmax = subplot(surf_map_l, fsaverage['sulc_left'], 141, coords_left, faces_left, elev=0, azim=180, bg_on_data=bg_on_data)
+    _, _ =subplot(surf_map_l, fsaverage['sulc_left'], 142, coords_left, faces_left, elev=0, azim=0, bg_on_data=bg_on_data)
+    _, _ =subplot(surf_map_r, fsaverage['sulc_right'], 143, coords_right, faces_right, elev=0, azim=180,bg_on_data=bg_on_data)
+    _, _ =subplot(surf_map_r, fsaverage['sulc_right'], 144, coords_right, faces_right, elev=0, azim=0, bg_on_data=bg_on_data)
 
     plt.tight_layout()
 
