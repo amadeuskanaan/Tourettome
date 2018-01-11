@@ -14,10 +14,10 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     print '1. Concatenating img_header, clinical and quality control dataframes'
 
     df_dcm =  pd.concat([pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_leipzig.csv'),index_col =0),
-                         #pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_paris.csv'),index_col =0),
-                         #pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hannover_a.csv'),index_col =0),
-                         #pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hannover_b.csv'),index_col =0),
-                         #pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hamburg.csv'),index_col =0),
+                         pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_paris.csv'),index_col =0),
+                         pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hannover_a.csv'),index_col =0),
+                         pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hannover_b.csv'),index_col =0),
+                         pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hamburg.csv'),index_col =0),
                          ])
 
     df_cln = pd.concat([pd.read_csv(os.path.join(phenotypic_dir, 'df_cln/clinical_leipzig.csv'),index_col =0),
@@ -32,10 +32,19 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
                        os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'))])
 
     df_pheno = pd.concat([df_dcm, df_qc, df_cln], axis=1).sort_index()
-    print df_pheno.head()
     df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
-    # Create design matrix dataframe
+    print '####################################################################'
+    print '1. Create design matrix dataframe for surfstat'
+
+    columns = ['Group', 'Age', 'Gender', 'Site', 'qc_func_fd']
+    df_design = df_pheno.drop([i for i in df_pheno.columns if i not in columns], axis=1)
+
+    tourettome_outliers = []
+    df_design.drop(outiers,axis =0)
+    df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic_design.csv'))
+
+
 
 concat_dataframes(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
 
