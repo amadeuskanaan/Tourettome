@@ -25,8 +25,8 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
                         ])
 
     df_qc = [pd.read_csv(os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'),
-                         #index_col=0) for subject in df_cln]
-                         index_col = 0) for subject in df_dcm.index]
+                         index_col = 0) for subject in df_dcm.index if os.path.isfile(
+                       os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'))]
 
     df_pheno = pd.concat([df_dcm, df_qc, df_cln], axis=1).sort_index()
     df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
