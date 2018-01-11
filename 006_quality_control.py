@@ -182,7 +182,7 @@ def make_subject_qc(population, workspace):
         fd = np.loadtxt(os.path.join(subdir, 'QUALITY_CONTROL/FD.1D'))
         dv = np.load(os.path.join(subdir, 'QUALITY_CONTROL/DVARS.npy'))
 
-        if not os.path.isfile(os.path.join(qcdir,'plot_func_motion.png')):
+        if not os.path.isfile(os.path.join(qcdir,'xplot_func_motion.png')):
             plot_temporal(gm, wm, cm, fd, dv, os.path.join(qcdir,'plot_func_motion.png'))
 
 
