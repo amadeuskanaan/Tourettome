@@ -102,7 +102,7 @@ def make_hannoverB_afs(population, original_datadir, afs_dir):
         param_group.append(param_subject)
 
     param_group = pd.concat(param_group, ignore_index=False)#.sort(columns='Age')
-    param_group.to_csv(os.path.join(tourettome_phenotypic, 'phenotypic_hannover_b.csv'))
+    param_group.to_csv(os.path.join(tourettome_phenotypic, 'df_dcm/dicomhdr_hannover_b.csv'))
 
 make_hannoverB_afs(population       = HANNOVER_B_orig_subject_list,
                    original_datadir = HANNOVER_B_orig_datadir,
