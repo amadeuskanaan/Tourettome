@@ -32,6 +32,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
                        os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'))])
 
     df_pheno = pd.concat([df_dcm, df_qc, df_cln], axis=1).sort_index()
+    print df_pheno.head()
     df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
     # Create design matrix dataframe
