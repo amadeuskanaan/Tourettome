@@ -10,7 +10,7 @@ from utilities.utils import *
 
 def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
-    print '####################################################################'
+    print '######################################'
     print '1. Concatenating dcm,cln,qc dataframes'
 
     df_dcm =  pd.concat([pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_leipzig.csv'),index_col =0),
@@ -37,7 +37,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     print '##############################################'
     print '2. Create design matrix dataframe for surfstat'
 
-    design_columns = ['Group', 'Age', 'Gender', 'Site', 'qc_func_fd']
+    design_columns = ['Group', 'Age', 'Sex', 'Site', 'qc_func_fd']
     df_design = df_pheno.drop([i for i in df_pheno.columns if i not in design_columns], axis=1)
 
     tourettome_outliers = ['LZ001'] + hamburg
