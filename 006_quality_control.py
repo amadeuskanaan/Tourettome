@@ -185,7 +185,6 @@ def make_subject_qc(population, workspace):
         if not os.path.isfile(os.path.join(qcdir,'xplot_func_motion.png')):
             plot_temporal(gm, wm, cm, fd, dv, os.path.join(qcdir,'plot_func_motion.png'))
 
-
 def make_group_qc(population, workspace, phenotypic_dir):
 
     print 'Creating Group QC dataframe'
