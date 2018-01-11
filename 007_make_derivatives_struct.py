@@ -56,6 +56,8 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
             else:
                 print '..........Subject missing reconall data'
                 print os.path.join(fs_dir, 'surf/lh.thickness')
+
+                
         ################################################################################################################
         ### 2- Subcortical Volume
         ################################################################################################################

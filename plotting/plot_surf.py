@@ -1,21 +1,21 @@
 def return_fsaverage_data(freesurfer_dir, fsaverage_id):
     import os
-    datadir = os.path.join(freesurfer_dir, fsaverage_id, 'surf')
-
     fsaverage = dict()
-    fsaverage['infl_left'] = os.path.join(datadir, 'lh.inflated')
-    fsaverage['infl_right'] = os.path.join(datadir, 'rh.inflated')
-    fsaverage['pial_left'] = os.path.join(datadir, 'lh.pial')
-    fsaverage['pial_right'] = os.path.join(datadir, 'rh.pial')
-    fsaverage['sulc_left'] = os.path.join(datadir, 'lh.sulc')
-    fsaverage['sulc_right'] = os.path.join(datadir, 'rh.sulc')
+    freesurfer_dir = os.path.join(freesurfer_dir, fsaverage_id)
+    fsaverage['infl_left'] = os.path.join(freesurfer_dir, 'surf/lh.inflated')
+    fsaverage['infl_right'] = os.path.join(freesurfer_dir, 'surf/rh.inflated')
+    fsaverage['pial_left'] = os.path.join(freesurfer_dir, 'surf/lh.pial')
+    fsaverage['pial_right'] = os.path.join(freesurfer_dir, 'surf/rh.pial')
+    fsaverage['sulc_left'] = os.path.join(freesurfer_dir, 'surf/lh.sulc')
+    fsaverage['sulc_right'] = os.path.join(freesurfer_dir, 'surf/rh.sulc')
+    fsaverage['cort_left'] = os.path.join(freesurfer_dir, 'label/lh.cortex.label')
+    fsaverage['cort_right'] = os.path.join(freesurfer_dir, 'rh.cortex.label')
     return fsaverage
 
-
 def plot_surf(fsaverage, surf_map_l, surf_map_r,
-              threshold=None, alpha=0.7, cmap='hot', vmin=None, vmax=None,
-              bg_on_data=1, output_file=None, texture_type = 'sulc',
-              ):
+                threshold=None, alpha=0.7, cmap='hot', vmin=None, vmax=None,
+                bg_on_data=1, output_file=None, texture_type='pial',
+                ):
     # Import libraries
     import nibabel
     import numpy as np
@@ -30,13 +30,16 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
     from nilearn.plotting.surf_plotting import load_surf_data, load_surf_mesh
 
     # load mesh and derive axes limits
-    mesh_left = load_surf_mesh(fsaverage['pial_left'])
-    mesh_right = load_surf_mesh(fsaverage['pial_right'])
+    mesh_left = load_surf_mesh(fsaverage['%s_left' % texture_type])
+    mesh_right = load_surf_mesh(fsaverage['%s_right' % texture_type])
 
     coords_left, faces_left = mesh_left[0], mesh_left[1]
     coords_right, faces_right = mesh_right[0], mesh_right[1]
 
-    limits = [-65, 33]
+    if texture_type == 'pial':
+        limits = [-65, 33]
+    elif texture_type == 'infl':
+        limits = [-62, 62]
 
     avg_method = 'mean'
     darkness = 1
@@ -120,27 +123,32 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
 
             p3dcollec.set_facecolors(face_colors)
 
-    #fig = plt.figure(figsize=(60, 20))
+    # fig = plt.figure(figsize=(60, 20))
     fig = plt.figure(figsize=(70, 20))
 
-    subplot(surf_map_l, fsaverage['%s_left'%texture_type], 141, coords_left, faces_left, elev=0, azim=180, bg_on_data=bg_on_data)
-    subplot(surf_map_l, fsaverage['%s_left'%texture_type], 142, coords_left, faces_left, elev=0, azim=0, bg_on_data=bg_on_data)
-    subplot(surf_map_r, fsaverage['%s_right'%texture_type], 143, coords_right, faces_right, elev=0, azim=180,bg_on_data=bg_on_data)
-    subplot(surf_map_r, fsaverage['%s_right'%texture_type], 144, coords_right, faces_right, elev=0, azim=0, bg_on_data=bg_on_data)
+    if texture_type == 'pial':
+        fig = plt.figure(figsize=(70, 20))
+    elif texture_type == 'infl':
+        fig = plt.figure(figsize=(75, 20))
+
+    subplot(surf_map_l, fsaverage['sulc_left'], 141, coords_left, faces_left, elev=0, azim=180, bg_on_data=bg_on_data)
+    subplot(surf_map_l, fsaverage['sulc_left'], 142, coords_left, faces_left, elev=0, azim=0, bg_on_data=bg_on_data)
+    subplot(surf_map_r, fsaverage['sulc_right'], 143, coords_right, faces_right, elev=0, azim=180,
+            bg_on_data=bg_on_data)
+    subplot(surf_map_r, fsaverage['sulc_right'], 144, coords_right, faces_right, elev=0, azim=0, bg_on_data=bg_on_data)
 
     plt.tight_layout()
 
-
-    # add CBAR
-    # fig.subplots_adjust(wspace=0.05, hspace=0.1, right=0.83)
     fig.subplots_adjust(right=0.83)
     ax_cb = fig.add_axes([0.85, 0.25, 0.020, 0.53])  # x,y,w,h
-    cbar = mpl.colorbar.ColorbarBase(ax_cb, cmap=cmap, orientation='vertical')
-    #print vmin, vmax
+    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+    cbar = mpl.colorbar.ColorbarBase(ax_cb, cmap=cmap, norm=norm, orientation='vertical')
     cbar.set_ticks([vmin, vmax])
-    cbar.ax.tick_params(labelsize=50)
+    cbar.ax.tick_params(labelsize=75)
 
     # save figure if output file is given
     if output_file is not None:
         fig.savefig(output_file)
         plt.close(fig)
+
+
