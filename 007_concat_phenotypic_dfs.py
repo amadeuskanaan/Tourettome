@@ -31,6 +31,8 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     df_pheno = pd.concat([df_dcm, df_qc, df_cln], axis=1).sort_index()
     df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
+    # Create design matrix dataframe
+
 concat_dataframes(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
 
 
