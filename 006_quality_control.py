@@ -258,6 +258,5 @@ def make_group_qc(population, workspace, phenotypic_dir):
         os.system('convert -density 50x50 -quality 50 -compress jpeg _report.pdf report.pdf')
         os.system('rm -rf _report.pdf')
 
-tourettome_subjects = ['LZ008', 'HM003']
 make_subject_qc(tourettome_subjects, tourettome_workspace)
 make_group_qc(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
