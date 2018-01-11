@@ -12,11 +12,11 @@ def return_fsaverage_data(freesurfer_dir, fsaverage_id):
     fsaverage['cort_right'] = os.path.join(freesurfer_dir, 'rh.cortex.label')
     return fsaverage
 
+
 def plot_surf(fsaverage, surf_map_l, surf_map_r,
-                threshold=None, alpha=0.7, cmap='hot', vmin=None, vmax=None,
-                bg_on_data=1, output_file=None, texture_type='pial',
-                ):
-    # Import libraries
+              threshold=None, alpha=0.7, cmap='hot', vmin=None, vmax=None,
+              bg_on_data=1, output_file=None, texture_type='pial', title=None):
+
     import nibabel
     import numpy as np
     import matplotlib.pyplot as plt
@@ -146,9 +146,10 @@ def plot_surf(fsaverage, surf_map_l, surf_map_r,
     cbar.set_ticks([vmin, vmax])
     cbar.ax.tick_params(labelsize=75)
 
+    if title:
+        fig.suptitle(title, fontsize=75, weight='bold', x=0.42, y=0.85)
+
     # save figure if output file is given
     if output_file is not None:
         fig.savefig(output_file)
         plt.close(fig)
-
-
