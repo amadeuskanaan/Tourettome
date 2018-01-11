@@ -42,7 +42,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     tourettome_outliers = ['LZ001'] + hamburg
     df_design.drop(tourettome_outliers,axis =0)
-    df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic_design.csv'))
+    df_design.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic_design.csv'))
 
 
 concat_dataframes(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
