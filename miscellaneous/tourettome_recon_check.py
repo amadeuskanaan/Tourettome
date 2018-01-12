@@ -24,10 +24,14 @@ print '---------------------------------------------'
 fsdir= tourettome_freesurfer
 fsdir = '/data/pt_nmr093_gts/freesurfer'
 
-fsdir_subs    = [sub for sub in os.listdir(fsdir) if sub in tourettome_subjects if sub != 'LZ050']
+fsdir_subs       = sorted([sub for sub in os.listdir(fsdir) if sub in tourettome_subjects if sub != 'LZ050'])
+finished_subs    = sorted([sub for sub in fsdir_subs if  'rh.thickness' in os.listdir(os.path.join(fsdir, sub, 'surf'))])
+running_subs     = sorted([i for i in tourettome_subjects if i not in finished_subs ])
+not_running_subs = sorted([i for i in tourettome_subjects if i not in fsdir_subs])
 
-finished_subs = sorted([sub for sub in fsdir_subs if  'rh.thickness' in os.listdir(os.path.join(fsdir, sub, 'surf'))])
-print 'Recon-all completed for %s subjects --> %s' %(len(finished_subs), finished_subs)
+print 'Recon-all completed for %s subjects --> ' #%(len(finished_subs), finished_subs)
+print 'Currently runnning  for %s subjects --> %s' %s(len(finished_subs), finished_subs)
+print 'NOT       runnning  for %s subjects --> %s' %s(len(not_running_subs), not_running_subs)
 # missing_files = [sub for sub in fsdir_subs if 'aparc.DKTatlas+aseg.mgz' not in os.listdir(os.path.join(fsdir, sub, 'mri'))]
 # missing_dirs  = [sub for sub in tourettome_subjects if not os.path.isdir(os.path.join(fsdir, sub))]
 #
