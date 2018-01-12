@@ -64,7 +64,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     tourettome_outliers = [i for i in df_pheno.index if i not in subsx]
 
     print 'dropping outliers=', tourettome_outliers
-    df_design.drop(tourettome_outliers,axis =0)
+    df_design.drop(tourettome_outliers)
     df_design.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic_designx.csv'))
 
 
