@@ -27,7 +27,7 @@ fsdir = '/data/pt_nmr093_gts/freesurfer'
 fsdir_subs       = sorted([sub for sub in os.listdir(fsdir) if sub in tourettome_subjects if sub != 'LZ050'])
 finished_subs    = sorted([sub for sub in fsdir_subs if  'rh.thickness' in os.listdir(os.path.join(fsdir, sub, 'surf'))])
 running_subs     = sorted([i for i in tourettome_subjects if i not in finished_subs ])
-not_running_subs = sorted([i for i in tourettome_subjects if i not in fsdir_subs])
+not_running_subs = sorted([i for i in tourettome_subjects if i not in  os.listdir(fsdir)])
 
 print 'Recon-all completed for %s subjects --> ' #%(len(finished_subs), finished_subs)
 print 'Currently runnning  for %s subjects --> %s' %(len(running_subs), running_subs)
