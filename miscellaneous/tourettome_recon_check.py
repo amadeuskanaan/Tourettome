@@ -29,9 +29,13 @@ finished_subs    = sorted([i for i in tourettome_subjects if os.path.isfile(os.p
 running_subs     = sorted([i for i in tourettome_subjects if i in os.listdir(fsdir) and not os.path.isfile(os.path.join(fsdir, i, 'surf/rh.thickness'))])
 not_running_subs = sorted([i for i in tourettome_subjects if i not in os.listdir(fsdir)])
 
+
+no_dkstats = [i for i in tourettome_subjects if i not in finished_subs]
 print 'Recon-all completed for %s subjects --> ' %(len(finished_subs)) #, finished_subs
-print 'Currently runnning  for %s subjects --> %s' %(len(running_subs), running_subs)
-print 'NOT       runnning  for %s subjects --> %s' %(len(not_running_subs), not_running_subs)
+print 'No-aseg stats N= %s= %s'%(len(no_dkstats), no_dkstats)
+
+#print 'Currently runnning  for %s subjects --> %s' %(len(running_subs), running_subs)
+#print 'NOT       runnning  for %s subjects --> %s' %(len(not_running_subs), not_running_subs)
 # missing_files = [sub for sub in fsdir_subs if 'aparc.DKTatlas+aseg.mgz' not in os.listdir(os.path.join(fsdir, sub, 'mri'))]
 # missing_dirs  = [sub for sub in tourettome_subjects if not os.path.isdir(os.path.join(fsdir, sub))]
 #
