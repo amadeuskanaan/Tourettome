@@ -25,7 +25,7 @@ fsdir= tourettome_freesurfer
 fsdir = '/data/pt_nmr093_gts/freesurfer'
 
 fsdir_subs       = sorted([i for i in tourettome_subjects if i in  os.listdir(fsdir) if i != 'LZ050'])
-finished_subs    = sorted([i for i in tourettome_subjects if os.path.isfile(os.path.join(fsdir, i, 'surf/rh.thickness'))])
+finished_subs    = sorted([i for i in tourettome_subjects if os.path.isfile(os.path.join(fsdir, i, 'stats/rh.entorhinal_exvivo.stats'))])
 running_subs     = sorted([i for i in tourettome_subjects if i in os.listdir(fsdir) and not os.path.isfile(os.path.join(fsdir, i, 'surf/rh.thickness'))])
 not_running_subs = sorted([i for i in tourettome_subjects if i not in os.listdir(fsdir)])
 
