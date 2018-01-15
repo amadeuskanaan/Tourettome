@@ -127,8 +127,6 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print ''
 
     ################################################################################################
-    ################################################################################################
-    ################################################################################################
     print ' 1. Extracting functional features'
 
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_raw.csv')):
@@ -155,24 +153,19 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
 
     ################################################################################################
-    ################################################################################################
-    ################################################################################################
     print ' 2. Nuisance variable regression - Age, Gender, Site, Image-Quality'
     print ''
 
-    # Regression Controls
-    if not os.path.isfile(os.path.join(features_dir, 'sca_controls_resid.csv')):
-        sca_controls_raw = pd.read_csv(os.path.join(features_dir, 'sca_controls_raw.csv'), index_col=0)
-        sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
-    else:
-        sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
-
-    # Regression Patients
+    # Regress
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
+        sca_controls_raw = pd.read_csv(os.path.join(features_dir, 'sca_controls_raw.csv'), index_col=0)
         sca_patients_raw = pd.read_csv(os.path.join(features_dir, 'sca_patients_raw.csv'), index_col=0)
+        sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
         sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
     else:
         sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
+        sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
+
 
 
 
