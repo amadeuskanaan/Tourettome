@@ -156,7 +156,11 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print 'Patient Dataframe shape=', sca_patients_raw.shape
 
     # Regression
-    sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
+
+    print sca_controls_raw.shape
+    print len(controls)
+
+    #sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
     # sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
 
 
