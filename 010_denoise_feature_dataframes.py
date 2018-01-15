@@ -60,6 +60,9 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print '========================================================================================'
     print ''
 
+    #I/O
+    features_dir = mkdir_path(os.path.join(derivatives_dir, 'feature_matrices'))
+
     ################################################################################################
     # Samples after QC
 
@@ -78,32 +81,35 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     df_pheno_patients = df_pheno.drop([i for i in df_pheno.index if i not in patients], axis=0)
     df_pheno_patients = df_pheno_patients.drop([i for i in df_pheno_patients.columns if i not in nuisance_terms], axis=1)
 
+    # Included subjects
     print '..... n_controls=', len(controls)
     print '..... n_patients=', len(patients)
     print '..... n_total =', len(controls) + len(patients)
     print ''
 
+    # Outliers
+    print 'n_control_outliers=', len(control_outliers)
+    print 'n_patients_outliers=', len(patient_outliers)
+    print 'n_total_outliers =', len(control_outliers) + len(patient_outliers)
 
+    ################################################################################################
+    print ' 1. Extracting functional features'
 
+    dict_controls_sca = {}
+    dict_patients_sca = {}
 
+    for seed_name in seeds:
+        print '..... Extracting vertex-wise SBCA data for seed =', seeds
+        dict_controls_sca[seed_name] = return_sca_data(seed_name, controls, derivatives_dir)
+        dict_patients_sca[seed_name] = return_sca_data(seed_name, patients, derivatives_dir)
 
-    # ################################################################################################
-    # print ' 1. Extracting functional features'
-    #
-    # dict_controls_sca = {}
-    # dict_patients_sca = {}
-    #
-    # for seed_name in seeds:
-    #     print 'A-  Extracting Seed-based correlation data for seeds =', seeds
-    #     dict_controls_sca[seed_name] = return_sca_data(seed_name, controls, derivatives_dir)
-    #     dict_patients_sca[seed_name] = return_sca_data(seed_name, patients, derivatives_dir)
-    #
-    # print dict_controls_sca.keys()
-    # print dict_patients_sca.keys()
-    #
-    # #df_controls_features = pd.concat([df_controls_sca[seed]['sca'] for seed in df_controls_sca.keys()])
-    # #df_patients_features = pd.concat([df_patients_sca[seed]['sca'] for seed in df_patients_sca.keys()])
-    #
+    print dict_controls_sca.keys()
+    print dict_patients_sca.keys()
+
+    np.save( os.path.join(features_dir, 'raw_controls_sca.npy'),  dict_controls_sca)
+    #df_controls_features = pd.concat([df_controls_sca[seed]['sca'] for seed in df_controls_sca.keys()])
+    #df_patients_features = pd.concat([df_patients_sca[seed]['sca'] for seed in df_patients_sca.keys()])
+
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
                              tourettome_derivatives, tourettome_freesurfer )
