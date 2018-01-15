@@ -17,31 +17,6 @@ from variables.subject_list import *
 from utilities.utils import mkdir_path, return_sca_data
 from plotting.cmaps import *
 
-
-
-def regress_covariates(df_features, df_pheno):
-
-    # Build design Matrix "C(a, contrast)"
-    formula = " 0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv"
-    design_matrix = dmatrix(formula, df_pheno, return_type="dataframe")
-    design_matrix.sort_index(axis=1, inplace=True)
-    design_matrix.columns = ['age', 'female', 'male', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
-
-    df_features = np.nan_to_num(df_features).T
-    df_features_resid = []
-
-    # Fit linear model
-    for vertex_id in range(df_features.shape[1]):
-        mat = design_matrix
-        mat['y'] = df_features[:, vertex_id]
-        formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
-        model = smf.ols(formula=formula, data=pd.DataFrame(mat))
-        df_features_resid.append(model.fit().resid)
-
-    df_features_resid = pd.concat(df_features_resid, axis=1)
-    return df_features_resid
-
-
 control_outliers = ['HM015', 'LZ061', 'HB028']
 patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
                     'LZ018', 'LZ020', 'LZ022', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ031', 'LZ035', 'LZ038',
@@ -62,6 +37,39 @@ def plot_heatmap(df, fname, figsize=(12, 10), cmap='jet', vmin=-0.7, vmax=0.7):
     sns.heatmap(df, xticklabels=False, yticklabels=False, cmap=cmap, vmin=vmin, vmax=vmax)
     plt.savefig('%s.png'%fname, bbox_inches='tight')
 
+
+def regress_covariates(df_features, df_pheno, population, popname, features_dir):
+
+    # Build design Matrix
+    design_matrix = dmatrix(" 0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
+    design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population])
+    design_matrix.sort_index(axis=1, inplace=True)
+    design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
+
+    # save design matrix
+    design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
+    f= plt.figure(figsize=(12, 8))
+    dmat = design_matrix
+    dmat['age'] = dmat['age']/100
+    sns.heatmap(dmat, yticklabels=False, cmap=cmapx, vmin=0, vmax=2)
+    plt.xticks(size=20, rotation=90, weight='bold')
+    plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+
+
+
+    # df_features = np.nan_to_num(df_features).T
+    # df_features_resid = []
+    #
+    # # Fit linear model
+    # for vertex_id in range(df_features.shape[1]):
+    #     mat = design_matrix
+    #     mat['y'] = df_features[:, vertex_id]
+    #     formula = 'y ~ age + female + male +  hannover_a + hannover_b + leipzig + paris + cjv + fd'
+    #     model = smf.ols(formula=formula, data=pd.DataFrame(mat))
+    #     df_features_resid.append(model.fit().resid)
+    #
+    # df_features_resid = pd.concat(df_features_resid, axis=1)
+    # return df_features_resid
 
 
 def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
@@ -129,7 +137,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
     ################################################################################################
     print ' 2. Nuisance variable regression - Age, Gender, Site, Image-Quality'
-
+    print ''
     # Extract Raw Data
     sca_controls_raw = pd.concat([np.load(sca_controls_raw)[()][seed] for seed in seeds], axis =0)
     sca_patients_raw = pd.concat([np.load(sca_patients_raw)[()][seed] for seed in seeds], axis =0)
@@ -137,9 +145,12 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     plot_heatmap(sca_controls_raw, '%s/sca_controls_raw'%features_dir, cmap =cmap_gradient)
     plot_heatmap(sca_patients_raw, '%s/sca_patients_raw'%features_dir, cmap =cmap_gradient)
 
-    print 'Control Dataframe shape=',sca_controls_raw.shape
-    print 'Patient Dataframe shape=',sca_patients_raw.shape
+    print 'Control Dataframe shape=', sca_controls_raw.shape
+    print 'Patient Dataframe shape=', sca_patients_raw.shape
 
+    # Regression
+    regress_covariates(sca_controls_raw, df_pheno, controls, 'controls')
+    regress_covariates(sca_controls_raw, df_pheno, patients, 'patients')
 
 
 
