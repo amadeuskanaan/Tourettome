@@ -86,14 +86,14 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     design_matrix.sort_index(axis=1, inplace=True)
     design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
 
-    #sav design matrix data
-    dmat = design_matrix
-    dmat['age'] = dmat['age']/100
-    f= plt.figure(figsize=(12, 8))
-    sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
-    plt.xticks(size=20, rotation=90, weight='bold')
-    plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
-    design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
+    # #sav design matrix data
+    # dmat = design_matrix
+    # dmat['age'] = dmat['age']/100
+    # f= plt.figure(figsize=(12, 8))
+    # sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
+    # plt.xticks(size=20, rotation=90, weight='bold')
+    # plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+    # design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
 
     df_features = np.nan_to_num(df_features).T
     print df_features.shape
@@ -101,9 +101,12 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
 
     for vertex_id in range(df_features.shape[1]):
         mat = design_matrix
-        mat['y'] = df_features[:, vertex_id]
+
+        print mat.shape
         print mat
         break
+        # mat['y'] = df_features[:, vertex_id]
+        # print mat
         # formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
         # model = smf.ols(formula=formula, data=pd.DataFrame(mat))
         # df_features_resid.append(model.fit().resid)
