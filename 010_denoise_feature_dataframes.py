@@ -102,18 +102,18 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     for vertex_id in range(df_features.shape[1]):
         mat = design_matrix
         mat['y'] = df_features[:, vertex_id]
-        formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
-        model = smf.ols(formula=formula, data=pd.DataFrame(mat))
-        df_features_resid.append(model.fit().resid)
+        print mat
+        break
+        # formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
+        # model = smf.ols(formula=formula, data=pd.DataFrame(mat))
+        # df_features_resid.append(model.fit().resid)
 
-    df_features_resid = pd.concat(df_features_resid, axis=1)
-
-    # save residual data
-    df_features_resid = pd.concat(df_features_resid, axis=1)
-    df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
-    f = plt.figure(figsize=(12, 10))
-    sns.heatmap(pd.concat(x, axis=1).T, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
-    plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+    # # save residual data
+    # df_features_resid = pd.concat(df_features_resid, axis=1)
+    # df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
+    # f = plt.figure(figsize=(12, 10))
+    # sns.heatmap(pd.concat(x, axis=1).T, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
+    # plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
 
     return df_features_resid
 
@@ -197,10 +197,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
     # Regression
 
-    print sca_controls_raw.shape
-    print len(controls)
 
-    sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
+    #sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
 
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
