@@ -59,6 +59,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     df_features_resid = []
 
     # Fit linear model
+    print '..... calculating residuals for %s',popname
     for vertex_id in range(df_features.shape[1]):
         mat = design_matrix
         mat['y'] = df_features[:, vertex_id]
