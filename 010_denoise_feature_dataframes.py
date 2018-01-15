@@ -59,7 +59,7 @@ terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 def plot_heatmap(df, fname, figsize=(12, 10), cmap='jet', vmin=0.7, vmax=0.7):
     fig = plt.figure(figsize=figsize)
     sns.heatmap(df, xticklabels=False, yticklabels=False, cmap=cmap, vmin=vmin, vmax=vmax)
-    plt.savefig(os.path.join(features_dir, '%s.png' % fname), bbox_inches='tight')
+    plt.savefig('%s.png'%fname, bbox_inches='tight')
 
 
 
@@ -133,8 +133,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     sca_controls_raw = pd.concat([np.load(sca_controls_raw)[()][seed] for seed in seeds], axis =0)
     sca_patients_raw = pd.concat([np.load(sca_patients_raw)[()][seed] for seed in seeds], axis =0)
 
-    plot_heatmap(sca_controls_raw, 'sca_controls_raw')
-    plot_heatmap(sca_patients_raw, 'sca_patients_raw')
+    plot_heatmap(sca_controls_raw, '%s/sca_controls_raw'%features_dir)
+    plot_heatmap(sca_patients_raw, '%s/sca_patients_raw'%features_dir)
 
     print 'Control Dataframe shape=',sca_controls_raw.shape
     print 'Patient Dataframe shape=',sca_patients_raw.shape
