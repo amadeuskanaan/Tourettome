@@ -81,3 +81,5 @@ nuclei_bilateral   = ['Caudate', 'Putamen', 'Accumbens-area', 'Pallidum', 'Hippo
 nuclei_left        = ['Left-' + nucleus for nucleus in nuclei_bilateral]
 nuclei_right       = ['Right-' + nucleus for nucleus in nuclei_bilateral]
 nuclei_subcortical = nuclei_left + nuclei_right
+
+
