@@ -47,29 +47,34 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
 
     # save design matrix
-    design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
-    f= plt.figure(figsize=(12, 8))
     dmat = design_matrix
     dmat['age'] = dmat['age']/100
+    f= plt.figure(figsize=(12, 8))
     sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
     plt.xticks(size=20, rotation=90, weight='bold')
     plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+    design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
 
+    df_features = np.nan_to_num(df_features).T
+    df_features_resid = []
 
+    # Fit linear model
+    for vertex_id in range(df_features.shape[1]):
+        mat = design_matrix
+        mat['y'] = df_features[:, vertex_id]
+        formula = 'y ~ age + female + male +  hannover_a + hannover_b + leipzig + paris + cjv + fd'
+        model = smf.ols(formula=formula, data=pd.DataFrame(mat))
+        df_features_resid.append(model.fit().resid)
 
-    # df_features = np.nan_to_num(df_features).T
-    # df_features_resid = []
-    #
-    # # Fit linear model
-    # for vertex_id in range(df_features.shape[1]):
-    #     mat = design_matrix
-    #     mat['y'] = df_features[:, vertex_id]
-    #     formula = 'y ~ age + female + male +  hannover_a + hannover_b + leipzig + paris + cjv + fd'
-    #     model = smf.ols(formula=formula, data=pd.DataFrame(mat))
-    #     df_features_resid.append(model.fit().resid)
-    #
-    # df_features_resid = pd.concat(df_features_resid, axis=1)
-    # return df_features_resid
+    # save residual data
+    df_features_resid = pd.concat(df_features_resid, axis=1)
+    df_features_resid.to_csv('%s/sca_%s_resid.csv'%(features_dir, popname))
+
+    f = plt.figure(figsize=(12, 10))
+    sns.heatmap(df_controls_features_resid.T, xticklabels=False, yticklabels=False, cmap=cmap, vmin=-.7, vmax=0.7)
+    plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+
+    return df_features_resid
 
 
 def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
@@ -149,9 +154,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print 'Patient Dataframe shape=', sca_patients_raw.shape
 
     # Regression
-    regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
-    regress_covariates(sca_controls_raw, df_pheno, patients, 'patients', features_dir)
-
+    sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
+    sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
 
 
 
