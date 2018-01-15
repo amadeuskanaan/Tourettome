@@ -91,6 +91,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print 'n_control_outliers=', len(control_outliers)
     print 'n_patients_outliers=', len(patient_outliers)
     print 'n_total_outliers =', len(control_outliers) + len(patient_outliers)
+    print ''
 
     ################################################################################################
     print ' 1. Extracting functional features'
@@ -104,15 +105,15 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
         for seed_name in seeds:
             print '..... Extracting Control vertex-wise SBCA data for seed =', seed_name
-            df_controls_sca[seed_name] = return_sca_data(seed_name, controls, derivatives_dir)
+            dict_controls_sca[seed_name] = return_sca_data(seed_name, controls, derivatives_dir)
             print '..... Extracting Patient vertex-wise SBCA data for seed =', seed_name
             dict_patients_sca[seed_name] = return_sca_data(seed_name, patients, derivatives_dir)
 
         print dict_controls_sca.keys()
         print dict_patients_sca.keys()
 
-        np.save(os.path.join(features_dir, 'sca_controls_raw.npy'),  dict_controls_sca)
-        np.save(os.path.join(features_dir, 'sca_patients_raw.npy'),  dict_controls_sca)
+        np.save(sca_controls_raw,  dict_controls_sca)
+        np.save(sca_patients_raw,  dict_patients_sca)
 
 
 
