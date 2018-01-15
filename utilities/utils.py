@@ -150,3 +150,36 @@ def find_cut_coords(img, mask=None, activation_threshold=None):
 def os_system(list_cmd):
     import os
     os.system(' '.join(list_cmd))
+
+
+def return_sca_data(seed, population, derivatives_dir):
+    import os
+    import numpy as np
+    import pandas as pd
+
+    df_features = []
+    for subject in population:
+
+        lh = os.path.join(derivatives_dir, 'func_seed_correlation/%s/%s_sca_z_fwhm6_lh.npy' % (seed, subject))
+        rh = os.path.join(derivatives_dir, 'func_seed_correlation/%s/%s_sca_z_fwhm6_rh.npy' % (seed, subject))
+
+        if os.path.isfile(lh) and os.path.isfile(rh):
+            sca_lh = np.load(lh).ravel()
+            sca_rh = np.load(rh).ravel()
+        else:
+            print 'Subject %s missing %s RSFC data' %(subject, seed)
+
+        df_sca_lh = pd.DataFrame(sca_lh, columns=[subject],
+                                 index=['%s_lh_%s' % (seed, str(i)) for i in range(sca_lh.shape[0])])
+        df_sca_rh = pd.DataFrame(sca_rh, columns=[subject],
+                                 index=['%s_rh_%s' % (seed, str(i)) for i in range(sca_rh.shape[0])])
+
+        df_features.append(pd.concat([df_sca_lh, df_sca_rh], axis=0))
+    df_features = pd.concat(df_features, axis=1)
+
+    # dict_sca = {'lh': np.array(np.mean(df_features, axis=1))[:10242],
+    #             'rh': np.array(np.mean(df_features, axis=1))[10242:],
+    #             'sca': df_features
+    #             }
+
+    return df_features
