@@ -130,13 +130,11 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
     f = plt.figure(figsize=(12, 10))
     sns.heatmap(sca_controls_raw, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
-    f.savefig(os.path.join(features_dir, 'sca_controls_raw.png'), bbox_inches='tight')
-    f.close()
+    plt.savefig(os.path.join(features_dir, 'sca_controls_raw.png'), bbox_inches='tight')
 
     f = plt.figure(figsize=(12, 10))
     sns.heatmap(sca_patients_raw, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
-    f.savefig(os.path.join(features_dir, 'sca_patients_raw.png'), bbox_inches='tight')
-    f.close()
+    plt.savefig(os.path.join(features_dir, 'sca_patients_raw.png'), bbox_inches='tight')
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
                              tourettome_derivatives, tourettome_freesurfer )
