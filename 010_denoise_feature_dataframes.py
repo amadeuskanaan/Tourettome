@@ -8,7 +8,7 @@ import nibabel as nb
 from patsy import dmatrix
 import statsmodels.formula.api as smf
 
-from variables import *
+from variables.subject_list import *
 from utilities.utils import mkdir_path, return_sca_data
 
 
@@ -63,13 +63,19 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     # Samples after QC
 
     df_pheno = pd.read_csv(os.path.join(derivatives_dir, 'phenotypic/tourettome_phenotypic.csv'), index_col=0)
-    df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
-    df_pheno_controls = df_pheno_controls.drop([i for i in df_pheno_controls.columns if i not in terms], axis=1)
 
+    # Extract groups
     patients = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'patients' if
                        i not in patient_outliers and i not in hamburg])
     controls = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'controls' or df_pheno.loc[i]['Group'] == 'probands'
                        if i not in control_outliers and i not in hamburg])
+
+    # create group phenotypic dataframes
+    df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
+    df_pheno_controls = df_pheno_controls.drop([i for i in df_pheno_controls.columns if i not in terms], axis=1)
+
+    df_pheno_patients = df_pheno.drop([i for i in df_pheno.index if i not in patients], axis=0)
+    df_pheno_patients = df_pheno_patients.drop([i for i in df_pheno_patients.columns if i not in terms], axis=1)
 
     print '..... n_controls=', len(controls)
     print '..... n_patients=', len(patients)
