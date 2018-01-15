@@ -62,7 +62,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     ################################################################################################
     # Samples after QC
 
-    df_pheno = pd.read_csv(os.path.join(derivatives_dir, 'phenotypic/tourettome_phenotypic.csv'), index_col=0)
+    df_pheno = pd.read_csv(os.path.join(tourettome_phenotypic, 'tourettome_phenotypic.csv'), index_col=0)
 
     # Extract groups
     patients = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'patients' if
