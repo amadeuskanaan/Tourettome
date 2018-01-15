@@ -59,7 +59,7 @@ terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 def plot_heatmap(df, fname, figsize=(12, 10), cmap='jet', vmin=0.7, vmax=0.7):
     fig = plt.figure(figsize=figsize)
     sns.heatmap(df, xticklabels=False, yticklabels=False, cmap=cmap, vmin=vmin, vmax=vmax)
-    f.savefig(os.path.join(features_dir, '%s.png' % fname), bbox_inches='tight')
+    plt.savefig(os.path.join(features_dir, '%s.png' % fname), bbox_inches='tight')
 
 
 
