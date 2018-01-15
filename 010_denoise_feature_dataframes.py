@@ -63,11 +63,11 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     # Samples after QC
 
     df_pheno = pd.read_csv(os.path.join(tourettome_phenotypic, 'tourettome_phenotypic.csv'), index_col=0)
-
+    population = df_pheno.index
     # Extract groups
     patients = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'patients' if
                        i not in patient_outliers and i not in hamburg])
-    controls = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'controls' or df_pheno.loc[i]['Group'] == 'probands'
+    controls = sorted([i for i in population if df_pheno.loc[i]['Group'] in ['controls', 'probands']
                        if i not in control_outliers and i not in hamburg])
 
     # create group phenotypic dataframes
