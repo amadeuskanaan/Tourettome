@@ -113,7 +113,13 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         np.save(sca_patients_raw,  dict_patients_sca)
         print 'Raw dataframes contain these seeds -->',  dict_controls_sca.keys()
 
+    ################################################################################################
+    print ' 2. Nuisance variable regression - Age, Gender, Site, Image-Quality'
 
+    sca_controls_raw = pd.concat([np.load(sca_controls_raw)[()][seed] for seed in seeds], axis =0)
+    sca_patients_raw = pd.concat([np.load(sca_patients_raw)[()][seed] for seed in seeds], axis =0)
+
+    print sca_controls_raw
 
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
@@ -121,18 +127,6 @@ construct_features_dataframe(control_outliers, patient_outliers, tourettome_work
 
 
 
-
-
-
-    # print '..... Controls dataframe shape =',df_controls_features.shape
-    # print '..... Patients dataframe shape =',df_patients_features.shape
-
-    # print ''
-    # print 'B- Regressing out nuisance variables= age, gender, site, image quality'
-    #
-    # # Construct clean phenotypic dataframe
-    # terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
-    # df_pheno = pd.read_csv(os.path.join(derivatives_dir, 'phenotypic/tourettome_phenotypic.csv'), index_col = 0)
 
     # df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
     # df_pheno_controls = df_pheno_controls.drop([i for i in df_pheno_controls.columns if i not in terms], axis=1)
