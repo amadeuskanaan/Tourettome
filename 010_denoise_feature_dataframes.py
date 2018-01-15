@@ -46,8 +46,8 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
            'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
 
 
-rsfc_seeds     = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC']
-nuisance_terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
+seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC']
+terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 
 
 
@@ -76,10 +76,10 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
     # create group phenotypic dataframes
     df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
-    df_pheno_controls = df_pheno_controls.drop([i for i in df_pheno_controls.columns if i not in nuisance_terms], axis=1)
+    df_pheno_controls = df_pheno_controls.drop([i for i in df_pheno_controls.columns if i not in terms], axis=1)
 
     df_pheno_patients = df_pheno.drop([i for i in df_pheno.index if i not in patients], axis=0)
-    df_pheno_patients = df_pheno_patients.drop([i for i in df_pheno_patients.columns if i not in nuisance_terms], axis=1)
+    df_pheno_patients = df_pheno_patients.drop([i for i in df_pheno_patients.columns if i not in terms], axis=1)
 
     # Included subjects
     print '..... n_controls=', len(controls)
