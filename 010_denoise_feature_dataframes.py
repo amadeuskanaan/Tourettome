@@ -38,7 +38,7 @@ def plot_heatmap(df, fname, figsize=(12, 10), cmap='jet', vmin=-0.7, vmax=0.7):
     plt.savefig('%s.png'%fname, bbox_inches='tight')
 
 
-def regress_covariates(df_features, df_pheno, population, popname, features_dir):
+def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap = cmap_gradient):
 
     # Build design Matrix
     design_matrix = dmatrix(" 0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
@@ -51,7 +51,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir)
     f= plt.figure(figsize=(12, 8))
     dmat = design_matrix
     dmat['age'] = dmat['age']/100
-    sns.heatmap(dmat, yticklabels=False, cmap=cmapx, vmin=0, vmax=2)
+    sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
     plt.xticks(size=20, rotation=90, weight='bold')
     plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
 
