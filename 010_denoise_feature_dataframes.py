@@ -98,7 +98,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     # #df_patients_features = pd.concat([df_patients_sca[seed]['sca'] for seed in df_patients_sca.keys()])
     #
 
-construct_features_dataframe(qc_controls, qc_patients, tourettome_workspace,
+construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
                              tourettome_derivatives, tourettome_freesurfer )
 
 
