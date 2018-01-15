@@ -56,6 +56,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
 
     df_features = np.nan_to_num(df_features).T
+    print df_features.shape
     df_features_resid = []
 
     # Fit linear model
@@ -156,7 +157,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
     # Regression
     sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
-    sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
+    # sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
 
 
 
