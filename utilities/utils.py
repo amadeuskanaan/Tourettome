@@ -167,7 +167,7 @@ def return_sca_data(seed, population, derivatives_dir):
             sca_lh = np.load(lh).ravel()
             sca_rh = np.load(rh).ravel()
         else:
-            print 'Subject %s missing %s RSFC data' %(subject, seed)
+            print '.... Subject %s missing %s RSFC data' %(subject, seed)
 
         df_sca_lh = pd.DataFrame(sca_lh, columns=[subject],
                                  index=['%s_lh_%s' % (seed, str(i)) for i in range(sca_lh.shape[0])])

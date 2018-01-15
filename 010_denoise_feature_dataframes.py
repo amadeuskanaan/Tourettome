@@ -104,16 +104,14 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         dict_patients_sca = {}
 
         for seed_name in seeds:
-            print '..... Extracting Control vertex-wise SBCA data for seed =', seed_name
+            print '-- Extracting CONTROL SBCA for', seed_name
             dict_controls_sca[seed_name] = return_sca_data(seed_name, controls, derivatives_dir)
-            print '..... Extracting Patient vertex-wise SBCA data for seed =', seed_name
+            print '-- Extracting PATIENT SBCA for', seed_name
             dict_patients_sca[seed_name] = return_sca_data(seed_name, patients, derivatives_dir)
-
-        print dict_controls_sca.keys()
-        print dict_patients_sca.keys()
 
         np.save(sca_controls_raw,  dict_controls_sca)
         np.save(sca_patients_raw,  dict_patients_sca)
+        print 'Raw dataframes contain these seeds -->',  dict_controls_sca.keys()
 
 
 
