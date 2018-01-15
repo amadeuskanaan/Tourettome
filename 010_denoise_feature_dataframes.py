@@ -65,8 +65,8 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     df_features = np.nan_to_num(df_features).T
     df_features_resid = []
 
-    print '%s features shape=' %(popname,df_features.shape)
-    print '%s dmatrix  shape=' %(popname,design_matrix.shape)
+    print '%s features shape=%s' %(popname,df_features.shape)
+    print '%s dmatrix  shape=%s' %(popname,design_matrix.shape)
 
     for vertex_id in range(df_features.shape[1]):
         mat = design_matrix
