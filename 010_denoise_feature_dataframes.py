@@ -7,9 +7,13 @@ import pandas as pd
 import nibabel as nb
 from patsy import dmatrix
 import statsmodels.formula.api as smf
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set_style('white')
 
 from variables.subject_list import *
 from utilities.utils import mkdir_path, return_sca_data
+
 
 
 def regress_covariates(df_features, df_pheno):
