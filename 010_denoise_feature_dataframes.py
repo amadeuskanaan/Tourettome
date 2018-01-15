@@ -57,9 +57,9 @@ terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 
 
 def plot_heatmap(df, fname, figsize=(12, 10), cmap='jet', vmin=0.7, vmax=0.7):
-    f = plt.figure(figsize=figsize)
-    sns.heatmap(sca_controls_raw, xticklabels=False, yticklabels=False, cmap=cmap, vmin=vmin, vmax=vmax)
-    plt.savefig(os.path.join(features_dir, '%s.png' % fname), bbox_inches='tight')
+    fig = plt.figure(figsize=figsize)
+    sns.heatmap(df, xticklabels=False, yticklabels=False, cmap=cmap, vmin=vmin, vmax=vmax)
+    f.savefig(os.path.join(features_dir, '%s.png' % fname), bbox_inches='tight')
 
 
 
@@ -121,18 +121,10 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
             print '-- Extracting PATIENT SBCA for', seed_name
             dict_patients_sca[seed_name] = return_sca_data(seed_name, patients, derivatives_dir)
 
+        print 'Raw dataframes contain these seeds -->',  dict_controls_sca.keys()
         np.save(sca_controls_raw,  dict_controls_sca)
         np.save(sca_patients_raw,  dict_patients_sca)
 
-
-
-
-
-        f = plt.figure(figsize=(12, 10))
-        sns.heatmap(sca_patients_raw, xticklabels=False, yticklabels=False, cmap=cmap, vmin=-.7, vmax=0.7)
-        plt.savefig(os.path.join(features_dir, 'sca_patients_raw.png'), bbox_inches='tight')
-
-        print 'Raw dataframes contain these seeds -->',  dict_controls_sca.keys()
 
     ################################################################################################
     print ' 2. Nuisance variable regression - Age, Gender, Site, Image-Quality'
