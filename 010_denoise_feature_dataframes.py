@@ -56,6 +56,12 @@ seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC']
 terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 
 
+def plot_heatmap(df, fname, figsize=(12, 10), cmap='jet', vmin=0.7, vmax=0.7):
+    f = plt.figure(figsize=figsize)
+    sns.heatmap(sca_controls_raw, xticklabels=False, yticklabels=False, cmap=cmap, vmin=vmin, vmax=vmax)
+    plt.savefig(os.path.join(features_dir, '%s.png' % fname), bbox_inches='tight')
+
+
 
 def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
 
@@ -117,24 +123,33 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
         np.save(sca_controls_raw,  dict_controls_sca)
         np.save(sca_patients_raw,  dict_patients_sca)
+
+
+
+
+
+        f = plt.figure(figsize=(12, 10))
+        sns.heatmap(sca_patients_raw, xticklabels=False, yticklabels=False, cmap=cmap, vmin=-.7, vmax=0.7)
+        plt.savefig(os.path.join(features_dir, 'sca_patients_raw.png'), bbox_inches='tight')
+
         print 'Raw dataframes contain these seeds -->',  dict_controls_sca.keys()
 
     ################################################################################################
     print ' 2. Nuisance variable regression - Age, Gender, Site, Image-Quality'
 
+    # Extract Raw Data
     sca_controls_raw = pd.concat([np.load(sca_controls_raw)[()][seed] for seed in seeds], axis =0)
     sca_patients_raw = pd.concat([np.load(sca_patients_raw)[()][seed] for seed in seeds], axis =0)
 
-    print sca_controls_raw.shape
-    print sca_patients_raw.shape
+    plot_heatmap(sca_controls_raw, 'sca_controls_raw')
+    plot_heatmap(sca_patients_raw, 'sca_patients_raw')
 
-    f = plt.figure(figsize=(12, 10))
-    sns.heatmap(sca_controls_raw, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
-    plt.savefig(os.path.join(features_dir, 'sca_controls_raw.png'), bbox_inches='tight')
+    print 'Control Dataframe shape=',sca_controls_raw.shape
+    print 'Patient Dataframe shape=',sca_patients_raw.shape
 
-    f = plt.figure(figsize=(12, 10))
-    sns.heatmap(sca_patients_raw, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
-    plt.savefig(os.path.join(features_dir, 'sca_patients_raw.png'), bbox_inches='tight')
+
+
+
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
                              tourettome_derivatives, tourettome_freesurfer )
