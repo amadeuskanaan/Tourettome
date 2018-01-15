@@ -72,7 +72,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     df_features_resid.to_csv('%s/sca_%s_resid.csv'%(features_dir, popname))
 
     f = plt.figure(figsize=(12, 10))
-    sns.heatmap(df_controls_features_resid.T, xticklabels=False, yticklabels=False, cmap=cmap, vmin=-.7, vmax=0.7)
+    sns.heatmap(df_features_resid.T, xticklabels=False, yticklabels=False, cmap=cmap, vmin=-.7, vmax=0.7)
     plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
 
     return df_features_resid
