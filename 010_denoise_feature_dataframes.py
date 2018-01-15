@@ -119,34 +119,20 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     sca_controls_raw = pd.concat([np.load(sca_controls_raw)[()][seed] for seed in seeds], axis =0)
     sca_patients_raw = pd.concat([np.load(sca_patients_raw)[()][seed] for seed in seeds], axis =0)
 
-    print sca_controls_raw
+    print sca_controls_raw.shape
+    print sca_patients_raw.shape
+
+    f = plt.figure(figsize=(12, 10))
+    sns.heatmap(sca_controls_raw, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
+    plt.save(os.path.join(features_dir, 'sca_controls_raw.png'))
+
+    f = plt.figure(figsize=(12, 10))
+    sns.heatmap(sca_patients_raw, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
+    plt.save(os.path.join(features_dir, 'sca_patients_raw.png'))
 
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
                              tourettome_derivatives, tourettome_freesurfer )
-
-
-
-
-    # df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
-    # df_pheno_controls = df_pheno_controls.drop([i for i in df_pheno_controls.columns if i not in terms], axis=1)
-    #
-    # df_pheno_patients = df_pheno.drop([i for i in df_pheno.index if i not in patients], axis=0)
-    # df_pheno_patients = df_pheno_patients.drop([i for i in df_pheno_patients.columns if i not in terms], axis=1)
-
-    # df_controls_features_resid = regress_covariates(df_controls_features, df_pheno_controls)
-    # df_patients_features_resid = regress_covariates(df_patients_features, df_pheno_patients)
-
-    # print 'C- z-scoring patient data based on control distribution'
-    # n_vertices = df_controls_features_resid.shape[1]
-    # vertex_mu = [np.mean(df_controls_features_resid.T.loc[vertex]) for vertex in range(n_vertices)]
-    # vertex_sd = [np.std(df_controls_features_resid.T.loc[vertex]) for vertex in range(n_vertices)]
-    #
-    # df_controls_features_resid_z = pd.concat([(df_controls_features_resid.T.loc[vertex] - vertex_mu[vertex]) /
-    #                                 vertex_sd[vertex] for vertex in range(n_vertices)], axis=1)
-    #
-    # df_patients_features_resid_z = pd.concat( [(df_patients_features_resid.T.loc[vertex] - vertex_mu[vertex]) /
-    #                                 vertex_sd[vertex] for vertex in range(n_vertices)], axis=1)
 
 
 
