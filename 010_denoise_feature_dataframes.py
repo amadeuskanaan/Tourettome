@@ -171,14 +171,14 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
         print 'shape_dmatrix',design_matrix.shape
 
-        #sav design matrix data
+        #save design matrix data
         dmat = design_matrix
         dmat['age'] = dmat['age']/100
         f= plt.figure(figsize=(12, 8))
         sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
         plt.xticks(size=20, rotation=90, weight='bold')
         plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
-        design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
+        design_matrix.to_csv('%s/design_matrix_%s.csv'%(features_dir, popname))
 
         df_features = np.nan_to_num(df_features).T
         print df_features.shape
@@ -186,11 +186,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         df_features_resid = []
 
         # for vertex_id in range(df_features.shape[1]):
-        #     mat = design_matrix
-        #
-        #     print mat.shape
-        #     print mat
-        #     break
+            # mat = design_matrix
             # mat['y'] = df_features[:, vertex_id]
             # print mat
             # formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
@@ -207,7 +203,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         return df_features_resid
 
     # Regression
-    sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
+    # sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
+    sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
 
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
