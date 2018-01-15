@@ -95,20 +95,26 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     ################################################################################################
     print ' 1. Extracting functional features'
 
-    dict_controls_sca = {}
-    dict_patients_sca = {}
+    sca_controls_raw = os.path.join(features_dir, 'sca_controls_raw.npy')
+    sca_patients_raw = os.path.join(features_dir, 'sca_patients_raw.npy')
 
-    for seed_name in seeds:
-        print '..... Extracting vertex-wise SBCA data for seed =', seeds
-        dict_controls_sca[seed_name] = return_sca_data(seed_name, controls, derivatives_dir)
-        dict_patients_sca[seed_name] = return_sca_data(seed_name, patients, derivatives_dir)
+    if not os.path.isfile(sca_patients_raw):
+        dict_controls_sca = {}
+        dict_patients_sca = {}
 
-    print dict_controls_sca.keys()
-    print dict_patients_sca.keys()
+        for seed_name in seeds:
+            print '..... Extracting Control vertex-wise SBCA data for seed =', seed_name
+            df_controls_sca[seed_name] = return_sca_data(seed_name, controls, derivatives_dir)
+            print '..... Extracting Patient vertex-wise SBCA data for seed =', seed_name
+            dict_patients_sca[seed_name] = return_sca_data(seed_name, patients, derivatives_dir)
 
-    np.save( os.path.join(features_dir, 'raw_controls_sca.npy'),  dict_controls_sca)
-    #df_controls_features = pd.concat([df_controls_sca[seed]['sca'] for seed in df_controls_sca.keys()])
-    #df_patients_features = pd.concat([df_patients_sca[seed]['sca'] for seed in df_patients_sca.keys()])
+        print dict_controls_sca.keys()
+        print dict_patients_sca.keys()
+
+        np.save(os.path.join(features_dir, 'sca_controls_raw.npy'),  dict_controls_sca)
+        np.save(os.path.join(features_dir, 'sca_patients_raw.npy'),  dict_controls_sca)
+
+
 
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
