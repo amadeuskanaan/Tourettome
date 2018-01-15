@@ -79,7 +79,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
 
     # plot residual data
     f = plt.figure(figsize=(12, 10))
-    sns.heatmap(df_features_resid.T, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
+    sns.heatmap(df_features_resid.T, xticklabels=False, yticklabels=False, cmap=cmap, vmin=-.7, vmax=0.7)
     plt.savefig('%s/sca_%s_resid.png' % (features_dir, popname), bbox_inches='tight')
 
     return df_features_resid
