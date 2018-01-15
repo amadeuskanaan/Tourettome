@@ -202,8 +202,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print ''
 
     # Extract Raw Data
-    sca_controls_raw = pd.read_csv(os.path.join(features_dir, 'sca_controls_raw.csv'), index_col= O)
-    sca_patients_raw = pd.read_csv(os.path.join(features_dir, 'sca_patients_raw.csv'), index_col= O)
+    sca_controls_raw = pd.read_csv(os.path.join(features_dir, 'sca_controls_raw.csv'), index_col= 0)
+    sca_patients_raw = pd.read_csv(os.path.join(features_dir, 'sca_patients_raw.csv'), index_col= 0)
 
     print 'Control Dataframe shape=', sca_controls_raw.shape
     print 'Patient Dataframe shape=', sca_patients_raw.shape
