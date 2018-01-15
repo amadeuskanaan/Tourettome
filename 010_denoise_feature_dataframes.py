@@ -137,9 +137,9 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
         for seed_name in seeds:
             print '-- Extracting CONTROL SBCA for', seed_name
-            controls_sca.append(return_sca_data(seed_name, controls, derivatives_dir))
+            sca_controls_raw.append(return_sca_data(seed_name, controls, derivatives_dir))
             print '-- Extracting PATIENT SBCA for', seed_name
-            patients_sca.append(return_sca_data(seed_name, patients, derivatives_dir))
+            sca_patients_raw.append(return_sca_data(seed_name, patients, derivatives_dir))
 
         print 'Raw dataframes contain these seeds -->', seeds
         sca_controls_raw = pd.concat(sca_controls_raw)
