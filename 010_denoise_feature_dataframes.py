@@ -79,9 +79,6 @@ def ______________regress_covariates(df_features, df_pheno, population, popname,
     return df_features_resid
 
 
-
-
-
 def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
 
     print '========================================================================================'
@@ -125,6 +122,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print ''
 
     ################################################################################################
+    ################################################################################################
+    ################################################################################################
     print ' 1. Extracting functional features'
 
     sca_controls_raw = os.path.join(features_dir, 'sca_controls_raw.npy')
@@ -146,6 +145,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
 
     ################################################################################################
+    ################################################################################################
+    ################################################################################################
     print ' 2. Nuisance variable regression - Age, Gender, Site, Image-Quality'
     print ''
     # Extract Raw Data
@@ -160,21 +161,21 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
     def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap=cmap_gradient):
         # Build design Matrix
-        design_matrix = dmatrix(" 0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
+        design_matrix = dmatrix("0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
         design_matrix.sort_index(axis=1, inplace=True)
         design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
 
         design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
         print 'shape_dmatrix',design_matrix.shape
 
-        # #sav design matrix data
-        # dmat = design_matrix
-        # dmat['age'] = dmat['age']/100
-        # f= plt.figure(figsize=(12, 8))
-        # sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
-        # plt.xticks(size=20, rotation=90, weight='bold')
-        # plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
-        # design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
+        #sav design matrix data
+        dmat = design_matrix
+        dmat['age'] = dmat['age']/100
+        f= plt.figure(figsize=(12, 8))
+        sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
+        plt.xticks(size=20, rotation=90, weight='bold')
+        plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+        design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
 
         df_features = np.nan_to_num(df_features).T
         print df_features.shape
