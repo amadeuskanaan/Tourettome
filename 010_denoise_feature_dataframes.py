@@ -79,46 +79,6 @@ def ______________regress_covariates(df_features, df_pheno, population, popname,
     return df_features_resid
 
 
-def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap=cmap_gradient):
-    # Build design Matrix
-    design_matrix = dmatrix(" 0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
-    design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population])
-    design_matrix.sort_index(axis=1, inplace=True)
-    design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
-
-    # #sav design matrix data
-    # dmat = design_matrix
-    # dmat['age'] = dmat['age']/100
-    # f= plt.figure(figsize=(12, 8))
-    # sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
-    # plt.xticks(size=20, rotation=90, weight='bold')
-    # plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
-    # design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
-
-    df_features = np.nan_to_num(df_features).T
-    print df_features.shape
-    df_features_resid = []
-
-    for vertex_id in range(df_features.shape[1]):
-        mat = design_matrix
-
-        print mat.shape
-        print mat
-        break
-        # mat['y'] = df_features[:, vertex_id]
-        # print mat
-        # formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
-        # model = smf.ols(formula=formula, data=pd.DataFrame(mat))
-        # df_features_resid.append(model.fit().resid)
-
-    # # save residual data
-    # df_features_resid = pd.concat(df_features_resid, axis=1)
-    # df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
-    # f = plt.figure(figsize=(12, 10))
-    # sns.heatmap(pd.concat(x, axis=1).T, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
-    # plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
-
-    return df_features_resid
 
 
 
@@ -198,6 +158,50 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print 'Control Dataframe shape=', sca_controls_raw.shape
     print 'Patient Dataframe shape=', sca_patients_raw.shape
 
+    def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap=cmap_gradient):
+        # Build design Matrix
+        design_matrix = dmatrix(" 0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
+        design_matrix.sort_index(axis=1, inplace=True)
+        design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
+
+        design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
+        print 'shape_dmatrix',design_matrix.shape
+
+        # #sav design matrix data
+        # dmat = design_matrix
+        # dmat['age'] = dmat['age']/100
+        # f= plt.figure(figsize=(12, 8))
+        # sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
+        # plt.xticks(size=20, rotation=90, weight='bold')
+        # plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+        # design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
+
+        df_features = np.nan_to_num(df_features).T
+        print df_features.shape
+        print 'shape_features',df_features.shape
+        df_features_resid = []
+
+        # for vertex_id in range(df_features.shape[1]):
+        #     mat = design_matrix
+        #
+        #     print mat.shape
+        #     print mat
+        #     break
+            # mat['y'] = df_features[:, vertex_id]
+            # print mat
+            # formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
+            # model = smf.ols(formula=formula, data=pd.DataFrame(mat))
+            # df_features_resid.append(model.fit().resid)
+
+        # # save residual data
+        # df_features_resid = pd.concat(df_features_resid, axis=1)
+        # df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
+        # f = plt.figure(figsize=(12, 10))
+        # sns.heatmap(pd.concat(x, axis=1).T, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
+        # plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+
+        return df_features_resid
+
     # Regression
     sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
 
@@ -205,26 +209,4 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
                              tourettome_derivatives, tourettome_freesurfer )
 
-
-
-    # ct_lh = nb.load(os.path.join(datadir, 'struct_cortical_thickness',
-        #                              '%s_ct2fsaverage5_fwhm20_lh.mgh' % subject)).get_data().ravel()
-        # ct_rh = nb.load(os.path.join(datadir, 'struct_cortical_thickness',
-        #                              '%s_ct2fsaverage5_fwhm20_rh.mgh' % subject)).get_data().ravel()
-        #
-        # if scale:
-        #     ct_lh = preprocessing.scale(ct_lh)
-        #     ct_rh = preprocessing.scale(ct_rh)
-        # else:
-        #     pass
-        # df_ct_lh = pd.DataFrame(ct_lh, columns=[subject], index=['ct_lh_' + str(i) for i in range(ct_lh.shape[0])])
-        # df_ct_rh = pd.DataFrame(ct_rh, columns=[subject], index=['ct_rh_' + str(i) for i in range(ct_rh.shape[0])])
-        #
-        # df_subvol = pd.read_csv(os.path.join(datadir, 'struct_subcortical_volume', '%s_aseg_stats.txt' % subject),
-        #                         index_col=0)
-        # df_subvol = df_subvol.drop([i for i in df_subvol.columns if i not in nuclei_subcortical], axis=1)
-        # df_subvol = pd.DataFrame(scale(df_subvol.T), index=df_subvol.columns, columns=[subject])
-        #
-        # df_features.append(pd.concat([df_ct_lh, df_ct_rh  # , df_subvol
-        #                               ], axis=0))
 
