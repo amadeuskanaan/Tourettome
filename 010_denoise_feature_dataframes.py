@@ -34,12 +34,23 @@ def regress_covariates(df_features, df_pheno):
     df_features_resid = pd.concat(df_features_resid, axis=1)
     return df_features_resid
 
-rsfc_seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC',
-              #'PALL', 'THAL'
-             ]
 
-def construct_features_dataframe(population_controls, population_patients,
-                                 workspace_dir, derivatives_dir, freesufer_dir):
+control_outliers = ['HM015', 'LZ061', 'HB028']
+patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
+                    'LZ018', 'LZ020', 'LZ022', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ031', 'LZ035', 'LZ038',
+                    'PA009', 'PA012', 'PA025', 'PA045', 'PA052', 'PA055', 'PA058', 'PA077', 'PA080', 'PA094',
+                   ]
+
+hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008', 'HM009', 'HM010',
+           'HM011', 'HM012', 'HM014', 'HM015', 'HM017', 'HM019', 'HM020', 'HM022', 'HM023', 'HM024',
+           'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
+
+
+rsfc_seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC']
+
+
+
+def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
 
     print '========================================================================================'
     print ''
@@ -47,27 +58,45 @@ def construct_features_dataframe(population_controls, population_patients,
     print ''
     print '========================================================================================'
     print ''
+
+    ################################################################################################
+    # Samples after QC
+
+    df_pheno = pd.read_csv(os.path.join(derivatives_dir, 'phenotypic/tourettome_phenotypic.csv'), index_col=0)
+    df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
+    df_pheno_controls = df_pheno_controls.drop([i for i in df_pheno_controls.columns if i not in terms], axis=1)
+
+    patients = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'patients' if
+                       i not in patient_outliers and i not in hamburg])
+    controls = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'controls' or df_pheno.loc[i]['Group'] == 'probands'
+                       if i not in control_outliers and i not in hamburg])
+
     print '..... n_controls=', len(controls)
     print '..... n_patients=', len(patients)
     print '..... n_total =', len(controls) + len(patients)
     print ''
-    print ' 1. Extracting functional features'
 
-    print 'A-  Extracting Seed-based correlation data for seeds =',seeds
 
-    dict_controls_sca = {}
-    dict_patients_sca = {}
 
-    for seed_name in seeds:
-        dict_controls_sca[seed_name] = return_sca_data(seed_name, controls, derivatives_dir)
-        dict_controls_sca[seed_name] = return_sca_data(seed_name, patients, derivatives_dir)
 
-    print dict_controls_sca.keys()
-    print dict_patients_sca.keys()
 
-    #df_controls_features = pd.concat([df_controls_sca[seed]['sca'] for seed in df_controls_sca.keys()])
-    #df_patients_features = pd.concat([df_patients_sca[seed]['sca'] for seed in df_patients_sca.keys()])
-
+    # ################################################################################################
+    # print ' 1. Extracting functional features'
+    #
+    # dict_controls_sca = {}
+    # dict_patients_sca = {}
+    #
+    # for seed_name in seeds:
+    #     print 'A-  Extracting Seed-based correlation data for seeds =', seeds
+    #     dict_controls_sca[seed_name] = return_sca_data(seed_name, controls, derivatives_dir)
+    #     dict_patients_sca[seed_name] = return_sca_data(seed_name, patients, derivatives_dir)
+    #
+    # print dict_controls_sca.keys()
+    # print dict_patients_sca.keys()
+    #
+    # #df_controls_features = pd.concat([df_controls_sca[seed]['sca'] for seed in df_controls_sca.keys()])
+    # #df_patients_features = pd.concat([df_patients_sca[seed]['sca'] for seed in df_patients_sca.keys()])
+    #
 
 construct_features_dataframe(qc_controls, qc_patients, tourettome_workspace,
                              tourettome_derivatives, tourettome_freesurfer )
