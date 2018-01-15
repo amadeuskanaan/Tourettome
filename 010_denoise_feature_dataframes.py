@@ -149,8 +149,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print 'Patient Dataframe shape=', sca_patients_raw.shape
 
     # Regression
-    regress_covariates(sca_controls_raw, df_pheno, controls, 'controls')
-    regress_covariates(sca_controls_raw, df_pheno, patients, 'patients')
+    regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
+    regress_covariates(sca_controls_raw, df_pheno, patients, 'patients', features_dir)
 
 
 
