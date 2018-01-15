@@ -42,7 +42,6 @@ def plot_heatmap(df, fname, figsize=(12, 10), cmap='jet', vmin=-0.7, vmax=0.7):
     sns.heatmap(df, xticklabels=False, yticklabels=False, cmap=cmap, vmin=vmin, vmax=vmax)
     plt.savefig('%s.png'%fname, bbox_inches='tight')
 
-
 def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap=cmap_gradient):
 
     # Build design Matrix
@@ -50,9 +49,8 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     design_matrix.sort_index(axis=1, inplace=True)
     design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
     design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
-    print 'shape_dmatrix',
 
-    #save design matrix data
+    # Save design matrix data
     dmat = design_matrix
     dmat['age'] = dmat['age']/100
     f= plt.figure(figsize=(12, 8))
@@ -61,12 +59,12 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
     design_matrix.to_csv('%s/design_matrix_%s.csv'%(features_dir, popname))
 
-    # regress features
+    # Regress features
     df_features = np.nan_to_num(df_features).T
     df_features_resid = []
 
-    print '%s features shape=%s' %(popname,df_features.shape)
     print '%s dmatrix  shape=%s' %(popname,design_matrix.shape)
+    print '%s features shape=%s' %(popname,df_features.shape)
 
     for vertex_id in range(df_features.shape[1]):
         mat = design_matrix
@@ -77,13 +75,14 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
 
     # save residual data
     df_features_resid = pd.concat(df_features_resid, axis=1)
-    f = plt.figure(figsize=(12, 10))
-    sns.heatmap(df_features_resid, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
-    plt.savefig('%s/sca_%s_resid.csv' % (features_dir, popname), bbox_inches='tight')
     df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
 
-    return df_features_resid
+    # plot residual data
+    f = plt.figure(figsize=(12, 10))
+    sns.heatmap(df_features_resid, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
+    plt.savefig('%s/sca_%s_resid.png' % (features_dir, popname), bbox_inches='tight')
 
+    return df_features_resid
 
 def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
 
@@ -161,14 +160,20 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print ' 2. Nuisance variable regression - Age, Gender, Site, Image-Quality'
     print ''
 
-    # Extract Raw Data
-    sca_controls_raw = pd.read_csv(os.path.join(features_dir, 'sca_controls_raw.csv'), index_col= 0)
-    sca_patients_raw = pd.read_csv(os.path.join(features_dir, 'sca_patients_raw.csv'), index_col= 0)
+    # Regression Controls
+    if not os.path.isfile(os.path.join(features_dir, 'sca_controls_resid.csv')):
+        sca_controls_raw = pd.read_csv(os.path.join(features_dir, 'sca_controls_raw.csv'), index_col=0)
+        sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
+    else:
+        sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
 
+    # Regression Patients
+    if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
+        sca_patients_raw = pd.read_csv(os.path.join(features_dir, 'sca_patients_raw.csv'), index_col=0)
+        sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
+    else:
+        sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
 
-    # Regression
-    sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
-    sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
 
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
