@@ -53,7 +53,7 @@ def ______________regress_covariates(df_features, df_pheno, population, popname,
     sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
     plt.xticks(size=20, rotation=90, weight='bold')
     plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
-    design_matrix.to_csv('%s/design_matrix_%s.txt'%(features_dir, popname))
+    design_matrix.to_csv('%s/design_matrix_%s.csv'%(features_dir, popname))
 
     df_features = np.nan_to_num(df_features).T
     print df_features.shape
