@@ -175,11 +175,10 @@ def return_sca_data(seed, population, derivatives_dir):
                                  index=['%s_rh_%s' % (seed, str(i)) for i in range(sca_rh.shape[0])])
 
         df_features.append(pd.concat([df_sca_lh, df_sca_rh], axis=0))
-    df_features = pd.concat(df_features, axis=1)
 
     # dict_sca = {'lh': np.array(np.mean(df_features, axis=1))[:10242],
     #             'rh': np.array(np.mean(df_features, axis=1))[10242:],
-    #             'sca': df_features
+    #             'sca': pd.concat(df_features, axis=1)
     #             }
 
-    return df_features
+    return pd.concat(df_features, axis=1)
