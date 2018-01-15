@@ -79,7 +79,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
 
     # plot residual data
     f = plt.figure(figsize=(12, 10))
-    sns.heatmap(df_features_resid, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
+    sns.heatmap(df_features_resid.T, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
     plt.savefig('%s/sca_%s_resid.png' % (features_dir, popname), bbox_inches='tight')
 
     return df_features_resid
@@ -188,7 +188,6 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     else:
         sca_controls_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'), index_col=0)
         sca_patients_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'), index_col=0)
-
 
 
 
