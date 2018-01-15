@@ -17,11 +17,13 @@ from variables.subject_list import *
 from utilities.utils import mkdir_path, return_sca_data
 from plotting.cmaps import *
 
-control_outliers = ['HM015', 'LZ061', 'HB028']
+control_outliers = ['HM015', 'LZ061', 'HB028',
+                    'LZ052' # no data
+                    ]
 patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
                     'LZ018', 'LZ020', 'LZ022', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ031', 'LZ035', 'LZ038',
                     'PA009', 'PA012', 'PA025', 'PA045', 'PA052', 'PA055', 'PA058', 'PA077', 'PA080', 'PA094',
-                    'LZ001', 'LZ052' # no data
+                    'LZ001',
                     ]
 
 hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008', 'HM009', 'HM010',
