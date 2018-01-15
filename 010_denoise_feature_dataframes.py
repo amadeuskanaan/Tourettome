@@ -7,6 +7,7 @@ import pandas as pd
 import nibabel as nb
 from patsy import dmatrix
 import statsmodels.formula.api as smf
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set_style('white')
