@@ -84,6 +84,47 @@ def ______________regress_covariates(df_features, df_pheno, population, popname,
     return df_features_resid
 
 
+def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap=cmap_gradient):
+    # Build design Matrix
+    design_matrix = dmatrix("0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
+    design_matrix.sort_index(axis=1, inplace=True)
+    design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
+
+    design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
+    print 'shape_dmatrix',design_matrix.shape
+
+    #save design matrix data
+    dmat = design_matrix
+    dmat['age'] = dmat['age']/100
+    f= plt.figure(figsize=(12, 8))
+    sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
+    plt.xticks(size=20, rotation=90, weight='bold')
+    plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+    design_matrix.to_csv('%s/design_matrix_%s.csv'%(features_dir, popname))
+
+    df_features = np.nan_to_num(df_features).T
+    print df_features.shape
+    print 'shape_features',df_features.shape
+    df_features_resid = []
+
+    # for vertex_id in range(df_features.shape[1]):
+        # mat = design_matrix
+        # mat['y'] = df_features[:, vertex_id]
+        # print mat
+        # formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
+        # model = smf.ols(formula=formula, data=pd.DataFrame(mat))
+        # df_features_resid.append(model.fit().resid)
+
+    # # save residual data
+    # df_features_resid = pd.concat(df_features_resid, axis=1)
+    # df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
+    # f = plt.figure(figsize=(12, 10))
+    # sns.heatmap(pd.concat(x, axis=1).T, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
+    # plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+
+    return df_features_resid
+
+
 def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
 
     print '========================================================================================'
@@ -131,7 +172,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     ################################################################################################
     print ' 1. Extracting functional features'
 
-    if not os.path.isfile(os.path.join(features_dir, 'sca_patients_raw.npy')):
+    if not os.path.isfile(os.path.join(features_dir, 'sca_patients_raw.csv')):
         sca_controls_raw = []
         sca_patients_raw = []
 
@@ -149,65 +190,27 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         sca_controls_raw.to_csv(os.path.join(features_dir, 'sca_controls_raw.csv'))
         sca_patients_raw.to_csv(os.path.join(features_dir, 'sca_patients_raw.csv'))
 
+        plot_heatmap(sca_controls_raw, '%s/sca_controls_raw'%features_dir, cmap =cmap_gradient)
+        plot_heatmap(sca_patients_raw, '%s/sca_patients_raw'%features_dir, cmap =cmap_gradient)
 
-    # ################################################################################################
-    # ################################################################################################
-    # ################################################################################################
-    # print ' 2. Nuisance variable regression - Age, Gender, Site, Image-Quality'
-    # print ''
-    # # Extract Raw Data
-    # sca_controls_raw = pd.concat([np.load(sca_controls_raw)[()][seed] for seed in seeds], axis =0)
-    # sca_patients_raw = pd.concat([np.load(sca_patients_raw)[()][seed] for seed in seeds], axis =0)
-    #
-    # plot_heatmap(sca_controls_raw, '%s/sca_controls_raw'%features_dir, cmap =cmap_gradient)
-    # plot_heatmap(sca_patients_raw, '%s/sca_patients_raw'%features_dir, cmap =cmap_gradient)
-    #
-    # print 'Control Dataframe shape=', sca_controls_raw.shape
-    # print 'Patient Dataframe shape=', sca_patients_raw.shape
-    #
-    # def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap=cmap_gradient):
-    #     # Build design Matrix
-    #     design_matrix = dmatrix("0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
-    #     design_matrix.sort_index(axis=1, inplace=True)
-    #     design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
-    #
-    #     design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
-    #     print 'shape_dmatrix',design_matrix.shape
-    #
-    #     #save design matrix data
-    #     dmat = design_matrix
-    #     dmat['age'] = dmat['age']/100
-    #     f= plt.figure(figsize=(12, 8))
-    #     sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
-    #     plt.xticks(size=20, rotation=90, weight='bold')
-    #     plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
-    #     design_matrix.to_csv('%s/design_matrix_%s.csv'%(features_dir, popname))
-    #
-    #     df_features = np.nan_to_num(df_features).T
-    #     print df_features.shape
-    #     print 'shape_features',df_features.shape
-    #     df_features_resid = []
-    #
-    #     # for vertex_id in range(df_features.shape[1]):
-    #         # mat = design_matrix
-    #         # mat['y'] = df_features[:, vertex_id]
-    #         # print mat
-    #         # formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
-    #         # model = smf.ols(formula=formula, data=pd.DataFrame(mat))
-    #         # df_features_resid.append(model.fit().resid)
-    #
-    #     # # save residual data
-    #     # df_features_resid = pd.concat(df_features_resid, axis=1)
-    #     # df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
-    #     # f = plt.figure(figsize=(12, 10))
-    #     # sns.heatmap(pd.concat(x, axis=1).T, xticklabels=False, yticklabels=False, cmap='jet', vmin=-.7, vmax=0.7)
-    #     # plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
-    #
-    #     return df_features_resid
-    #
-    # # Regression
-    # # sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
-    # sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
+
+
+    ################################################################################################
+    ################################################################################################
+    ################################################################################################
+    print ' 2. Nuisance variable regression - Age, Gender, Site, Image-Quality'
+    print ''
+
+    # Extract Raw Data
+    sca_controls_raw = pd.read_csv(os.path.join(features_dir, 'sca_controls_raw.csv'), index_col= O)
+    sca_patients_raw = pd.read_csv(os.path.join(features_dir, 'sca_patients_raw.csv'), index_col= O)
+
+    print 'Control Dataframe shape=', sca_controls_raw.shape
+    print 'Patient Dataframe shape=', sca_patients_raw.shape
+
+    # Regression
+    sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
+    sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
 
 
 construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
