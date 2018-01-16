@@ -151,7 +151,7 @@ def os_system(list_cmd):
     import os
     os.system(' '.join(list_cmd))
 
-
+from plotting.cmaps import cmap_gradient
 def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap=cmap_gradient):
 
     # Build design Matrix
