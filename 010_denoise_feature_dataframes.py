@@ -14,7 +14,7 @@ import seaborn as sns
 sns.set_style('white')
 
 from variables.subject_list import *
-from utilities.utils import mkdir_path, return_sca_data
+from utilities.utils import mkdir_path, return_sca_data, return_ct_data, regress_covariates
 from plotting.cmaps import *
 
 control_outliers = ['HM015', 'LZ061', 'HB028',
@@ -42,47 +42,6 @@ def plot_heatmap(df, fname, figsize=(12, 10), cmap='jet', vmin=-0.7, vmax=0.7):
     sns.heatmap(df, xticklabels=False, yticklabels=False, cmap=cmap, vmin=vmin, vmax=vmax)
     plt.savefig('%s.png'%fname, bbox_inches='tight')
 
-def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap=cmap_gradient):
-
-    # Build design Matrix
-    design_matrix = dmatrix("0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
-    design_matrix.sort_index(axis=1, inplace=True)
-    design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
-    design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
-
-    # Save design matrix data
-    dmat = design_matrix
-    dmat['age'] = dmat['age']/100
-    f= plt.figure(figsize=(12, 8))
-    sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
-    plt.xticks(size=20, rotation=90, weight='bold')
-    plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
-    design_matrix.to_csv('%s/design_matrix_%s.csv'%(features_dir, popname))
-
-    # Regress features
-    df_features = np.nan_to_num(df_features).T
-    df_features_resid = []
-
-    print '%s dmatrix  shape=%s' %(popname,design_matrix.shape)
-    print '%s features shape=%s' %(popname,df_features.shape)
-
-    for vertex_id in range(df_features.shape[1]):
-        mat = design_matrix
-        mat['y'] = df_features[:, vertex_id]
-        formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
-        model = smf.ols(formula=formula, data=pd.DataFrame(mat))
-        df_features_resid.append(model.fit().resid)
-
-    # save residual data
-    df_features_resid = pd.concat(df_features_resid, axis=1).T
-    df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
-
-    # plot residual data
-    f = plt.figure(figsize=(12, 10))
-    sns.heatmap(df_features_resid, xticklabels=False, yticklabels=False, cmap=cmap, vmin=-.7, vmax=0.7)
-    plt.savefig('%s/sca_%s_resid.png' % (features_dir, popname), bbox_inches='tight')
-
-    return df_features_resid
 
 def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
 
@@ -129,22 +88,23 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print '################################################################################################'
     print ' Denoising  SCA features'
     print ''
+
     print '... Extracting data'
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_raw.csv')):
         sca_controls_raw = []
         sca_patients_raw = []
 
         for seed_name in seeds:
-            print '-- Extracting CONTROL SBCA for', seed_name
+            print '......  checking control data for ', seed_name
             sca_controls_raw.append(return_sca_data(seed_name, controls, derivatives_dir))
-            print '-- Extracting PATIENT SBCA for', seed_name
+            print '......  checking patient data for ', seed_name
             sca_patients_raw.append(return_sca_data(seed_name, patients, derivatives_dir))
 
         print 'Raw dataframes contain these seeds -->', seeds
         sca_controls_raw = pd.concat(sca_controls_raw)
         sca_patients_raw = pd.concat(sca_patients_raw)
 
-        #save raw dataframes
+        # Save raw dataframes
         sca_controls_raw.to_csv(os.path.join(features_dir, 'sca_controls_raw.csv'))
         sca_patients_raw.to_csv(os.path.join(features_dir, 'sca_patients_raw.csv'))
 
@@ -171,6 +131,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
 
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
+
         # Calculate control mu/sd across each vertex
         n_vertices = sca_controls_resid.shape[1]
         vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
@@ -182,17 +143,15 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
                                  vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
 
-        print sca_patients_resid_z.shape
-
+        # Save datadframes
         sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
         sca_patients_resid_z.to_csv('%s/sca_patients_resid_z.csv'%features_dir)
+        plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' % features_dir, vmin =-3, vmax=3)
+        plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' % features_dir, vmin =-3, vmax=3)
 
-        # else:
-    #     sca_controls_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'), index_col=0)
-    #     sca_patients_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'), index_col=0)
-    #     plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' %features_dir, cmap=cmap_gradient)
-    #     plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' %features_dir, cmap=cmap_gradient)
-
+    else:
+        sca_controls_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'), index_col=0)
+        sca_patients_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'), index_col=0)
 
 
     # print '#####################################################'

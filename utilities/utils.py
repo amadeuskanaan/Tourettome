@@ -152,6 +152,51 @@ def os_system(list_cmd):
     os.system(' '.join(list_cmd))
 
 
+def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap=cmap_gradient):
+
+    # Build design Matrix
+    design_matrix = dmatrix("0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
+    design_matrix.sort_index(axis=1, inplace=True)
+    design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
+    design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
+
+    # Save design matrix data
+    dmat = design_matrix
+    dmat['age'] = dmat['age']/100
+    f= plt.figure(figsize=(12, 8))
+    sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
+    plt.xticks(size=20, rotation=90, weight='bold')
+    plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
+    design_matrix.to_csv('%s/design_matrix_%s.csv'%(features_dir, popname))
+
+    # Regress features
+    df_features = np.nan_to_num(df_features).T
+    df_features_resid = []
+
+    print '...... %s dmatrix  shape=%s' %(popname,design_matrix.shape)
+    print '...... %s features shape=%s' %(popname,df_features.shape)
+
+    for vertex_id in range(df_features.shape[1]):
+        mat = design_matrix
+        mat['y'] = df_features[:, vertex_id]
+        formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
+        model = smf.ols(formula=formula, data=pd.DataFrame(mat))
+        df_features_resid.append(model.fit().resid)
+
+    # save residual data
+    df_features_resid = pd.concat(df_features_resid, axis=1).T
+    df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
+
+    # plot residual data
+    f = plt.figure(figsize=(12, 10))
+    sns.heatmap(df_features_resid, xticklabels=False, yticklabels=False, cmap=cmap, vmin=-.7, vmax=0.7)
+    plt.savefig('%s/sca_%s_resid.png' % (features_dir, popname), bbox_inches='tight')
+
+    return df_features_resid
+
+
+
+
 def return_sca_data(seed, population, derivatives_dir):
     import os
     import numpy as np
@@ -182,3 +227,20 @@ def return_sca_data(seed, population, derivatives_dir):
     #             }
 
     return pd.concat(df_features, axis=1)
+
+def return_ct_data(population, derivatives_dir):
+    df_features = []
+    for subject in population:
+        ct_lh = nb.load(os.path.join(derivatives_dir, 'struct_cortical_thickness',
+                                     '%s_ct2fsaverage5_fwhm20_lh.mgh' % subject)).get_data().ravel()
+        ct_rh = nb.load(os.path.join(derivatives_dir, 'struct_cortical_thickness',
+                                     '%s_ct2fsaverage5_fwhm20_rh.mgh' % subject)).get_data().ravel()
+
+        ct_lh = pd.DataFrame(ct_lh, columns=[subject],
+                                index=['ct_lh_' + str(i) for i in range(ct_lh.shape[0])])
+        ct_rh = pd.DataFrame(ct_rh, columns=[subject],
+                                index=['ct_rh_' + str(i) for i in range(ct_rh.shape[0])])
+
+    df_features = pd.concat(df_features.append(pd.concat([ct_lh, ct_rh], axis=0)), axis=1)
+
+    return df_features
