@@ -96,8 +96,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     #I/O
     features_dir = mkdir_path(os.path.join(derivatives_dir, 'feature_matrices'))
 
-    ################################################################################################
-    # Samples after QC
+    print '#####################################################'
+    print ' 0. Inspecting sample size'
 
     df_pheno = pd.read_csv(os.path.join(tourettome_phenotypic, 'tourettome_phenotypic.csv'), index_col=0)
     population = df_pheno.index
@@ -127,8 +127,10 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print ''
 
     ################################################################################################
-    print ' 1. Extracting functional features'
+    print '#####################################################'
+    print ' 1. Denoising striatal SCA features'
 
+    # extract data
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_raw.csv')):
         sca_controls_raw = []
         sca_patients_raw = []
@@ -154,9 +156,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         sca_controls_raw = pd.read_csv(os.path.join(features_dir, 'sca_controls_raw.csv'), index_col=0)
         sca_patients_raw = pd.read_csv(os.path.join(features_dir, 'sca_patients_raw.csv'), index_col=0)
 
-    ################################################################################################
-    print '1a. SCA Nuisance variable regression - Age, Gender, Site, Image-Quality'
-    print ''
+    print '... nuisance variable regression'
 
     # Regress
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
@@ -166,10 +166,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
         sca_patients_resid = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0)
 
-    ################################################################################################
-    print ' 1b. SCA Zscore patient dataframe to to control distribution'
-    print ''
-
+    print ' ... z-scoring dataframes to control distribution'
     # "At each surface point, we normalized feature data in each individual with ASD against the
     # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
 
@@ -179,7 +176,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
         vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
 
-        # normalize dataframes
+        # Normalize dataframes
         sca_controls_resid_z = [(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
                                  vertex_sd[vertex] for vertex in range(n_vertices)]
         sca_patients_resid_z = [(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
@@ -188,6 +185,40 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     else:
         sca_controls_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'), index_col=0)
         sca_patients_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'), index_col=0)
+        plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' %features_dir, cmap=cmap_gradient)
+        plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' %features_dir, cmap=cmap_gradient)
+
+
+
+    # print '#####################################################'
+    # print ' 2. Denoising cortical-thicknes features'
+
+    ct_controls = return_ct_data(controls, derivatives_dir)
+    ct_patients = return_ct_data(patients, derivatives_dir)
+
+
+
+    # ct_lh = nb.load(os.path.join(datadir, 'struct_cortical_thickness',
+    #                              '%s_ct2fsaverage5_fwhm20_lh.mgh' % subject)).get_data().ravel()
+    # ct_rh = nb.load(os.path.join(datadir, 'struct_cortical_thickness',
+    #                              '%s_ct2fsaverage5_fwhm20_rh.mgh' % subject)).get_data().ravel()
+    #
+    # if scale:
+    #     ct_lh = preprocessing.scale(ct_lh)
+    #     ct_rh = preprocessing.scale(ct_rh)
+    # else:
+    #     pass
+    # df_ct_lh = pd.DataFrame(ct_lh, columns=[subject], index=['ct_lh_' + str(i) for i in range(ct_lh.shape[0])])
+    # df_ct_rh = pd.DataFrame(ct_rh, columns=[subject], index=['ct_rh_' + str(i) for i in range(ct_rh.shape[0])])
+    #
+    # df_subvol = pd.read_csv(os.path.join(datadir, 'struct_subcortical_volume', '%s_aseg_stats.txt' % subject),
+    #                         index_col=0)
+    # df_subvol = df_subvol.drop([i for i in df_subvol.columns if i not in nuclei_subcortical], axis=1)
+    # df_subvol = pd.DataFrame(scale(df_subvol.T), index=df_subvol.columns, columns=[subject])
+    #
+    # df_features.append(pd.concat([df_ct_lh, df_ct_rh  # , df_subvol
+    #                               ], axis=0))
+
 
 
 
