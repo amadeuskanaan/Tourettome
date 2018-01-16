@@ -14,7 +14,8 @@ sns.set_style('white')
 
 from variables.subject_list import *
 from utilities.utils import mkdir_path, return_sca_data, return_ct_data, regress_covariates
-from plotting.cmaps import *
+from plotting.plot_mats import plot_heatmap
+from plotting.cmaps import cmap_gradient
 
 control_outliers = ['HM015', 'LZ061', 'HB028',
                     'LZ052' # no data
@@ -36,10 +37,6 @@ seeds = ['STR3_MOTOR'
 terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 
 
-def plot_heatmap(df, fname, figsize=(12, 10), cmap='jet', vmin=-0.7, vmax=0.7):
-    fig = plt.figure(figsize=figsize)
-    sns.heatmap(df, xticklabels=False, yticklabels=False, cmap=cmap, vmin=vmin, vmax=vmax)
-    plt.savefig('%s.png'%fname, bbox_inches='tight')
 
 
 def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
