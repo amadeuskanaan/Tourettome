@@ -94,7 +94,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
             print '......  checking patient data for ', seed_name
             sca_patients_raw.append(return_sca_data(seed_name, patients, derivatives_dir))
 
-        print 'Raw dataframes contain these seeds -->', seeds
+        print '...... raw dataframes contain these seeds -->', seeds
         sca_controls_raw = pd.concat(sca_controls_raw)
         sca_patients_raw = pd.concat(sca_patients_raw)
 
@@ -145,7 +145,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
 
 
-        # print '#####################################################'
+    # print '#####################################################'
     # print ' 2. Denoising cortical-thickness features'
 
     # ct_controls = return_ct_data(controls, derivatives_dir)
