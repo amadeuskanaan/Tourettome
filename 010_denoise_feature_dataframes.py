@@ -82,7 +82,6 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
     print '################################################################################################'
     print ' Denoising  SCA features'
-    print ''
 
     print '... Extracting data'
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_raw.csv')):
@@ -110,7 +109,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         sca_patients_raw = pd.read_csv(os.path.join(features_dir, 'sca_patients_raw.csv'), index_col=0)
 
     ############################################################################################################
-    print ' ... Regression nuisance variables'
+    print '... Regression nuisance variables'
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
         sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
         sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
@@ -130,29 +129,25 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
         vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
 
-        print n_vertices
-        print len(vertex_mu)
-        print len(vertex_sd)
+        # Normalize dataframes
+        sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
+                                 vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
+        sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
+                                 vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
 
-    #     # Normalize dataframes
-    #     sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
-    #                              vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
-    #     sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
-    #                              vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
-    #
-    #     # Save datadframes
-    #     sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
-    #     sca_patients_resid_z.to_csv('%s/sca_patients_resid_z.csv'%features_dir)
-    #     plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
-    #     plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
-    #
-    # else:
-    #     sca_controls_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'), index_col=0)
-    #     sca_patients_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'), index_col=0)
-    #
+        # Save datadframes
+        sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
+        sca_patients_resid_z.to_csv('%s/sca_patients_resid_z.csv'%features_dir)
+        plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
+        plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
+
+    else:
+        sca_controls_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'), index_col=0)
+        sca_patients_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'), index_col=0)
+
 
     # print '#####################################################'
-    # print ' 2. Denoising cortical-thicknes features'
+    # print ' 2. Denoising cortical-thickness features'
 
     # ct_controls = return_ct_data(controls, derivatives_dir)
     # ct_patients = return_ct_data(patients, derivatives_dir)
