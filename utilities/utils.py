@@ -25,7 +25,6 @@ def mkdir_path(path):
         else: raise
     return path
 
-
 def mkcd_path(path):
     import os
     import errno
