@@ -171,15 +171,15 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
 
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
-        # Calcualte control mu/sd across each vertex
-        n_vertices = sca_controls_resid.shape[1]
-        vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
-        vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
+        # Calculate control mu/sd across each vertex
+        n_vertices = sca_controls_resid.shape[0]
+        vertex_mu = [np.mean(sca_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
+        vertex_sd = [np.std(sca_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
 
         # Normalize dataframes
-        sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
+        sca_controls_resid_z = pd.concat([(sca_controls_resid.loc[vertex] - vertex_mu[vertex]) /
                                  vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
-        sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
+        sca_patients_resid_z = pd.concat([(sca_patients_resid.loc[vertex] - vertex_mu[vertex]) /
                                  vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
 
         sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
