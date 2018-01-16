@@ -129,7 +129,11 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
         vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
 
-        #         # Normalize dataframes
+        print n_vertices
+        print vertex_mu
+        print vertex_sd
+
+        # Normalize dataframes
         # sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
         #                          vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
         # sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
