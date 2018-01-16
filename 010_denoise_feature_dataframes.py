@@ -123,8 +123,6 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
         sca_patients_resid = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0)
 
-    print sca_patients_resid.T.shape
-
     ############################################################################################################
     print ' ... z-scoring dataframes to control distribution'
     # "At each surface point, we normalized feature data in each individual with ASD against the
@@ -137,22 +135,26 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
         vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
 
-        # Normalize dataframes
-        sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
-                                 vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
-        sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
-                                 vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
+        print n_vertices
+        print vertex_mu
+        print vertex_sd
 
-        # Save datadframes
-        sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
-        sca_patients_resid_z.to_csv('%s/sca_patients_resid_z.csv'%features_dir)
-        plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' % features_dir, vmin =-3, vmax=3)
-        plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' % features_dir, vmin =-3, vmax=3)
-
-    else:
-        sca_controls_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'), index_col=0)
-        sca_patients_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'), index_col=0)
-
+    #     # Normalize dataframes
+    #     sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
+    #                              vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
+    #     sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
+    #                              vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
+    #
+    #     # Save datadframes
+    #     sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
+    #     sca_patients_resid_z.to_csv('%s/sca_patients_resid_z.csv'%features_dir)
+    #     plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' % features_dir, vmin =-3, vmax=3)
+    #     plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' % features_dir, vmin =-3, vmax=3)
+    #
+    # else:
+    #     sca_controls_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'), index_col=0)
+    #     sca_patients_resid_z = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'), index_col=0)
+    #
 
     # print '#####################################################'
     # print ' 2. Denoising cortical-thicknes features'
