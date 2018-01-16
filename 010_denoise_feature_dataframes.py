@@ -133,9 +133,9 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
 
         sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
-                                 vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
+                                 vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
         # sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
-        #                          vertex_sd[vertex] for vertex in range(n_vertices)],axis=1)
+        #                          vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
 
         # Save data frames
         sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
