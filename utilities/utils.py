@@ -194,7 +194,8 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
         df_features_resid.append(model.fit().resid)
 
     # save residual data
-    df_features_resid = pd.concat(df_features_resid, axis=1).T
+    df_features_resid = pd.concat(df_features_resid, axis=1)
+    df_features_resid = df_features_resid.T
     df_features_resid.to_csv('%s/sca_%s_resid.csv' % (features_dir, popname))
 
     # plot residual data
