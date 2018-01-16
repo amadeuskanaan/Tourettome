@@ -5,7 +5,6 @@ import os
 import numpy as np
 import pandas as pd
 import nibabel as nb
-from patsy import dmatrix
 import statsmodels.formula.api as smf
 import matplotlib
 matplotlib.use('agg')
