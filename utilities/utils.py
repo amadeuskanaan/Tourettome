@@ -153,6 +153,7 @@ def os_system(list_cmd):
 
 def regress_covariates(df_features, df_pheno, population, popname, features_dir, cmap='jet'):
     from patsy import dmatrix
+    import statsmodels.formula.api as smf
 
     # Build design Matrix
     design_matrix = dmatrix("0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
