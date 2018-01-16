@@ -1,5 +1,16 @@
 __author__ = 'kanaan'
 
+import os
+import numpy as np
+import pandas as pd
+import nibabel as nb
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set_style('white')
+
+
 import string
 valid_chars = '-_.() %s%s' %(string.ascii_letters, string.digits)
 
