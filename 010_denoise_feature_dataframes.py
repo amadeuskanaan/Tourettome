@@ -163,6 +163,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
         sca_patients_resid = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0)
 
+    print sca_controls_resid.T.shape
+
     ############################################################################################################
     print ' ... z-scoring dataframes to control distribution'
     # "At each surface point, we normalized feature data in each individual with ASD against the
