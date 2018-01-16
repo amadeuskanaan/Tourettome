@@ -111,8 +111,8 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     ############################################################################################################
     print '... Regression nuisance variables'
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
-        sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir)
-        sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir)
+        sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir, cmap_gradient)
+        sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir, cmap_gradient)
     else:
         sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0).T
         sca_patients_resid = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0).T
