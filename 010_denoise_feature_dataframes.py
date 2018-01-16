@@ -143,16 +143,11 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
         plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
 
-
-
     # print '#####################################################'
     # print ' 2. Denoising cortical-thickness features'
 
     # ct_controls = return_ct_data(controls, derivatives_dir)
     # ct_patients = return_ct_data(patients, derivatives_dir)
-
-
-
 
 
 
