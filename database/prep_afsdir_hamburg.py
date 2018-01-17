@@ -47,7 +47,7 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
             os.system('flirt -in REST -ref ANATOMICAL -dof 6 -cost corratio -out test_func2anat')
 
         # create subject dataframe
-        columns = ['Name', 'Site', 'Group', 'Age', 'Sex', 'ScanDate', 'Scanner', 'NCoils', 'Sequence', 'TR',
+        columns = ['Name', 'Site', 'Group', 'ScanDate', 'Scanner', 'NCoils', 'Sequence', 'TR',
                    'TE', 'Resolution', 'NVols', 'FlipAngle']
         df = pd.DataFrame(index=['%s' % subject], columns=columns)
         df.loc['%s' % subject] = pd.Series({'Name'      : subject,
