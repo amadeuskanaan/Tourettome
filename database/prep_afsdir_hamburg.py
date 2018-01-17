@@ -52,8 +52,8 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
         df = pd.DataFrame(index=['%s' % subject], columns=columns)
         df.loc['%s' % subject] = pd.Series({'Name'      : subject,
                                                'Group'     : group_id,
-                                               #'Age'       : '',
-                                               #'Sex'       : '',
+                                               #'Age'       : '', This column is grabeed from the clinical df
+                                               #'Sex'       : '', This column is grabeed from the clinical df
                                                'ScanDate'  : '3.5x3.5x3',
                                                'Scanner'   : '3T-SIEMENS-Trio',
                                                'Sequence'  : 'EPI-REST',
