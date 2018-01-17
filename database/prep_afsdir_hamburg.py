@@ -52,17 +52,17 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
         df = pd.DataFrame(index=['%s' % subject], columns=columns)
         df.loc['%s' % subject] = pd.Series({'Name'      : subject,
                                                'Group'     : group_id,
-                                               'Age'       : '',
-                                               'Sex'       : '',
-                                               'ScanDate'  : '',
-                                               'Scanner'   : '',
-                                               'Sequence'  : '',
-                                               'NCoils'    : '',
-                                               'TR'        : '',
-                                               'TE'        : '',
+                                               #'Age'       : '',
+                                               #'Sex'       : '',
+                                               'ScanDate'  : '3.5x3.5x3',
+                                               'Scanner'   : '3T-SIEMENS-Trio',
+                                               'Sequence'  : 'EPI-REST',
+                                               'NCoils'    : '12',
+                                               'TR'        : '2.28',
+                                               'TE'        : '30',
                                                'Resolution': '',
-                                               'NVols'     : '',
-                                               'FlipAngle' : '',
+                                               'NVols'     : '75',
+                                               'FlipAngle' : '80',
                                                'Site'      : 'HAMBURG'
                                                })
 
