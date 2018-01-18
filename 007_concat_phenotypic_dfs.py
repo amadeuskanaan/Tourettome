@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 from variables.subject_list import *
+from variables.subject_list_original import *
 from variables.clinical_standardization import *
 from utilities.utils import *
 
@@ -55,7 +56,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     # rename index to anonamized subject_ids
     # df_leipzig['Name'] = df_leipzig.index
-    df_leipzig = df_leipzig.rename(index=leipzig_index_dict).sort_index()
+    df_leipzig = df_leipzig.rename(index=LEIPZIG_orig_subject_list).sort_index()
 
     # drop subjects with no resting data
     drop_leipzig = [i for i in df_leipzig.index if not i[0:2] == 'LZ']
