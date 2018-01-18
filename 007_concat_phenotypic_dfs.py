@@ -34,11 +34,12 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     #                     # pd.read_csv(os.path.join(phenotypic_dir, 'df_cln/clinical_hamburg.csv'), index_col=0)
     #                     ])
 
-    #########################
+    #############################################################################################################
     # Clinical Leipzig
 
-    # read data
     cln_orig_dir     = os.path.join(phenotypic_dir, 'df_cln/df_cln_original')
+
+    # read data
     leipzig_patients = pd.read_csv((os.path.join(cln_orig_dir, 'orig_leipzig_clinical_patients.csv')),index_col=0)
     leipzig_controls = pd.read_csv((os.path.join(cln_orig_dir, 'orig_leipzig_clinical_controls.csv')),index_col=0)
     df_leipzig_dcm   = pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_leipzig.csv'), index_col=0)
@@ -82,20 +83,31 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
         else:
             df_leipzig.loc[subject, 'diagnosis'] = 'Healthy_Control'
 
+    #############################################################################################################
+    # Clinical Hamburg
 
+    # load clinical and dicom header dfs
+    df_hamburg = pd.read_csv((os.path.join(cln_orig_dir, '/orig_hamburg_clinical.csv')), index_col=0)
+    df_hamburg_dcm = pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hamburg.csv'), index_col=0)
 
-    print df_leipzig
+    # drop useless columns  and rename hamburg columns
+    df_hamburg = df_hamburg.drop([c for c in df_hamburg.columns if c not in hamburg_columns_dict.keys()], axis=1)
+    df_hamburg = df_hamburg.rename(columns=hamburg_columns_dict)
 
+    # concat dicom header and clinical dfs
+    df_hamburg = pd.concat([df_hamburg, df_hamburg_dcm], axis=1)
+    df_hamburg = df_hamburg.sort_index(axis=1)
 
+    # Add diangosis info
+    for subject in df_hamburg.index:
+        if df_hamburg.loc[subject]['group_id'] == 'patients':
+            df_hamburg.loc[subject, 'diagnosis'] = 'GTS'
+        else:
+            df_hamburg.loc[subject, 'diagnosis'] = 'Healthy_control'
 
+    df_hamburg['Sex'] = df_hamburg['Sex'].map({'M': 'male', 'F': 'female'})
 
-
-
-
-
-
-
-
+    pd.concat([df_hamburg, df_leipzig])
 
 concat_dataframes(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
 
