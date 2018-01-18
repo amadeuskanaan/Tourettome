@@ -178,7 +178,48 @@ def construct_features_dataframe(derivatives_dir):
     else:
         sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0)
 
+
     ############################################################################################################
+    print '################################################################################################'
+    print ' ... Z-scoring dataframes'
+    # "At each surface point, we normalized feature data in each individual with ASD against the
+    # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
+
+    print '...... Breaking down Tourettome_resid into patients/controls dfs and plotting'
+    # break down sca_tourettome_resid to patient and control dataframes
+    sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
+    sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
+
+    # plot sca residuals
+    f = plt.figure(figsize=(17.5, 10))
+    sns.heatmap(sca_controls_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+    plt.xticks(size=6, rotation=90, weight='bold')
+    f.savefig(os.path.join(features_dir, 'sca_controls_resid.png'), dpi=300)
+
+    f = plt.figure(figsize=(17.5, 10))
+    sns.heatmap(sca_patients_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+    plt.xticks(size=6, rotation=90, weight='bold')
+    f.savefig(os.path.join(features_dir, 'sca_patients_resid.png'), dpi=300)
+
+    print '...... Z-scoring patients'
+    # get vertex means/sds across control subjects
+    n_vertices = sca_patients_resid.shape[0]
+    vertices_mu = [np.mean(sca_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
+    vertices_sd = [np.std(sca_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
+
+    # z-score patients
+    sca_patients_resid = pd.concat([(sca_patients_resid.loc[vertex] - vertices_mu[vertex]) / vertices_sd[vertex]
+                                    for vertex in range(n_vertices)], axis=1).T
+
+    # plot sca residuals
+    f = plt.figure(figsize=(35, 20))
+    sns.heatmap(sca_patients_resid, yticklabels=False, cmap=cmap_gradient, vmin=-3, vmax=3)
+    plt.xticks(size=6, rotation=90, weight='bold')
+    f.savefig(os.path.join(features_dir, 'sca_patients_resid_z.png'), dpi=300)
+
+
+
+
 
 
 
