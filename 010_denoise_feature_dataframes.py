@@ -25,7 +25,7 @@ patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006
                     'LZ001',
                     ]
 
-seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
+seeds = ['STR3_MOTOR'#, 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
          ]
 terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 
@@ -125,18 +125,21 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print 'sca_controls_shape', sca_controls_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
     print 'sca_patients_shape', sca_patients_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
 
-    ############################################################################################################
-    print ' ... z-scoring dataframes to control distribution'
-    # "At each surface point, we normalized feature data in each individual with ASD against the
-    # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
+    # ############################################################################################################
+    # print ' ... z-scoring dataframes to control distribution'
+    # # "At each surface point, we normalized feature data in each individual with ASD against the
+    # # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
+    #
+    # #  Patient z-scoring
+    # if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
+    #     vertex_mu = [np.mean(sca_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
+    #     vertex_sd = [np.std(sca_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
+    #     sca_patients_resid = pd.concat([(sca_patients_resid.loc[vertex] - vertex_mu[vertex]) / vertex_sd[vertex]
+    #                      for vertex in range(n_vertices)], axis=1).T
+
+    # Control z-scoring
     # Bo: "For controls, z-scoring per subject is done against the distrubution of all other controls "
 
-    # # First
-    # sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
-    # sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
-    #
-    # # Patient z-scoring
-    # if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
     #     # Calculate control mu/sd across each vertex and z-score patients
     #     n_vertices = sca_controls_resid.shape[1]
     #     vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
