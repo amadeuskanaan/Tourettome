@@ -154,9 +154,9 @@ def construct_features_dataframe(derivatives_dir):
             design_matrix[i] = preprocessing.scale(design_matrix[i])
         sns.heatmap(design_matrix, yticklabels=False, cmap=cmap_gradient, vmin=-2.5, vmax=2.5)
         plt.xticks(size=20, rotation=90, weight='bold')
-        f.savefig(os.path.join(features_dir, 'design_matrix_tourettome.png'), dpi = 300)
+        f.savefig(os.path.join(features_dir, 'design_matrix_tourettome.png'), dpi = 300, bbox_inches='tight')
 
-    design_matrix = os.path.join(features_dir, 'design_matrix_tourettome.csv', bbox_inches='tight')
+    design_matrix = os.path.join(features_dir, 'design_matrix_tourettome.csv')
 
     # ############################################################################################################
     # print '################################################################################################'
