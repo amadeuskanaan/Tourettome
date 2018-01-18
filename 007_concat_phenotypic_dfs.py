@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 from variables.subject_list import *
-from variables.subject_list_original import LEIPZIG_A_subject_dict, PARIS_subject_dict, HANNOVER_B_subject_dict, HANNOVER_A_subject_dict
+from variables.subject_list_original import LEIPZIG_A_subject_dict, PARIS_subject_dict, HANNOVER_B_subject_dictx , HANNOVER_A_subject_dict
 from variables.clinical_standardization import *
 from utilities.utils import *
 
@@ -122,25 +122,25 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     # concat dataframes, drop useless columns and rename columns to same formatting
     df_hannover_b = pd.concat([hannover_b_controls, hannover_b_patients])
-    # df_hannover_b = df_hannover_b.drop([c for c in df_hannover_b.columns if c not in hannover_b_columns_dict.keys()],axis=1)
-    # df_hannover_b = df_hannover_b.rename(columns=hannover_b_columns_dict)
+    df_hannover_b = df_hannover_b.drop([c for c in df_hannover_b.columns if c not in hannover_b_columns_dict.keys()],axis=1)
+    df_hannover_b = df_hannover_b.rename(columns=hannover_b_columns_dict)
 
-    # # Drop patients with two scans
-    # drop_hb_patients = [i for i in df_hannover_b.index if i[-1] == 'B']
-    # df_hannover_b = df_hannover_b.drop(drop_hb_patients)
-    #
-    # # rename index to anonamized subject_ids
-    # # df_hannover_b['Name'] = df_hannover_b.index
-    # df_hannover_b = df_hannover_b.rename(index=HANNOVER_B_subject_dict).sort_index()
-    #
-    # # concat dicom header and clinical dfs
-    # df_hannover_b = pd.concat([df_hannover_b, df_hannover_b_dcm], axis=1)
-    # df_hannover_b = df_hannover_b.sort_index(axis=1)
-    #
-    # # drop subjects without MRI data
-    # drop_hb = [i for i in df_hannover_b.index if not i[0:2] == 'HB']
-    # df_hannover_b = df_hannover_b.drop(drop_hb, axis=0)
-    #
+    # Drop patients with two scans
+    drop_hb_patients = [i for i in df_hannover_b.index if i[-1] == 'B']
+    df_hannover_b = df_hannover_b.drop(drop_hb_patients)
+
+    # rename index to anonamized subject_ids
+    # df_hannover_b['Name'] = df_hannover_b.index
+    df_hannover_b = df_hannover_b.rename(index=HANNOVER_B_subject_dictx).sort_index()
+
+    # concat dicom header and clinical dfs
+    df_hannover_b = pd.concat([df_hannover_b, df_hannover_b_dcm], axis=1)
+    df_hannover_b = df_hannover_b.sort_index(axis=1)
+
+    # drop subjects without MRI data
+    drop_hb = [i for i in df_hannover_b.index if not i[0:2] == 'HB']
+    df_hannover_b = df_hannover_b.drop(drop_hb, axis=0)
+
     df_hannover_b.to_csv(os.path.join(phenotypic_dir, 'df_hannover_b.csv'))
 
     # df_lh = pd.concat([df_hamburg, df_leipzig])
