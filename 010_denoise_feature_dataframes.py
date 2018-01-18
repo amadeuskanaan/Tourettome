@@ -158,28 +158,27 @@ def construct_features_dataframe(derivatives_dir):
 
     design_matrix = os.path.join(features_dir, 'design_matrix_tourettome.csv')
 
-    # ############################################################################################################
-    # print '################################################################################################'
-    # print '... SCA nuisance variable regression'
-    #
-    # if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_resid.csv')):
-    #     dmat = os.path.join(features_dir, 'design_matrix_tourettome.csv')
-    #     sca_tourettome_resid = regress_nuisance_covariates(sca_tourettome_raw, dmat)
-    #
-    #     # save residual data
-    #     sca_tourettome_resid = pd.concat(sca_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
-    #     sca_tourettome_resid.to_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'))
-    #
-    #     # plot sca residuals
-    #     f = plt.figure(figsize=(35, 20))
-    #     sns.heatmap(sca_tourettome_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
-    #     plt.xticks(size=6, rotation=90, weight='bold')
-    #     f.savefig(os.path.join(features_dir, 'sca_tourettome_resid.png'), dpi=300)
-    #
-    # else:
-    #     sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0)
+    ############################################################################################################
+    print '################################################################################################'
+    print '... SCA nuisance variable regression'
 
+    if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_resid.csv')):
+        sca_tourettome_resid = regress_nuisance_covariates(sca_tourettome_raw, design_matrix)
 
+        # save residual data
+        sca_tourettome_resid = pd.concat(sca_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
+        sca_tourettome_resid.to_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'))
+
+        # plot sca residuals
+        f = plt.figure(figsize=(35, 20))
+        sns.heatmap(sca_tourettome_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'sca_tourettome_resid.png'), dpi=300)
+
+    else:
+        sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0)
+
+    ############################################################################################################
 
 
 
