@@ -80,7 +80,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print ' Denoising  SCA features'
 
     print '... Extracting data'
-    if not os.path.isfile(os.path.join(features_dir, 'sca_patients_raw.csv')):
+    if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_raw.csv')):
         sca_controls_raw = []
         sca_patients_raw = []
 
