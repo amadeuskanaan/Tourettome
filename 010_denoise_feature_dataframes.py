@@ -107,7 +107,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print '... Regression nuisance variables'
 
     if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_resid.csv')):
-        sca_tourettome_resid = regress_covariates(sca_patients_raw, df_pheno, tourettome_subs,
+        sca_tourettome_resid = regress_covariates(sca_tourettome_raw, df_pheno, tourettome_subs,
                                                   'tourettome', features_dir, cmap_gradient)
     else:
         sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0).T
