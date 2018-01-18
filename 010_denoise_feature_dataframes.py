@@ -25,10 +25,6 @@ patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006
                     'LZ001',
                     ]
 
-hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008', 'HM009', 'HM010',
-           'HM011', 'HM012', 'HM014', 'HM015', 'HM017', 'HM019', 'HM020', 'HM022', 'HM023', 'HM024',
-           'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
-
 seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
          ]
 terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
@@ -53,9 +49,9 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     population = df_pheno.index
     # Extract groups
     patients = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'patients' if
-                       i not in patient_outliers and i not in hamburg])
+                       i not in patient_outliers])
     controls = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'controls' or
-                       df_pheno.loc[i]['Group'] == 'probands' if i not in control_outliers and i not in hamburg])
+                       df_pheno.loc[i]['Group'] == 'probands' if i not in control_outliers])
 
     # create group phenotypic dataframes
     df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
