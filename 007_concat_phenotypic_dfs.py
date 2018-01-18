@@ -15,25 +15,6 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     print '######################################'
     print '1. Concatenating dcm,cln,qc dataframes'
 
-    df_dcm =  pd.concat([pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_leipzig.csv'),index_col =0),
-                         pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_paris.csv'),index_col =0),
-                         pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hannover_a.csv'),index_col =0),
-                         pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hannover_b.csv'),index_col =0),
-                         pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hamburg.csv'),index_col =0),
-                         ])
-
-    df_qc = pd.concat([pd.read_csv(os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'),
-                         index_col = 0) for subject in df_dcm.index if os.path.isfile(
-                       os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'))])
-
-
-    # df_cln = pd.concat([pd.read_csv(os.path.join(phenotypic_dir, 'df_cln/clinical_leipzig.csv'), index_col=0),
-    #                     # pd.read_csv(os.path.join(phenotypic_dir, 'df_cln/clinical_paris.csv'), index_col=0)
-    #                     # pd.read_csv(os.path.join(phenotypic_dir, 'df_cln/clinical_hannover_a.csv'), index_col=0)
-    #                     # pd.read_csv(os.path.join(phenotypic_dir, 'df_cln/clinical_hannover_b.csv'), index_col=0)
-    #                     # pd.read_csv(os.path.join(phenotypic_dir, 'df_cln/clinical_hamburg.csv'), index_col=0)
-    #                     ])
-
     #############################################################################################################
     # Clinical Leipzig
 
@@ -143,16 +124,30 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     df_hannover_b.to_csv(os.path.join(phenotypic_dir, 'df_hannover_b.csv'))
 
-    # df_lh = pd.concat([df_hamburg, df_leipzig])
-    # df_lh.to_csv(os.path.join(phenotypic_dir, 'df_lh.csv'))
+
 
 
     #############################################################################################################
+    # Hannover_A
+    df_hannover_a_dcm = pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hannover_a.csv'), index_col=0)
 
-    # dfcln =  pd.concat([df_hamburg, df_leipzig, df_hannover_b])
-    # dfcln.to_csv(os.path.join(phenotypic_dir, 'df_cln_concat.csv'))
-    # dfcln.to_csv(os.path.join(phenotypic_dir, 'df_cln_concat.csv'))
+    #############################################################################################################
+    # Paris
+    df_paris_dcm = pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_Paris.csv'), index_col=0)
 
+
+
+    #############################################################################################################
+    # Concat clinical+dcm
+    df_cln_dcm = pd.concat([df_hamburg, df_leipzig, df_hannover_b, df_hannover_a_dcm, df_paris_dcm])
+
+    # concat  df_cln_dcm with df_qc
+    df_qc = pd.concat([pd.read_csv(os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'),
+                         index_col = 0) for subject in df_dcm.index if os.path.isfile(
+                       os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'))])
+
+    df_pheno = pd.concat([df_cln_dcm, df_qc])
+    df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypicX.csv'))
 
 
 concat_dataframes(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
