@@ -122,11 +122,6 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     drop_hb = [i for i in df_hannover_b.index if not i[0:2] == 'HB']
     df_hannover_b = df_hannover_b.drop(drop_hb, axis=0)
 
-    df_hannover_b.to_csv(os.path.join(phenotypic_dir, 'df_hannover_b.csv'))
-
-
-
-
     #############################################################################################################
     # Hannover_A
     df_hannover_a_dcm = pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hannover_a.csv'), index_col=0)
@@ -146,7 +141,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
                          index_col = 0) for subject in df_cln_dcm.index if os.path.isfile(
                        os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'))])
 
-    df_pheno = pd.concat([df_cln_dcm, df_qc])
+    df_pheno = pd.concat([df_cln_dcm, df_qc], axis = 1)
     df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
     print df_pheno
