@@ -40,7 +40,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     cln_orig_dir     = os.path.join(phenotypic_dir, 'df_cln/df_cln_original')
     leipzig_patients = pd.read_csv((os.path.join(cln_orig_dir, 'orig_leipzig_clinical_patients.csv')),index_col=0)
     leipzig_controls = pd.read_csv((os.path.join(cln_orig_dir, 'orig_leipzig_clinical_controls.csv')),index_col=0)
-    df_leipzig_dcm   = pd.read_csv(os.path.join(datadir, 'df_dcm/dicomhdr_leipzig.csv'), index_col=0)
+    df_leipzig_dcm   = pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_leipzig.csv'), index_col=0)
 
     # Add group identifier. just for sanity check
     leipzig_patients['group_id'] = 'patients'
@@ -97,6 +97,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
 
 concat_dataframes(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
+
 
 
 
