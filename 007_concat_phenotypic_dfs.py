@@ -107,7 +107,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     df_hamburg['Sex'] = df_hamburg['Sex'].map({'M': 'male', 'F': 'female'})
 
-    pd.concat([df_hamburg, df_leipzig])
+    print pd.concat([df_hamburg, df_leipzig])
 
 concat_dataframes(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
 
