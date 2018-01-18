@@ -34,8 +34,6 @@ seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
 terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 
 
-
-
 def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
 
     print '========================================================================================'
@@ -95,51 +93,65 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         print '...... raw dataframes contain these seeds -->', seeds
         sca_controls_raw = pd.concat(sca_controls_raw)
         sca_patients_raw = pd.concat(sca_patients_raw)
+        sca_all_raw = pd.concat([sca_controls_raw, sca_patients_raw])
 
         # Save raw dataframes
         sca_controls_raw.to_csv(os.path.join(features_dir, 'sca_controls_raw.csv'))
         sca_patients_raw.to_csv(os.path.join(features_dir, 'sca_patients_raw.csv'))
+        sca_tourettome_raw.to_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'))
 
         plot_heatmap(sca_controls_raw, '%s/sca_controls_raw'%features_dir, cmap =cmap_gradient)
         plot_heatmap(sca_patients_raw, '%s/sca_patients_raw'%features_dir, cmap =cmap_gradient)
+        plot_heatmap(sca_tourettome_raw, '%s/sca_tourettome_raw'%features_dir, cmap =cmap_gradient)
     else:
-        sca_controls_raw = pd.read_csv(os.path.join(features_dir, 'sca_controls_raw.csv'), index_col=0)
-        sca_patients_raw = pd.read_csv(os.path.join(features_dir, 'sca_patients_raw.csv'), index_col=0)
+        sca_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'), index_col=0)
 
-    ############################################################################################################
-    print '... Regression nuisance variables'
-    if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
-        sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir, cmap_gradient)
-        sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir, cmap_gradient)
-    else:
-        sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0).T
-        sca_patients_resid = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0).T
+#     ############################################################################################################
+#     print '... Regression nuisance variables'
+#
+# #####################
+# #####################
+# #####################
+# ####TO DO ---- regress as a concatenated dataframe
+#     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
+#         sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir, cmap_gradient)
+#         sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir, cmap_gradient)
+#     else:
+#         sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0).T
+#         sca_patients_resid = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0).T
+#
+#     print sca_controls_resid.shape
+#     print sca_patients_resid.shape
 
-    print sca_controls_resid.shape
-    print sca_patients_resid.shape
+#     ############################################################################################################
+#     print ' ... z-scoring dataframes to control distribution'
+#     # "At each surface point, we normalized feature data in each individual with ASD against the
+#     # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
+#
+#     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
+#
+#         # Calculate control mu/sd across each vertex and z-score patients
+#         n_vertices = sca_controls_resid.shape[1]
+#         vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
+#         vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
+#         sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
+#                                  vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
+#
+# ########
+# ########
+# ########## Z-score control dataframe in a loop.
+#         # for each subject, remove this subject, calculate. vertex mu_sd and zscore.
+#         sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
+#                                  vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
+#
+#         # Save data frames
+#         sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
+#         sca_patients_resid_z.to_csv('%s/sca_patients_resid_z.csv'%features_dir)
+#         plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
+#         plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
+#
+#
 
-    ############################################################################################################
-    print ' ... z-scoring dataframes to control distribution'
-    # "At each surface point, we normalized feature data in each individual with ASD against the
-    # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
-
-    if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
-
-        # Calculate control mu/sd across each vertex
-        n_vertices = sca_controls_resid.shape[1]
-        vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
-        vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
-
-        sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
-                                 vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
-        sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
-                                 vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
-
-        # Save data frames
-        sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
-        sca_patients_resid_z.to_csv('%s/sca_patients_resid_z.csv'%features_dir)
-        plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
-        plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
 
     # print '#####################################################'
     # print ' 2. Denoising cortical-thickness features'
