@@ -114,6 +114,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
 
     print sca_tourettome_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
 
+
 #     ############################################################################################################
 #     print ' ... z-scoring dataframes to control distribution'
 #     # "At each surface point, we normalized feature data in each individual with ASD against the
