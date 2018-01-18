@@ -133,7 +133,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     #############################################################################################################
     # Paris
-    df_paris_dcm = pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_Paris.csv'), index_col=0)
+    df_paris_dcm = pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_paris.csv'), index_col=0)
 
 
 
