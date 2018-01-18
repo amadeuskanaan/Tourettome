@@ -198,7 +198,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
 
     # Save design matrix data
     dmat = design_matrix
-    dmat['age'] = dmat['age']/100   # divide age by 100 for vis purposes
+    dmat['AGE'] = dmat['AGE']/100   # divide age by 100 for vis purposes
     f = plt.figure(figsize=(12, 8))
     sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
     plt.xticks(size=20, rotation=90, weight='bold')
