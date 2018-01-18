@@ -9,6 +9,7 @@ import statsmodels.formula.api as smf
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn import preprocessing
 sns.set_style('white')
 
 from variables.subject_list import *
