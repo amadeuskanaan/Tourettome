@@ -107,7 +107,8 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     df_hamburg['Sex'] = df_hamburg['Sex'].map({'M': 'male', 'F': 'female'})
 
-    df_hamburg.to_csv(os.path.join(phenotypic_dir, 'df_hamburg.csv'))
+    df_lh = pd.concat([df_hamburg, df_leipzig])
+    df_lh.to_csv(os.path.join(phenotypic_dir, 'df_lh.csv'))
 
     #############################################################################################################
     # Clinical Hannover_B
