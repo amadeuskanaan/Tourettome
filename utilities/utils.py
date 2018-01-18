@@ -215,7 +215,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     for vertex_id in range(df_features.shape[1]):
         mat = design_matrix
         mat['y'] = df_features[:, vertex_id]
-        formula = 'y ~ age + female + male + hannover_b + hamburg + leipzig + paris + cjv + fd'
+        formula = 'y ~ AGE + MALE + FEMALE + HANNOVER_A + HANNOVER_B + HAMBURG + LEIPZIG + PARIS + QC_CJV + QC_FD'
         model = smf.ols(formula=formula, data=pd.DataFrame(mat))
         df_features_resid.append(model.fit().resid)
 
