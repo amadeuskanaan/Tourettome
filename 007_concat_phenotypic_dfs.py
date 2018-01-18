@@ -87,7 +87,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     # Clinical Hamburg
 
     # load clinical and dicom header dfs
-    df_hamburg = pd.read_csv((os.path.join(cln_orig_dir, '/orig_hamburg_clinical.csv')), index_col=0)
+    df_hamburg = pd.read_csv((os.path.join(cln_orig_dir, 'orig_hamburg_clinical.csv')), index_col=0)
     df_hamburg_dcm = pd.read_csv(os.path.join(phenotypic_dir, 'df_dcm/dicomhdr_hamburg.csv'), index_col=0)
 
     # drop useless columns  and rename hamburg columns
