@@ -156,7 +156,7 @@ def construct_features_dataframe(derivatives_dir):
         plt.xticks(size=20, rotation=90, weight='bold')
         f.savefig(os.path.join(features_dir, 'design_matrix_tourettome.png'), dpi = 300, bbox_inches='tight')
 
-    design_matrix = os.path.join(features_dir, 'design_matrix_tourettome.csv')
+    design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col = 0)
 
     ############################################################################################################
     print '################################################################################################'
