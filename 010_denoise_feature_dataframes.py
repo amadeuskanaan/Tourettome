@@ -91,46 +91,6 @@ def construct_features_dataframe(derivatives_dir):
     print ''
 
     ############################################################################################################
-    print '... Regression nuisance variables'
-
-    # Create design matrix
-    design_matrix = pd.DataFrame(index=sca_tourettome_raw.columns)
-    design_matrix['Age'] = df_pheno['Age']
-
-    def make_dmat_category(old_col, new_col):
-        for subject in design_matrix.index:
-            if df_pheno.loc[subject][old_col] == new_col:
-                design_matrix.loc[subject, new_col] = 1
-            else:
-                design_matrix.loc[subject, new_col] = 0
-
-    make_dmat_category('Sex', 'male')
-    make_dmat_category('Sex', 'female')
-    make_dmat_category('Site', 'HANNOVER_A')
-    make_dmat_category('Site', 'HANNOVER_B')
-    make_dmat_category('Site', 'HAMBURG')
-    make_dmat_category('Site', 'Leipzig')
-    make_dmat_category('Site', 'PARIS')
-    design_matrix['CJV'] = df_pheno['qc_anat_cjv']
-    design_matrix['FD'] = df_pheno['qc_func_fd']
-    design_matrix['DVARS'] = df_pheno['qc_func_dvars']
-    design_matrix['TSNR'] = df_pheno['qc_func_tsnr']
-    # design_matrix['SNR'] = df_pheno['qc_func_snr']
-    # design_matrix['FBER'] = df_pheno['qc_func_fber']
-
-
-    # Save design matrix data
-    design_matrix.to_csv('%s/design_matrix_tourettome.csv' % (features_dir))
-
-    # Plot design matrix
-    f = plt.figure(figsize=(12, 8))
-    for i in ['Age', 'FD', 'DVARS', 'TSNR']:
-        design_matrix[i] = preprocessing.scale(design_matrix[i])
-    sns.heatmap(design_matrix, yticklabels=False, cmap=cmap_gradient, vmin=-2.5, vmax=2.5)
-    plt.xticks(size=20, rotation=90, weight='bold')
-
-    ############################################################################################################
-
     print '################################################################################################'
     print '... Extracting SCA data'
 
