@@ -149,5 +149,6 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     df_pheno = pd.concat([df_cln_dcm, df_qc])
     df_pheno.to_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'))
 
+    print df_pheno
 
 concat_dataframes(tourettome_subjects, tourettome_workspace, tourettome_phenotypic)
