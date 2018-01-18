@@ -93,7 +93,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         print '...... raw dataframes contain these seeds -->', seeds
         sca_controls_raw = pd.concat(sca_controls_raw)
         sca_patients_raw = pd.concat(sca_patients_raw)
-        sca_all_raw = pd.concat([sca_controls_raw, sca_patients_raw])
+        sca_tourettome_raw = pd.concat([sca_controls_raw, sca_patients_raw])
 
         # Save raw dataframes
         sca_controls_raw.to_csv(os.path.join(features_dir, 'sca_controls_raw.csv'))
