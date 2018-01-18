@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 from variables.subject_list import *
-from variables.subject_list_original import *
+from variables.subject_list_original import LEIPZIG_A_subject_dict, PARIS_subject_dict, HANNOVER_A_subject_dict
 from variables.clinical_standardization import *
 from utilities.utils import *
 
