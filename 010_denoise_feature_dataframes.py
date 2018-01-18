@@ -189,6 +189,8 @@ def construct_features_dataframe(derivatives_dir):
     # break down sca_tourettome_resid to patient and control dataframes
     sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
     sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
+    sca_patients_resid.to_csv(os.path.join(features_dir,'sca_patients_resid.csv'))
+    sca_controls_resid.to_csv(os.path.join(features_dir,'sca_controls_resid.csv'))
 
     # plot sca residuals
     f = plt.figure(figsize=(17.5, 10))
