@@ -143,7 +143,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     # concat  df_cln_dcm with df_qc
     df_qc = pd.concat([pd.read_csv(os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'),
-                         index_col = 0) for subject in df_dcm.index if os.path.isfile(
+                         index_col = 0) for subject in df_cln_dcm.index if os.path.isfile(
                        os.path.join(workspace_dir, subject, 'QUALITY_CONTROL/quality_paramters.csv'))])
 
     df_pheno = pd.concat([df_cln_dcm, df_qc])
