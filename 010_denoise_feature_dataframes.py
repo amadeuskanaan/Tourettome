@@ -111,15 +111,15 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
                                                   'tourettome', features_dir, cmap_gradient)
 
         # break down residual matrix into patients and controls
-        sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
-        sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
+        sca_controls_resid = sca_tourettome_resid.drop(patients, axis=0)
+        sca_patients_resid = sca_tourettome_resid.drop(controls, axis=0)
         sca_controls_resid.to_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'))
         sca_patients_resid.to_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'))
 
     else:
         sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0)
-        sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
-        sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
+        sca_controls_resid = sca_tourettome_resid.drop(patients, axis=0)
+        sca_patients_resid = sca_tourettome_resid.drop(controls, axis=0)
 
     print 'sca_tourettome_shape', sca_tourettome_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
     print 'sca_controls_shape', sca_controls_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
