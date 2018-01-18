@@ -28,6 +28,23 @@ seeds = ['STR3_MOTOR'#, 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
 terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 
 
+def regress_nuisance_covariates(df_features, df_design):
+    # Regress features
+    df_features = np.nan_to_num(df_features).T
+    df_features_resid = []
+
+    print '...... Tourettome dmatrix  shape=', df_design.shape
+    print '...... Tourettome features shape=', df_features.shape
+
+    formula = 'y ~ Age + male + female + HANNOVER_A + HANNOVER_B + HAMBURG + Leipzig + PARIS + CJV + FD + DVARS + TSNR'
+    for vertex_id in range(df_features.shape[1]):
+        mat = df_design
+        mat['y'] = df_features[:, vertex_id]
+        model = smf.ols(formula=formula, data=pd.DataFrame(mat))
+        df_features_resid.append(model.fit().resid)
+    return df_features_resid
+
+
 def construct_features_dataframe(derivatives_dir):
 
     print '========================================================================================'
@@ -41,7 +58,7 @@ def construct_features_dataframe(derivatives_dir):
     features_dir = mkdir_path(os.path.join(derivatives_dir, 'feature_matrices'))
 
     ############################################################################################################
-    print '#####################################################'
+    print '#####################################################################################################'
     print ' Inspecting sample size'
 
     df_pheno = pd.read_csv(os.path.join(tourettome_phenotypic, 'tourettome_phenotypic.csv'), index_col=0)
@@ -74,6 +91,46 @@ def construct_features_dataframe(derivatives_dir):
     print ''
 
     ############################################################################################################
+    print '... Regression nuisance variables'
+
+    # Create design matrix
+    design_matrix = pd.DataFrame(index=sca_tourettome_raw.columns)
+    design_matrix['Age'] = df_pheno['Age']
+
+    def make_dmat_category(old_col, new_col):
+        for subject in design_matrix.index:
+            if df_pheno.loc[subject][old_col] == new_col:
+                design_matrix.loc[subject, new_col] = 1
+            else:
+                design_matrix.loc[subject, new_col] = 0
+
+    make_dmat_category('Sex', 'male')
+    make_dmat_category('Sex', 'female')
+    make_dmat_category('Site', 'HANNOVER_A')
+    make_dmat_category('Site', 'HANNOVER_B')
+    make_dmat_category('Site', 'HAMBURG')
+    make_dmat_category('Site', 'Leipzig')
+    make_dmat_category('Site', 'PARIS')
+    design_matrix['CJV'] = df_pheno['qc_anat_cjv']
+    design_matrix['FD'] = df_pheno['qc_func_fd']
+    design_matrix['DVARS'] = df_pheno['qc_func_dvars']
+    design_matrix['TSNR'] = df_pheno['qc_func_tsnr']
+    # design_matrix['SNR'] = df_pheno['qc_func_snr']
+    # design_matrix['FBER'] = df_pheno['qc_func_fber']
+
+
+    # Save design matrix data
+    design_matrix.to_csv('%s/design_matrix_tourettome.csv' % (features_dir))
+
+    # Plot design matrix
+    f = plt.figure(figsize=(12, 8))
+    for i in ['Age', 'FD', 'DVARS', 'TSNR']:
+        design_matrix[i] = preprocessing.scale(design_matrix[i])
+    sns.heatmap(design_matrix, yticklabels=False, cmap=cmap_gradient, vmin=-2.5, vmax=2.5)
+    plt.xticks(size=20, rotation=90, weight='bold')
+
+    ############################################################################################################
+
     print '################################################################################################'
     print '... Extracting SCA data'
 
@@ -95,6 +152,74 @@ def construct_features_dataframe(derivatives_dir):
 
     else:
         sca_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'), index_col=0)
+
+    ############################################################################################################
+    print '################################################################################################'
+    print '... Build Design Matrix'
+
+    if not os.path.isfile(os.path.join(features_dir, 'design_matrix_tourettome.csv')):
+        # Create design matrix
+        design_matrix = pd.DataFrame(index=sca_tourettome_raw.columns)
+        design_matrix['Age'] = df_pheno['Age']
+
+        def make_dmat_category(old_col, new_col):
+            for subject in design_matrix.index:
+                if df_pheno.loc[subject][old_col] == new_col:
+                    design_matrix.loc[subject, new_col] = 1
+                else:
+                    design_matrix.loc[subject, new_col] = 0
+
+        make_dmat_category('Sex', 'male')
+        make_dmat_category('Sex', 'female')
+        make_dmat_category('Site', 'HANNOVER_A')
+        make_dmat_category('Site', 'HANNOVER_B')
+        make_dmat_category('Site', 'HAMBURG')
+        make_dmat_category('Site', 'Leipzig')
+        make_dmat_category('Site', 'PARIS')
+        design_matrix['CJV'] = df_pheno['qc_anat_cjv']
+        design_matrix['FD'] = df_pheno['qc_func_fd']
+        design_matrix['DVARS'] = df_pheno['qc_func_dvars']
+        design_matrix['TSNR'] = df_pheno['qc_func_tsnr']
+        # design_matrix['SNR'] = df_pheno['qc_func_snr']
+        # design_matrix['FBER'] = df_pheno['qc_func_fber']
+
+
+        # Save design matrix data
+        design_matrix.to_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'))
+
+        # Plot design matrix
+        f = plt.figure(figsize=(12, 8))
+        for i in ['Age', 'FD', 'DVARS', 'TSNR']:
+            design_matrix[i] = preprocessing.scale(design_matrix[i])
+        sns.heatmap(design_matrix, yticklabels=False, cmap=cmap_gradient, vmin=-2.5, vmax=2.5)
+        plt.xticks(size=20, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'design_matrix_tourettome.png'), dpi = 300)
+
+    design_matrix = os.path.join(features_dir, 'design_matrix_tourettome.csv')
+
+    # ############################################################################################################
+    # print '################################################################################################'
+    # print '... SCA nuisance variable regression'
+    #
+    # if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_resid.csv')):
+    #     dmat = os.path.join(features_dir, 'design_matrix_tourettome.csv')
+    #     sca_tourettome_resid = regress_nuisance_covariates(sca_tourettome_raw, dmat)
+    #
+    #     # save residual data
+    #     sca_tourettome_resid = pd.concat(sca_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
+    #     sca_tourettome_resid.to_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'))
+    #
+    #     # plot sca residuals
+    #     f = plt.figure(figsize=(35, 20))
+    #     sns.heatmap(sca_tourettome_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+    #     plt.xticks(size=6, rotation=90, weight='bold')
+    #     f.savefig(os.path.join(features_dir, 'sca_tourettome_resid.png'), dpi=300)
+    #
+    # else:
+    #     sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0)
+
+
+
 
 
 construct_features_dataframe(tourettome_derivatives)
