@@ -167,7 +167,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     # Build design Matrix
     design_matrix = dmatrix("0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
     design_matrix.sort_index(axis=1, inplace=True)
-    design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b', 'leipzig', 'paris', 'cjv', 'fd']
+    design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b','hamburg', 'leipzig', 'paris', 'cjv', 'fd']
     design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
 
     # Save design matrix data
@@ -189,7 +189,7 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     for vertex_id in range(df_features.shape[1]):
         mat = design_matrix
         mat['y'] = df_features[:, vertex_id]
-        formula = 'y ~ age + female + male + hannover_b + leipzig + paris + cjv + fd'
+        formula = 'y ~ age + female + male + hannover_b + hamburg + leipzig + paris + cjv + fd'
         model = smf.ols(formula=formula, data=pd.DataFrame(mat))
         df_features_resid.append(model.fit().resid)
 

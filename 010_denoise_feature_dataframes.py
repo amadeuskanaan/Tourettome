@@ -112,7 +112,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     else:
         sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0).T
 
-    print sca_tourettome_resid.shape
+    print sca_tourettome_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
 
 #     ############################################################################################################
 #     print ' ... z-scoring dataframes to control distribution'
