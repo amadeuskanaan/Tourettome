@@ -52,6 +52,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
                        i not in patient_outliers])
     controls = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'controls' or
                        df_pheno.loc[i]['Group'] == 'probands' if i not in control_outliers])
+    tourettome_subs =  controls + patients
 
     # create group phenotypic dataframes
     df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
@@ -102,22 +103,16 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     else:
         sca_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'), index_col=0)
 
-#     ############################################################################################################
-#     print '... Regression nuisance variables'
-#
-# #####################
-# #####################
-# #####################
-# ####TO DO ---- regress as a concatenated dataframe
-#     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
-#         sca_controls_resid = regress_covariates(sca_controls_raw, df_pheno, controls, 'controls', features_dir, cmap_gradient)
-#         sca_patients_resid = regress_covariates(sca_patients_raw, df_pheno, patients, 'patients', features_dir, cmap_gradient)
-#     else:
-#         sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0).T
-#         sca_patients_resid = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0).T
-#
-#     print sca_controls_resid.shape
-#     print sca_patients_resid.shape
+    ############################################################################################################
+    print '... Regression nuisance variables'
+
+    if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_resid.csv')):
+        sca_tourettome_resid = regress_covariates(sca_patients_raw, df_pheno, tourettome_subs,
+                                                  'tourettome', features_dir, cmap_gradient)
+    else:
+        sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0).T
+
+    print sca_tourettome_resid.shape
 
 #     ############################################################################################################
 #     print ' ... z-scoring dataframes to control distribution'
