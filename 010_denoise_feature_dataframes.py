@@ -117,7 +117,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
         sca_patients_resid.to_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'))
 
     else:
-        sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0).T
+        sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0)
         sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
         sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
 
