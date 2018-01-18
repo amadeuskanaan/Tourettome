@@ -164,16 +164,42 @@ def regress_covariates(df_features, df_pheno, population, popname, features_dir,
     from patsy import dmatrix
     import statsmodels.formula.api as smf
 
-    # Build design Matrix
-    design_matrix = dmatrix("0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
-    design_matrix.sort_index(axis=1, inplace=True)
-    design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b','hamburg', 'leipzig', 'paris', 'cjv', 'fd' ]
+
+    # There is a bug in patsy(dmatrix).... do it manually.
+    # # Build design Matrix
+    # design_matrix = dmatrix("0 + Sex + Site + Age + qc_func_fd + qc_anat_cjv", df_pheno, return_type="dataframe")
+    # design_matrix.sort_index(axis=1, inplace=True)
+    # design_matrix.columns = ['age', 'female', 'male', 'hannover_a', 'hannover_b','hamburg', 'leipzig', 'paris', 'cjv', 'fd' ]
+    # design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
+
+    design_matrix = pd.DataFrame(index=df_pheno.index)
+
+    # populate design matrix with vars
+    def make_dmat_category(old_col, new_col):
+        for i in design_matrix.index:
+            if df_pheno.loc[i][old_col] == new_col:
+                design_matrix.loc[i, new_col] = 1
+            else:
+                design_matrix.loc[i, new_col] = 0
+
+    design_matrix['Age'] = df_pheno['Age']
+    make_dmat_category('Sex', 'male')
+    make_dmat_category('Sex', 'female')
+    make_dmat_category('Site', 'HANNOVER_A')
+    make_dmat_category('Site', 'HANNOVER_B')
+    make_dmat_category('Site', 'HAMBURG')
+    make_dmat_category('Site', 'Leipzig')
+    make_dmat_category('Site', 'PARIS')
+    design_matrix['qc_func_fd'] = df_pheno['qc_func_fd']
+    design_matrix['qc_anat_cjv'] = df_pheno['qc_anat_cjv']
+
+    design_matrix.columns = ['AGE', 'MALE', 'FEMALE', 'HANNOVER_A', 'HANNOVER_B', 'HAMBURG', 'LEIPZIG', 'PARIS', 'QC_CJV', 'QC_FD']
     design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in population], axis = 0)
 
     # Save design matrix data
     dmat = design_matrix
-    dmat['age'] = dmat['age']/100
-    f= plt.figure(figsize=(12, 8))
+    dmat['age'] = dmat['age']/100   # divide age by 100 for vis purposes
+    f = plt.figure(figsize=(12, 8))
     sns.heatmap(dmat, yticklabels=False, cmap=cmap, vmin=0, vmax=2)
     plt.xticks(size=20, rotation=90, weight='bold')
     plt.savefig('%s/design_matrix_%s.png'%(features_dir, popname), bbox_inches='tight')
