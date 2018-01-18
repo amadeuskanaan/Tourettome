@@ -144,7 +144,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
     df_hannover_b.head()
 
     dfcln =  pd.concat([df_hamburg, df_leipzig, df_hannover_b])
-    dfcln.to_csv(os.pathjoin(phenotypic_dir, 'df_cln_concat.csv'))
+    dfcln.to_csv(os.path.join(phenotypic_dir, 'df_cln_concat.csv'))
 
 
 
