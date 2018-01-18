@@ -211,17 +211,26 @@ def construct_features_dataframe(derivatives_dir):
         # z-score patients
         sca_patients_resid_z = pd.concat([(sca_patients_resid.loc[vertex] - vertices_mu[vertex]) / vertices_sd[vertex]
                                         for vertex in range(n_vertices)], axis=1).T
-
         sca_patients_resid_z.to_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'))
 
         # plot sca residuals
         f = plt.figure(figsize=(35, 20))
-        sns.heatmap(sca_patients_resid, yticklabels=False, cmap=cmap_gradient, vmin=-3, vmax=3)
+        sns.heatmap(sca_patients_resid_z, yticklabels=False, cmap=cmap_gradient, vmin=-3, vmax=3)
         plt.xticks(size=6, rotation=90, weight='bold')
         f.savefig(os.path.join(features_dir, 'sca_patients_resid_z.png'), dpi=300)
 
     print '...... Z-scoring controls'
+    if not os.path.isfile(os.path.join(features_dir, 'sca_controls_resid_z.csv')):
+        # z-score patients
+        sca_controls_resid_z = pd.concat([(sca_controls_resid_z.loc[vertex] - vertices_mu[vertex]) / vertices_sd[vertex]
+                                          for vertex in range(n_vertices)], axis=1).T
+        sca_controls_resid_z.to_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'))
 
+        # plot sca residuals
+        f = plt.figure(figsize=(35, 20))
+        sns.heatmap(sca_controls_resid_z, yticklabels=False, cmap=cmap_gradient, vmin=-3, vmax=3)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'sca_patients_resid_z.png'), dpi=300)
 
 
 
