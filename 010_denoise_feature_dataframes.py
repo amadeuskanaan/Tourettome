@@ -1,36 +1,34 @@
-__author__ = 'kanaan 10.01.2018'
-
+__author__ = 'kanaan 10.01.2018... re-written 18.10.2018'
 
 import os
 import numpy as np
 import pandas as pd
 import nibabel as nb
 import matplotlib
+import statsmodels.formula.api as smf
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set_style('white')
 
 from variables.subject_list import *
-from utilities.utils import mkdir_path, return_sca_data, return_ct_data, regress_covariates
-from plotting.plot_mats import plot_heatmap
+from utilities.utils import mkdir_path
+from utilities.check_data import return_ct_data, return_sca_data
 from plotting.cmaps import cmap_gradient
 
-control_outliers = ['HM015', 'LZ061', 'HB028',
-                    'LZ052' # no data
-                    ]
+
+control_outliers = ['HM015', 'LZ061', 'HB028', 'LZ052' ]
 patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
                     'LZ018', 'LZ020', 'LZ022', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ031', 'LZ035', 'LZ038',
                     'PA009', 'PA012', 'PA025', 'PA045', 'PA052', 'PA055', 'PA058', 'PA077', 'PA080', 'PA094',
-                    'LZ001',
-                    ]
+                    'LZ001',]
 
 seeds = ['STR3_MOTOR'#, 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
-         ]
+        ]
 terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 
 
-def construct_features_dataframe(control_outliers, patient_outliers, workspace_dir, derivatives_dir, freesufer_dir):
+def construct_features_dataframe(derivatives_dir):
 
     print '========================================================================================'
     print ''
@@ -42,17 +40,19 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     #I/O
     features_dir = mkdir_path(os.path.join(derivatives_dir, 'feature_matrices'))
 
+    ############################################################################################################
     print '#####################################################'
     print ' Inspecting sample size'
 
     df_pheno = pd.read_csv(os.path.join(tourettome_phenotypic, 'tourettome_phenotypic.csv'), index_col=0)
     population = df_pheno.index
+
     # Extract groups
     patients = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'patients' if
                        i not in patient_outliers])
     controls = sorted([i for i in population if df_pheno.loc[i]['Group'] == 'controls' or
                        df_pheno.loc[i]['Group'] == 'probands' if i not in control_outliers])
-    tourettome_subs =  controls + patients
+    tourettome_subjects = sorted(controls + patients)
 
     # create group phenotypic dataframes
     df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
@@ -64,7 +64,7 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     # Included subjects
     print 'n_controls=', len(controls)
     print 'n_patients=', len(patients)
-    print 'n_total =', len(controls) + len(patients)
+    print 'n_total =', len(tourettome_subjects)
     print ''
 
     # Outliers
@@ -73,108 +73,28 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     print 'n_total_outliers =', len(control_outliers) + len(patient_outliers)
     print ''
 
+    ############################################################################################################
     print '################################################################################################'
-    print ' Denoising  SCA features'
+    print '... Extracting SCA data'
 
-    print '... Extracting data'
     if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_raw.csv')):
-        sca_controls_raw = []
-        sca_patients_raw = []
-
+        sca_tourettome_raw = []
         for seed_name in seeds:
-            print '......  checking control data for ', seed_name
-            sca_controls_raw.append(return_sca_data(seed_name, controls, derivatives_dir))
-            print '......  checking patient data for ', seed_name
-            sca_patients_raw.append(return_sca_data(seed_name, patients, derivatives_dir))
-
-        print '...... raw dataframes contain these seeds -->', seeds
-        sca_controls_raw = pd.concat(sca_controls_raw)
-        sca_patients_raw = pd.concat(sca_patients_raw)
-        sca_tourettome_raw = pd.concat([sca_controls_raw, sca_patients_raw], axis =1)
+            print 'checking sca data for tourettome population (After QC)'
+            sca_tourettome_raw.append(return_sca_data(seed_name, tourettome_subjects, derivatives_dir))
 
         # Save raw dataframes
-        sca_controls_raw.to_csv(os.path.join(features_dir, 'sca_controls_raw.csv'))
-        sca_patients_raw.to_csv(os.path.join(features_dir, 'sca_patients_raw.csv'))
+        sca_tourettome_raw = pd.concat(sca_tourettome_raw)
         sca_tourettome_raw.to_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'))
 
-        plot_heatmap(sca_controls_raw, '%s/sca_controls_raw'%features_dir, cmap =cmap_gradient)
-        plot_heatmap(sca_patients_raw, '%s/sca_patients_raw'%features_dir, cmap =cmap_gradient)
-        plot_heatmap(sca_tourettome_raw, '%s/sca_tourettome_raw'%features_dir, cmap =cmap_gradient)
+        # Save raw dataframe plot
+        f = plt.figure(figsize=(35, 20))
+        sns.heatmap(sca_tourettome_raw, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'sca_tourettome_raw.png'), dpi=300)
+
     else:
         sca_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'), index_col=0)
 
-    ############################################################################################################
-    print '... Regression nuisance variables'
 
-    if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_resid.csv')):
-        sca_tourettome_resid = regress_covariates(sca_tourettome_raw, df_pheno, tourettome_subs,
-                                                  'tourettome', features_dir, cmap_gradient)
-
-        # break down residual matrix into patients and controls
-        sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
-        sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
-        sca_controls_resid.to_csv(os.path.join(features_dir, 'sca_controls_resid.csv'))
-        sca_patients_resid.to_csv(os.path.join(features_dir, 'sca_patients_resid.csv'))
-
-    else:
-        sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0)
-        sca_controls_resid   = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
-        sca_patients_resid   = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0)
-
-    print 'sca_tourettome_shape', sca_tourettome_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
-    print 'sca_controls_shape', sca_controls_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
-    print 'sca_patients_shape', sca_patients_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
-
-    # ############################################################################################################
-    # print ' ... z-scoring dataframes to control distribution'
-    # # "At each surface point, we normalized feature data in each individual with ASD against the
-    # # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
-    #
-    # #  Patient z-scoring
-    # if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
-    #     vertex_mu = [np.mean(sca_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
-    #     vertex_sd = [np.std(sca_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
-    #     sca_patients_resid = pd.concat([(sca_patients_resid.loc[vertex] - vertex_mu[vertex]) / vertex_sd[vertex]
-    #                      for vertex in range(n_vertices)], axis=1).T
-
-    # Control z-scoring
-    # Bo: "For controls, z-scoring per subject is done against the distrubution of all other controls "
-
-    #     # Calculate control mu/sd across each vertex and z-score patients
-    #     n_vertices = sca_controls_resid.shape[1]
-    #     vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
-    #     vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
-    #     sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
-    #                              vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
-    #
-    #     print len(vertex_mu)
-
-
-# ########
-# ########
-# ########## Z-score control dataframe in a loop.
-#         # for each subject, remove this subject, calculate. vertex mu_sd and zscore.
-#         sca_controls_resid_z = pd.concat([(sca_controls_resid.T.loc[vertex] - vertex_mu[vertex]) /
-#                                  vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
-#
-#         # Save data frames
-#         sca_controls_resid_z.to_csv('%s/sca_controls_resid_z.csv'%features_dir)
-#         sca_patients_resid_z.to_csv('%s/sca_patients_resid_z.csv'%features_dir)
-#         plot_heatmap(sca_controls_resid_z, '%s/sca_controls_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
-#         plot_heatmap(sca_patients_resid_z, '%s/sca_patients_resid_z' % features_dir, vmin =-3, vmax=3, cmap = cmap_gradient)
-#
-#
-
-
-    # print '#####################################################'
-    # print ' 2. Denoising cortical-thickness features'
-
-    # ct_controls = return_ct_data(controls, derivatives_dir)
-    # ct_patients = return_ct_data(patients, derivatives_dir)
-
-
-
-construct_features_dataframe(control_outliers, patient_outliers, tourettome_workspace,
-                             tourettome_derivatives, tourettome_freesurfer )
-
-
+construct_features_dataframe(tourettome_derivatives)
