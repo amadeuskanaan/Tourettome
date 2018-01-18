@@ -56,7 +56,7 @@ def concat_dataframes(population, workspace_dir, phenotypic_dir):
 
     # rename index to anonamized subject_ids
     # df_leipzig['Name'] = df_leipzig.index
-    df_leipzig = df_leipzig.rename(index=LEIPZIG_orig_subject_list).sort_index()
+    df_leipzig = df_leipzig.rename(index=LEIPZIG_A_subject_dict).sort_index()
 
     # drop subjects with no resting data
     drop_leipzig = [i for i in df_leipzig.index if not i[0:2] == 'LZ']
