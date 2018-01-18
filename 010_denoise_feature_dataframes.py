@@ -109,26 +109,44 @@ def construct_features_dataframe(control_outliers, patient_outliers, workspace_d
     if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_resid.csv')):
         sca_tourettome_resid = regress_covariates(sca_tourettome_raw, df_pheno, tourettome_subs,
                                                   'tourettome', features_dir, cmap_gradient)
+
+        # break down residual matrix into patients and controls
+        sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
+        sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
+        sca_controls_resid.to_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'))
+        sca_patients_resid.to_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'))
+
     else:
         sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0).T
+        sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
+        sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
 
-    print sca_tourettome_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
+    print 'sca_tourettome_shape', sca_tourettome_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
+    print 'sca_controls_shape', sca_controls_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
+    print 'sca_patients_shape', sca_patients_resid.shape  # 5 ROIS x 10242 vertices x 2 hemis = 102420
+
+    ############################################################################################################
+    print ' ... z-scoring dataframes to control distribution'
+    # "At each surface point, we normalized feature data in each individual with ASD against the
+    # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
+    # Bo: "For controls, z-scoring per subject is done against the distrubution of all other controls "
+
+    # # First
+    # sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
+    # sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
+    #
+    # # Patient z-scoring
+    # if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
+    #     # Calculate control mu/sd across each vertex and z-score patients
+    #     n_vertices = sca_controls_resid.shape[1]
+    #     vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
+    #     vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
+    #     sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
+    #                              vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
+    #
+    #     print len(vertex_mu)
 
 
-#     ############################################################################################################
-#     print ' ... z-scoring dataframes to control distribution'
-#     # "At each surface point, we normalized feature data in each individual with ASD against the
-#     # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
-#
-#     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
-#
-#         # Calculate control mu/sd across each vertex and z-score patients
-#         n_vertices = sca_controls_resid.shape[1]
-#         vertex_mu = [np.mean(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
-#         vertex_sd = [np.std(sca_controls_resid.T.loc[vertex]) for vertex in range(n_vertices)]
-#         sca_patients_resid_z = pd.concat([(sca_patients_resid.T.loc[vertex] - vertex_mu[vertex]) /
-#                                  vertex_sd[vertex] for vertex in range(n_vertices)],axis=1).T
-#
 # ########
 # ########
 # ########## Z-score control dataframe in a loop.
