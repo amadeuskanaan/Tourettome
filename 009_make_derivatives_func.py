@@ -23,12 +23,25 @@ fsaverage5 = return_fsaverage_data(freesurfer_dir, 'fsaverage5')
 ### 2- ECM  - Eigenvector Centrality Mapping
 
 
-def make_group_masks(population, workspace_dir, derivatives_dir):
+control_outliers = ['HM015', 'HM028', 'LZ057', 'LZ061', 'PA059', 'LZ052' ]
+patient_outliers = ['HA009', 'HA016', 'HB005', 'HB011', 'HB015', 'HM015', 'HM023', 'HM026', 'HM028', 'LZ004',
+                    'LZ006', 'LZ007', 'LZ013', 'LZ017', 'LZ018', 'LZ020', 'LZ021', 'LZ025', 'LZ027', 'LZ028',
+                    'LZ029', 'LZ030', 'LZ031', 'LZ035', 'LZ038', 'PA001', 'PA006', 'PA009', 'PA011', 'PA012',
+                    'PA013', 'PA019', 'PA025', 'PA039', 'PA045', 'PA052', 'PA055', 'PA058', 'PA061', 'PA066',
+                    'PA077', 'PA078', 'PA080', 'PA081', 'PA094', 'PA095', 'LZ001']
+
+FD_outliers = control_outliers + patient_outliers + ['HB014', 'HB015']
+
+def make_group_masks(population, workspace_dir, derivatives_dir, outliers):
 
     print '##############################'
     print 'Creating Group GM Mask '
-    derivatives_dir = mkdir_path(os.path.join(derivatives_dir, 'MASKS'))
+    derivatives_dir = mkdir_path(os.path.join(derivatives_dir, 'func_centrality'))
     gm_group_mask = os.path.join(derivatives_dir, 'GROUP_GM_FUNC_3mm.nii')
+
+
+    # drop outlier subjects
+    population = [i for i in population if i not in outliers]
 
     if not os.path.isfile(gm_group_mask):
         gm_masks_list = ' '.join(['%s -add' %(os.path.join(workspace_dir, subject, 'REGISTRATION/REST_GM_MNI3mm.nii.gz'))
@@ -37,7 +50,6 @@ def make_group_masks(population, workspace_dir, derivatives_dir):
         os.system('fslmaths %s -thrp 25 -bin %s' %(gm_masks_list, gm_group_mask))
         os.system('gunzip %s'%gm_group_mask)
 
-# make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives)
 
 def make_functional_derivatives(population, workspace_dir, freesurfer_dir, derivatives_dir):
 
@@ -123,7 +135,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
 
 
-
+make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
 make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
