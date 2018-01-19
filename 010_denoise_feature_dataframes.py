@@ -18,11 +18,20 @@ from utilities.check_data import return_ct_data, return_sca_data
 from plotting.cmaps import cmap_gradient
 
 
+#based on fd_mu > 0.19
 control_outliers = ['HM015', 'LZ061', 'HB028', 'LZ052' ]
 patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
                     'LZ018', 'LZ020', 'LZ022', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ031', 'LZ035', 'LZ038',
                     'PA009', 'PA012', 'PA025', 'PA045', 'PA052', 'PA055', 'PA058', 'PA077', 'PA080', 'PA094',
                     'LZ001',]
+
+#based on fd_max > 1 and fd_mu> 0.2
+control_outliers = ['HM015', 'HM028', 'LZ057', 'LZ061', 'PA059']
+patient_outliers = ['HA009', 'HA016', 'HB005', 'HB011', 'HB015', 'HM015', 'HM023', 'HM026', 'HM028', 'LZ004',
+                    'LZ006', 'LZ007', 'LZ013', 'LZ017', 'LZ018', 'LZ020', 'LZ021', 'LZ025', 'LZ027', 'LZ028',
+                    'LZ029', 'LZ030', 'LZ031', 'LZ035', 'LZ038', 'PA001', 'PA006', 'PA009', 'PA011', 'PA012',
+                    'PA013', 'PA019', 'PA025', 'PA039', 'PA045', 'PA052', 'PA055', 'PA058', 'PA061', 'PA066',
+                    'PA077', 'PA078', 'PA080', 'PA081', 'PA094', 'PA095']
 
 seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
         ]
@@ -351,11 +360,6 @@ def construct_features_dataframe(derivatives_dir):
         sns.heatmap(ct_controls_resid_z, yticklabels=False, cmap=cmap_gradient, vmin=-3, vmax=3)
         plt.xticks(size=6, rotation=90, weight='bold')
         f.savefig(os.path.join(features_dir, 'ct_controls_resid_z.png'), dpi=300)
-
-
-
-
-
 
 
 
