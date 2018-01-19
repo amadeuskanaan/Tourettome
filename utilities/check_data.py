@@ -26,6 +26,10 @@ def return_sca_data(seed, population, derivatives_dir):
     return pd.concat(df_features, axis=1)
 
 def return_ct_data(population, derivatives_dir):
+    import os
+    import numpy as np
+    import pandas as pd
+
     df_features = []
     for subject in population:
         if not os.path.isfile(os.path.join(derivatives_dir, 'struct_cortical_thickness',
