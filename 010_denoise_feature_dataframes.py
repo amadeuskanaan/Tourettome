@@ -57,7 +57,7 @@ def regress_nuisance_covariates(df_features, df_design):
     return df_features_resid
 
 
-def construct_features_dataframe():
+def construct_features_dataframe(derivatives_dir):
 
     print '========================================================================================'
     print ''
