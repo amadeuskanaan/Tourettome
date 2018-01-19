@@ -47,7 +47,6 @@ def return_ct_data(population, derivatives_dir):
             ct_rh = pd.DataFrame(ct_rh, columns=[subject],
                                  index=['ct_rh_' + str(i) for i in range(ct_rh.shape[0])])
         df_features.append(pd.concat([ct_lh, ct_rh], axis=0))
-        df_features.append(pd.concat([ct_lh, ct_rh], axis=0))
 
     return pd.concat(df_features, axis=1)
 
