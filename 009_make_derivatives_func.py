@@ -172,7 +172,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 # make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 tourettome_subjects =[i for i in tourettome_subjects if i not in FD_outliers and i[0:2]=='PA']
-make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+make_functional_derivatives(tourettome_subjects[45:], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
 
