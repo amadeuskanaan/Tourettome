@@ -135,14 +135,15 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         print '2. Calculating Eigenvector-centraliy'
 
+        # Create ECM subject dir in derivatives folder.... done since matlab code needs to be in the same folder..
+        ecm_dir_subject = mkdir_path(os.path.join(ecm_dir, subject))
+        os.chdir(ecm_dir_subject)
+        os.system('cp %s ./'%func_denoised)
 
-
-        os.chdir(ecm_dir)
 
         print '...... Runnning ECM for subject', subject
         # run fast ecm
-
-
+        func_denoised = os.path.join(ecm_dir_subject, 'residual_bp_z_fwhm6.nii.gz')
         matlab_cmd = ['matlab', '-version', '8.2', '-nodesktop', '-nosplash', '-nojvm',
                       # fastECM( inputfile, rankmap, normmap, degmap, maxiter, maskfile, atlasfile )
                       '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"' % (func_denoised,
