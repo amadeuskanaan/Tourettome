@@ -25,21 +25,24 @@ def return_sca_data(seed, population, derivatives_dir):
 
     return pd.concat(df_features, axis=1)
 
-
-
 def return_ct_data(population, derivatives_dir):
     df_features = []
     for subject in population:
-        ct_lh = nb.load(os.path.join(derivatives_dir, 'struct_cortical_thickness',
-                                     '%s_ct2fsaverage5_fwhm20_lh.mgh' % subject)).get_data().ravel()
-        ct_rh = nb.load(os.path.join(derivatives_dir, 'struct_cortical_thickness',
-                                     '%s_ct2fsaverage5_fwhm20_rh.mgh' % subject)).get_data().ravel()
+        if not os.path.isfile(os.path.join(derivatives_dir, 'struct_cortical_thickness',
+                                           '%s_ct2fsaverage5_fwhm20_lh.mgh' % subject)):
+            print 'subject %s missing ct data' % subject
+        else:
+            ct_lh = nb.load(os.path.join(derivatives_dir, 'struct_cortical_thickness',
+                                         '%s_ct2fsaverage5_fwhm20_lh.mgh' % subject)).get_data().ravel()
+            ct_rh = nb.load(os.path.join(derivatives_dir, 'struct_cortical_thickness',
+                                         '%s_ct2fsaverage5_fwhm20_rh.mgh' % subject)).get_data().ravel()
 
-        ct_lh = pd.DataFrame(ct_lh, columns=[subject],
-                                index=['ct_lh_' + str(i) for i in range(ct_lh.shape[0])])
-        ct_rh = pd.DataFrame(ct_rh, columns=[subject],
-                                index=['ct_rh_' + str(i) for i in range(ct_rh.shape[0])])
+            ct_lh = pd.DataFrame(ct_lh, columns=[subject],
+                                 index=['ct_lh_' + str(i) for i in range(ct_lh.shape[0])])
+            ct_rh = pd.DataFrame(ct_rh, columns=[subject],
+                                 index=['ct_rh_' + str(i) for i in range(ct_rh.shape[0])])
+        df_features.append(pd.concat([ct_lh, ct_rh], axis=0))
+        df_features.append(pd.concat([ct_lh, ct_rh], axis=0))
 
-    df_features = pd.concat(df_features.append(pd.concat([ct_lh, ct_rh], axis=0)), axis=1)
+    return pd.concat(df_features, axis=1)
 
-    return df_features
