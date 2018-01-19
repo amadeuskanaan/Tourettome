@@ -157,8 +157,8 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         ecm_rh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_right']).ravel()
 
         # Save seed-to-vertex correlation as a txt file
-        np.save('./%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
-        np.save('./%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
+        np.save('../%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
+        np.save('../%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
 
         # clean folder
         os.system('rm -rf residual_bp_z_fwhm6.nii')
