@@ -249,7 +249,8 @@ def construct_features_dataframe(derivatives_dir):
 
     if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_raw.csv')):
         print 'checking sca data for tourettome population (After QC)'
-        ct_tourettome_raw = return_ct_data(tourettome_subjects, tourettome_derivatives)
+        ct_tourettome_raw, missing_ct= return_ct_data(tourettome_subjects, tourettome_derivatives)
+        ct_tourettome_raw = ct_tourettome_raw.drop(missing_ct, axis = 1)
         ct_tourettome_raw.to_csv(os.path.join(features_dir, 'ct_tourettome_raw.csv'))
 
         #plot

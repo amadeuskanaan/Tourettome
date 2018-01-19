@@ -33,12 +33,11 @@ def return_ct_data(population, derivatives_dir):
 
     df_features = []
     missing_subs = []
-
     for subject in population:
 
         if not os.path.isfile(os.path.join(derivatives_dir, 'struct_cortical_thickness',
                                            '%s_ct2fsaverage5_fwhm20_lh.mgh' % subject)):
-            #print 'subject %s missing ct data' % subject
+            print 'subject %s missing ct data' % subject
             missing_subs.append(subject)
         else:
             ct_lh = nb.load(os.path.join(derivatives_dir, 'struct_cortical_thickness',
@@ -51,7 +50,6 @@ def return_ct_data(population, derivatives_dir):
             ct_rh = pd.DataFrame(ct_rh, columns=[subject],
                                  index=['ct_rh_' + str(i) for i in range(ct_rh.shape[0])])
         df_features.append(pd.concat([ct_lh, ct_rh], axis=0))
-    df_features = pd.concat(df_features, axis=1)
-    df_features.drop(missing_subs, axis = 1)
-    return df_features
+
+    return pd.concat(df_features, axis=1), missing_subs
 
