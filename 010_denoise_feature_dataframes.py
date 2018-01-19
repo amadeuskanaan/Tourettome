@@ -302,8 +302,8 @@ def construct_features_dataframe(derivatives_dir):
 
     print '...... Breaking down Tourettome_resid into patients/controls dfs and plotting'
     # break down CT to patient and control dataframes
-    ct_patients_resid = sca_tourettome_resid.drop([i for i in controls if i in ct_tourettome_raw.columns], axis=1)
-    ct_controls_resid = sca_tourettome_resid.drop([i for i in patients if i in ct_tourettome_raw.columns], axis=1)
+    ct_patients_resid = ct_tourettome_resid.drop([i for i in controls if i in ct_tourettome_resid.columns], axis=1)
+    ct_controls_resid = ct_tourettome_resid.drop([i for i in patients if i in ct_tourettome_resid.columns], axis=1)
 
     if not os.path.isfile(os.path.join(features_dir, 'ct_patients_resid.csv')):
         # save separately
