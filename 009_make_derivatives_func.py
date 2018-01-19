@@ -157,13 +157,13 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
             # clean folder
             os.system('rm -rf residual_bp_z_fwhm6.nii')
 
-        # map to suf
+        # Map ECM to surface and save
         if not os.path.isfile(os.path.join(ecm_dir, '%s_ecm_z_fwhm6_lh.npy' % subject)):
-            # Save seed-to-vertex correlation as a txt file
-            np.save('../%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
-            np.save('../%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
             ecm_lh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_left']).ravel()
             ecm_rh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_right']).ravel()
+            np.save('../%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
+            np.save('../%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
+
 
 
 # make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
