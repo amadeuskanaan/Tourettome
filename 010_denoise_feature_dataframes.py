@@ -24,7 +24,7 @@ patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006
                     'PA009', 'PA012', 'PA025', 'PA045', 'PA052', 'PA055', 'PA058', 'PA077', 'PA080', 'PA094',
                     'LZ001',]
 
-seeds = ['STR3_MOTOR'#, 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
+seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
         ]
 terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
 
