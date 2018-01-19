@@ -250,14 +250,15 @@ def construct_features_dataframe(derivatives_dir):
     if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_raw.csv')):
         print 'checking sca data for tourettome population (After QC)'
         ct_tourettome_raw = return_ct_data(tourettome_subjects, tourettome_derivatives)
-        ct_tourettome_raw.to_csv(os.path.join(features_dir, 'ct_tourettome_raw.png'))
+        ct_tourettome_raw.to_csv(os.path.join(features_dir, 'ct_tourettome_raw.csv'))
 
         #plot
         f = plt.figure(figsize=(35, 20))
         sns.heatmap(ct_tourettome_raw, yticklabels=False, cmap=cmap_gradient, vmin=1, vmax=3.5)
         plt.xticks(size=6, rotation=90)
 
-        ct_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_raw.png'),index_col=0)
+    else:
+        ct_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_raw.csv'),index_col=0)
 
     # ########################################################################################################
     # print '################################################################################################'
