@@ -135,7 +135,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         print '2. Calculating Eigenvector-centraliy'
 
-        if not os.path.isfile(ecm_dir, subject, 'residual_bp_z_fwhm6_normECM.nii'):
+        if not os.path.isfile(os.path.join(ecm_dir, subject, 'residual_bp_z_fwhm6_normECM.nii')):
             # Create ECM subject dir in derivatives folder....
             ecm_dir_subject = mkdir_path(os.path.join(ecm_dir, subject))
 
