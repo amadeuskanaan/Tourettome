@@ -135,33 +135,34 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         print '2. Calculating Eigenvector-centraliy'
 
-        # Create ECM subject dir in derivatives folder....
-        ecm_dir_subject = mkdir_path(os.path.join(ecm_dir, subject))
+        if not os.path.isfile(ecm_dir, '%s_ecm_z_fwhm6_lh.npy' % subject):
+            # Create ECM subject dir in derivatives folder....
+            ecm_dir_subject = mkdir_path(os.path.join(ecm_dir, subject))
 
-        #copy denoised file locally. done since matlab code needs to be in the same folder..
-        os.chdir(ecm_dir_subject)
-        os.system('cp %s ./'%func_denoised)
+            #copy denoised file locally. done since matlab code needs to be in the same folder..
+            os.chdir(ecm_dir_subject)
+            os.system('cp %s ./'%func_denoised)
 
-        # gzip.. important for maltab
-        os.system('gunzip residual_bp_z_fwhm6.nii.gz')
+            # gzip.. important for maltab
+            os.system('gunzip residual_bp_z_fwhm6.nii.gz')
 
-        print '...... Runnning ECM for subject', subject
-        # run fast ecm
-        matlab_cmd = ['matlab', '-version', '8.2', '-nodesktop', '-nosplash', '-nojvm',
-                      # fastECM( inputfile, rankmap, normmap, degmap, maxiter, maskfile, atlasfile )
-                      '-r "fastECM(\'residual_bp_z_fwhm6.nii\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"' %
-                      (gm_group_mask)]
-        subprocess.call(matlab_cmd)
+            print '...... Runnning ECM for subject', subject
+            # run fast ecm
+            matlab_cmd = ['matlab', '-version', '8.2', '-nodesktop', '-nosplash', '-nojvm',
+                          # fastECM( inputfile, rankmap, normmap, degmap, maxiter, maskfile, atlasfile )
+                          '-r "fastECM(\'residual_bp_z_fwhm6.nii\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"' %
+                          (gm_group_mask)]
+            subprocess.call(matlab_cmd)
 
-        ecm_lh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_left']).ravel()
-        ecm_rh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_right']).ravel()
+            ecm_lh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_left']).ravel()
+            ecm_rh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_right']).ravel()
 
-        # Save seed-to-vertex correlation as a txt file
-        np.save('../%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
-        np.save('../%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
+            # Save seed-to-vertex correlation as a txt file
+            np.save('../%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
+            np.save('../%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
 
-        # clean folder
-        os.system('rm -rf residual_bp_z_fwhm6.nii')
+            # clean folder
+            os.system('rm -rf residual_bp_z_fwhm6.nii')
 
 
 
