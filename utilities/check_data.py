@@ -32,12 +32,13 @@ def return_ct_data(population, derivatives_dir):
     import nibabel as nb
 
     df_features = []
+    missing_subs = []
+
     for subject in population:
 
-        missing_subs = []
         if not os.path.isfile(os.path.join(derivatives_dir, 'struct_cortical_thickness',
                                            '%s_ct2fsaverage5_fwhm20_lh.mgh' % subject)):
-            print 'subject %s missing ct data' % subject
+            #print 'subject %s missing ct data' % subject
             missing_subs.append(subject)
         else:
             ct_lh = nb.load(os.path.join(derivatives_dir, 'struct_cortical_thickness',
@@ -51,5 +52,6 @@ def return_ct_data(population, derivatives_dir):
                                  index=['ct_rh_' + str(i) for i in range(ct_rh.shape[0])])
         df_features.append(pd.concat([ct_lh, ct_rh], axis=0))
 
+    print missing_subs
     return pd.concat(df_features, axis=1).drop(missing_subs, axis = 1)
 
