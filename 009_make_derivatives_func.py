@@ -135,7 +135,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         print '2. Calculating Eigenvector-centraliy'
 
-        if not os.path.isfile(ecm_dir, '%s_ecm_z_fwhm6_lh.npy' % subject):
+        if not os.path.isfile(ecm_dir, subject, 'residual_bp_z_fwhm6_normECM.nii'):
             # Create ECM subject dir in derivatives folder....
             ecm_dir_subject = mkdir_path(os.path.join(ecm_dir, subject))
 
@@ -154,21 +154,24 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                           (gm_group_mask)]
             subprocess.call(matlab_cmd)
 
-            ecm_lh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_left']).ravel()
-            ecm_rh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_right']).ravel()
-
-            # Save seed-to-vertex correlation as a txt file
-            np.save('../%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
-            np.save('../%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
-
             # clean folder
             os.system('rm -rf residual_bp_z_fwhm6.nii')
 
+        # map to suf
+        if not os.path.isfile(ecm_dir, '%s_ecm_z_fwhm6_lh.npy' % subject):
+            # Save seed-to-vertex correlation as a txt file
+            np.save('../%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
+            np.save('../%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
+            ecm_lh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_left']).ravel()
+            ecm_rh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_right']).ravel()
 
 
 # make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
 
-tourettome_subjects =[i for i in tourettome_subjects if i not in FD_outliers]
+# tourettome_subjects =[i for i in tourettome_subjects if i not in FD_outliers]
+# make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+
+tourettome_subjects =[i for i in tourettome_subjects if i not in FD_outliers and i[0:2]=='PA']
 make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
