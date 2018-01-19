@@ -140,10 +140,10 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         #copy denoised file locally. done since matlab code needs to be in the same folder..
         os.chdir(ecm_dir_subject)
-        os.system('cp %s ./'%func_denoised)
+        os.system('cp %s ./resid'%func_denoised)
 
         # gzip.. important for maltab
-        os.system('gunzip residual_bp_z_fwhm6.nii.gz')
+        os.system('gunzip resid.nii.gz')
 
         print '...... Runnning ECM for subject', subject
         # run fast ecm
@@ -153,7 +153,15 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                       (gm_group_mask)]
         subprocess.call(matlab_cmd)
 
+        ecm_lh = surface.vol_to_surf('resid.nii', fsaverage5['pial_left']).ravel()
+        ecm_rh = surface.vol_to_surf('resid.nii', fsaverage5['pial_right']).ravel()
 
+        # Save seed-to-vertex correlation as a txt file
+        np.save('./%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
+        np.save('./%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
+
+        # clean folder
+        os.system('rm -rf resid.nii')
 
 
 
