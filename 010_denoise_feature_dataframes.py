@@ -256,6 +256,7 @@ def construct_features_dataframe(derivatives_dir):
         f = plt.figure(figsize=(35, 20))
         sns.heatmap(ct_tourettome_raw, yticklabels=False, cmap=cmap_gradient, vmin=1, vmax=3.5)
         plt.xticks(size=6, rotation=90)
+        f.savefig(os.path.join(features_dir, 'ct_tourettome_raw.png'), bbox_inches = 'tight')
 
     else:
         ct_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_raw.csv'),index_col=0)
