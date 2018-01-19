@@ -62,13 +62,13 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
     # global IO
     sca_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_seed_correlation'))
     ecm_dir       = mkdir_path(os.path.join(derivatives_dir, 'func_centrality'))
-    gm_group_mask = os.path.join(derivatives_dir, 'MASKS/GROUP_GM_FUNC_3mm.nii')
+    gm_group_mask = os.path.join(derivatives_dir, 'func_centrality/GROUP_GM_FUNC_3mm.nii')
 
     count = 0
     for subject in population:
         count +=1
         print '###################################################################'
-        print 'Extracting structural features for subject %s' % subject
+        print 'Extracting functional derivatives for subject %s' % subject
 
         # subject I/0
         subject_dir = os.path.join(workspace_dir, subject)
@@ -133,10 +133,26 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         ### 2- Eigenvector Centrality
         ################################################################################################################
 
+        print '2. Calculating Eigenvector-centraliy'
 
 
-make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
-make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+
+        os.chdir(ecm_dir)
+
+        print '...... Runnning ECM for subject', subject
+        # run fast ecm
+
+
+        matlab_cmd = ['matlab', '-version', '8.2', '-nodesktop', '-nosplash', '-nojvm',
+                      # fastECM( inputfile, rankmap, normmap, degmap, maxiter, maskfile, atlasfile )
+                      '-r "fastECM(\'%s\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"' % (func_denoised,
+                                                                                             gm_group_mask)]
+        subprocess.call(matlab_cmd)
+
+
+
+# make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
+make_functional_derivatives(['LZ030'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
 
