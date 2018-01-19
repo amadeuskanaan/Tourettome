@@ -269,34 +269,32 @@ def construct_features_dataframe(derivatives_dir):
 
     print ct_tourettome_raw.shape
 
-    # ########################################################################################################
-    # print '################################################################################################'
-    # print '... Cortical-thickness nuisance variable regression'
-    #
-    #
-    #
-    # if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_resid.csv')):
-    #
-    #     # first drop subjects from design matrix that dont have CT----- due to freesurfer failure. get those subs back
-    #     design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col=0)
-    #     design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in ct_tourettome_raw.columns],
-    #                                        axis = 0 )
-    #
-    #     ct_tourettome_resid = regress_nuisance_covariates(ct_tourettome_raw, design_matrix)
-    #
-    #     # save residual data
-    #     ct_tourettome_resid = pd.concat(ct_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
-    #     ct_tourettome_resid.to_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'))
-    #
-    #     # plot sca residuals
-    #     f = plt.figure(figsize=(35, 20))
-    #     sns.heatmap(ct_tourettome_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
-    #     plt.xticks(size=6, rotation=90, weight='bold')
-    #     f.savefig(os.path.join(features_dir, 'ct_tourettome_resid.png'), dpi=300)
-    #
-    # else:
-    #     ct_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'), index_col=0)
-    #
-    #
+    ########################################################################################################
+    print '################################################################################################'
+    print '... Cortical-thickness nuisance variable regression'
+
+    if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_resid.csv')):
+
+        # first drop subjects from design matrix that dont have CT----- due to freesurfer failure. get those subs back
+        design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col=0)
+        design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in ct_tourettome_raw.columns],
+                                           axis = 0 )
+
+        ct_tourettome_resid = regress_nuisance_covariates(ct_tourettome_raw, design_matrix)
+
+        # save residual data
+        ct_tourettome_resid = pd.concat(ct_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
+        ct_tourettome_resid.to_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'))
+
+        # plot sca residuals
+        f = plt.figure(figsize=(35, 20))
+        sns.heatmap(ct_tourettome_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'ct_tourettome_resid.png'), dpi=300)
+
+    else:
+        ct_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'), index_col=0)
+
+
 
 construct_features_dataframe(tourettome_derivatives)
