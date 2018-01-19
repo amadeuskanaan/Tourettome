@@ -58,8 +58,8 @@ def construct_features_dataframe(derivatives_dir):
     #I/O
     features_dir = mkdir_path(os.path.join(derivatives_dir, 'feature_matrices'))
 
-    ############################################################################################################
-    print '#####################################################################################################'
+    ########################################################################################################
+    print '################################################################################################'
     print ' Inspecting sample size'
 
     df_pheno = pd.read_csv(os.path.join(tourettome_phenotypic, 'tourettome_phenotypic.csv'), index_col=0)
@@ -91,7 +91,7 @@ def construct_features_dataframe(derivatives_dir):
     print 'n_total_outliers =', len(control_outliers) + len(patient_outliers)
     print ''
 
-    ############################################################################################################
+    #######################################################################################################
     print '################################################################################################'
     print '... Extracting SCA data'
 
@@ -158,7 +158,7 @@ def construct_features_dataframe(derivatives_dir):
 
     design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col = 0)
 
-    ############################################################################################################
+    ########################################################################################################
     print '################################################################################################'
     print '... SCA nuisance variable regression'
 
@@ -179,7 +179,7 @@ def construct_features_dataframe(derivatives_dir):
         sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col=0)
 
 
-    ############################################################################################################
+    ########################################################################################################
     print '################################################################################################'
     print ' ... Z-scoring dataframes'
     # "At each surface point, we normalized feature data in each individual with ASD against the
@@ -240,17 +240,48 @@ def construct_features_dataframe(derivatives_dir):
 
 
 
+    #######################################################################################################
+    print '################################################################################################'
+    print '... Extracting Cortical-thickness data'
 
+    if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_raw.csv')):
+        print 'checking sca data for tourettome population (After QC)'
+        ct_tourettome_raw = return_ct_data(tourettome_subjects, tourettome_derivatives)
+        ct_tourettome_raw.to_csv(os.path.join(features_dir, 'ct_tourettome_raw.png'))
 
+        #plot
+        f = plt.figure(figsize=(35, 20))
+        sns.heatmap(ct_tourettome_raw, yticklabels=False, cmap=cmap_gradient, vmin=1, vmax=3.5)
+        plt.xticks(size=6, rotation=90)
 
+    else:
+        ct_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_raw.png'),index_col=0)
 
+    ########################################################################################################
+    print '################################################################################################'
+    print '... Cortical-thickness nuisance variable regression'
 
+    if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_resid.csv')):
 
+        # first drop subjects from design matrix that dont have CT----- due to freesurfer failure. get those subs back
+        design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col=0)
+        design_matrix = design_matrix.drop([i for i in design_matrix.columns if i not in ct_tourettome_raw.columns],
+                                           axis = 1 )
 
+        ct_tourettome_resid = regress_nuisance_covariates(ct_tourettome_raw, design_matrix)
 
+        # save residual data
+        ct_tourettome_resid = pd.concat(ct_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
+        ct_tourettome_resid.to_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'))
 
+        # plot sca residuals
+        f = plt.figure(figsize=(35, 20))
+        sns.heatmap(ct_tourettome_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'ct_tourettome_resid.png'), dpi=300)
 
-
+    else:
+        ct_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'), index_col=0)
 
 
 
