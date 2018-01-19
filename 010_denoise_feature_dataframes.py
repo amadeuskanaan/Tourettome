@@ -183,7 +183,7 @@ def construct_features_dataframe(derivatives_dir):
 
         ########################################################################################################
         print '################################################################################################'
-        print ' ... Z-scoring dataframes'
+        print ' ... Z-scoring SCA dataframes'
         # "At each surface point, we normalized feature data in each individual with ASD against the
         # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
 
@@ -294,6 +294,68 @@ def construct_features_dataframe(derivatives_dir):
 
     else:
         ct_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'), index_col=0)
+
+
+    ########################################################################################################
+    print '################################################################################################'
+    print ' ... Z-scoring CT dataframes'
+
+    print '...... Breaking down Tourettome_resid into patients/controls dfs and plotting'
+    # break down CT to patient and control dataframes
+    ct_patients_resid = sca_tourettome_resid.drop([i for i in controls if i in ct_tourettome_raw.columns], axis=1)
+    ct_controls_resid = sca_tourettome_resid.drop([i for i in patients if i in ct_tourettome_raw.columns], axis=1)
+
+    if not os.path.isfile(os.path.join(features_dir, 'ct_patients_resid.csv')):
+        # save separately
+        ct_patients_resid.to_csv(os.path.join(features_dir, 'ct_patients_resid.csv'))
+        ct_controls_resid.to_csv(os.path.join(features_dir, 'ct_controls_resid.csv'))
+
+        # plot separate sca residuals
+        f = plt.figure(figsize=(17.5, 10))
+        sns.heatmap(ct_controls_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'ct_controls_resid.png'), dpi=300)
+
+        f = plt.figure(figsize=(17.5, 10))
+        sns.heatmap(ct_patients_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'ct_patients_resid.png'), dpi=300)
+
+    print '...... Z-scoring patients'
+    # get vertex means/sds across control subjects
+    n_vertices = ct_patients_resid.shape[0]
+    vertices_mu = [np.mean(ct_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
+    vertices_sd = [np.std(ct_controls_resid.loc[vertex]) for vertex in range(n_vertices)]
+
+    if not os.path.isfile(os.path.join(features_dir, 'ct_patients_resid_z.csv')):
+        # z-score patients
+        ct_patients_resid_z = pd.concat([(ct_patients_resid.loc[vertex] - vertices_mu[vertex]) / vertices_sd[vertex]
+                                          for vertex in range(n_vertices)], axis=1).T
+        ct_patients_resid_z.to_csv(os.path.join(features_dir, 'ct_patients_resid_z.csv'))
+
+        # plot sca residuals
+        f = plt.figure(figsize=(35, 20))
+        sns.heatmap(ct_patients_resid_z, yticklabels=False, cmap=cmap_gradient, vmin=-3, vmax=3)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'ct_patients_resid_z.png'), dpi=300)
+
+    print '...... Z-scoring controls'
+    if not os.path.isfile(os.path.join(features_dir, 'ct_controls_resid_z.csv')):
+        # z-score patients
+        ct_controls_resid_z = pd.concat([(ct_controls_resid.loc[vertex] - vertices_mu[vertex]) / vertices_sd[vertex]
+                                          for vertex in range(n_vertices)], axis=1).T
+        ct_controls_resid_z.to_csv(os.path.join(features_dir, 'ct_controls_resid_z.csv'))
+
+        # plot sca residuals
+        f = plt.figure(figsize=(35, 20))
+        sns.heatmap(ct_controls_resid_z, yticklabels=False, cmap=cmap_gradient, vmin=-3, vmax=3)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'ct_controls_resid_z.png'), dpi=300)
+
+
+
+
+
 
 
 
