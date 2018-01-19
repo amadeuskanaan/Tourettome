@@ -26,12 +26,14 @@ patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006
                     'LZ001',]
 
 #based on fd_max > 1 and fd_mu> 0.2
-control_outliers = ['HM015', 'HM028', 'LZ057', 'LZ061', 'PA059']
+control_outliers = ['HM015', 'HM028', 'LZ057', 'LZ061', 'PA059', 'LZ052' ]
 patient_outliers = ['HA009', 'HA016', 'HB005', 'HB011', 'HB015', 'HM015', 'HM023', 'HM026', 'HM028', 'LZ004',
                     'LZ006', 'LZ007', 'LZ013', 'LZ017', 'LZ018', 'LZ020', 'LZ021', 'LZ025', 'LZ027', 'LZ028',
                     'LZ029', 'LZ030', 'LZ031', 'LZ035', 'LZ038', 'PA001', 'PA006', 'PA009', 'PA011', 'PA012',
                     'PA013', 'PA019', 'PA025', 'PA039', 'PA045', 'PA052', 'PA055', 'PA058', 'PA061', 'PA066',
-                    'PA077', 'PA078', 'PA080', 'PA081', 'PA094', 'PA095']
+                    'PA077', 'PA078', 'PA080', 'PA081', 'PA094', 'PA095', 'LZ001',]
+
+# LZ001, LZ052 are missing data
 
 seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL'
         ]
