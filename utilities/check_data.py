@@ -29,6 +29,7 @@ def return_ct_data(population, derivatives_dir):
     import os
     import numpy as np
     import pandas as pd
+    import nibabel as nb
 
     df_features = []
     for subject in population:
