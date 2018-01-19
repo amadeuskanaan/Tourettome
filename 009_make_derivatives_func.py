@@ -140,7 +140,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         #copy denoised file locally. done since matlab code needs to be in the same folder..
         os.chdir(ecm_dir_subject)
-        os.system('cp %s ./resid'%func_denoised)
+        os.system('cp %s ./resid.nii.gz'%func_denoised)
 
         # gzip.. important for maltab
         os.system('gunzip resid.nii.gz')
