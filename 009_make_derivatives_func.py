@@ -166,7 +166,9 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
 
 # make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
-make_functional_derivatives(['LZ030'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+
+tourettome_subjects =[i for i in tourettome_subjects if i not in outliers]
+make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
 
