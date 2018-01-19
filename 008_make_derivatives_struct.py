@@ -11,7 +11,7 @@ from variables.subject_list import *
 ### 3- Subcortical Volume
 ### 4- Surface Area
 
-def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivatives_dir) :
+def make_derivatives_struct(population, freesurfer_dir, derivatives_dir) :
 
     print '========================================================================================'
     print ''
@@ -36,7 +36,7 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
 
         print '1- Extracting Cortical Thickness'
 
-        if os.path.isfile(os.path.join(fs_dir, 'surf/lh.thickness')):
+        if os.path.isfile(os.path.join(fs_dir, 'surf/lh.thickness'))    :
             FWHM_CT = '20'
             fsaverage = 'fsaverage5'
             for hemi in ['lh', 'rh']:
@@ -76,4 +76,4 @@ def make_derivatives_struct(population, workspace_dir, freesurfer_dir, derivativ
 
 
 tourettome_freesurfer = '/data/pt_nmr093_gts/freesurfer'
-make_derivatives_struct(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives )
+make_derivatives_struct(tourettome_subjects, tourettome_freesurfer, tourettome_derivatives )
