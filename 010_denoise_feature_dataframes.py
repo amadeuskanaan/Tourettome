@@ -248,12 +248,17 @@ def construct_features_dataframe(derivatives_dir):
     print '... Extracting Cortical-thickness data'
 
     if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_raw.csv')):
-        print 'checking sca data for tourettome population (After QC)'
-        ct_tourettome_raw, missing_ct= return_ct_data(tourettome_subjects, tourettome_derivatives)
-        ct_tourettome_raw = ct_tourettome_raw.drop(missing_ct, axis = 1)
+        print '......checking CT data for tourettome population (After QC)'
+
+        # only take subjects that have ct and are not outliers
+        tourettome_subjects_ct = np.unique([i[0:5] for i in os.listdir(os.path.join(tourettome_derivatives, 'struct_cortical_thickness'))])
+        tourettome_subjects_ct = [i for i in tourettome_subjects_ct if i not in control_outliers + patient_outliers]
+
+        #check data and save
+        ct_tourettome_raw= return_ct_data(tourettome_subjects_ct, tourettome_derivatives)
         ct_tourettome_raw.to_csv(os.path.join(features_dir, 'ct_tourettome_raw.csv'))
 
-        #plot
+        # plot ct_raw
         f = plt.figure(figsize=(35, 20))
         sns.heatmap(ct_tourettome_raw, yticklabels=False, cmap=cmap_gradient, vmin=1, vmax=3.5)
         plt.xticks(size=6, rotation=90)
