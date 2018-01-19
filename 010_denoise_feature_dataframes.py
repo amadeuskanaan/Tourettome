@@ -191,19 +191,20 @@ def construct_features_dataframe(derivatives_dir):
     sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
 
     if not os.path.isfile(os.path.join(features_dir,'sca_patients_resid.csv')):
+        # save separately
         sca_patients_resid.to_csv(os.path.join(features_dir,'sca_patients_resid.csv'))
         sca_controls_resid.to_csv(os.path.join(features_dir,'sca_controls_resid.csv'))
 
-    # plot sca residuals
-    f = plt.figure(figsize=(17.5, 10))
-    sns.heatmap(sca_controls_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
-    plt.xticks(size=6, rotation=90, weight='bold')
-    f.savefig(os.path.join(features_dir, 'sca_controls_resid.png'), dpi=300)
+        # plot separate sca residuals
+        f = plt.figure(figsize=(17.5, 10))
+        sns.heatmap(sca_controls_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'sca_controls_resid.png'), dpi=300)
 
-    f = plt.figure(figsize=(17.5, 10))
-    sns.heatmap(sca_patients_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
-    plt.xticks(size=6, rotation=90, weight='bold')
-    f.savefig(os.path.join(features_dir, 'sca_patients_resid.png'), dpi=300)
+        f = plt.figure(figsize=(17.5, 10))
+        sns.heatmap(sca_patients_resid, yticklabels=False, cmap=cmap_gradient, vmin=-1, vmax=1)
+        plt.xticks(size=6, rotation=90, weight='bold')
+        f.savefig(os.path.join(features_dir, 'sca_patients_resid.png'), dpi=300)
 
     print '...... Z-scoring patients'
     # get vertex means/sds across control subjects
