@@ -59,7 +59,7 @@ def return_ecm_data(population, derivatives_dir):
             ecm_lh = np.load(lh).ravel()
             ecm_rh = np.load(rh).ravel()
         else:
-            print '.... Subject %s missing %s ECM data' %(subject, seed)
+            print '.... Subject %s missing  ECM data'%subject
 
         df_ecm_lh = pd.DataFrame(ecm_lh, columns=[subject],
                                  index=['lh_%s' % str(i) for i in range(ecm_lh.shape[0])])
