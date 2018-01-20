@@ -148,7 +148,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_raw.csv')):
         sca_tourettome_raw = []
         for seed_name in rsfc_seeds:
-            print 'checking sca %s data for tourettome population (After QC)'%seed
+            print 'checking sca %s data for tourettome population (After QC)'%seed_name
             sca_tourettome_raw.append(return_sca_data(seed_name, tourettome_subjects, derivatives_dir))
 
         # Save raw dataframes
