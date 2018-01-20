@@ -139,7 +139,8 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     # Outliers
     print 'n_control_outliers=', len(control_outliers)
     print 'n_patients_outliers=', len(patient_outliers)
-    print 'n_total_outliers =', len([i for i in control_outliers+patient_outliers if i not in hamburg])
+    # print 'n_total_outliers =', len([i for i in control_outliers+patient_outliers if i not in hamburg])
+    print 'n_total_outliers =', len(control_outliers+patient_outliers)
     print ''
 
     #######################################################################################################
@@ -193,7 +194,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
 
     ############################################################################################################
     print '################################################################################################'
-    print '... Build Design Matrix'
+    print '... Building Design Matrix'
 
     if not os.path.isfile(os.path.join(features_dir, 'design_matrix_tourettome.csv')):
         # Create design matrix
