@@ -52,8 +52,8 @@ def regress_nuisance_covariates(df_features, df_design, formula):
     df_features = np.nan_to_num(df_features).T
     df_features_resid = []
 
-    print '...... Tourettome dmatrix  shape=', df_design.shape
-    print '...... Tourettome features shape=', df_features.shape
+    print '......... Tourettome dmatrix  shape=', df_design.shape
+    print '......... Tourettome features shape=', df_features.shape
 
     for vertex_id in range(df_features.shape[1]):
         mat = df_design
@@ -115,7 +115,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     features_dir = mkdir_path(os.path.join(derivatives_dir, 'feature_matrices'))
 
     ########################################################################################################
-    print '################################################################################################'
+    print '###########################################################'
     print ' Inspecting sample size'
 
     df_pheno = pd.read_csv(os.path.join(tourettome_phenotypic, 'tourettome_phenotypic.csv'),
@@ -150,11 +150,11 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     print ''
 
     #######################################################################################################
-    print '################################################################################################'
-    print '... Extracting SCA & CT data'
+    print '###########################################################'
+    print '... Extracting SCA & CT data for QCd tourettome population'
 
     if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_raw.csv')):
-        print '......Checking CT data for tourettome population (After QC)'
+        print '......Checking SCA data'
         sca_tourettome_raw = []
         for seed_name in rsfc_seeds:
             print '...... %s'%seed_name
@@ -170,7 +170,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
         sca_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_raw.csv'), index_col=0)
 
     if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_raw.csv')):
-        print '......Checking CT data for tourettome population (After QC)'
+        print '......Checking CT data'
 
         # only take subjects that have ct and are not outliers
         tourettome_subjects_ct = np.unique([i[0:5] for i in os.listdir(os.path.join(tourettome_derivatives, 'struct_cortical_thickness'))])
@@ -188,7 +188,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
 
 
     ############################################################################################################
-    print '################################################################################################'
+    print '###########################################################'
     print '... Building Design Matrix'
 
     if not os.path.isfile(os.path.join(features_dir, 'design_matrix_tourettome.csv')):
@@ -229,9 +229,8 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col = 0)
 
     ########################################################################################################
-    print '################################################################################################'
+    print '###########################################################'
     print '... Denoising SCA features'
-    ########################################################################################################
 
     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
 
@@ -248,26 +247,27 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
             # plot sca residuals
             plt_features_heatmap(ct_tourettome_raw, os.path.join(features_dir, 'sca_tourettome_resid.png'),
                                  vmin=-2,vmax=2)
-            ######################
+
             # Break down sca_tourettome_resid to patient and control dataframes
-            if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
-                # break down sca_tourettome_resid to patient and control dataframes
-                sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
-                sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
+            sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
+            sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
 
-                # save separately
-                sca_patients_resid.to_csv(os.path.join(features_dir, 'sca_patients_resid.csv'))
-                sca_controls_resid.to_csv(os.path.join(features_dir, 'sca_controls_resid.csv'))
+            # save separately
+            sca_patients_resid.to_csv(os.path.join(features_dir, 'sca_patients_resid.csv'))
+            sca_controls_resid.to_csv(os.path.join(features_dir, 'sca_controls_resid.csv'))
 
-                # plot separate sca residuals
-                plt_features_heatmap(sca_controls_resid, os.path.join(features_dir, 'sca_controls_resid.png'),
-                                     vmin=-1, vmax=1, figsize=(17.5, 10))
-                plt_features_heatmap(sca_patients_resid, os.path.join(features_dir, 'sca_patients_resid.png'),
-                                     vmin=-1, vmax=1, figsize=(17.5, 10))
+            # plot separate sca residuals
+            plt_features_heatmap(sca_controls_resid, os.path.join(features_dir, 'sca_controls_resid.png'),
+                                 vmin=-1, vmax=1, figsize=(17.5, 10))
+            plt_features_heatmap(sca_patients_resid, os.path.join(features_dir, 'sca_patients_resid.png'),
+                                 vmin=-1, vmax=1, figsize=(17.5, 10))
 
         else:
             sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
             sca_patients_resid = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0)
+
+        #####################
+        # Regress
 
         if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
             print ' ... Z-scoring SCA dataframes'
@@ -280,7 +280,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
                                  vmin=-4, vmax=4, figsize=(17.5, 10))
 
     else:
-        print 'SCA already denoised'
+        print 'SCA features already denoised'
 
 
     # ########################################################################################################
