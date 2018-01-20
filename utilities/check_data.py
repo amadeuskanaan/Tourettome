@@ -62,9 +62,9 @@ def return_ecm_data(population, derivatives_dir):
             print '.... Subject %s missing %s ECM data' %(subject, seed)
 
         df_ecm_lh = pd.DataFrame(ecm_lh, columns=[subject],
-                                 index=['lh_%s' % str(i) for i in range(sca_lh.shape[0])])
+                                 index=['lh_%s' % str(i) for i in range(ecm_lh.shape[0])])
         df_ecm_rh = pd.DataFrame(ecm_rh, columns=[subject],
-                                 index=['rh_%s' % str(i) for i in range(sca_rh.shape[0])])
+                                 index=['rh_%s' % str(i) for i in range(ecm_rh.shape[0])])
 
         df_features.append(pd.concat([df_ecm_lh, df_ecm_rh], axis=0))
 
