@@ -292,65 +292,65 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     else:
         print 'SCA features already denoised'
 
-    # ########################################################################################################
-    # print '###########################################################'
-    # print '... Denoising CT features'
-    #
-    # if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_resid.csv')):
-    #
-    #     #####################
-    #     # Drop CT subjects from design_matrix
-    #     print '...... Dropping subjects with no freesurfer segmentation'
-    #     print '...... Regressing nuisace variables for CT dataframes'
-    #
-    #     # first drop subjects from design matrix that dont have CT----- due to freesurfer failure. get those subs back
-    #     design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col=0)
-    #     design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in ct_tourettome_raw.columns],
-    #                                        axis=0)
-    #
-    #     #####################
-    #     # Regress
-    #     if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_resid.csv')):
-    #         print '...... Regressing nuisace variables for CT dataframes'
-    #         ct_tourettome_resid = regress_nuisance_covariates(ct_tourettome_raw, design_matrix, formula)
-    #
-    #         # save residual data
-    #         ct_tourettome_resid = pd.concat(ct_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
-    #         ct_tourettome_resid.to_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'))
-    #
-    #         # plot ct residuals
-    #         plt_features_heatmap(ct_tourettome_resid, os.path.join(features_dir, 'ct_tourettome_resid.png'),
-    #                              vmin=-2, vmax=2)
-    #
-    #         # Break down ct_tourettome_resid to patient and control dataframes
-    #         ct_patients_resid = ct_tourettome_resid.drop(controls, axis=1)
-    #         ct_controls_resid = ct_tourettome_resid.drop(patients, axis=1)
-    #
-    #         # save separately
-    #         ct_patients_resid.to_csv(os.path.join(features_dir, 'ct_patients_resid.csv'))
-    #         ct_controls_resid.to_csv(os.path.join(features_dir, 'ct_controls_resid.csv'))
-    #
-    #         # plot separate sca residuals
-    #         plt_features_heatmap(ct_controls_resid, os.path.join(features_dir, 'ct_controls_resid.png'),
-    #                              vmin=-1, vmax=1, figsize=(17.5, 10))
-    #         plt_features_heatmap(ct_patients_resid, os.path.join(features_dir, 'ct_patients_resid.png'),
-    #                              vmin=-1, vmax=1, figsize=(17.5, 10))
-    #
-    #         #####################
-    #         # Z-Score
-    #         if not os.path.isfile(os.path.join(features_dir, 'ct_patients_resid_z.csv')):
-    #             print ' ... Z-scoring SCA dataframes'
-    #             ct_controls_resid_z, ct_patients_resid_z = z_score_features(ct_controls_resid, ct_patients_resid)
-    #
-    #             # plot separate sca residuals
-    #             plt_features_heatmap(ct_controls_resid_z, os.path.join(features_dir, 'ct_controls_resid_z.png'),
-    #                                  vmin=-4, vmax=4, figsize=(17.5, 10))
-    #             plt_features_heatmap(ct_patients_resid_z, os.path.join(features_dir, 'ct_patients_resid_z.png'),
-    #                                  vmin=-4, vmax=4, figsize=(17.5, 10))
-    #
-    #     else:
-    #         print 'CT features already denoised'
-    #
+    ########################################################################################################
+    print '###########################################################'
+    print '... Denoising CT features'
+
+    if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_resid.csv')):
+
+        #####################
+        # Drop CT subjects from design_matrix
+        print '...... Dropping subjects with no freesurfer segmentation'
+        print '...... Regressing nuisace variables for CT dataframes'
+
+        # first drop subjects from design matrix that dont have CT----- due to freesurfer failure. get those subs back
+        design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col=0)
+        design_matrix = design_matrix.drop([i for i in design_matrix.index if i not in ct_tourettome_raw.columns],
+                                           axis=0)
+
+        #####################
+        # Regress
+        if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_resid.csv')):
+            print '...... Regressing nuisace variables for CT dataframes'
+            ct_tourettome_resid = regress_nuisance_covariates(ct_tourettome_raw, design_matrix, formula)
+
+            # save residual data
+            ct_tourettome_resid = pd.concat(ct_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
+            ct_tourettome_resid.to_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'))
+
+            # plot ct residuals
+            plt_features_heatmap(ct_tourettome_resid, os.path.join(features_dir, 'ct_tourettome_resid.png'),
+                                 vmin=-2, vmax=2)
+
+            # Break down ct_tourettome_resid to patient and control dataframes
+            ct_patients_resid = ct_tourettome_resid.drop(controls, axis=1)
+            ct_controls_resid = ct_tourettome_resid.drop(patients, axis=1)
+
+            # save separately
+            ct_patients_resid.to_csv(os.path.join(features_dir, 'ct_patients_resid.csv'))
+            ct_controls_resid.to_csv(os.path.join(features_dir, 'ct_controls_resid.csv'))
+
+            # plot separate sca residuals
+            plt_features_heatmap(ct_controls_resid, os.path.join(features_dir, 'ct_controls_resid.png'),
+                                 vmin=-1, vmax=1, figsize=(17.5, 10))
+            plt_features_heatmap(ct_patients_resid, os.path.join(features_dir, 'ct_patients_resid.png'),
+                                 vmin=-1, vmax=1, figsize=(17.5, 10))
+
+            #####################
+            # Z-Score
+            if not os.path.isfile(os.path.join(features_dir, 'ct_patients_resid_z.csv')):
+                print ' ... Z-scoring SCA dataframes'
+                ct_controls_resid_z, ct_patients_resid_z = z_score_features(ct_controls_resid, ct_patients_resid)
+
+                # plot separate sca residuals
+                plt_features_heatmap(ct_controls_resid_z, os.path.join(features_dir, 'ct_controls_resid_z.png'),
+                                     vmin=-4, vmax=4, figsize=(17.5, 10))
+                plt_features_heatmap(ct_patients_resid_z, os.path.join(features_dir, 'ct_patients_resid_z.png'),
+                                     vmin=-4, vmax=4, figsize=(17.5, 10))
+
+        else:
+            print 'CT features already denoised'
+
 
     # ########################################################################################################
     # print '###########################################################'
