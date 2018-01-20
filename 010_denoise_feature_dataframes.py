@@ -365,56 +365,58 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
             print 'CT features already denoised'
 
 
-    # ########################################################################################################
-    # print '###########################################################'
-    # print '... Denoising ECM features'
-    #
-    # if not os.path.isfile(os.path.join(features_dir, 'ecm_patients_resid_z.csv')):
-    #
-    #     #####################
-    #     # Regress
-    #     if not os.path.isfile(os.path.join(features_dir, 'ecm_tourettome_resid.csv')):
-    #         print '...... Regressing nuisace variables for ECM dataframes'
-    #         # must read dmat again since we dropped missing subjects from ct
-    #         design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col=0)
-    #         ecm_tourettome_resid = regress_nuisance_covariates(ecm_tourettome_raw, design_matrix, formula)
-    #
-    #         # save residual data
-    #         ecm_tourettome_resid = pd.concat(ecm_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
-    #         ecm_tourettome_resid.to_csv(os.path.join(features_dir, 'ecm_tourettome_resid.csv'))
-    #         plt_features_heatmap(ecm_tourettome_resid, os.path.join(features_dir, 'ecm_tourettome_resid.png'),vmin=-2,vmax=2)
-    #
-    #         # Break down sca_tourettome_resid to patient and control dataframes
-    #         ecm_patients_resid = ecm_tourettome_resid.drop(controls, axis=1)
-    #         ecm_controls_resid = ecm_tourettome_resid.drop(patients, axis=1)
-    #
-    #         # save separately
-    #         ecm_patients_resid.to_csv(os.path.join(features_dir, 'ecm_patients_resid.csv'))
-    #         ecm_controls_resid.to_csv(os.path.join(features_dir, 'ecm_controls_resid.csv'))
-    #
-    #         # plot separate sca residuals
-    #         plt_features_heatmap(ecm_controls_resid, os.path.join(features_dir, 'ecm_controls_resid.png'),
-    #                              vmin=-1, vmax=1, figsize=(17.5, 10))
-    #         plt_features_heatmap(ecm_patients_resid, os.path.join(features_dir, 'ecm_patients_resid.png'),
-    #                              vmin=-1, vmax=1, figsize=(17.5, 10))
-    #
-    #     else:
-    #         ecm_controls_resid = pd.read_csv(os.path.join(features_dir, 'ecm_controls_resid.csv'), index_col=0)
-    #         ecm_patients_resid = pd.read_csv(os.path.join(features_dir, 'ecm_patients_resid.csv'), index_col=0)
-    #
-    #     #####################
-    #     # Z-Score
-    #     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
-    #         print ' ... Z-scoring SCA dataframes'
-    #         ecm_controls_resid_z, ecm_patients_resid_z = z_score_features(ecm_controls_resid, ecm_patients_resid)
-    #
-    #         # plot separate sca residuals
-    #         plt_features_heatmap(ecm_controls_resid_z, os.path.join(features_dir, 'ecm_controls_resid_z.png'),
-    #                              vmin=-4, vmax=4, figsize=(17.5, 10))
-    #         plt_features_heatmap(ecm_patients_resid_z, os.path.join(features_dir, 'ecm_patients_resid_z.png'),
-    #                              vmin=-4, vmax=4, figsize=(17.5, 10))
-    #
-    # else:
-    #     print 'ECM features already denoised'
+    ########################################################################################################
+    print '###########################################################'
+    print '... Denoising ECM features'
+
+    if not os.path.isfile(os.path.join(features_dir, 'ecm_patients_resid_z.csv')):
+
+        #####################
+        # Regress
+        if not os.path.isfile(os.path.join(features_dir, 'ecm_tourettome_resid.csv')):
+            print '...... Regressing nuisace variables for ECM dataframes'
+            # must read dmat again since we dropped missing subjects from ct
+            design_matrix = pd.read_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'), index_col=0)
+            ecm_tourettome_resid = regress_nuisance_covariates(ecm_tourettome_raw, design_matrix, formula)
+
+            # save residual data
+            ecm_tourettome_resid = pd.concat(ecm_tourettome_resid, axis=1).T  # transpose here to get back to RAW shape
+            ecm_tourettome_resid.to_csv(os.path.join(features_dir, 'ecm_tourettome_resid.csv'))
+            plt_features_heatmap(ecm_tourettome_resid, os.path.join(features_dir, 'ecm_tourettome_resid.png'),vmin=-2,vmax=2)
+
+        #####################
+        # Break Down mats into patients and controls
+        if not os.path.isfile(os.path.join(features_dir, 'ecm_patients_resid.csv')):
+            ecm_patients_resid = ecm_tourettome_resid.drop(controls, axis=1)
+            ecm_controls_resid = ecm_tourettome_resid.drop(patients, axis=1)
+
+            # save separately
+            ecm_patients_resid.to_csv(os.path.join(features_dir, 'ecm_patients_resid.csv'))
+            ecm_controls_resid.to_csv(os.path.join(features_dir, 'ecm_controls_resid.csv'))
+
+            # plot separate sca residuals
+            plt_features_heatmap(ecm_controls_resid, os.path.join(features_dir, 'ecm_controls_resid.png'),
+                                 vmin=-1, vmax=1, figsize=(17.5, 10))
+            plt_features_heatmap(ecm_patients_resid, os.path.join(features_dir, 'ecm_patients_resid.png'),
+                                 vmin=-1, vmax=1, figsize=(17.5, 10))
+
+        else:
+            ecm_controls_resid = pd.read_csv(os.path.join(features_dir, 'ecm_controls_resid.csv'), index_col=0)
+            ecm_patients_resid = pd.read_csv(os.path.join(features_dir, 'ecm_patients_resid.csv'), index_col=0)
+
+        #####################
+        # Z-Score
+        if not os.path.isfile(os.path.join(features_dir, 'ecm_patients_resid_z.csv')):
+            print ' ... Z-scoring ECM dataframes'
+            ecm_controls_resid_z, ecm_patients_resid_z = z_score_features(ecm_controls_resid, ecm_patients_resid)
+
+            # plot separate sca residuals
+            plt_features_heatmap(ecm_controls_resid_z, os.path.join(features_dir, 'ecm_controls_resid_z.png'),
+                                 vmin=-4, vmax=4, figsize=(17.5, 10))
+            plt_features_heatmap(ecm_patients_resid_z, os.path.join(features_dir, 'ecm_patients_resid_z.png'),
+                                 vmin=-4, vmax=4, figsize=(17.5, 10))
+
+    else:
+        print 'ECM features already denoised'
 
 construct_features_dataframe(tourettome_derivatives, control_outliers, patient_outliers, rsfc_seeds)
