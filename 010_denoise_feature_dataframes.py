@@ -126,6 +126,9 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     df_pheno_controls = df_pheno_controls.drop([i for i in df_pheno_controls.columns if i not in terms], axis=1)
     df_pheno_patients = df_pheno_patients.drop([i for i in df_pheno_patients.columns if i not in terms], axis=1)
 
+    df_pheno_controls.to_csv(os.path.join(tourettome_phenotypic, 'tourettome_phenotypic_controls.csv'))
+    df_pheno_patients.to_csv(os.path.join(tourettome_phenotypic, 'tourettome_phenotypic_patients.csv'))
+
     # Included subjects
     print 'n_controls=', len(controls)
     print 'n_patients=', len(patients)
