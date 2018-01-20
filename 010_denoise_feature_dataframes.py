@@ -375,4 +375,4 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
 
 
 
-construct_features_dataframe(tourettome_derivatives)
+construct_features_dataframe(tourettome_derivatives, control_outliers, patient_outliers)
