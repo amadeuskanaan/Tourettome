@@ -42,9 +42,9 @@ patient_outliers = ['HA009', 'HA016', 'HB005', 'HB011', 'HB015', 'HM015', 'HM023
                     'PA077', 'PA078', 'PA080', 'PA081', 'PA094', 'PA095', 'LZ001'] + hamburg_patients
 
 
-seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL']
-terms = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
-formula = 'y ~ Age + male + female + HANNOVER_A + HANNOVER_B + HAMBURG + Leipzig + PARIS + CJV + FD + DVARS + TSNR'
+rsfc_seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC', 'PALL', 'THAL']
+terms      = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
+formula  = 'y ~ Age + male + female + HANNOVER_A + HANNOVER_B + Leipzig + PARIS + CJV + FD'
 
 def regress_nuisance_covariates(df_features, df_design, formula):
     # Regress features
@@ -95,7 +95,7 @@ def z_score_features(df_controls, df_patients):
     return df_controls_z, df_patients_z
 
 
-def construct_features_dataframe(derivatives_dir, control_outliers, patients_outliers):
+def construct_features_dataframe(derivatives_dir, control_outliers, patients_outliers, rsfc_seeds):
 
     print '========================================================================================'
     print ''
@@ -147,7 +147,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
 
     if not os.path.isfile(os.path.join(features_dir, 'sca_tourettome_raw.csv')):
         sca_tourettome_raw = []
-        for seed_name in seeds:
+        for seed_name in rsfc_seeds:
             print 'checking sca %s data for tourettome population (After QC)'%seed
             sca_tourettome_raw.append(return_sca_data(seed_name, tourettome_subjects, derivatives_dir))
 
@@ -215,15 +215,16 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
         make_dmat_category('Site', 'PARIS')
         design_matrix['CJV'] = df_pheno['qc_anat_cjv']
         design_matrix['FD'] = df_pheno['qc_func_fd']
-        design_matrix['DVARS'] = df_pheno['qc_func_dvars']
-        design_matrix['TSNR'] = df_pheno['qc_func_tsnr']
+        # design_matrix['DVARS'] = df_pheno['qc_func_dvars']
+        # design_matrix['TSNR'] = df_pheno['qc_func_tsnr']
 
         # Save design matrix data
         design_matrix.to_csv(os.path.join(features_dir, 'design_matrix_tourettome.csv'))
 
         # Plot design matrix
         f = plt.figure(figsize=(12, 8))
-        for i in ['Age', 'FD', 'DVARS', 'TSNR']:
+        for i in ['Age', 'FD'#, 'DVARS', 'TSNR'
+                  ]:
             design_matrix[i] = preprocessing.scale(design_matrix[i])
         sns.heatmap(design_matrix, yticklabels=False, cmap=cmap_gradient, vmin=-2.5, vmax=2.5)
         plt.xticks(size=20, rotation=90, weight='bold')
@@ -376,4 +377,4 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
 
 
 
-construct_features_dataframe(tourettome_derivatives, control_outliers, patient_outliers)
+construct_features_dataframe(tourettome_derivatives, control_outliers, patient_outliers, rsfc_seeds)
