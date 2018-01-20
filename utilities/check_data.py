@@ -1,8 +1,9 @@
+import os
+import numpy as np
+import pandas as pd
+import nibabel as nb
 
 def return_sca_data(seed, population, derivatives_dir):
-    import os
-    import numpy as np
-    import pandas as pd
 
     df_features = []
     for subject in population:
@@ -26,10 +27,6 @@ def return_sca_data(seed, population, derivatives_dir):
     return pd.concat(df_features, axis=1)
 
 def return_ct_data(population, derivatives_dir):
-    import os
-    import numpy as np
-    import pandas as pd
-    import nibabel as nb
 
     df_features = []
     for subject in population:
@@ -51,3 +48,24 @@ def return_ct_data(population, derivatives_dir):
 
     return pd.concat(df_features, axis=1)
 
+
+def return_ecm_data(population, derivatives_dir):
+    df_features = []
+    for subject in population:
+        lh = os.path.join(derivatives_dir, 'func_centrality/%s_ecm_z_fwhm6_lh.npy' %subject)
+        rh = os.path.join(derivatives_dir, 'func_centrality/%s_ecm_z_fwhm6_rh.npy' %subject)
+
+        if os.path.isfile(lh) and os.path.isfile(rh):
+            ecm_lh = np.load(lh).ravel()
+            ecm_rh = np.load(rh).ravel()
+        else:
+            print '.... Subject %s missing %s ECM data' %(subject, seed)
+
+        df_ecm_lh = pd.DataFrame(ecm_lh, columns=[subject],
+                                 index=['lh_%s' % str(i) for i in range(sca_lh.shape[0])])
+        df_ecm_rh = pd.DataFrame(ecm_rh, columns=[subject],
+                                 index=['rh_%s' % str(i) for i in range(sca_rh.shape[0])])
+
+        df_features.append(pd.concat([df_ecm_lh, df_ecm_rh], axis=0))
+
+    return pd.concat(df_features, axis=1)
