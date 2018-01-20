@@ -296,7 +296,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     print '###########################################################'
     print '... Denoising CT features'
 
-    if not os.path.isfile(os.path.join(features_dir, 'ct_tourettome_resid.csv')):
+    if not os.path.isfile(os.path.join(features_dir, 'ct_patients_resid_z.csv')):
 
         #####################
         # Drop CT subjects from design_matrix
