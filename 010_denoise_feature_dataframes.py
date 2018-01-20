@@ -353,7 +353,9 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
             print ' ... Z-scoring SCA dataframes'
             ct_controls_resid_z, ct_patients_resid_z = z_score_features(ct_controls_resid, ct_patients_resid)
 
-            # plot separate sca residuals
+            # save data
+            ct_controls_resid_z.to_csv(os.path.join(features_dir, 'ct_controls_resid_z.csv'))
+            ct_patients_resid_z.to_csv(os.path.join(features_dir, 'ct_patients_resid_z.csv'))
             plt_features_heatmap(ct_controls_resid_z, os.path.join(features_dir, 'ct_controls_resid_z.png'),
                                  vmin=-4, vmax=4, figsize=(17.5, 10))
             plt_features_heatmap(ct_patients_resid_z, os.path.join(features_dir, 'ct_patients_resid_z.png'),
