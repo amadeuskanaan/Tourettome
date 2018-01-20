@@ -32,8 +32,9 @@ hamburg_controls = ['HM001', 'HM004', 'HM006', 'HM012', 'HM014', 'HM017', 'HM019
                     'HM028', 'HM029','HM030','HM032']
 hamburg_patients = ['HM002', 'HM003', 'HM005', 'HM007', 'HM008', 'HM009', 'HM010', 'HM011', 'HM020', 'HM024',
                     'HM031', 'HM033']
+hamburg          = hamburg_patients+hamburg_controls
 
-#based on fd_max > 1 and fd_mu> 0.2
+# QC based on fd_max > 1 and fd_mu> 0.2
 control_outliers = ['HM015', 'HM028', 'LZ057', 'LZ061', 'PA059', 'LZ052' ] + hamburg_controls
 patient_outliers = ['HA009', 'HA016', 'HB005', 'HB011', 'HB015', 'HM015', 'HM023', 'HM026', 'HM028', 'LZ004',
                     'LZ006', 'LZ007', 'LZ013', 'LZ017', 'LZ018', 'LZ020', 'LZ021', 'LZ025', 'LZ027', 'LZ028',
@@ -138,7 +139,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     # Outliers
     print 'n_control_outliers=', len(control_outliers)
     print 'n_patients_outliers=', len(patient_outliers)
-    print 'n_total_outliers =', len(control_outliers) + len(patient_outliers)
+    print 'n_total_outliers =', len([i for i in control_outliers+patient_outliers if i not in hamburg])
     print ''
 
     #######################################################################################################
@@ -181,7 +182,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
 
         # plot ct_raw
         f = plt.figure(figsize=(35, 20))
-        sns.heatmap(ct_tourettome_raw, yticklabels=False, cmap=cmap_gradient, vmin=1, vmax=3.5)
+        sns.heatmap(ct_tourettome_raw, yticklabels=False, cmap=cmap_gradient, vmin=0, vmax=4)
         plt.xticks(size=6, rotation=90)
         f.savefig(os.path.join(features_dir, 'ct_tourettome_raw.png'), bbox_inches = 'tight')
 
