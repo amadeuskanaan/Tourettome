@@ -14,7 +14,7 @@ sns.set_style('white')
 
 from variables.subject_list import *
 from utilities.utils import mkdir_path
-from utilities.check_data import return_ct_data, return_sca_data
+from utilities.check_data import return_ct_data, return_sca_data, return_ecm_data
 from plotting.cmaps import cmap_gradient
 
 
@@ -192,7 +192,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     if not os.path.isfile(os.path.join(features_dir, 'ecm_tourettome_raw.csv')):
         print '...... Checking ECM data'
         # check data and save
-        ecm_tourettome_raw = return_ct_data(tourettome_subjects, tourettome_derivatives)
+        ecm_tourettome_raw = return_ecm_data(tourettome_subjects, tourettome_derivatives)
         ecm_tourettome_raw.to_csv(os.path.join(features_dir, 'ecm_tourettome_raw.csv'))
         plt_features_heatmap(ecm_tourettome_raw, os.path.join(features_dir, 'ecm_tourettome_raw.png'), vmin=-1, vmax=1)
 
