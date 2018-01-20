@@ -257,8 +257,10 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
             plt_features_heatmap(sca_tourettome_resid, os.path.join(features_dir, 'sca_tourettome_resid.png'),
                                  vmin=-2,vmax=2)
 
+        #####################
         # Break down sca_tourettome_resid to patient and control dataframes
         if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
+            sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col =0)
             sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
             sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
 
@@ -327,6 +329,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
         # Break Down mats into patients and controls
         if not os.path.isfile(os.path.join(features_dir, 'ct_patients_resid.csv')):
             # Break down ct_tourettome_resid to patient and control dataframes
+            ct_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_resid.csv'), index_col=0)
             ct_patients_resid = ct_tourettome_resid.drop([i for i in controls if i in ct_tourettome_resid.columns], axis=1)
             ct_controls_resid = ct_tourettome_resid.drop([i for i in patients if i in ct_tourettome_resid.columns], axis=1)
 
@@ -339,6 +342,10 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
                                  vmin=-1, vmax=1, figsize=(17.5, 10))
             plt_features_heatmap(ct_patients_resid, os.path.join(features_dir, 'ct_patients_resid.png'),
                                  vmin=-1, vmax=1, figsize=(17.5, 10))
+
+        else:
+            ct_controls_resid = pd.read_csv(os.path.join(features_dir, 'ct_controls_resid.csv'), index_col=0)
+            ct_patients_resid = pd.read_csv(os.path.join(features_dir, 'ct_patients_resid.csv'), index_col=0)
 
         #####################
         # Z-Score
