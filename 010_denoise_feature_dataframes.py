@@ -195,6 +195,8 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
         ecm_tourettome_raw = return_ecm_data(tourettome_subjects, tourettome_derivatives)
         ecm_tourettome_raw.to_csv(os.path.join(features_dir, 'ecm_tourettome_raw.csv'))
         plt_features_heatmap(ecm_tourettome_raw, os.path.join(features_dir, 'ecm_tourettome_raw.png'), vmin=-1, vmax=1)
+    else:
+        ecm_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'ecm_tourettome_raw.csv'), index_col=0)
 
     ############################################################################################################
     print '###########################################################'
