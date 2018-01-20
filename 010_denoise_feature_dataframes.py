@@ -121,12 +121,10 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     tourettome_subjects = sorted(controls + patients)
 
     # create group phenotypic dataframes
+    df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
+    df_pheno_patients = df_pheno.drop([i for i in df_pheno.index if i not in patients], axis=0)
     df_pheno_controls = df_pheno_controls.drop([i for i in df_pheno_controls.columns if i not in terms], axis=1)
     df_pheno_patients = df_pheno_patients.drop([i for i in df_pheno_patients.columns if i not in terms], axis=1)
-
-    # df_pheno_controls = df_pheno.drop([i for i in df_pheno.index if i not in controls], axis=0)
-    # df_pheno_patients = df_pheno.drop([i for i in df_pheno.index if i not in patients], axis=0)
-
 
     # Included subjects
     print 'n_controls=', len(controls)
