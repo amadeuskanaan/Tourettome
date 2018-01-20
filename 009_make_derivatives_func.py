@@ -23,6 +23,7 @@ fsaverage5 = return_fsaverage_data(freesurfer_dir, 'fsaverage5')
 ### 2- ECM  - Eigenvector Centrality Mapping
 
 
+# QC based on fd_max > 1 and fd_mu> 0.2
 control_outliers = ['HM015', 'HM028', 'LZ057', 'LZ061', 'PA059', 'LZ052' ]
 patient_outliers = ['HA009', 'HA016', 'HB005', 'HB011', 'HB015', 'HM015', 'HM023', 'HM026', 'HM028', 'LZ004',
                     'LZ006', 'LZ007', 'LZ013', 'LZ017', 'LZ018', 'LZ020', 'LZ021', 'LZ025', 'LZ027', 'LZ028',
@@ -166,13 +167,9 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
 
 
-# make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
-
-# tourettome_subjects =[i for i in tourettome_subjects if i not in FD_outliers]
-# make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-
-tourettome_subjects =[i for i in tourettome_subjects if i not in FD_outliers and i[0:2]=='PA']
-make_functional_derivatives(tourettome_subjects[45:], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+#make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
+tourettome_subjects =[i for i in tourettome_subjects if i not in FD_outliers]
+make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
 
