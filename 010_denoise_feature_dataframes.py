@@ -187,14 +187,14 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
     else:
         ct_tourettome_raw = pd.read_csv(os.path.join(features_dir, 'ct_tourettome_raw.csv'),index_col=0)
 
-    ###################
-    # ECM
-    if not os.path.isfile(os.path.join(features_dir, 'ecm_tourettome_raw.csv')):
-        print '...... Checking ECM data'
-        # check data and save
-        ecm_tourettome_raw = return_ecm_data(tourettome_subjects, tourettome_derivatives)
-        ecm_tourettome_raw.to_csv(os.path.join(features_dir, 'ecm_tourettome_raw.csv'))
-        plt_features_heatmap(ecm_tourettome_raw, os.path.join(features_dir, 'ecm_tourettome_raw.png'), vmin=-1, vmax=1)
+    # ###################
+    # # ECM
+    # if not os.path.isfile(os.path.join(features_dir, 'ecm_tourettome_raw.csv')):
+    #     print '...... Checking ECM data'
+    #     # check data and save
+    #     ecm_tourettome_raw = return_ecm_data(tourettome_subjects, tourettome_derivatives)
+    #     ecm_tourettome_raw.to_csv(os.path.join(features_dir, 'ecm_tourettome_raw.csv'))
+    #     plt_features_heatmap(ecm_tourettome_raw, os.path.join(features_dir, 'ecm_tourettome_raw.png'), vmin=-1, vmax=1)
 
     ############################################################################################################
     print '###########################################################'
@@ -323,8 +323,8 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
                                  vmin=-2, vmax=2)
 
             # Break down ct_tourettome_resid to patient and control dataframes
-            ct_patients_resid = ct_tourettome_resid.drop(controls, axis=1)
-            ct_controls_resid = ct_tourettome_resid.drop(patients, axis=1)
+            ct_patients_resid = ct_tourettome_resid.drop([i for i in controls if i in ct_tourettome_resid.columns], axis=1)
+            ct_controls_resid = ct_tourettome_resid.drop([i for i in patients if i in ct_tourettome_resid.columns], axis=1)
 
             # save separately
             ct_patients_resid.to_csv(os.path.join(features_dir, 'ct_patients_resid.csv'))
