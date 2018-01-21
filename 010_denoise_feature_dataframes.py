@@ -39,7 +39,7 @@ control_outliers = ['HM015', 'LZ061', 'LZ052' ] #+ hamburg_controls
 patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
                     'LZ018', 'LZ020', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ030', 'LZ031', 'LZ035', 'LZ038',
                     'PA001', 'PA006', 'PA009', 'PA012', 'PA013', 'PA019', 'PA025', 'PA039', 'PA045', 'PA052',
-                    'PA055', 'PA058', 'PA077', 'PA078', 'PA080', 'PA081', 'PA094' 'LZ001'] #+ hamburg_patients
+                    'PA055', 'PA058', 'PA077', 'PA078', 'PA080', 'PA081', 'PA094', 'LZ001'] #+ hamburg_patients
 
 
 rsfc_seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC'] # 'PALL', 'THAL'
