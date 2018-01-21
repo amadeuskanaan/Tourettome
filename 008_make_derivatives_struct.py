@@ -36,22 +36,23 @@ def make_derivatives_struct(population, freesurfer_dir, derivatives_dir) :
 
         print '1- Extracting Cortical Thickness'
 
-        if os.path.isfile(os.path.join(fs_dir, 'surf/lh.thickness')):
-            FWHM_CT = '20'
-            fsaverage = 'fsaverage5'
-            for hemi in ['lh', 'rh']:
-                if not os.path.isfile(os.path.join(ct_dir, '%s_ct2fsaverage5_fwhm20_%s.mgh' % (subject,hemi))):
-                        surf2surf = ['mri_surf2surf ',
-                                     '--s '          + subject,
-                                     '--sval '       + os.path.join(fs_dir, 'surf/%s.thickness' % hemi),
-                                     '--hemi '       + hemi,
-                                     '--trgsubject ' + fsaverage,
-                                     '--fwhm-src '   + FWHM_CT,
-                                     '--tval '       + os.path.join(ct_dir, '%s_ct2%s_fwhm%s_%s.mgh' %
-                                                                    (subject, fsaverage, FWHM_CT, hemi)),
-                                     '--cortex '
-                                     '--noreshape ']
-                        os_system(surf2surf)
+        if os.path.isfile(os.path.join(fs_dir, 'surf/rh.thickness')):
+            if not os.path.isfile(os.path.join(ct_dir, '%s_ct2fsaverage5_fwhm20_rh.mgh'%subject)):
+                FWHM_CT = '20'
+                fsaverage = 'fsaverage5'
+                for hemi in ['lh', 'rh']:
+                    if not os.path.isfile(os.path.join(ct_dir, '%s_ct2fsaverage5_fwhm20_%s.mgh' % (subject,hemi))):
+                            surf2surf = ['mri_surf2surf ',
+                                         '--s '          + subject,
+                                         '--sval '       + os.path.join(fs_dir, 'surf/%s.thickness' % hemi),
+                                         '--hemi '       + hemi,
+                                         '--trgsubject ' + fsaverage,
+                                         '--fwhm-src '   + FWHM_CT,
+                                         '--tval '       + os.path.join(ct_dir, '%s_ct2%s_fwhm%s_%s.mgh' %
+                                                                        (subject, fsaverage, FWHM_CT, hemi)),
+                                         '--cortex '
+                                         '--noreshape ']
+                            os_system(surf2surf)
 
         else:
             print '..........Subject missing reconall data'
