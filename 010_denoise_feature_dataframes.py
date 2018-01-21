@@ -411,7 +411,8 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
         if not os.path.isfile(os.path.join(features_dir, 'ecm_patients_resid_z.csv')):
             print ' ... Z-scoring ECM dataframes'
             ecm_controls_resid_z, ecm_patients_resid_z = z_score_features(ecm_controls_resid, ecm_patients_resid)
-
+            ecm_controls_resid_z.to_csv(os.path.join(features_dir, 'ecm_controls_resid_z.csv'))
+            ecm_patients_resid_z.to_csv(os.path.join(features_dir, 'ecm_patients_resid_z.csv'))
             # plot separate sca residuals
             plt_features_heatmap(ecm_controls_resid_z, os.path.join(features_dir, 'ecm_controls_resid_z.png'),
                                  vmin=-4, vmax=4, figsize=(17.5, 10))
