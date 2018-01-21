@@ -36,7 +36,7 @@ def make_derivatives_struct(population, freesurfer_dir, derivatives_dir) :
 
         print '1- Extracting Cortical Thickness'
 
-        if not os.path.isfile(os.path.join(fs_dir, 'surf/lh.thickness')) and not os.path.isfile(os.path.join(fs_dir, 'surf/rh.thickness'))    :
+        if os.path.isfile(os.path.join(fs_dir, 'surf/lh.thickness')):
             FWHM_CT = '20'
             fsaverage = 'fsaverage5'
             for hemi in ['lh', 'rh']:
