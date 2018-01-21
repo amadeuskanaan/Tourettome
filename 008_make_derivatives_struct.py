@@ -36,7 +36,7 @@ def make_derivatives_struct(population, freesurfer_dir, derivatives_dir) :
 
         print '1- Extracting Cortical Thickness'
 
-        if os.path.isfile(os.path.join(fs_dir, 'surf/lh.thickness'))    :
+        if not os.path.isfile(os.path.join(fs_dir, 'surf/lh.thickness')) and not os.path.isfile(os.path.join(fs_dir, 'surf/rh.thickness'))    :
             FWHM_CT = '20'
             fsaverage = 'fsaverage5'
             for hemi in ['lh', 'rh']:
@@ -62,17 +62,17 @@ def make_derivatives_struct(population, freesurfer_dir, derivatives_dir) :
         ### 2- Subcortical Volume
         ################################################################################################################
 
-        print '2- Extracting Subcortical Volumes'
-
-        if os.path.isfile(os.path.join(fs_dir, 'stats/aseg.stats')):
-            aseg_stats_out = os.path.join(vol_dir, '%s_aseg_stats.txt' % subject)
-            if not os.path.isfile(aseg_stats_out):
-                os.system('asegstats2table -s %s --meas volume --delimiter comma -t %s'
-                      %(subject,  aseg_stats_out))
-        else:
-            print '..........Subject missing reconall data'
-            #print os.path.join(fs_dir, 'stats/aseg.stats')
-
+        # print '2- Extracting Subcortical Volumes'
+        #
+        # if os.path.isfile(os.path.join(fs_dir, 'stats/aseg.stats')):
+        #     aseg_stats_out = os.path.join(vol_dir, '%s_aseg_stats.txt' % subject)
+        #     if not os.path.isfile(aseg_stats_out):
+        #         os.system('asegstats2table -s %s --meas volume --delimiter comma -t %s'
+        #               %(subject,  aseg_stats_out))
+        # else:
+        #     print '..........Subject missing reconall data'
+        #     #print os.path.join(fs_dir, 'stats/aseg.stats')
+        #
 
 
 tourettome_freesurfer = '/data/pt_nmr093_gts/freesurfer'
