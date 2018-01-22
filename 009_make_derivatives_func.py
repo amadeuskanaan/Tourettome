@@ -131,27 +131,27 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                 # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
 
 
-                if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm20_rh.mgh' % subject)):
-                    os.chdir(seed_dir)
-                    for hemi in  ['lh', 'rh']:
-                        # vol2surf
-                        os.system('mri_vol2surf '
-                                  '--mov %s_sca_z.nii.gz '
-                                  '--regheader %s '
-                                  '--projfrac-avg 0.1 0.9 0.1 '
-                                  '--interp nearest '
-                                  '--hemi %s '
-                                  '--out %s_sca_z_%s.mgh'
-                                  %(subject, subject, hemi, subject, hemi))
-                        #surf2surf
-                        os.system('mri_surf2surf '
-                                  '--s %s '
-                                  '--sval  %s_sca_z_%s.mgh '
-                                  '--hemi %s '
-                                  '--trgsubject fsaverage5 '
-                                  '--fwhm-src 20 '
-                                  '--tval %s/%s_sca_z_fsaverage5_fwhm20_%s.mgh'
-                                  %(subject, subject, hemi, hemi, subject, hemi))
+            if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm20_rh.mgh' % subject)):
+                os.chdir(seed_dir)
+                for hemi in  ['lh', 'rh']:
+                    # vol2surf
+                    os.system('mri_vol2surf '
+                              '--mov %s_sca_z.nii.gz '
+                              '--regheader %s '
+                              '--projfrac-avg 0.1 0.9 0.1 '
+                              '--interp nearest '
+                              '--hemi %s '
+                              '--out %s_sca_z_%s.mgh'
+                              %(subject, subject, hemi, subject, hemi))
+                    #surf2surf
+                    os.system('mri_surf2surf '
+                              '--s %s '
+                              '--sval  %s_sca_z_%s.mgh '
+                              '--hemi %s '
+                              '--trgsubject fsaverage5 '
+                              '--fwhm-src 20 '
+                              '--tval %s/%s_sca_z_fsaverage5_fwhm20_%s.mgh'
+                              %(subject, subject, hemi, hemi, subject, hemi))
 
 
         #
