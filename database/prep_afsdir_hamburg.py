@@ -85,4 +85,4 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
     param_group = pd.concat(param_group, ignore_index=False)  # .sort(columns='Age')
     param_group.to_csv(os.path.join(tourettome_phenotypic, 'df_dcm/dicomhdr_hamburg.csv'))
 
-prep_hamburg_data(HMABURG_CONTROLS+HAMBURG_PATIENTS, HAMBURG_orig_datadir , tourettome_afs)
+prep_hamburg_data(sorted(HMABURG_CONTROLS+HAMBURG_PATIENTS), HAMBURG_orig_datadir , tourettome_afs)
