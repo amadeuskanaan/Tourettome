@@ -50,6 +50,12 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
         columns = ['Name', 'Site', 'Group', 'ScanDate', 'Scanner', 'NCoils', 'Sequence', 'TR',
                    'TE', 'Resolution', 'NVols', 'FlipAngle']
         df = pd.DataFrame(index=['%s' % subject], columns=columns)
+
+        if group_id =='patients':
+            group_id = 'patients'
+        elif group_id =='probands':
+            group_id = 'controls'
+
         df.loc['%s' % subject] = pd.Series({'Name'      : subject,
                                                'Group'     : group_id,
                                                #'Age'       : '', This column is grabeed from the clinical df
