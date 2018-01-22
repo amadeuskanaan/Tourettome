@@ -44,7 +44,7 @@ patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006
 
 rsfc_seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC'] # 'PALL', 'THAL'
 terms      = ['Age', 'Sex', 'Site', 'qc_func_fd']
-formula  = 'y ~ Age + male + female + HANNOVER_A + HANNOVER_B + Leipzig + PARIS  + FD'
+formula  = 'y ~ 1 + Age + male + female + HANNOVER_A + HANNOVER_B + Leipzig + PARIS  + FD'
 
 def regress_nuisance_covariates(df_features, df_design, formula):
     # Regress features
