@@ -150,7 +150,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                               '--hemi %s '
                               '--trgsubject fsaverage5 '
                               '--fwhm-src 20 '
-                              '--tval %s/%s_sca_z_fsaverage5_fwhm20_%s.mgh'
+                              '--tval %s_sca_z_fsaverage5_fwhm20_%s.mgh'
                               %(subject, subject, hemi, hemi, subject, hemi))
 
 
