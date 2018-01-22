@@ -54,7 +54,7 @@ def prep_hamburg_data(population, original_datadir, afs_dir):
         if group_id =='patients':
             group_id = 'patients'
         elif group_id =='probands':
-            group_id = 'patients'
+            group_id = 'controls'
 
         df.loc['%s' % subject] = pd.Series({'Name'      : subject,
                                                'Group'     : group_id,
