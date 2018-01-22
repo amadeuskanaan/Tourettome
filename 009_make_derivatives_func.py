@@ -132,7 +132,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
 
             if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm20_rh.mgh' % subject)):
-                os.chdir(seed_dir)
+                os.chdir(os.path.join(sca_dir, seed_name))
                 for hemi in  ['lh', 'rh']:
                     # vol2surf
                     os.system('mri_vol2surf '
