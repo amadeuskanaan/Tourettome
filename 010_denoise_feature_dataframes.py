@@ -39,12 +39,12 @@ control_outliers = ['HM015', 'LZ061', 'LZ052' ] + hamburg_controls
 patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
                     'LZ018', 'LZ020', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ030', 'LZ031', 'LZ035', 'LZ038',
                     'PA001', 'PA006', 'PA009', 'PA012', 'PA013', 'PA019', 'PA025', 'PA039', 'PA045', 'PA052',
-                    'PA055', 'PA058', 'PA077', 'PA078', 'PA080', 'PA081', 'PA094', 'LZ001'] #+ hamburg_patients
+                    'PA055', 'PA058', 'PA077', 'PA078', 'PA080', 'PA081', 'PA094', 'LZ001'] + hamburg_patients
 
 
 rsfc_seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC'] # 'PALL', 'THAL'
 terms      = ['Age', 'Sex', 'Site', 'qc_func_fd']
-formula  = 'y ~ Age + male + female + HANNOVER_A + HANNOVER_B + HAMBURG + Leipzig + PARIS + CJV + FD'
+formula  = 'y ~ Age + male + female + HANNOVER_A + HANNOVER_B + Leipzig + PARIS  + FD'
 
 def regress_nuisance_covariates(df_features, df_design, formula):
     # Regress features
@@ -220,8 +220,8 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
         #make_dmat_category('Site', 'HAMBURG')
         make_dmat_category('Site', 'Leipzig')
         make_dmat_category('Site', 'PARIS')
-        #design_matrix['CJV'] = df_pheno['qc_anat_cjv']
         design_matrix['FD'] = df_pheno['qc_func_fd']
+        #design_matrix['CJV'] = df_pheno['qc_anat_cjv']
         # design_matrix['DVARS'] = df_pheno['qc_func_dvars']
         # design_matrix['TSNR'] = df_pheno['qc_func_tsnr']
 
