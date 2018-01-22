@@ -43,7 +43,7 @@ patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006
 
 
 rsfc_seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC'] # 'PALL', 'THAL'
-terms      = ['Age', 'Sex', 'Site', 'qc_func_fd', 'qc_anat_cjv']
+terms      = ['Age', 'Sex', 'Site', 'qc_func_fd']
 formula  = 'y ~ Age + male + female + HANNOVER_A + HANNOVER_B + HAMBURG + Leipzig + PARIS + CJV + FD'
 
 def regress_nuisance_covariates(df_features, df_design, formula):
@@ -220,7 +220,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
         #make_dmat_category('Site', 'HAMBURG')
         make_dmat_category('Site', 'Leipzig')
         make_dmat_category('Site', 'PARIS')
-        design_matrix['CJV'] = df_pheno['qc_anat_cjv']
+        #design_matrix['CJV'] = df_pheno['qc_anat_cjv']
         design_matrix['FD'] = df_pheno['qc_func_fd']
         # design_matrix['DVARS'] = df_pheno['qc_func_dvars']
         # design_matrix['TSNR'] = df_pheno['qc_func_tsnr']
