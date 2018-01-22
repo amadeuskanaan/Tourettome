@@ -130,9 +130,9 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                 # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_lh.npy'%subject), sca_lh)
                 # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
 
-
+            seed_dir = os.path.join(sca_dir, seed_name)
             if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm20_rh.mgh' % subject)):
-                os.chdir(os.path.join(sca_dir, seed_name))
+                os.chdir(seed_dir)
                 for hemi in  ['lh', 'rh']:
                     # vol2surf
                     os.system('mri_vol2surf '
