@@ -73,7 +73,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
         # subject I/0
         subject_dir = os.path.join(workspace_dir, subject)
-        func_denoised = os.path.join(subject_dir, 'DENOISE', 'residuals_compcor', 'residual_bp_z_fwhm6.nii.gz')
+        func_denoised = os.path.join(subject_dir, 'DENOISE', 'residuals_compcor', 'residual_bp_z.nii.gz')
 
         ################################################################################################################
         ### 1- Seed-Based Correlation
@@ -82,20 +82,20 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         print '1. Calculating Seed-Based Correlation'
 
         seeds = {'STR'         : mask_str,
-                 'STR3_MOTOR'  : mask_str_motor,
-                 'STR3_LIMBIC' : mask_str_limbic,
-                 'STR3_EXEC'   : mask_str_exec,
-                 'CAUD'        : mask_caud,
-                 'PUTA'        : mask_puta,
-                 'ACCU'        : mask_accu,
-                 'PALL'        : mask_pall,
-                 'THAL'        : mask_thal,
-                 'HIPP'        : mask_hipp,
-                 'AMYG'        : mask_amyg,
+                 # 'STR3_MOTOR'  : mask_str_motor,
+                 # 'STR3_LIMBIC' : mask_str_limbic,
+                 # 'STR3_EXEC'   : mask_str_exec,
+                 # 'CAUD'        : mask_caud,
+                 # 'PUTA'        : mask_puta,
+                 # 'ACCU'        : mask_accu,
+                 # 'PALL'        : mask_pall,
+                 # 'THAL'        : mask_thal,
+                 # 'HIPP'        : mask_hipp,
+                 # 'AMYG'        : mask_amyg,
                  }
 
         for seed_name in seeds:
-            if not os.path.isfile(os.path.join(sca_dir, seed_name, '%s_sca_z_fwhm6.nii.gz'%subject)):
+            if not os.path.isfile(os.path.join(sca_dir, seed_name, '%s_sca_z.nii.gz'%subject)):
                 print seed_name
                 seed_dir = mkdir_path(os.path.join(sca_dir, seed_name))
 
@@ -119,57 +119,82 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
                 # Save seed-to-brain correlation as a  Nifti image
                 sca_img = masker_brain.inverse_transform(sca.T)
-                sca_img.to_filename(os.path.join(seed_dir, '%s_sca_z_fwhm6.nii.gz'%subject))
+                sca_img.to_filename(os.path.join(seed_dir, '%s_sca_z.nii.gz'%subject))
 
+                # skip the nilearn approach..... do it with freesurfer...
                 # Map seed-to-voxel onto surface
-                sca_lh = surface.vol_to_surf(sca_img, fsaverage5['pial_left']).ravel()
-                sca_rh = surface.vol_to_surf(sca_img, fsaverage5['pial_right']).ravel()
-
-                # Save seed-to-vertex correlation as a txt file
-                np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_lh.npy'%subject), sca_lh)
-                np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
-
-
-        ################################################################################################################
-        ### 2- Eigenvector Centrality
-        ################################################################################################################
-
-        print '2. Calculating Eigenvector-centraliy'
-
-        if not os.path.isfile(os.path.join(ecm_dir, subject, 'residual_bp_z_fwhm6_normECM.nii')):
-            # Create ECM subject dir in derivatives folder....
-            ecm_dir_subject = mkdir_path(os.path.join(ecm_dir, subject))
-
-            #copy denoised file locally. done since matlab code needs to be in the same folder..
-            os.chdir(ecm_dir_subject)
-            os.system('cp %s ./'%func_denoised)
-
-            # gzip.. important for maltab
-            os.system('gunzip residual_bp_z_fwhm6.nii.gz')
-
-            print '...... Runnning ECM for subject', subject
-            # run fast ecm
-            matlab_cmd = ['matlab', '-version', '8.2', '-nodesktop', '-nosplash', '-nojvm',
-                          # fastECM( inputfile, rankmap, normmap, degmap, maxiter, maskfile, atlasfile )
-                          '-r "fastECM(\'residual_bp_z_fwhm6.nii\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"' %
-                          (gm_group_mask)]
-            subprocess.call(matlab_cmd)
-
-            # clean folder
-            os.system('rm -rf residual_bp_z_fwhm6.nii')
-
-        # Map ECM to surface and save
-        if not os.path.isfile(os.path.join(ecm_dir, '%s_ecm_z_fwhm6_lh.npy' % subject)):
-            ecm_lh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_left']).ravel()
-            ecm_rh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_right']).ravel()
-            np.save('../%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
-            np.save('../%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
+                # sca_lh = surface.vol_to_surf(sca_img, fsaverage5['pial_left']).ravel()
+                # sca_rh = surface.vol_to_surf(sca_img, fsaverage5['pial_right']).ravel()
+                #
+                # # Save seed-to-vertex correlation as a txt file
+                # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_lh.npy'%subject), sca_lh)
+                # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
 
 
+                if not os.path.isfile(os.path.join(ct_dir, '%s_ct2fsaverage5_fwhm20_rh.mgh' % subject)):
+                    os.chdir(seed_dir)
+                    for hemi in  ['lh', 'rh']:
+                        # vol2surf
+                        os.system('mri_vol2surf '
+                                  '--mov %s_sca_z.nii.gz '
+                                  '--regheader %s '
+                                  '--projfrac-avg 0.1 0.9 0.1 '
+                                  '--interp nearest '
+                                  '--hemi %s '
+                                  '--out %s_sca_z_%s.mgh'
+                                  %(subject, subject, hemi, subject, hemi))
+                        #surf2surf
+                        os.system('mri_surf2surf '
+                                  '--s %s '
+                                  '--sval  %s_sca_z_%s.mgh '
+                                  '--hemi %s '
+                                  '--trgsubject fsaverage5 '
+                                  '--fwhm-src 20 '
+                                  '--tval %s/%s_sca_z_fsaverage5_fwhm20_%s.mgh'
+                                  %(subject, subject, hemi, hemi, subject, hemi))
 
-make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
+
+        #
+        # ################################################################################################################
+        # ### 2- Eigenvector Centrality
+        # ################################################################################################################
+        #
+        # print '2. Calculating Eigenvector-centraliy'
+        #
+        # if not os.path.isfile(os.path.join(ecm_dir, subject, 'residual_bp_z_fwhm6_normECM.nii')):
+        #     # Create ECM subject dir in derivatives folder....
+        #     ecm_dir_subject = mkdir_path(os.path.join(ecm_dir, subject))
+        #
+        #     #copy denoised file locally. done since matlab code needs to be in the same folder..
+        #     os.chdir(ecm_dir_subject)
+        #     os.system('cp %s ./'%func_denoised)
+        #
+        #     # gzip.. important for maltab
+        #     os.system('gunzip residual_bp_z_fwhm6.nii.gz')
+        #
+        #     print '...... Runnning ECM for subject', subject
+        #     # run fast ecm
+        #     matlab_cmd = ['matlab', '-version', '8.2', '-nodesktop', '-nosplash', '-nojvm',
+        #                   # fastECM( inputfile, rankmap, normmap, degmap, maxiter, maskfile, atlasfile )
+        #                   '-r "fastECM(\'residual_bp_z_fwhm6.nii\', \'1\', \'1\', \'1\', \'20\', \'%s\') ; quit;"' %
+        #                   (gm_group_mask)]
+        #     subprocess.call(matlab_cmd)
+        #
+        #     # clean folder
+        #     os.system('rm -rf residual_bp_z_fwhm6.nii')
+        #
+        # # Map ECM to surface and save
+        # if not os.path.isfile(os.path.join(ecm_dir, '%s_ecm_z_fwhm6_lh.npy' % subject)):
+        #     ecm_lh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_left']).ravel()
+        #     ecm_rh = surface.vol_to_surf('residual_bp_z_fwhm6_normECM.nii', fsaverage5['pial_right']).ravel()
+        #     np.save('../%s_ecm_z_fwhm6_lh.npy' % subject, ecm_lh)
+        #     np.save('../%s_ecm_z_fwhm6_rh.npy' % subject, ecm_rh)
+
+
+
+# make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
 # tourettome_subjects =[i for i in tourettome_subjects if i not in FD_outliers]
-make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+make_functional_derivatives(['LZ040'], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
 
