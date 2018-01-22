@@ -35,7 +35,7 @@ hamburg_patients = ['HM002', 'HM003', 'HM005', 'HM007', 'HM008', 'HM009', 'HM010
 hamburg          = hamburg_patients+hamburg_controls
 
 # QC based on fd_max > 1.5 and fd_mu> 0.2
-control_outliers = ['HM015', 'LZ061', 'LZ052' ] #+ hamburg_controls
+control_outliers = ['HM015', 'LZ061', 'LZ052' ] + hamburg_controls
 patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
                     'LZ018', 'LZ020', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ030', 'LZ031', 'LZ035', 'LZ038',
                     'PA001', 'PA006', 'PA009', 'PA012', 'PA013', 'PA019', 'PA025', 'PA039', 'PA045', 'PA052',
@@ -217,7 +217,7 @@ def construct_features_dataframe(derivatives_dir, control_outliers, patients_out
         make_dmat_category('Sex', 'female')
         make_dmat_category('Site', 'HANNOVER_A')
         make_dmat_category('Site', 'HANNOVER_B')
-        make_dmat_category('Site', 'HAMBURG')
+        #make_dmat_category('Site', 'HAMBURG')
         make_dmat_category('Site', 'Leipzig')
         make_dmat_category('Site', 'PARIS')
         design_matrix['CJV'] = df_pheno['qc_anat_cjv']
