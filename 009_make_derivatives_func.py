@@ -107,7 +107,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
                 # Extract brain timeseries
                 masker_brain = NiftiMasker(smoothing_fwhm=None, detrend=None, standardize=True, low_pass=None,
-                                           high_pass=None, t_r=2., memory='nilearn_cache', memory_level=1, verbose=0)
+                                           high_pass=None, t_r=None, memory='nilearn_cache', memory_level=1, verbose=0)
                 timeseries_brain = masker_brain.fit_transform(func_denoised)
                 print 'brain_timeseries_shape', timeseries_brain.shape
 
@@ -131,14 +131,14 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                 # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
 
             seed_dir = os.path.join(sca_dir, seed_name)
-            if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm20_rh.mgh' % subject)):
+            if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm10_rh.mgh' % subject)):
                 os.chdir(seed_dir)
                 for hemi in  ['lh', 'rh']:
                     # vol2surf
                     os.system('mri_vol2surf '
                               '--mov %s_sca_z.nii.gz '
                               '--regheader %s '
-                              '--projfrac-avg 0.1 0.9 0.1 '
+                              '--projfrac-avg 0.2 0.8 0.1 '
                               '--interp nearest '
                               '--hemi %s '
                               '--out %s_sca_z_%s.mgh'
@@ -149,8 +149,8 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                               '--sval  %s_sca_z_%s.mgh '
                               '--hemi %s '
                               '--trgsubject fsaverage5 '
-                              '--fwhm-src 20 '
-                              '--tval %s_sca_z_fsaverage5_fwhm20_%s.mgh'
+                              '--fwhm-src 10 '
+                              '--tval %s_sca_z_fsaverage5_fwhm10_%s.mgh'
                               %(subject, subject, hemi, hemi, subject, hemi))
 
 
