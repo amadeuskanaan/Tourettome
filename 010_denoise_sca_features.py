@@ -5,11 +5,11 @@ import numpy as np
 import pandas as pd
 import nibabel as nb
 import matplotlib
-import seaborn as sns
-matplotlib.use('agg')
-import matplotlib.pyplot as plt
+import subprocess
 import seaborn as sns
 from sklearn import preprocessing
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
 sns.set_style('white')
 
 from variables.subject_list import *
