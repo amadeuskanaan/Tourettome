@@ -38,15 +38,15 @@ terms = ['Age', 'Sex', 'Group', 'Site', 'qc_func_fd']
 def denoise_features(tourettome_dir, feature_name, freesurfer_dir, outliers):
 
     # SAVE CT pheno dataframe for surfstat
-    df_pheno     = pd.read_csv(os.path.join(phenotypic_dir, 'tourettome_phenotypic.csv'),index_col=0)
+    df_pheno     = pd.read_csv(os.path.join(tourettome_dir,  'phenotypic', 'tourettome_phenotypic.csv'),index_col=0)
     df_pheno= df_pheno.drop(outliers)
 
     df_pheno = df_pheno.drop([i for i in df_pheno.columns if i not in terms],axis = 1)
     df_pheno.index.names = ['subject']
-    df_pheno.to_csv('/Users/kanaan/SCR/workspace/project_touretome/phenotypic/tourettome_phenotypic_qc.csv')
+    df_pheno.to_csv(os.path.join(tourettome_dir,'phenotypic/tourettome_phenotypic_qc.csv'))
 
-    df_patients = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'controls'])
-    df_controls = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'patients'])
+    #df_patients = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'controls'])
+    #df_controls = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'patients'])
 
     # Regress covarites
 
