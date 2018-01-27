@@ -47,6 +47,13 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
            'HM011', 'HM012', 'HM014', 'HM015', 'HM017', 'HM019', 'HM020', 'HM022', 'HM023', 'HM024',
            'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
 
+hamburg_controls = ['HM001', 'HM004', 'HM006', 'HM012', 'HM014', 'HM017', 'HM019', 'HM022','HM025', 'HM027',
+                    'HM028', 'HM029','HM030','HM032',
+                    'LZ057', 'LZ058']
+hamburg_patients = ['HM002', 'HM003', 'HM005', 'HM007', 'HM008', 'HM009', 'HM010', 'HM011', 'HM020', 'HM024',
+                    'HM031', 'HM033']
+
+
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b + hamburg
 unsuable_datasets   = ['LZ001', 'LZ052']
 # LZ052 stilll salvagable, but need to create a new dummy loop for brain extraction. try BET after thresholding INV or T1MAPS
