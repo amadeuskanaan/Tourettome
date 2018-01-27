@@ -18,29 +18,6 @@ from utilities.check_data import return_ct_data, return_sca_data, return_ecm_dat
 from plotting.cmaps import cmap_gradient
 
 
-#based on fd_mu > 0.19
-control_outliers = ['HM015', 'LZ061', 'HB028', 'LZ052' ]
-patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
-                    'LZ018', 'LZ020', 'LZ022', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ031', 'LZ035', 'LZ038',
-                    'PA009', 'PA012', 'PA025', 'PA045', 'PA052', 'PA055', 'PA058', 'PA077', 'PA080', 'PA094',
-                    'LZ001']
-
-# hamburg data has artifact..
-# LZ001, LZ052 are missing data
-
-hamburg_controls = ['HM001', 'HM004', 'HM006', 'HM012', 'HM014', 'HM017', 'HM019', 'HM022','HM025', 'HM027',
-                    'HM028', 'HM029','HM030','HM032']
-hamburg_patients = ['HM002', 'HM003', 'HM005', 'HM007', 'HM008', 'HM009', 'HM010', 'HM011', 'HM020', 'HM024',
-                    'HM031', 'HM033']
-hamburg          = hamburg_patients+hamburg_controls
-
-# QC based on fd_max > 1.5 and fd_mu> 0.2
-control_outliers = ['HM015', 'LZ061', 'LZ052' ] + hamburg_controls
-patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006', 'LZ007', 'LZ013', 'LZ017',
-                    'LZ018', 'LZ020', 'LZ025', 'LZ027', 'LZ028', 'LZ029', 'LZ030', 'LZ031', 'LZ035', 'LZ038',
-                    'PA001', 'PA006', 'PA009', 'PA012', 'PA013', 'PA019', 'PA025', 'PA039', 'PA045', 'PA052',
-                    'PA055', 'PA058', 'PA077', 'PA078', 'PA080', 'PA081', 'PA094', 'LZ001'] + hamburg_patients
-
 
 rsfc_seeds = ['STR3_MOTOR', 'STR3_LIMBIC', 'STR3_EXEC'] # 'PALL', 'THAL'
 terms      = ['Age', 'Sex', 'Site', 'qc_func_fd']
