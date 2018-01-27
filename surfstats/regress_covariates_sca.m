@@ -39,7 +39,6 @@ surf_mid_ct.coord = (surf_white.coord + surf_white.coord)./2;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Read phenotypic data
-% subject 	Age 	Group 	Sex 	Site
 phenotypic_fid  = fopen(phenotypic);
 phenotypic_data = textscan(phenotypic_fid,'%s%f%s%s%s%f','Delimiter',',','headerLines',1,'CollectOutput',1);
 fclose(phenotypic_fid);
