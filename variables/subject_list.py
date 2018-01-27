@@ -50,7 +50,7 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b + hamburg
 unsuable_datasets   = ['LZ001', 'LZ052']
 # LZ052 stilll salvagable, but need to create a new dummy loop for brain extraction. try BET after thresholding INV or T1MAPS
-tourettome_subjects = [subject for subject in tourettome_subjects if subject not in unsuable_datasets and not in hamburg]
+tourettome_subjects = [subject for subject in tourettome_subjects if subject not in unsuable_datasets + hamburg]
 
 ########################################################################################################################
 # Outliers
