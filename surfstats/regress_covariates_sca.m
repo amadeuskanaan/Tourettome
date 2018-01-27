@@ -17,7 +17,7 @@ function [residuals] = regress_covariates_sca(tourettome_dir, feature_name, free
 %% Input/Output
 features_dir    = [tourettome_dir, 'derivatives/' feature_name, '/'];
 out_dir         = [tourettome_dir, 'derivatives/feature_matrices/' ];
-fsaverage5_dir  = '/scr/malta1/Github/Tourettome/algorithms/surfstats/fsaverage5';
+fsaverage5_dir  = '/scr/malta1/Github/Tourettome/algorithms/surfstats/fsaverage5/';
 
 %%% define toolbox dirs
 addpath('/scr/malta1/Github/Tourettome/algorithms/surfstats/software/surfstat_chicago')
