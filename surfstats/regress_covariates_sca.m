@@ -30,7 +30,7 @@ ice = textread('ice.m');
 %% Define freesurfer data
 surf_sphere = SurfStatReadSurf({[fsaverage5_dir 'surf/lh.sphere'],[fsaverage5_dir 'surf/rh.sphere']});
 surf_curv   = SurfStatReadData({[fsaverage5_dir 'surf/fsaverage_curv_lh.asc'],[fsaverage5_dir 'surf/fsaverage_curv_rh.asc']});
-surf_infl   = SurfStatReadSurf({[fsaverage5_dir 'surf/lh.inflated'],[fsaverage5_dir 'rh.inflated']});
+surf_infl   = SurfStatReadSurf({[fsaverage5_dir 'surf/lh.inflated'],[fsaverage5_dir 'surf/rh.inflated']});
 surf_white  = SurfStatReadSurf({[fsaverage5_dir 'surf/lh.white'],[fsaverage5_dir 'surf/rh.white']});
 surf_pial   = SurfStatReadSurf({[fsaverage5_dir 'surf/lh.pial'],[fsaverage5_dir 'surf/rh.pial']});
 
