@@ -59,4 +59,4 @@ def denoise_features(tourettome_dir, feature_name, freesurfer_dir, outliers):
 
 
 fsdir = '/data/pt_nmr093_gts/freesurfer'
-denoise_features(tourettome_base, fsdir, 'func_seed_correlation', patient_outliers+ control_outliers)
+denoise_features(tourettome_base, fsdir, 'func_seed_correlation', patient_outliers+control_outliers)
