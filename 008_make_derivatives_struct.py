@@ -78,4 +78,4 @@ def make_derivatives_struct(population, freesurfer_dir, derivatives_dir) :
 
 tourettome_freesurfer = '/data/pt_nmr093_gts/freesurfer'
 # make_derivatives_struct(tourettome_subjects, tourettome_freesurfer, tourettome_derivatives )
-make_derivatives_struct(['PA007'], tourettome_freesurfer, tourettome_derivatives )
+make_derivatives_struct(tourettome_subjects, tourettome_freesurfer, tourettome_derivatives )
