@@ -17,7 +17,7 @@ function [residuals] = regress_covariates_sca(tourettome_dir, feature_name, free
 %% Input/Output
 features_dir    = [tourettome_dir, 'derivatives/' feature_name, '/'];
 out_dir         = [tourettome_dir, 'derivatives/feature_matrices/' ];
-fsaverage5_dir  = [freesurfer_dir 'fsaverage5/'];
+fsaverage5_dir  = '/scr/malta1/Github/Tourettome/algorithms/surfstats/fsaverage5';
 
 %%% define toolbox dirs
 addpath('/scr/malta1/Github/Tourettome/algorithms/surfstats/software/surfstat_chicago')
@@ -28,11 +28,11 @@ ice = textread('ice.m');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Define freesurfer data
-surf_sphere = SurfStatReadSurf({[fsaverage5_dir 'surf/lh.sphere'],[fsaverage5_dir 'surf/rh.sphere']});
-surf_curv   = SurfStatReadData({[fsaverage5_dir 'surf/fsaverage_curv_lh.asc'],[fsaverage5_dir 'surf/fsaverage_curv_rh.asc']});
-surf_infl   = SurfStatReadSurf({[fsaverage5_dir 'surf/lh.inflated'],[fsaverage5_dir 'surf/rh.inflated']});
-surf_white  = SurfStatReadSurf({[fsaverage5_dir 'surf/lh.white'],[fsaverage5_dir 'surf/rh.white']});
-surf_pial   = SurfStatReadSurf({[fsaverage5_dir 'surf/lh.pial'],[fsaverage5_dir 'surf/rh.pial']});
+surf_sphere = SurfStatReadSurf({[fsaverage5_dir 'lh.sphere'],[fsaverage5_dir 'rh.sphere']});
+surf_curv   = SurfStatReadData({[fsaverage5_dir 'fsaverage_curv_lh.asc'],[fsaverage5_dir 'fsaverage_curv_rh.asc']});
+surf_infl   = SurfStatReadSurf({[fsaverage5_dir 'lh.inflated'],[fsaverage5_dir 'rh.inflated']});
+surf_white  = SurfStatReadSurf({[fsaverage5_dir 'lh.white'],[fsaverage5_dir 'rh.white']});
+surf_pial   = SurfStatReadSurf({[fsaverage5_dir 'lh.pial'],[fsaverage5_dir 'rh.pial']});
 
 surf_mid_ct.tri   = surf_white.tri;
 surf_mid_ct.coord = (surf_white.coord + surf_white.coord)./2;
