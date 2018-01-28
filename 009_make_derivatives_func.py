@@ -181,8 +181,8 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
 
 # make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
-make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 # make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+make_functional_derivatives(hannover_a+hannover_b, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
 
 
