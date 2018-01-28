@@ -53,19 +53,19 @@ phenotypic_fd         = phenotypic_data{4};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % load feature data
 
-strM_lh = strcat(features_dir, 'STR3_MOTOR/', phenotypic_id, '_sca_z_fwhm6_lh.npy');
-strM_rh = strcat(features_dir, 'STR3_MOTOR/', phenotypic_id, '_sca_z_fwhm6_rh.npy');
-strL_lh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fwhm6_lh.npy');
-strL_rh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fwhm6_rh.npy');
-strE_lh = strcat(features_dir, 'STR3_EXEC/', phenotypic_id, '_sca_z_fwhm6_lh.npy');
-strE_rh = strcat(features_dir, 'STR3_EXEC/', phenotypic_id, '_sca_z_fwhm6_rh.npy');
+strM_lh = strcat(features_dir, 'STR3_MOTOR/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+strM_rh = strcat(features_dir, 'STR3_MOTOR/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+strL_lh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+strL_rh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+strE_lh = strcat(features_dir, 'STR3_EXEC/', phenotypic_id, '__sca_z_fsaverage5_fwhm10_lh.mgh');
+strE_rh = strcat(features_dir, 'STR3_EXEC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
 % load all subject data into a matrix
 
 MOTOR  = zeros(length(phenotypic_id),size(surf_white.coord,2));
 for i = 1:length(phenotypic_id)
     try
-       lh      = transpose(readNPY(strM_lh{i}));
-       rh      = transpose(readNPY(strM_rh{i}));
+       lh      = SurfStatReadData1(strM_lh{i}) ;
+       rh      = SurfStatReadData1(strM_rh{i}) ;
        MOTOR(i,:)  = [lh, rh];
     end
 end
@@ -73,8 +73,8 @@ end
 LIMBIC  = zeros(length(phenotypic_id),size(surf_white.coord,2));
 for i = 1:length(phenotypic_id)
     try
-       lh      = transpose(readNPY(strL_lh{i}));
-       rh      = transpose(readNPY(strL_rh{i}));
+       lh      = SurfStatReadData1(strL_lh{i}) ;
+       rh      = SurfStatReadData1(strL_rh{i}) ;
        LIMBIC(i,:)  = [lh, rh];
     end
 end
@@ -82,8 +82,8 @@ end
 EXEC  = zeros(length(phenotypic_id),size(surf_white.coord,2));
 for i = 1:length(phenotypic_id)
     try
-       lh      = transpose(readNPY(strE_lh{i}));
-       rh      = transpose(readNPY(strE_rh{i}));
+       lh      = SurfStatReadData1(strE_lh{i}) ;
+       rh      = SurfStatReadData1(strE_rh{i}) ;
        EXEC(i,:)  = [lh, rh];
     end
 end
