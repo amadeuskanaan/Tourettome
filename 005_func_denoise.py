@@ -132,9 +132,9 @@ def nuisance_signal_regression(population, workspace_dir):
         #                'compcor': True, 'gm': False, 'global': True, 'pc1': False}
         # denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr)
 
-nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
+# nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
 # nuisance_signal_regression(paris, tourettome_workspace)
 #nuisance_signal_regression(hamburg, tourettome_workspace)
-# nuisance_signal_regression(['PA060'], tourettome_workspace)
+nuisance_signal_regression(['HB028'], tourettome_workspace)
 
 
