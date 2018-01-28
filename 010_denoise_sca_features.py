@@ -19,7 +19,7 @@ sys.path.append('/Users/kanaan/SCR/Github/Tourettome/plotting/')
 from plotting.cmaps import cmap_gradient
 
 control_outliers = ['HM015', 'LZ061', 'LZ052', 'LZ057', 'LZ058',
-                    'HB019', 'HB028',
+                    'HB019',
                     'HM001', 'HM004', 'HM006', 'HM012', 'HM014', 'HM017', 'HM019', 'HM022', 'HM025', 'HM027',
                     'HM028', 'HM029', 'HM030', 'HM032'
                     ]
@@ -109,10 +109,6 @@ def denoise_features(tourettome_dir, feature_name, outliers):
     #
     # else:
     #     print 'SCA features already denoised'
-    #
-    #
-    #
-
 
 
 denoise_features(tourettome_base, 'func_seed_correlation', patient_outliers+control_outliers)
