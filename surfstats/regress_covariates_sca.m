@@ -53,12 +53,12 @@ phenotypic_fd         = phenotypic_data{4};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % load feature data
 
-strM_lh = strcat(features_dir, 'STR3_MOTOR/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
-strM_rh = strcat(features_dir, 'STR3_MOTOR/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+strM_lh = strcat(features_dir, 'STR3_MOTOR/',  phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+strM_rh = strcat(features_dir, 'STR3_MOTOR/',  phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
 strL_lh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
 strL_rh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
-strE_lh = strcat(features_dir, 'STR3_EXEC/', phenotypic_id, '__sca_z_fsaverage5_fwhm10_lh.mgh');
-strE_rh = strcat(features_dir, 'STR3_EXEC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+strE_lh = strcat(features_dir, 'STR3_EXEC/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+strE_rh = strcat(features_dir, 'STR3_EXEC/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
 % load all subject data into a matrix
 
 MOTOR  = zeros(length(phenotypic_id),size(surf_white.coord,2));
