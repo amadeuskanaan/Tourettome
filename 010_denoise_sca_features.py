@@ -59,4 +59,60 @@ def denoise_features(tourettome_dir, feature_name, outliers):
                %(tourettome_dir, feature_name, df_pheno )]
     subprocess.call(regress)
 
+
+    ####################################################################################################################
+    # Zscore
+
+    # features_dir = os.path.join(tourettome_derivatives, 'feature_matrices')
+    #
+    # df_patients = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'controls'])
+    # df_controls = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'patients'])
+    #
+    # df_resid_controls  = pd.read_csv(os.path.join(features_dir, 'tourettome_sca_resid.csv'), header= None)
+
+    #
+    #
+    #     #####################
+    #     # Break down sca_tourettome_resid to patient and control dataframes
+    #     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
+    #         sca_tourettome_resid = pd.read_csv(os.path.join(features_dir, 'sca_tourettome_resid.csv'), index_col =0)
+    #         sca_patients_resid = sca_tourettome_resid.drop(controls, axis=1)
+    #         sca_controls_resid = sca_tourettome_resid.drop(patients, axis=1)
+    #
+    #         # save separately
+    #         sca_patients_resid.to_csv(os.path.join(features_dir, 'sca_patients_resid.csv'))
+    #         sca_controls_resid.to_csv(os.path.join(features_dir, 'sca_controls_resid.csv'))
+    #
+    #         # plot separate sca residuals
+    #         plt_features_heatmap(sca_controls_resid, os.path.join(features_dir, 'sca_controls_resid.png'),
+    #                              vmin=-1, vmax=1, figsize=(17.5, 10))
+    #         plt_features_heatmap(sca_patients_resid, os.path.join(features_dir, 'sca_patients_resid.png'),
+    #                              vmin=-1, vmax=1, figsize=(17.5, 10))
+    #
+    #     else:
+    #         sca_controls_resid = pd.read_csv(os.path.join(features_dir, 'sca_controls_resid.csv'), index_col=0)
+    #         sca_patients_resid = pd.read_csv(os.path.join(features_dir, 'sca_patients_resid.csv'), index_col=0)
+    #
+    #     #####################
+    #     # Z-Score
+    #     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid_z.csv')):
+    #         print ' ... Z-scoring SCA dataframes'
+    #         sca_controls_resid_z, sca_patients_resid_z = z_score_features(sca_controls_resid, sca_patients_resid)
+    #
+    #         # save data
+    #         sca_controls_resid_z.to_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'))
+    #         sca_patients_resid_z.to_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'))
+    #         plt_features_heatmap(sca_controls_resid_z, os.path.join(features_dir, 'sca_controls_resid_z.png'),
+    #                              vmin=-4, vmax=4, figsize=(17.5, 10))
+    #         plt_features_heatmap(sca_patients_resid_z, os.path.join(features_dir, 'sca_patients_resid_z.png'),
+    #                              vmin=-4, vmax=4, figsize=(17.5, 10))
+    #
+    # else:
+    #     print 'SCA features already denoised'
+    #
+    #
+    #
+
+
+
 denoise_features(tourettome_base, 'func_seed_correlation', patient_outliers+control_outliers)
