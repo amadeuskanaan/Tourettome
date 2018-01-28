@@ -1,6 +1,6 @@
 %plot
 
-function [residuals] = regress_covariates_sca(tourettome_dir, feature_name, freesurfer_dir, phenotypic);
+function [residuals] = regress_covariates_sca(tourettome_dir, feature_name, phenotypic);
 
 
 %% Function to regress covariates for feature data
@@ -10,7 +10,6 @@ function [residuals] = regress_covariates_sca(tourettome_dir, feature_name, free
 % Inputs arguments
 %    derivatives_dir  : path to folder where feature data is located. Depending on feature, ie. CT or SCA,
 %                       the correct folder are found
-%    freesurfer_dir   : path to freesurfer_dir. Will look for fsaverage5 data here
 %    phenotypic_csv   : path to phenotypic file with subject_ids and covariates to be regressed only
 
 
