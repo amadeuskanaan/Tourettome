@@ -48,7 +48,7 @@ hamburg = ['HM001', 'HM002', 'HM003', 'HM004', 'HM005', 'HM006', 'HM007', 'HM008
            'HM025', 'HM026', 'HM027', 'HM028', 'HM029', 'HM030', 'HM031', 'HM032', 'HM033']
 
 tourettome_subjects = leipzig + paris + hannover_a + hannover_b + hamburg
-unsuable_datasets   = ['LZ001', 'LZ052', 'HB028']
+unsuable_datasets   = ['LZ001', 'LZ052']
 # LZ052 stilll salvagable, but need to create a new dummy loop for brain extraction. try BET after thresholding INV or T1MAPS
 tourettome_subjects = [subject for subject in tourettome_subjects if subject not in unsuable_datasets + hamburg]
 
@@ -61,7 +61,7 @@ tourettome_subjects = [subject for subject in tourettome_subjects if subject not
 
 # QC based on fd_max > 1.5 and fd_mu> 0.2
 control_outliers = ['HM015', 'LZ061', 'LZ052', 'LZ057', 'LZ058',
-                    'HB019', 'HB028',
+                    'HB019',
                     #'HM001', 'HM004', 'HM006', 'HM012', 'HM014', 'HM017', 'HM019', 'HM022', 'HM025', 'HM027',
                     #'HM028', 'HM029', 'HM030', 'HM032'
                     ]
