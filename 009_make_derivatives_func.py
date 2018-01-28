@@ -73,13 +73,13 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                  'STR3_MOTOR'  : mask_str_motor,
                  'STR3_LIMBIC' : mask_str_limbic,
                  'STR3_EXEC'   : mask_str_exec,
-                 # 'CAUD'        : mask_caud,
-                 # 'PUTA'        : mask_puta,
-                 # 'ACCU'        : mask_accu,
-                 # 'PALL'        : mask_pall,
-                 # 'THAL'        : mask_thal,
-                 # 'HIPP'        : mask_hipp,
-                 # 'AMYG'        : mask_amyg,
+                 'CAUD'        : mask_caud,
+                 'PUTA'        : mask_puta,
+                 'ACCU'        : mask_accu,
+                 'PALL'        : mask_pall,
+                 'THAL'        : mask_thal,
+                 'HIPP'        : mask_hipp,
+                 'AMYG'        : mask_amyg,
                  }
 
         for seed_name in seeds:
