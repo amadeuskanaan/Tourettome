@@ -59,6 +59,17 @@ strL_lh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5
 strL_rh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
 strE_lh = strcat(features_dir, 'STR3_EXEC/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
 strE_rh = strcat(features_dir, 'STR3_EXEC/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+
+pall_lh = strcat(features_dir, 'PALL/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+pall_rh = strcat(features_dir, 'PALL/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+
+amyg_lh = strcat(features_dir, 'AMYG/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+amyg_rh = strcat(features_dir, 'AMYG/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+
+hipp_lh = strcat(features_dir, 'HIPP/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+hipp_rh = strcat(features_dir, 'HIPP/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+
+
 % load all subject data into a matrix
 
 MOTOR  = zeros(length(phenotypic_id),size(surf_white.coord,2));
@@ -88,7 +99,34 @@ for i = 1:length(phenotypic_id)
     end
 end
 
-features = horzcat(MOTOR, LIMBIC, EXEC);
+PALL  = zeros(length(phenotypic_id),size(surf_white.coord,2));
+for i = 1:length(phenotypic_id)
+    try
+       lh      = SurfStatReadData1(pall_lh{i}) ;
+       rh      = SurfStatReadData1(pall_rh{i}) ;
+       PALL(i,:)  = [lh, rh];
+    end
+end
+
+AMYG  = zeros(length(phenotypic_id),size(surf_white.coord,2));
+for i = 1:length(phenotypic_id)
+    try
+       lh      = SurfStatReadData1(amyg_lh{i}) ;
+       rh      = SurfStatReadData1(amyg_rh{i}) ;
+       AMYG(i,:)  = [lh, rh];
+    end
+end
+
+HIPP  = zeros(length(phenotypic_id),size(surf_white.coord,2));
+for i = 1:length(phenotypic_id)
+    try
+       lh      = SurfStatReadData1(hipp_lh{i}) ;
+       rh      = SurfStatReadData1(hipp_rh{i}) ;
+       HIPP(i,:)  = [lh, rh];
+    end
+end
+
+features = horzcat(MOTOR, LIMBIC, EXEC, PALL);
 
 
 % plot and save
