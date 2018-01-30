@@ -2,6 +2,7 @@ import os
 import numpy as np
 import nibabel as nb
 import scipy
+import scipy.io
 import nipype.pipeline.engine as pe
 import nipype.interfaces.utility as util
 import nipype.interfaces.fsl as fsl
