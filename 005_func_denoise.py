@@ -102,7 +102,7 @@ def nuisance_signal_regression(population, workspace_dir):
                                    csf_sig_file =  csfsig,
                                    gm_sig_file  =  gmsig,
                                    motion_file  =  friston,
-                                   compcor_ncomponents=0,
+                                   compcor_ncomponents=5,
                                    frames_ex    = frames_ex)
 
                     print '......bandpass filtering'
@@ -132,24 +132,29 @@ def nuisance_signal_regression(population, workspace_dir):
 
         ################################################################################################################
 
-        # 1- Detrend (Linear-Quadratic + Motion-24 +  Compcor n5
-
-        print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
+        # 1- Detrend + Motion-24 +  Compcor
+        print '- Nuisance Signal regression :::: COMPCOR'
         selector_cc = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
                         'compcor': True,  'gm' : False, 'global': False, 'pc1'  : False}
-        denoise(denoise_type='compcor', data=func_mni, selector=selector_cc)
+        denoise(denoise_type='compcor', data=func_mni, selector=selector_cc, frames_ex=None)
 
-        # #2- Detrend (Linear-Quadratic), Motion-24, Compcor, GSR
-        # print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_global_bp_std_fwhm '
-        # selector_gsr = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
-        #                'compcor': True, 'gm': False, 'global': True, 'pc1': False}
-        # denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr)
-        #
+        #2- Detrend, Motion-24, Compcor, GSR
+        print '- Nuisance Signal regression :::: GSR'
+        selector_gsr = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+                       'compcor': True, 'gm': False, 'global': True, 'pc1': False}
+        denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr, frames_ex=None)
 
-        # #3- Detrend (Linear-Quadratic), Motion-24, Compcor, Censoring
-        # selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
-        #                    'compcor': True, 'gm': False, 'global': False, 'pc1': False}
-        # denoise(denoise_type='censoring', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
+        #3- Detrend, Motion-24, Compcor, Censoring
+        print '- Nuisance Signal regression :::: CENSORING'
+        selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+                           'compcor': True, 'gm': False, 'global': False, 'pc1': False}
+        denoise(denoise_type='censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
+
+        # 4- Detrend, Motion-24, Compcor, GSR, Censoring
+        print '- Nuisance Signal regression :::: CC+GSR+CENSORING'
+        selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+                           'compcor': True, 'gm': False, 'True': False, 'pc1': False}
+        denoise(denoise_type='gsr_censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
 
 # nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
 # nuisance_signal_regression(paris, tourettome_workspace)
