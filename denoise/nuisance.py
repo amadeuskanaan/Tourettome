@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import nibabel as nb
 import nipype.pipeline.engine as pe
