@@ -56,7 +56,7 @@ def nuisance_signal_regression(population, workspace_dir):
         # id bad frames
         FD1D      = np.loadtxt(calculate_FD_Power(movpar))
         fd_frames_in = [frame for frame, val in enumerate(FD1D) if val < 0.2]
-        print 'Percentage of Good frames =', (len(fd_frames_in) / len(FD1D) )* 100
+        print 'Percentage of Good frames =', float((len(fd_frames_in)) / float(len(FD1D)))* 100
         fd_frames_ex = set_frames_ex(in_file = FD1D, threshold=0.2, frames_before=1, frames_after=1)
 
 
