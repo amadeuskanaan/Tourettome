@@ -3,7 +3,7 @@ __author__ = 'kanaan 22.03.2017'
 import os
 import sys
 import nibabel as nb
-from CPAC.nuisance.nuisance import calc_residuals, extract_tissue_data
+from denoise.nuisance import *
 from utilities.utils import *
 from variables.subject_list import *
 from quality.motion_statistics import *
