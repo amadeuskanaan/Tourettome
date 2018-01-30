@@ -53,6 +53,13 @@ def nuisance_signal_regression(population, workspace_dir):
         friston = os.path.join(subdir, 'DENOISE/FRISTON_24.1D')
         calc_friston_twenty_four(movpar)
 
+        # id bad frames
+        FD1D      = np.loadtxt(calculate_FD_Power(movpar))
+        fd_frames_in = [frame for frame, val in enumerate(FD1D) if val < 0.2]
+        print 'Percentage of Good frames =' (len(fd_frames_in) / len(FD1D) )* 100
+        fd_frames_ex = set_frames_ex(in_file = FD1D, threshold=0.2, frames_before=1, frames_after=1)
+
+
         # extract tissue data
         if not os.path.isfile( os.path.join(signals_dir, 'wm_signals.npy')):
             print '......extracting tissue data'
@@ -75,7 +82,7 @@ def nuisance_signal_regression(population, workspace_dir):
         csfsig = os.path.join(signals_dir, 'csf_signals.npy')
         gmsig  = os.path.join(signals_dir, 'gm_signals.npy')
 
-        def denoise(denoise_type, data, selector, wmsig  = wmsig, csfsig = csfsig, gmsig  = gmsig):
+        def denoise(denoise_type, data, selector, wmsig  = wmsig, csfsig = csfsig, gmsig  = gmsig, frames_ex=None):
 
             run_dir = mkdir_path(os.path.join(nuisance_dir, 'residuals_%s'%denoise_type))
 
@@ -90,7 +97,8 @@ def nuisance_signal_regression(population, workspace_dir):
                                    csf_sig_file =  csfsig,
                                    gm_sig_file  =  gmsig,
                                    motion_file  =  friston,
-                                   compcor_ncomponents=0)
+                                   compcor_ncomponents=0,
+                                   frames_ex    = frames_ex)
 
                     print '......bandpass filtering'
                     os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
@@ -126,15 +134,19 @@ def nuisance_signal_regression(population, workspace_dir):
                         'compcor': True,  'gm' : False, 'global': False, 'pc1'  : False}
         denoise(denoise_type='compcor', data=func_mni, selector=selector_cc)
 
-        # 3- Detrend (Linear-Quadratic), Motion-24, Compcor
-        # print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_bp_std_fwhm '
-        # selector_gsr = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
-        #                'compcor': True, 'gm': False, 'global': True, 'pc1': False}
-        # denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr)
+        #2- Detrend (Linear-Quadratic), Motion-24, Compcor, GSR
+        print '- Nuisance Signal regression :::: FUNC2mm_detrend_compcor_moco24_global_bp_std_fwhm '
+        selector_gsr = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+                       'compcor': True, 'gm': False, 'global': True, 'pc1': False}
+        denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr)
+
+
+        #3- Detrend (Linear-Quadratic), Motion-24, Compcor, Censoring
+        selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+                           'compcor': True, 'gm': False, 'global': False, 'pc1': False}
+        denoise(denoise_type='censoring', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
 
 # nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
-# nuisance_signal_regression(paris, tourettome_workspace)
-#nuisance_signal_regression(hamburg, tourettome_workspace)
-nuisance_signal_regression(['HB028'], tourettome_workspace)
+nuisance_signal_regression(paris, tourettome_workspace)
 
 
