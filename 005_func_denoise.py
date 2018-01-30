@@ -153,7 +153,7 @@ def nuisance_signal_regression(population, workspace_dir):
         # 4- Detrend, Motion-24, Compcor, GSR, Censoring
         print '- Nuisance Signal regression :::: CC+GSR+CENSORING'
         selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
-                           'compcor': True, 'gm': False, 'True': False, 'pc1': False}
+                           'compcor': True, 'gm': False, 'global': True, 'pc1': False}
         denoise(denoise_type='gsr_censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
 
 # nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
