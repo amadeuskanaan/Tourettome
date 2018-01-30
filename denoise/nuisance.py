@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import nibabel as nb
+import scipy
 import nipype.pipeline.engine as pe
 import nipype.interfaces.utility as util
 import nipype.interfaces.fsl as fsl
@@ -11,7 +12,6 @@ import nipype.interfaces.ants as ants
 # logger = logging.getLogger('workflow')
 
 
-import numpy as np
 
 
 def calc_compcor_components(data, nComponents, wm_sigs, csf_sigs):
