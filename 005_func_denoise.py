@@ -62,8 +62,8 @@ def nuisance_signal_regression(population, workspace_dir):
 
         print 'MOTION-STATS'
         print '...perc_good_frames = ', perc_good_frames
-        print '...n_excluded_frames =%s' %(len(FD1D)- len(fd_frames_in))
-        print '...excluded_frames =', fd_frames_ex
+        print '...n_excluded_frames =%s/%s' %(len(np.loadtxt(fd_frames_ex)), len(FD1D))
+        print '...excluded_frames =', np.loadtxt(fd_frames_ex)
         if perc_good_frames < 0.5:
             print 'Percentage of Good frames is quite low... inspect subject and maybe throw out', perc_good_frames
 
