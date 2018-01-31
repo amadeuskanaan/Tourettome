@@ -108,7 +108,8 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                         # see Nilearn http://nilearn.github.io/auto_examples/03_connectivity/plot_seed_to_voxel_correlation.html#sphx-glr-auto-examples-03-connectivity-plot-seed-to-voxel-correlation-py
                         sca = np.dot(timeseries_brain.T, timeseries_seed) / timeseries_seed.shape[0]
                         sca_rz = np.arctanh(sca)
-                        print("seed-based correlation Fisher-z transformed: min = %.3f; max = %.3f" % (sca_rz.min(), sca_rz.max()))
+                        print("seed-based correlation R: min = %.3f; max = %.3f" % (sca.min(), sca.max()))
+                        print("seed-based correlation R-to-Z : min = %.3f; max = %.3f" % (sca_rz.min(), sca_rz.max()))
 
                         # Save seed-to-brain correlation as a  Nifti image
                         sca_img = masker_brain.inverse_transform(sca.T)
