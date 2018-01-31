@@ -64,7 +64,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         for denoise_type in ['compcor', 'gsr','censor','gsr_censor']:
             sca_dir = mkdir_path(os.path.join(derivatives_dir, 'func_seed_correlation', denoise_type))
 
-            func_denoised      = os.path.join(subject_dir, 'DENOISE', 'residuals_%s'%denoise_type, 'residual_bp_z.nii.gz')
+            func_denoised      = os.path.join(subject_dir, 'DENOISE', 'residuals_%s'%denoise_type, 'residual.nii.gz')
 
             if os.path.isfile(func_denoised):
 
@@ -92,15 +92,22 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                         print seed_name
                         seed_dir = mkdir_path(os.path.join(sca_dir, seed_name))
 
+                        TR = nb.load(func_denoised).header['pixdim'][4]
                         # Extract seed timeseries
                         seed = seeds[seed_name]
-                        masker_seed = NiftiLabelsMasker(labels_img=seed, smoothing_fwhm=None, standardize=None, memory='nilearn_cache', verbose=0)
+                        masker_seed = NiftiLabelsMasker(labels_img=seed,
+                                                        smoothing_fwhm=6, detrend = False, standardize=True,
+                                                        low_pass = 0.1, high_pass = 0.01, t_r = TR,
+                                                        memory='nilearn_cache', verbose=0,
+                                                        )
+
                         timeseries_seed = masker_seed.fit_transform(func_denoised)
                         print 'seed_timeseries_shape', timeseries_seed.shape
 
                         # Extract brain timeseries
-                        masker_brain = NiftiMasker(smoothing_fwhm=None, detrend=None, standardize=None, low_pass=None,
-                                                   high_pass=None, t_r=None, memory='nilearn_cache', memory_level=1, verbose=0)
+                        masker_brain = NiftiMasker(smoothing_fwhm=6, detrend=None, standardize=True,
+                                                   low_pass=0.1, high_pass=0.01, t_r=TR,
+                                                   memory='nilearn_cache', memory_level=1, verbose=0)
                         timeseries_brain = masker_brain.fit_transform(func_denoised)
                         print 'brain_timeseries_shape', timeseries_brain.shape
 
