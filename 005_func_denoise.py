@@ -58,8 +58,7 @@ def nuisance_signal_regression(population, workspace_dir):
         fd_frames_in = [frame for frame, val in enumerate(FD1D) if val < 0.2]
         perc_good_frames = float((len(fd_frames_in)) / float(len(FD1D)))* 100
 
-
-        fd_frames_ex = set_frames_ex(in_file = FD1D, threshold=0.2, frames_before=1, frames_after=1)
+        fd_frames_ex = set_frames_ex(in_file = FD1D, threshold=0.2, frames_before=0, frames_after=0)
 
         print 'MOTION-STATS'
         print '...perc_good_frames = ', perc_good_frames
