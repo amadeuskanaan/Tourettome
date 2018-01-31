@@ -58,6 +58,7 @@ def nuisance_signal_regression(population, workspace_dir):
         fd_frames_in = [frame for frame, val in enumerate(FD1D) if val < 0.2]
         perc_good_frames = float((len(fd_frames_in)) / float(len(FD1D)))* 100
 
+        print 'PRECENT GOOD FRAMES = ', %perc_good_frames
         if perc_good_frames < 0.5:
             print 'Percentage of Good frames is quite low... inspect subject and maybe throw out', perc_good_frames
 
