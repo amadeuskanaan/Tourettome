@@ -61,6 +61,7 @@ def nuisance_signal_regression(population, workspace_dir):
         fd_frames_ex = set_frames_ex(in_file = FD1D, threshold=0.2, frames_before=0, frames_after=0)
 
         print 'MOTION-STATS'
+        print 'FD mean/std =%s+%s' %(np.mean(FD1D), np.std(FD1D))
         print '...perc_good_frames = ', perc_good_frames
 
         f_ex = sorted(map(int, open('frames_ex.1D','r').read().split(',')[:-1]))
@@ -68,8 +69,6 @@ def nuisance_signal_regression(population, workspace_dir):
         print '...n_excluded_frames =%s/%s' %(len(f_ex), len(FD1D))
         if perc_good_frames < 0.5:
             print 'Percentage of Good frames is quite low... inspect subject and maybe throw out', perc_good_frames
-
-
 
             # extract tissue data
         if not os.path.isfile( os.path.join(signals_dir, 'wm_signals.npy')):
