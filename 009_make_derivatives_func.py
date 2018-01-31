@@ -153,7 +153,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                                       '--tval %s_sca_z_fsaverage5_fwhm10_%s.mgh'
                                       %(subject, subject, hemi, hemi, subject, hemi))
 
-                        os.system('rm -rf %s_sca_z_*.mgh'%subject)
+                        os.system('rm -rf %s_sca_z_lh.mgh %s_sca_z_rh.mgh' %(subject,subject))
 
             else:
                 print 'Need denoising first'
