@@ -158,7 +158,8 @@ def nuisance_signal_regression(population, workspace_dir):
 
 # nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
 # nuisance_signal_regression(paris, tourettome_workspace)
-nuisance_signal_regression([i for i in leipzig if i not in unsuable_datasets], tourettome_workspace)
-# nuisance_signal_regression(['PA002'], tourettome_workspace)
+# nuisance_signal_regression([i for i in leipzig if i not in unsuable_datasets], tourettome_workspace)
+nuisance_signal_regression(hannover_b+hamburg, tourettome_workspace)
+nuisance_signal_regression(hannover_a, tourettome_workspace)
 
 
