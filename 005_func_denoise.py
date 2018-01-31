@@ -115,20 +115,20 @@ def nuisance_signal_regression(population, workspace_dir):
                 print '...... smooth data'
                 os.system('fslmaths residual_bp_z -s %s residual_bp_z_fwhm6.nii.gz' % (sigma))
 
-            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_rh.mgh')):
-                print '...... project to surface' #### take non-smoothed data and smooth on surface
-                for hemi in ['lh', 'rh']:
-                    os.system('mri_vol2surf '
-                              '--mov residual_bp_z.nii.gz '
-                              '--reg %s '
-                              '--trgsubject fsaverage5 '
-                              '--projfrac-avg 0.2 0.8 0.1 '
-                              '--hemi %s '
-                              '--interp nearest '
-                              #'--fwhm 6 ' 
-                              '--cortex '
-                              '--o residual_bp_z_%s.mgh'
-                              % (fs_mni_reg, hemi, hemi))
+            # if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_rh.mgh')):
+            #     print '...... project to surface' #### take non-smoothed data and smooth on surface
+            #     for hemi in ['lh', 'rh']:
+            #         os.system('mri_vol2surf '
+            #                   '--mov residual_bp_z.nii.gz '
+            #                   '--reg %s '
+            #                   '--trgsubject fsaverage5 '
+            #                   '--projfrac-avg 0.2 0.8 0.1 '
+            #                   '--hemi %s '
+            #                   '--interp nearest '
+            #                   #'--fwhm 6 '
+            #                   '--cortex '
+            #                   '--o residual_bp_z_%s.mgh'
+            #                   % (fs_mni_reg, hemi, hemi))
 
         ################################################################################################################
 
@@ -156,8 +156,8 @@ def nuisance_signal_regression(population, workspace_dir):
                            'compcor': True, 'gm': False, 'global': True, 'pc1': False}
         denoise(denoise_type='gsr_censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
 
-# nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
+nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
 # nuisance_signal_regression(paris, tourettome_workspace)
-nuisance_signal_regression(['PA002'], tourettome_workspace)
+# nuisance_signal_regression(['PA002'], tourettome_workspace)
 
 
