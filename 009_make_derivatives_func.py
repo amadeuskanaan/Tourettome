@@ -72,7 +72,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                 ### 1- Seed-Based Correlation
                 ################################################################################################################
 
-                print '1. Calculating Seed-Based Correlation'
+                print '1. Calculating Seed-Based Correlation for denoise type =', denoise_type
 
                 seeds = {'STR3_MOTOR'  : mask_str_motor,
                          'STR3_LIMBIC' : mask_str_limbic,
