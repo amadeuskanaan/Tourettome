@@ -122,12 +122,13 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                         sca_img = masker_brain.inverse_transform(sca.T)
                         sca_img.to_filename(os.path.join(seed_dir, '%s_sca_z.nii.gz'%subject))
 
+                        ######### SKIP since already smoothed with nilearn
                         #smooth
                         # Smoothing kernel
-                        FWHM = 6
-                        sigma = FWHM / 2.35482004503
-                        os.chdir(seed_dir)
-                        os.system('fslmaths %s_sca_z -s %s %s_sca_z_fwhm6.nii.gz'%(subject, sigma, subject))
+                        # FWHM = 6
+                        # sigma = FWHM / 2.35482004503
+                        # os.chdir(seed_dir)
+                        # os.system('fslmaths %s_sca_z -s %s %s_sca_z_fwhm6.nii.gz'%(subject, sigma, subject))
 
                         # skip the nilearn approach..... do it with freesurfer...
                         # Map seed-to-voxel onto surface
@@ -137,6 +138,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                         # # Save seed-to-vertex correlation as a txt file
                         # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_lh.npy'%subject), sca_lh)
                         # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
+                        ####################
 
                     # seed_dir = os.path.join(sca_dir, seed_name)
                     # if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm10_rh.mgh' % subject)):
@@ -152,6 +154,14 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                     #                   '--out %s_sca_z_%s.mgh'
                     #                   %(subject, subject, hemi, subject, hemi))
                     #         #surf2surf
+                    #         os.system('mri_surf2surf '
+                    #                   '--s %s '
+                    #                   '--sval  %s_sca_z_%s.mgh '
+                    #                   '--hemi %s '
+                    #                   '--trgsubject fsaverage5 '
+                    #                   '--tval %s_sca_z_fsaverage5_fwhm00_%s.mgh'
+                    #                   % (subject, subject, hemi, hemi, subject, hemi))
+                    #
                     #         os.system('mri_surf2surf '
                     #                   '--s %s '
                     #                   '--sval  %s_sca_z_%s.mgh '
