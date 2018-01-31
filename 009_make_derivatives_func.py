@@ -118,7 +118,8 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                         # Smoothing kernel
                         FWHM = 6
                         sigma = FWHM / 2.35482004503
-                        os.system('fslmaths residual_bp_z -s %s residual_bp_z_fwhm6.nii.gz'%sigma)
+                        os.chdir(seed_dir)
+                        os.system('fslmaths %s_sca_z -s %s %s_sca_z_fwhm6.nii.gz'%(subject, sigma, subject))
 
                         # skip the nilearn approach..... do it with freesurfer...
                         # Map seed-to-voxel onto surface
@@ -151,6 +152,8 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                                       '--fwhm-src 10 '
                                       '--tval %s_sca_z_fsaverage5_fwhm10_%s.mgh'
                                       %(subject, subject, hemi, hemi, subject, hemi))
+
+                        os.system('rm -rf %s_sca_z_*.mgh'%subject)
 
             else:
                 print 'Need denoising first'
