@@ -62,7 +62,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         subject_dir = os.path.join(workspace_dir, subject)
 
         for denoise_type in ['compcor', 'gsr','censor','gsr_censor']:
-            sca_dir = mkdir_path(os.path.join(sca_dir, denoise_type))
+            sca_dir = mkdir_path(os.path.join(derivatives_dir, 'func_seed_correlation', denoise_type))
 
             func_denoised      = os.path.join(subject_dir, 'DENOISE', 'residuals_%s'%denoise_type, 'residual_bp_z.nii.gz')
 
