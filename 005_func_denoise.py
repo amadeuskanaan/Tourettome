@@ -157,8 +157,8 @@ def nuisance_signal_regression(population, workspace_dir):
         denoise(denoise_type='gsr_censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
 
 # nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
-nuisance_signal_regression(paris, tourettome_workspace)
 # nuisance_signal_regression(paris, tourettome_workspace)
+nuisance_signal_regression(leipzig, tourettome_workspace)
 # nuisance_signal_regression(['PA002'], tourettome_workspace)
 
 
