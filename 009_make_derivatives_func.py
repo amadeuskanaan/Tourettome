@@ -178,7 +178,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
 
 # make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
-make_functional_derivatives(tourettome_subjects, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+make_functional_derivatives(paris, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 # make_functional_derivatives(tourettome_subjects[0:20], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 # make_functional_derivatives(tourettome_subjects[20:40], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 # make_functional_derivatives(tourettome_subjects[40:60], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
