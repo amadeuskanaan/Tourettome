@@ -97,7 +97,7 @@ def nuisance_signal_regression(population, workspace_dir):
             run_dir = mkdir_path(os.path.join(nuisance_dir, 'residuals_%s'%denoise_type))
 
             os.chdir(run_dir)
-            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm6.nii.gz')):
+            if not os.path.isfile(os.path.join(run_dir, 'residual_bp.nii.gz')):
 
                 if not os.path.isfile(os.path.join(run_dir, 'residual_bp.nii.gz')):
                     print '......calculating residual image'
@@ -113,6 +113,7 @@ def nuisance_signal_regression(population, workspace_dir):
                     print '......bandpass filtering'
                     os.system('fslmaths residual -bptf %s %s residual_bp' % (highpass_sigma, lowpass_sigma))
 
+            if not os.path.isfile(os.path.join(run_dir, 'residual_bp_z_fwhm6.nii.gz')):
                 print '...... standradizing data'
                 expr = ['log((a+1)/(a-1))/2']
                 os.system('3dcalc -a residual_bp.nii.gz -expr %s -prefix residual_bp_z.nii.gz' %expr)
