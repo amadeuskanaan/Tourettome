@@ -61,11 +61,11 @@ def nuisance_signal_regression(population, workspace_dir):
         fd_frames_ex = set_frames_ex(in_file = FD1D, threshold=0.2, frames_before=0, frames_after=0)
 
         print 'MOTION-STATS'
-        print 'FD mean/std =%s+%s' %(np.mean(FD1D), np.std(FD1D))
-        print '...perc_good_frames = ', perc_good_frames
+        print 'FD mean/std =%s + %s' %(np.round(np.mean(FD1D),2), np.round(np.std(FD1D)),2)
+        print '...percent_good_frames = ', perc_good_frames
 
         f_ex = np.unique(sorted(map(int, open('frames_ex.1D','r').read().split(',')[:-1])))
-        print '...excluded_frames =', f_ex
+        #print '...excluded_frames =', f_ex
         print '...n_excluded_frames =%s/%s' %(len(f_ex), len(FD1D))
         if perc_good_frames < 50.:
             print 'Percentage of Good frames is quite low... inspect subject and maybe throw out', perc_good_frames
@@ -165,6 +165,8 @@ def nuisance_signal_regression(population, workspace_dir):
             denoise(denoise_type='gsr_censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
 
         # 5- Add ICA AROMA
+
+subs = [i for i in tourettome_subjects if i not in control_outliers+patient_outliers]
 
 nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
 # nuisance_signal_regression(paris, tourettome_workspace)
