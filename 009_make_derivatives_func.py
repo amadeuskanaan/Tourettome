@@ -13,6 +13,7 @@ from algorithms.fast_ecm import fastECM
 from utilities.utils import *
 from variables.subject_list import *
 from plotting.plot_surf import return_fsaverage_data
+from nilearn import datasets ,input_data, connectome, plotting
 
 freesurfer_dir = '/data/pt_nmr093_gts/freesurfer'
 fsaverage5 = return_fsaverage_data(freesurfer_dir, 'fsaverage5')
@@ -20,6 +21,19 @@ fsaverage5 = return_fsaverage_data(freesurfer_dir, 'fsaverage5')
 # Calculate functional derivatives
 
 FD_outliers = control_outliers + patient_outliers
+
+seeds = {'STR3_MOTOR': mask_str_motor,
+         'STR3_LIMBIC': mask_str_limbic,
+         'STR3_EXEC': mask_str_exec,
+         # 'STR'         : mask_str,
+         # 'CAUD'        : mask_caud,
+         # 'PUTA'        : mask_puta,
+         # 'ACCU'        : mask_accu,
+         # 'PALL'        : mask_pall,
+         # 'THAL'        : mask_thal,
+         # 'HIPP'        : mask_hipp,
+         # 'AMYG'        : mask_amyg,
+         }
 
 def make_group_masks(population, workspace_dir, derivatives_dir, outliers):
 
@@ -74,19 +88,6 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
                 print '1. Calculating Seed-Based Correlation for denoise type =', denoise_type
 
-                seeds = {'STR3_MOTOR'  : mask_str_motor,
-                         'STR3_LIMBIC' : mask_str_limbic,
-                         'STR3_EXEC'   : mask_str_exec,
-                         # 'STR'         : mask_str,
-                         # 'CAUD'        : mask_caud,
-                         # 'PUTA'        : mask_puta,
-                         # 'ACCU'        : mask_accu,
-                         # 'PALL'        : mask_pall,
-                         # 'THAL'        : mask_thal,
-                         # 'HIPP'        : mask_hipp,
-                         # 'AMYG'        : mask_amyg,
-                         }
-
                 for seed_name in seeds:
                     if not os.path.isfile(os.path.join(sca_dir, seed_name, '%s_sca_z.nii.gz'%subject)):
                         print seed_name
@@ -140,38 +141,67 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                         # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
                         ####################
 
-                    seed_dir = os.path.join(sca_dir, seed_name)
-                    if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm10_rh.mgh' % subject)):
-                        os.chdir(seed_dir)
-                        for hemi in  ['lh', 'rh']:
-                            # vol2surf
-                            os.system('mri_vol2surf '
-                                      '--mov %s_sca_z.nii.gz '
-                                      '--regheader %s '
-                                      '--projfrac-avg 0.2 0.8 0.1 '
-                                      '--interp nearest '
-                                      '--hemi %s '
-                                      '--out %s_sca_z_%s.mgh'
-                                      %(subject, subject, hemi, subject, hemi))
-                            #surf2surf
-                            os.system('mri_surf2surf '
-                                      '--s %s '
-                                      '--sval  %s_sca_z_%s.mgh '
-                                      '--hemi %s '
-                                      '--trgsubject fsaverage5 '
-                                      '--tval %s_sca_z_fsaverage5_fwhm00_%s.mgh'
-                                      % (subject, subject, hemi, hemi, subject, hemi))
+                    # seed_dir = os.path.join(sca_dir, seed_name)
+                    # if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm10_rh.mgh' % subject)):
+                    #     os.chdir(seed_dir)
+                    #     for hemi in  ['lh', 'rh']:
+                    #         # vol2surf
+                    #         os.system('mri_vol2surf '
+                    #                   '--mov %s_sca_z.nii.gz '
+                    #                   '--regheader %s '
+                    #                   '--projfrac-avg 0.2 0.8 0.1 '
+                    #                   '--interp nearest '
+                    #                   '--hemi %s '
+                    #                   '--out %s_sca_z_%s.mgh'
+                    #                   %(subject, subject, hemi, subject, hemi))
+                    #         #surf2surf
+                    #         os.system('mri_surf2surf '
+                    #                   '--s %s '
+                    #                   '--sval  %s_sca_z_%s.mgh '
+                    #                   '--hemi %s '
+                    #                   '--trgsubject fsaverage5 '
+                    #                   '--tval %s_sca_z_fsaverage5_fwhm00_%s.mgh'
+                    #                   % (subject, subject, hemi, hemi, subject, hemi))
+                    #
+                    #         os.system('mri_surf2surf '
+                    #                   '--s %s '
+                    #                   '--sval  %s_sca_z_%s.mgh '
+                    #                   '--hemi %s '
+                    #                   '--trgsubject fsaverage5 '
+                    #                   '--fwhm-src 10 '
+                    #                   '--tval %s_sca_z_fsaverage5_fwhm10_%s.mgh'
+                    #                   %(subject, subject, hemi, hemi, subject, hemi))
+                    #
+                    #     os.system('rm -rf %s_sca_z_lh.mgh %s_sca_z_rh.mgh' %(subject,subject))
 
-                            os.system('mri_surf2surf '
-                                      '--s %s '
-                                      '--sval  %s_sca_z_%s.mgh '
-                                      '--hemi %s '
-                                      '--trgsubject fsaverage5 '
-                                      '--fwhm-src 10 '
-                                      '--tval %s_sca_z_fsaverage5_fwhm10_%s.mgh'
-                                      %(subject, subject, hemi, hemi, subject, hemi))
 
-                        os.system('rm -rf %s_sca_z_lh.mgh %s_sca_z_rh.mgh' %(subject,subject))
+                ###########################################################################
+                print '2. Extracting connectome for =', denoise_type
+
+                connectome_dir = mkdir_path(os.path.join(derivatives_dir, 'func_connectome', denoise_type))
+                if not os.path.isfile(os.path.join(connectome_dir, '%s_power264.npy'%subject)):
+
+                    # get power-264 coordinates
+                    atlas = datasets.fetch_coords_power_2011()
+                    coords = np.vstack((atlas.rois['x'], atlas.rois['y'], atlas.rois['z'])).T
+
+                    # Extract signals
+                    spheres_masker = input_data.NiftiSpheresMasker(seeds=coords,
+                                                                   smoothing_fwhm=6,
+                                                                   radius=5.,
+                                                                   detrend=False,
+                                                                   standardize=True,
+                                                                   low_pass=0.1,
+                                                                   high_pass=0.01,
+                                                                   t_r=2.)
+                    timeseries = spheres_masker.fit_transform(func_denoised)
+                    print 'timsereies shape ', timeseries.shape
+
+                    correlation_measure = connectome.ConnectivityMeasure(kind='correlation')
+                    cmat = correlation_measure.fit_transform([timeseries])[0]
+                    np.save(os.path.join(connectome_dir, '%s_power264.npy'%subject), cmat)
+
+
 
             else:
                 print 'Need denoising first'
