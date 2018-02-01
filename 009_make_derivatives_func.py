@@ -76,6 +76,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
         subject_dir = os.path.join(workspace_dir, subject)
 
         for denoise_type in ['compcor', 'gsr','censor','gsr_censor']:
+            print 'Calculating Derivatives for denoise type:', denoise_type
             sca_dir = mkdir_path(os.path.join(derivatives_dir, 'func_seed_correlation', denoise_type))
 
             func_denoised      = os.path.join(subject_dir, 'DENOISE', 'residuals_%s'%denoise_type, 'residual.nii.gz')
@@ -86,7 +87,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                 ### 1- Seed-Based Correlation
                 ################################################################################################################
 
-                print '1. Calculating Seed-Based Correlation for denoise type =', denoise_type
+                print '1. Calculating SCA'
 
                 for seed_name in seeds:
                     if not os.path.isfile(os.path.join(sca_dir, seed_name, '%s_sca_z.nii.gz'%subject)):
@@ -176,7 +177,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
 
                 ###########################################################################
-                print '2. Extracting connectome for =', denoise_type
+                print '2. Calculating Power-264 connectome'
 
                 connectome_dir = mkdir_path(os.path.join(derivatives_dir, 'func_connectome', denoise_type))
                 if not os.path.isfile(os.path.join(connectome_dir, '%s_power264.npy'%subject)):
