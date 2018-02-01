@@ -42,10 +42,10 @@ def nuisance_signal_regression(population, workspace_dir):
         highpass_sigma  = 1./(2.*TR*highpass_cutoff)
         lowpass_sigma   = 1./(2.*TR*lowpass_cutoff)
 
-        print 'TR=%ss'%TR
-        print 'Highpass filter=', highpass_sigma
-        print 'Lowpass filter=', lowpass_sigma
-        print 'FWHM=', FWHM
+        # print 'TR=%ss'%TR
+        # print 'Highpass filter=', highpass_sigma
+        # print 'Lowpass filter=', lowpass_sigma
+        # print 'FWHM=', FWHM
 
         # Calculate Friston-24 paramters
         os.chdir(nuisance_dir)
@@ -61,12 +61,12 @@ def nuisance_signal_regression(population, workspace_dir):
         fd_frames_ex = set_frames_ex(in_file = FD1D, threshold=0.2, frames_before=0, frames_after=0)
 
         print 'MOTION-STATS'
-        print 'FD mean/std =%s + %s' %(np.round(np.mean(FD1D),2), np.round(np.std(FD1D),2))
+        print 'FD mean/std = %s + %s' %(np.round(np.mean(FD1D),2), np.round(np.std(FD1D),2))
         print '...percent_good_frames = ', perc_good_frames
 
         f_ex = np.unique(sorted(map(int, open('frames_ex.1D','r').read().split(',')[:-1])))
         #print '...excluded_frames =', f_ex
-        print '...n_excluded_frames =%s/%s' %(len(f_ex), len(FD1D))
+        print '...n_excluded_frames   = %s of %s' %(len(f_ex), len(FD1D))
         if perc_good_frames < 50.:
             print 'Percentage of Good frames is quite low... inspect subject and maybe throw out', perc_good_frames
 
@@ -93,6 +93,7 @@ def nuisance_signal_regression(population, workspace_dir):
         gmsig  = os.path.join(signals_dir, 'gm_signals.npy')
 
         def denoise(denoise_type, data, selector, wmsig  = wmsig, csfsig = csfsig, gmsig  = gmsig, frames_ex=None):
+            print '- Nuisance Signal regression :::: ',denoise_type
 
             run_dir = mkdir_path(os.path.join(nuisance_dir, 'residuals_%s'%denoise_type))
 
@@ -139,27 +140,22 @@ def nuisance_signal_regression(population, workspace_dir):
         ################################################################################################################
 
         # 1- Detrend + Motion-24 +  Compcor
-        print '- Nuisance Signal regression :::: COMPCOR'
         selector_cc = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
                         'compcor': True,  'gm' : False, 'global': False, 'pc1'  : False}
         denoise(denoise_type='compcor', data=func_mni, selector=selector_cc, frames_ex=None)
 
         #2- Detrend, Motion-24, Compcor, GSR
-        print '- Nuisance Signal regression :::: GSR'
         selector_gsr = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
                        'compcor': True, 'gm': False, 'global': True, 'pc1': False}
         denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr, frames_ex=None)
 
-        #3- Detrend, Motion-24, Compcor, Censoring
-
         if perc_good_frames > 50.:
-            print '- Nuisance Signal regression :::: CENSORING'
+            # 3- Detrend, Motion-24, Compcor, Censoring
             selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
                                'compcor': True, 'gm': False, 'global': False, 'pc1': False}
             denoise(denoise_type='censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
 
             # 4- Detrend, Motion-24, Compcor, GSR, Censoring
-            print '- Nuisance Signal regression :::: CC+GSR+CENSORING'
             selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
                                'compcor': True, 'gm': False, 'global': True, 'pc1': False}
             denoise(denoise_type='gsr_censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
