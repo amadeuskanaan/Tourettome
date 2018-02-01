@@ -180,5 +180,5 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 # make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
 
 subs = [i for i in tourettome_subjects if i not in control_outliers+patient_outliers]
-make_functional_derivatives(paris, subs, tourettome_freesurfer, tourettome_derivatives)
+make_functional_derivatives(subs, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
