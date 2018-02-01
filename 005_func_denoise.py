@@ -93,13 +93,11 @@ def nuisance_signal_regression(population, workspace_dir):
         gmsig  = os.path.join(signals_dir, 'gm_signals.npy')
 
         def denoise(denoise_type, data, selector, wmsig  = wmsig, csfsig = csfsig, gmsig  = gmsig, frames_ex=None):
-            print '- Nuisance Signal regression :::: ',denoise_type
 
             run_dir = mkdir_path(os.path.join(nuisance_dir, 'residuals_%s'%denoise_type))
-
             os.chdir(run_dir)
             if not os.path.isfile(os.path.join(run_dir, 'residual_bp.nii.gz')):
-
+                print '- Nuisance Signal regression :::: ', denoise_type
                 if not os.path.isfile(os.path.join(run_dir, 'residual_bp.nii.gz')):
                     print '......calculating residual image'
                     calc_residuals(data,
