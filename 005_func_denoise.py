@@ -61,7 +61,7 @@ def nuisance_signal_regression(population, workspace_dir):
         fd_frames_ex = set_frames_ex(in_file = FD1D, threshold=0.2, frames_before=0, frames_after=0)
 
         print 'MOTION-STATS'
-        print 'FD mean/std =%s + %s' %(np.round(np.mean(FD1D),2), np.round(np.std(FD1D)),2)
+        print 'FD mean/std =%s + %s' %(np.round(np.mean(FD1D),2), np.round(np.std(FD1D),2))
         print '...percent_good_frames = ', perc_good_frames
 
         f_ex = np.unique(sorted(map(int, open('frames_ex.1D','r').read().split(',')[:-1])))
