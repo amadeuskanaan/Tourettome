@@ -151,19 +151,23 @@ def nuisance_signal_regression(population, workspace_dir):
         denoise(denoise_type='gsr', data=func_mni, selector=selector_gsr, frames_ex=None)
 
         #3- Detrend, Motion-24, Compcor, Censoring
-        print '- Nuisance Signal regression :::: CENSORING'
-        selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
-                           'compcor': True, 'gm': False, 'global': False, 'pc1': False}
-        denoise(denoise_type='censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
 
-        # 4- Detrend, Motion-24, Compcor, GSR, Censoring
-        print '- Nuisance Signal regression :::: CC+GSR+CENSORING'
-        selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
-                           'compcor': True, 'gm': False, 'global': True, 'pc1': False}
-        denoise(denoise_type='gsr_censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
+        if perc_good_frames > 50.:
+            print '- Nuisance Signal regression :::: CENSORING'
+            selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+                               'compcor': True, 'gm': False, 'global': False, 'pc1': False}
+            denoise(denoise_type='censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
 
-# nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
-nuisance_signal_regression(paris, tourettome_workspace)
+            # 4- Detrend, Motion-24, Compcor, GSR, Censoring
+            print '- Nuisance Signal regression :::: CC+GSR+CENSORING'
+            selector_censor = {'wm': False, 'csf': False, 'motion': True, 'linear': True, 'quadratic': True,
+                               'compcor': True, 'gm': False, 'global': True, 'pc1': False}
+            denoise(denoise_type='gsr_censor', data=func_mni, selector=selector_censor, frames_ex=fd_frames_ex)
+
+        # 5- Add ICA AROMA
+
+nuisance_signal_regression(tourettome_subjects, tourettome_workspace)
+# nuisance_signal_regression(paris, tourettome_workspace)
 # nuisance_signal_regression([i for i in leipzig if i not in unsuable_datasets], tourettome_workspace)
 # nuisance_signal_regression(hannover_b+hamburg, tourettome_workspace)
 # nuisance_signal_regression(hannover_a, tourettome_workspace)
