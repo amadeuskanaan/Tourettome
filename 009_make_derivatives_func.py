@@ -140,57 +140,45 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                         # np.save(os.path.join(seed_dir, '%s_sca_z_fwhm6_rh.npy'%subject), sca_rh)
                         ####################
 
-                    # seed_dir = os.path.join(sca_dir, seed_name)
-                    # if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm10_rh.mgh' % subject)):
-                    #     os.chdir(seed_dir)
-                    #     for hemi in  ['lh', 'rh']:
-                    #         # vol2surf
-                    #         os.system('mri_vol2surf '
-                    #                   '--mov %s_sca_z.nii.gz '
-                    #                   '--regheader %s '
-                    #                   '--projfrac-avg 0.2 0.8 0.1 '
-                    #                   '--interp nearest '
-                    #                   '--hemi %s '
-                    #                   '--out %s_sca_z_%s.mgh'
-                    #                   %(subject, subject, hemi, subject, hemi))
-                    #         #surf2surf
-                    #         os.system('mri_surf2surf '
-                    #                   '--s %s '
-                    #                   '--sval  %s_sca_z_%s.mgh '
-                    #                   '--hemi %s '
-                    #                   '--trgsubject fsaverage5 '
-                    #                   '--tval %s_sca_z_fsaverage5_fwhm00_%s.mgh'
-                    #                   % (subject, subject, hemi, hemi, subject, hemi))
-                    #
-                    #         os.system('mri_surf2surf '
-                    #                   '--s %s '
-                    #                   '--sval  %s_sca_z_%s.mgh '
-                    #                   '--hemi %s '
-                    #                   '--trgsubject fsaverage5 '
-                    #                   '--fwhm-src 10 '
-                    #                   '--tval %s_sca_z_fsaverage5_fwhm10_%s.mgh'
-                    #                   %(subject, subject, hemi, hemi, subject, hemi))
-                    #
-                    #     os.system('rm -rf %s_sca_z_lh.mgh %s_sca_z_rh.mgh' %(subject,subject))
+                    seed_dir = os.path.join(sca_dir, seed_name)
+                    if not os.path.isfile(os.path.join(seed_dir, '%s_sca_z_fsaverage5_fwhm10_rh.mgh' % subject)):
+                        os.chdir(seed_dir)
+                        for hemi in  ['lh', 'rh']:
+                            # vol2surf
+                            os.system('mri_vol2surf '
+                                      '--mov %s_sca_z.nii.gz '
+                                      '--regheader %s '
+                                      '--projfrac-avg 0.2 0.8 0.1 '
+                                      '--interp nearest '
+                                      '--hemi %s '
+                                      '--out %s_sca_z_%s.mgh'
+                                      %(subject, subject, hemi, subject, hemi))
+                            #surf2surf
+                            os.system('mri_surf2surf '
+                                      '--s %s '
+                                      '--sval  %s_sca_z_%s.mgh '
+                                      '--hemi %s '
+                                      '--trgsubject fsaverage5 '
+                                      '--tval %s_sca_z_fsaverage5_fwhm00_%s.mgh'
+                                      % (subject, subject, hemi, hemi, subject, hemi))
+
+                            os.system('mri_surf2surf '
+                                      '--s %s '
+                                      '--sval  %s_sca_z_%s.mgh '
+                                      '--hemi %s '
+                                      '--trgsubject fsaverage5 '
+                                      '--fwhm-src 10 '
+                                      '--tval %s_sca_z_fsaverage5_fwhm10_%s.mgh'
+                                      %(subject, subject, hemi, hemi, subject, hemi))
+
+                        os.system('rm -rf %s_sca_z_lh.mgh %s_sca_z_rh.mgh' %(subject,subject))
 
             else:
                 print 'Need denoising first'
 
 
 # make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
-make_functional_derivatives(paris, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[0:20], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[20:40], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[40:60], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[60:80], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[80:100], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[100:120], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[120:140], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[140:160], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[160:180], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[180:200], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
-# make_functional_derivatives(tourettome_subjects[200:], tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
-
-
+subs = [i for i in tourettome_subjects if i not in control_outliers+patient_outliers]
+make_functional_derivatives(paris, subs, tourettome_freesurfer, tourettome_derivatives)
 
