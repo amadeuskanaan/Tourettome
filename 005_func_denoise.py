@@ -64,10 +64,10 @@ def nuisance_signal_regression(population, workspace_dir):
         print 'FD mean/std =%s+%s' %(np.mean(FD1D), np.std(FD1D))
         print '...perc_good_frames = ', perc_good_frames
 
-        f_ex = sorted(map(int, open('frames_ex.1D','r').read().split(',')[:-1]))
+        f_ex = np.unique(sorted(map(int, open('frames_ex.1D','r').read().split(',')[:-1])))
         print '...excluded_frames =', f_ex
         print '...n_excluded_frames =%s/%s' %(len(f_ex), len(FD1D))
-        if perc_good_frames < 0.5:
+        if perc_good_frames < 50.:
             print 'Percentage of Good frames is quite low... inspect subject and maybe throw out', perc_good_frames
 
             # extract tissue data
