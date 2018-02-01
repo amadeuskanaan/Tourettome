@@ -60,8 +60,7 @@ def nuisance_signal_regression(population, workspace_dir):
 
         fd_frames_ex = set_frames_ex(in_file = FD1D, threshold=0.2, frames_before=0, frames_after=0)
 
-        print 'MOTION-STATS'
-        print 'FD mean/std = %s + %s' %(np.round(np.mean(FD1D),2), np.round(np.std(FD1D),2))
+        print '...FD mean/std         = %s + %s' %(np.round(np.mean(FD1D),2), np.round(np.std(FD1D),2))
         print '...percent_good_frames = ', perc_good_frames
 
         f_ex = np.unique(sorted(map(int, open('frames_ex.1D','r').read().split(',')[:-1])))
@@ -81,12 +80,6 @@ def nuisance_signal_regression(population, workspace_dir):
 
         ################################################################################################################
         ######## Denoise MNI FUNC
-
-        # 1- Detrend (Linear-Quadratic), Motion-24, WM/CSF mean signal
-        # 2- Detrend (Linear-Quadratic), Motion-24, Compcor
-        # 3- ICA-AROMA, Detrend (Linear-Quadratic), Motion-24, WM/CSF mean signal
-
-        ################################################################################################################
 
         wmsig  = os.path.join(signals_dir, 'wm_signals.npy')
         csfsig = os.path.join(signals_dir, 'csf_signals.npy')
