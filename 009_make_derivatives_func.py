@@ -180,7 +180,7 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                 print '2. Calculating Power-264 connectome'
 
                 connectome_dir = mkdir_path(os.path.join(derivatives_dir, 'func_connectome', denoise_type))
-                if not os.path.isfile(os.path.join(connectome_dir, '%s_power264.npy'%subject)):
+                if not os.path.isfile(os.path.join(connectome_dir, '%s_power264_tangent.npy'%subject)):
 
                     # get power-264 coordinates
                     atlas = datasets.fetch_coords_power_2011()
@@ -198,9 +198,12 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                     timeseries = spheres_masker.fit_transform(func_denoised)
                     print 'timsereies shape ', timeseries.shape
 
-                    correlation_measure = connectome.ConnectivityMeasure(kind='correlation')
-                    cmat = correlation_measure.fit_transform([timeseries])[0]
-                    np.save(os.path.join(connectome_dir, '%s_power264.npy'%subject), cmat)
+
+                    for cor_type in ['correlation', 'tangent']:
+                        if not os.path.isfile(os.path.join(connectome_dir, '%s_power264_%s.npy' % (subject, cor_type))):
+                            correlation_measure = connectome.ConnectivityMeasure(kind=cor_type)
+                            cmat = correlation_measure.fit_transform([timeseries])[0]
+                            np.save(os.path.join(connectome_dir, '%s_power264_%s.npy'%(subject,cor_type)), cmat)
 
 
 

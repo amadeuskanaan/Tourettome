@@ -73,9 +73,8 @@ def make_derivatives_struct(population, freesurfer_dir, derivatives_dir) :
         # else:
         #     print '..........Subject missing reconall data'
         #     #print os.path.join(fs_dir, 'stats/aseg.stats')
-        #
 
 
 tourettome_freesurfer = '/data/pt_nmr093_gts/freesurfer'
 # make_derivatives_struct(tourettome_subjects, tourettome_freesurfer, tourettome_derivatives )
-make_derivatives_struct(tourettome_subjects, tourettome_freesurfer, tourettome_derivatives )
+make_derivatives_struct(tourettome_subjects, tourettome_freesurfer, tourettome_derivatives)
