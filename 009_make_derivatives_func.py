@@ -205,14 +205,12 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                             cmat = correlation_measure.fit_transform([timeseries])[0]
                             np.save(os.path.join(connectome_dir, '%s_power264_%s.npy'%(subject,cor_type)), cmat)
 
-
-
             else:
                 print 'Need denoising first'
 
 
 # make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
 
-subs = [i for i in tourettome_subjects if i not in control_outliers+patient_outliers]
+subs = [i for i in paris if i not in control_outliers+patient_outliers]
 make_functional_derivatives(subs, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
