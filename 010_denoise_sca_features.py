@@ -87,7 +87,7 @@ def denoise_features(tourettome_dir, feature_name, outliers):
     os.chdir('/scr/malta1/Github/Tourettome/surfstats')
     regress = ['matlab', '-nodesktop', '-nosplash', '-noFigureWindows',
                '-r "regress_covariates_sca(\'%s\', \'%s\', \'%s\') ; quit;"'
-               %(tourettome_dir, feature_name, df_pheno )]
+               %(tourettome_dir, feature_name, df_pheno_qc )]
     subprocess.call(regress)
 
     # ####################################################################################################################
