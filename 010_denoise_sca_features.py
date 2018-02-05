@@ -103,8 +103,8 @@ def denoise_features(tourettome_dir, feature_name, outliers, dntype = 'gsr'):
     sca_resid_tourettome.index = list(df_pheno_qc.index)
 
     print sca_resid_tourettome.head()
-    sca_resid_patients = sca_resid_tourettome.drop(controls, axis=1)
-    sca_resid_controls = sca_resid_tourettome.drop(patients, axis=1)
+    sca_resid_patients = sca_resid_tourettome.drop(controls, axis=0)
+    sca_resid_controls = sca_resid_tourettome.drop(patients, axis=0)
     
     # #####################
     # # Z-Score
