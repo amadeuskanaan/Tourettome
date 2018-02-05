@@ -69,7 +69,7 @@ def z_score_features(df_controls, df_patients):
     return df_controls_z, df_patients_z
 
 
-def denoise_features(tourettome_dir, feature_name, outliers, dyntype = 'gsr'):
+def denoise_features(tourettome_dir, feature_name, outliers, dntype = 'gsr'):
 
     # SAVE CT pheno dataframe for surfstat
     df_pheno     = pd.read_csv(os.path.join(tourettome_dir,  'phenotypic', 'tourettome_phenotypic.csv'),index_col=0)
@@ -88,7 +88,7 @@ def denoise_features(tourettome_dir, feature_name, outliers, dyntype = 'gsr'):
     os.chdir('/scr/malta1/Github/Tourettome/surfstats')
     regress = ['matlab', '-nodesktop', '-nosplash', '-noFigureWindows',
                '-r "regress_covariates_sca(\'%s\', \'%s\', \'%s\', \'%s\') ; quit;"'
-               %(tourettome_dir, feature_name, df_pheno_qc, dyntype)]
+               %(tourettome_dir, feature_name, df_pheno_qc, dntype)]
     subprocess.call(regress)
 
     # ####################################################################################################################
