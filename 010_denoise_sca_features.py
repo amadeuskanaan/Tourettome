@@ -78,8 +78,8 @@ def denoise_features(tourettome_dir, feature_name, outliers, dntype = 'gsr'):
     df_pheno= df_pheno.drop(outliers)
 
     df_pheno_qc = df_pheno.drop([i for i in df_pheno.columns if i not in terms] ,axis = 1)
-    patients = df_pheno_qc.drop([i for i in df_pheno_qc.index if not df_pheno_qc.loc[i]['Group'] == 'patients'])
-    controls = df_pheno_qc.drop([i for i in df_pheno_qc.index if not df_pheno_qc.loc[i]['Group'] == 'controls'])
+    patients = [i for i in df_pheno_qc.index if not df_pheno_qc.loc[i]['Group'] == 'patients']
+    controls = [i for i in df_pheno_qc.index if not df_pheno_qc.loc[i]['Group'] == 'controls']
     df_pheno_qc.index.names = ['subject']
     df_pheno_qc.to_csv(os.path.join(tourettome_dir,'phenotypic/tourettome_phenotypic_qc.csv'))
     df_pheno_qc = os.path.join(tourettome_dir,  'phenotypic', 'tourettome_phenotypic_qc.csv')
@@ -101,17 +101,19 @@ def denoise_features(tourettome_dir, feature_name, outliers, dntype = 'gsr'):
     sca_resid_tourettome  = pd.read_csv(os.path.join(features_dir, 'tourettome_sca_resid.csv'), header= None)
     df_pheno_qc = pd.read_csv(os.path.join(tourettome_dir, 'phenotypic', 'tourettome_phenotypic_qc.csv'),index_col=0)
     sca_resid_tourettome.index = list(df_pheno_qc.index)
-    sca_resid_patients = sca_resid_tourettome.drop(controls.index, axis=1)
-    sca_resid_controls = sca_resid_tourettome.drop(patients.index, axis=1)
-    
-    #####################
-    # Z-Score
-    if not os.path.isfile(os.path.join(features_dir, 'sca_resid_z_patients.csv')):
-        print ' ... Z-scoring SCA dataframes'
-        sca_controls_resid_z, sca_patients_resid_z = z_score_features(sca_resid_controls.T, sca_resid_patients.T)
 
-        print sca_controls_resid_z.shape
-        print sca_patients_resid_z.shape
+    print sca_resid_tourettome.head()
+    sca_resid_patients = sca_resid_tourettome.drop(controls, axis=1)
+    sca_resid_controls = sca_resid_tourettome.drop(patients, axis=1)
+    
+    # #####################
+    # # Z-Score
+    # if not os.path.isfile(os.path.join(features_dir, 'sca_resid_z_patients.csv')):
+    #     print ' ... Z-scoring SCA dataframes'
+    #     sca_controls_resid_z, sca_patients_resid_z = z_score_features(sca_resid_controls.T, sca_resid_patients.T)
+    #
+    #     print sca_controls_resid_z.shape
+    #     print sca_patients_resid_z.shape
         #
         # # save data
         # sca_controls_resid_z.to_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'))
