@@ -99,6 +99,7 @@ def denoise_features(tourettome_dir, feature_name, outliers, dntype = 'gsr'):
 
     # Break down sca_tourettome_resid to patient and control dataframes
     sca_resid_tourettome  = pd.read_csv(os.path.join(features_dir, 'tourettome_sca_resid.csv'), header= None)
+    df_pheno_qc = pd.read_csv(os.path.join(tourettome_dir, 'phenotypic', 'tourettome_phenotypic_qc.csv'),index_col=0)
     sca_resid_tourettome.index = list(df_pheno_qc.index)
     sca_resid_patients = sca_resid_tourettome.drop(controls.index, axis=1)
     sca_resid_controls = sca_resid_tourettome.drop(patients.index, axis=1)
