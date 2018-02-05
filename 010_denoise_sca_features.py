@@ -102,26 +102,23 @@ def denoise_features(tourettome_dir, feature_name, outliers, dntype = 'gsr'):
     df_pheno_qc = pd.read_csv(os.path.join(tourettome_dir, 'phenotypic', 'tourettome_phenotypic_qc.csv'),index_col=0)
     sca_resid_tourettome.index = list(df_pheno_qc.index)
 
-    print sca_resid_tourettome.head()
     sca_resid_patients = sca_resid_tourettome.drop(controls, axis=0)
     sca_resid_controls = sca_resid_tourettome.drop(patients, axis=0)
     
-    # #####################
-    # # Z-Score
-    # if not os.path.isfile(os.path.join(features_dir, 'sca_resid_z_patients.csv')):
-    #     print ' ... Z-scoring SCA dataframes'
-    #     sca_controls_resid_z, sca_patients_resid_z = z_score_features(sca_resid_controls.T, sca_resid_patients.T)
-    #
-    #     print sca_controls_resid_z.shape
-    #     print sca_patients_resid_z.shape
-        #
-        # # save data
-        # sca_controls_resid_z.to_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'))
-        # sca_patients_resid_z.to_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'))
-        # plt_features_heatmap(sca_controls_resid_z, os.path.join(features_dir, 'sca_controls_resid_z.png'),
-        #                      vmin=-3, vmax=3, figsize=(17.5, 10))
-        # plt_features_heatmap(sca_patients_resid_z, os.path.join(features_dir, 'sca_patients_resid_z.png'),
-        #                      vmin=-3, vmax=3, figsize=(17.5, 10))
+    if not os.path.isfile(os.path.join(features_dir, 'sca_resid_z_patients.csv')):
+        print ' ... Z-scoring SCA dataframes'
+        sca_controls_resid_z, sca_patients_resid_z = z_score_features(sca_resid_controls.T, sca_resid_patients.T)
+
+        print sca_controls_resid_z.shape
+        print sca_patients_resid_z.shape
+
+        # save data
+        sca_controls_resid_z.to_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'))
+        sca_patients_resid_z.to_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'))
+        plt_features_heatmap(sca_controls_resid_z, os.path.join(features_dir, 'sca_controls_resid_z.png'),
+                             vmin=-3, vmax=3, figsize=(17.5, 10))
+        plt_features_heatmap(sca_patients_resid_z, os.path.join(features_dir, 'sca_patients_resid_z.png'),
+                             vmin=-3, vmax=3, figsize=(17.5, 10))
 
 
 denoise_features(tourettome_base, 'func_seed_correlation', patient_outliers+control_outliers)
