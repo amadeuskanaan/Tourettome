@@ -75,13 +75,12 @@ def denoise_features(tourettome_dir, feature_name, outliers):
     df_pheno     = pd.read_csv(os.path.join(tourettome_dir,  'phenotypic', 'tourettome_phenotypic.csv'),index_col=0)
     df_pheno= df_pheno.drop(outliers)
 
-    df_pheno = df_pheno.drop([i for i in df_pheno.columns if i not in terms],axis = 1)
-    df_pheno.index.names = ['subject']
-    df_pheno.to_csv(os.path.join(tourettome_dir,'phenotypic/tourettome_phenotypic_qc.csv'))
-    df_pheno = os.path.join(tourettome_dir,  'phenotypic', 'tourettome_phenotypic_qc.csv')
+    df_pheno_qc = df_pheno.drop([i for i in df_pheno.columns if i not in terms],axis = 1)
+    df_pheno_qc.index.names = ['subject']
+    df_pheno_qc.to_csv(os.path.join(tourettome_dir,'phenotypic/tourettome_phenotypic_qc.csv'))
 
-    patients = [i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'patients']
-    controls = [i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'controls']
+    patients = [i for i in df_pheno_qc.index if df_pheno_qc.loc[i]['Group'] == 'patients']
+    controls = [i for i in df_pheno_qc.index if df_pheno_qc.loc[i]['Group'] == 'controls']
 
     # Regress covariates
     #[features, residuals]=regress_covariates_sca(tourettome_dir, feature_name, freesurfer_dir, phenotypic)
