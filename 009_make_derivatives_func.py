@@ -25,14 +25,14 @@ FD_outliers = control_outliers + patient_outliers
 seeds = {'STR3_MOTOR': mask_str_motor,
          'STR3_LIMBIC': mask_str_limbic,
          'STR3_EXEC': mask_str_exec,
-         # 'STR'         : mask_str,
-         # 'CAUD'        : mask_caud,
-         # 'PUTA'        : mask_puta,
-         # 'ACCU'        : mask_accu,
-         # 'PALL'        : mask_pall,
-         # 'THAL'        : mask_thal,
-         # 'HIPP'        : mask_hipp,
-         # 'AMYG'        : mask_amyg,
+         'STR'         : mask_str,
+         'CAUD'        : mask_caud,
+         'PUTA'        : mask_puta,
+         'ACCU'        : mask_accu,
+         'PALL'        : mask_pall,
+         'THAL'        : mask_thal,
+         'HIPP'        : mask_hipp,
+         'AMYG'        : mask_amyg,
          }
 
 def make_group_masks(population, workspace_dir, derivatives_dir, outliers):
@@ -210,6 +210,6 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
 
 make_group_masks(tourettome_subjects, tourettome_workspace, tourettome_derivatives, FD_outliers)
 
-subs = [i for i in paris if i not in control_outliers+patient_outliers]
-#make_functional_derivatives(subs, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
+subs = [i for i in tourettome_subjects if i not in control_outliers+patient_outliers]
+make_functional_derivatives(subs, tourettome_workspace, tourettome_freesurfer, tourettome_derivatives)
 
