@@ -1,6 +1,6 @@
 %plot
 
-function [residuals] = regress_covariates_sca(tourettome_dir, feature_name, phenotypic);
+function [residuals] = regress_covariates_sca(tourettome_dir, feature_name, phenotypic, dyntpe);
 
 
 %% Function to regress covariates for feature data
