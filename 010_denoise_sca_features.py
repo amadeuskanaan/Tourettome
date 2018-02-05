@@ -78,6 +78,7 @@ def denoise_features(tourettome_dir, feature_name, outliers):
     df_pheno_qc = df_pheno.drop([i for i in df_pheno.columns if i not in terms],axis = 1)
     df_pheno_qc.index.names = ['subject']
     df_pheno_qc.to_csv(os.path.join(tourettome_dir,'phenotypic/tourettome_phenotypic_qc.csv'))
+    df_pheno_qc = os.path.join(tourettome_dir,  'phenotypic', 'tourettome_phenotypic_qc.csv', index_col = 0)
 
     patients = [i for i in df_pheno_qc.index if df_pheno_qc.loc[i]['Group'] == 'patients']
     controls = [i for i in df_pheno_qc.index if df_pheno_qc.loc[i]['Group'] == 'controls']
