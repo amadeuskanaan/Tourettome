@@ -53,21 +53,21 @@ phenotypic_fd         = phenotypic_data{4};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % load feature data
 
-strM_lh = strcat(features_dir, 'STR3_MOTOR/',  phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
-strM_rh = strcat(features_dir, 'STR3_MOTOR/',  phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
-strL_lh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
-strL_rh = strcat(features_dir, 'STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
-strE_lh = strcat(features_dir, 'STR3_EXEC/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
-strE_rh = strcat(features_dir, 'STR3_EXEC/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+strM_lh = strcat(features_dir, dntype, '/STR3_MOTOR/',  phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+strM_rh = strcat(features_dir, dntype, '/STR3_MOTOR/',  phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+strL_lh = strcat(features_dir, dntype, '/STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+strL_rh = strcat(features_dir, dntype, '/STR3_LIMBIC/', phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+strE_lh = strcat(features_dir, dntype, '/STR3_EXEC/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+strE_rh = strcat(features_dir, dntype, '/STR3_EXEC/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
 
-pall_lh = strcat(features_dir, 'PALL/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
-pall_rh = strcat(features_dir, 'PALL/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+pall_lh = strcat(features_dir, dntype, '/PALL/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+pall_rh = strcat(features_dir, dntype, '/PALL/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
 
-amyg_lh = strcat(features_dir, 'AMYG/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
-amyg_rh = strcat(features_dir, 'AMYG/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+amyg_lh = strcat(features_dir, dntype, '/AMYG/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+amyg_rh = strcat(features_dir, dntype, '/AMYG/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
 
-hipp_lh = strcat(features_dir, 'HIPP/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
-hipp_rh = strcat(features_dir, 'HIPP/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
+hipp_lh = strcat(features_dir, dntype, '/HIPP/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_lh.mgh');
+hipp_rh = strcat(features_dir, dntype, '/HIPP/',   phenotypic_id, '_sca_z_fsaverage5_fwhm10_rh.mgh');
 
 
 % load all subject data into a matrix
@@ -126,7 +126,7 @@ for i = 1:length(phenotypic_id)
     end
 end
 
-features = horzcat(MOTOR, LIMBIC, EXEC, PALL);
+features = horzcat(MOTOR, LIMBIC, EXEC);
 
 
 % plot and save
@@ -144,7 +144,7 @@ term_sex    = term(phenotypic_sex);
 term_site   = term(phenotypic_site);
 term_fd     = term(phenotypic_fd);
 
-% buid linear model controlled for site, group, age, sex
+% buid linear model controlled for site, age, sex
 df_model  = 1 + term_age + term_sex + term_site + term_fd;
 
 % Estimaste model parameters

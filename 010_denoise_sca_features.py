@@ -35,6 +35,40 @@ patient_outliers = ['HA009', 'HB005', 'HM015', 'HM023', 'HM026', 'LZ004', 'LZ006
 
 terms = ['Age', 'Sex', 'Group', 'Site', 'qc_func_fd']
 
+
+def z_score_features(df_controls, df_patients):
+
+    ################################
+    # Z-score controls
+    print '...... Control feature  shape=', df_controls.shape
+    print '...... Z-scoring Controls'
+    # For each subject z-score based on the distrubution of all other subjects
+    df_controls_mu = []
+    df_controls_sd = []
+
+    for subject in df_controls.columns:
+        df_controls_mu.append(pd.DataFrame(df_controls.drop([subject], axis=1).mean(axis=1), columns=[subject]))
+        df_controls_sd.append(pd.DataFrame(df_controls.drop([subject], axis=1).std(axis=1), columns=[subject]))
+
+    df_controls_mu = pd.concat(df_controls_mu, axis=1)
+    df_controls_sd = pd.concat(df_controls_sd, axis=1)
+    df_controls_z = (df_controls.copy(deep=True) - df_controls_mu) / df_controls_sd
+
+    ################################
+    # Z-score patients
+    print '...... Patient feature  shape=',df_patients.shape
+    print '...... Z-scoring Patients'    # "At each surface point, we normalized feature data in each individual with ASD against the
+    # corresponding distribution in control using vertex-wise zscoring (Bernhardt, AnnNeurology, 2015)"
+    n_patients = len(df_patients.columns)
+    df_controls_vert_mu = pd.DataFrame(pd.np.tile(df_controls.mean(axis=1), (n_patients, 1)),
+                                       index=df_patients.columns).T
+    df_controls_vert_sd = pd.DataFrame(pd.np.tile(df_controls.std(axis=1), (n_patients, 1)),
+                                       index=df_patients.columns).T
+    df_patients_z = (df_patients.copy(deep=1) - df_controls_vert_mu) / df_controls_vert_sd
+
+    return df_controls_z, df_patients_z
+
+
 def denoise_features(tourettome_dir, feature_name, outliers):
 
     # SAVE CT pheno dataframe for surfstat
@@ -46,32 +80,24 @@ def denoise_features(tourettome_dir, feature_name, outliers):
     df_pheno.to_csv(os.path.join(tourettome_dir,'phenotypic/tourettome_phenotypic_qc.csv'))
     df_pheno = os.path.join(tourettome_dir,  'phenotypic', 'tourettome_phenotypic_qc.csv')
 
-    #df_patients = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'controls'])
-    #df_controls = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'patients'])
+    patients = [i for i in df_pheno.index if not df_pheno.loc[i]['Group'] == 'patients']
+    controls = [i for i in df_pheno.index if not df_pheno.loc[i]['Group'] == 'controls']
 
-    # Regress covarites
-
+    # Regress covariates
     #[features, residuals]=regress_covariates_sca(tourettome_dir, feature_name, freesurfer_dir, phenotypic)
-
     os.chdir('/scr/malta1/Github/Tourettome/surfstats')
     regress = ['matlab', '-nodesktop', '-nosplash', '-noFigureWindows',
                '-r "regress_covariates_sca(\'%s\', \'%s\', \'%s\') ; quit;"'
                %(tourettome_dir, feature_name, df_pheno )]
     subprocess.call(regress)
 
-
-    ####################################################################################################################
-    # Zscore
-
+    # ####################################################################################################################
+    # # Zscore
     # features_dir = os.path.join(tourettome_derivatives, 'feature_matrices')
+    # df_sca_resid  = pd.read_csv(os.path.join(features_dir, 'tourettome_sca_resid.csv'), header= None)
     #
-    # df_patients = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'controls'])
-    # df_controls = df_pheno.drop([i for i in df_pheno.index if df_pheno.loc[i]['Group'] == 'patients'])
-    #
-    # df_resid_controls  = pd.read_csv(os.path.join(features_dir, 'tourettome_sca_resid.csv'), header= None)
-
-    #
-    #
+    # sca_resid_patients = df_resid.drop(controls, )
+    
     #     #####################
     #     # Break down sca_tourettome_resid to patient and control dataframes
     #     if not os.path.isfile(os.path.join(features_dir, 'sca_patients_resid.csv')):
