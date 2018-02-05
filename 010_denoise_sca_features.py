@@ -73,6 +73,7 @@ def z_score_features(df_controls, df_patients):
 def denoise_features(tourettome_dir, feature_name, outliers, dntype = 'gsr'):
 
     # SAVE CT pheno dataframe for surfstat
+    features_dir = os.path.join(tourettome_derivatives, 'feature_matrices')
     df_pheno     = pd.read_csv(os.path.join(tourettome_dir,  'phenotypic', 'tourettome_phenotypic.csv'),index_col=0)
     df_pheno= df_pheno.drop(outliers)
 
@@ -95,7 +96,6 @@ def denoise_features(tourettome_dir, feature_name, outliers, dntype = 'gsr'):
 
     ####################################################################################################################
     # Zscore
-    features_dir = os.path.join(tourettome_derivatives, 'feature_matrices')
 
     # Break down sca_tourettome_resid to patient and control dataframes
     sca_resid_tourettome  = pd.read_csv(os.path.join(features_dir, 'tourettome_sca_resid.csv'), header= None)
