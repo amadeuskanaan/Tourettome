@@ -175,7 +175,9 @@ def make_functional_derivatives(population, workspace_dir, freesurfer_dir, deriv
                         os.system('rm -rf %s_sca_z_lh.mgh %s_sca_z_rh.mgh' %(subject,subject))
 
 
-                ##########################################################################
+                ################################################################################################################
+                ### 1- connectome
+                ################################################################################################################
                 print '2. Calculating Power-264 connectome'
 
                 connectome_dir = mkdir_path(os.path.join(derivatives_dir, 'func_connectome', denoise_type))
