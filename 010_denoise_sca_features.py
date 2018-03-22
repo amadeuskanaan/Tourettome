@@ -115,10 +115,6 @@ def denoise_features(tourettome_dir, feature_name, outliers, dntype = 'gsr'):
         # save data
         sca_controls_resid_z.to_csv(os.path.join(features_dir, 'sca_controls_resid_z.csv'))
         sca_patients_resid_z.to_csv(os.path.join(features_dir, 'sca_patients_resid_z.csv'))
-        plt_features_heatmap(sca_controls_resid_z, os.path.join(features_dir, 'sca_controls_resid_z.png'),
-                             vmin=-3, vmax=3, figsize=(17.5, 10))
-        plt_features_heatmap(sca_patients_resid_z, os.path.join(features_dir, 'sca_patients_resid_z.png'),
-                             vmin=-3, vmax=3, figsize=(17.5, 10))
 
 
 denoise_features(tourettome_base, 'func_seed_correlation', patient_outliers+control_outliers)
